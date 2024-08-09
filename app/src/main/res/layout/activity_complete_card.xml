@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.generate.CompleteCardActivity">
+
+        <TextView
+            android:id="@+id/textView_title_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="77.79dp"
+            android:text="@string/complete_card_activity_title_1"
+            android:textSize="24sp"
+            android:textColor="@color/petid_clear_blue"
+            android:textFontWeight="600"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView_party_popper_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView_title_1"
+            app:layout_constraintEnd_toStartOf="@+id/textView_title_1"
+            app:layout_constraintTop_toTopOf="@+id/textView_title_1"
+            app:srcCompat="@drawable/ic_party_popper" />
+
+        <TextView
+            android:id="@+id/textView_title_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/complete_card_activity_title_2"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="@+id/textView_title_1"
+            app:layout_constraintEnd_toEndOf="@+id/textView_title_1"
+            app:layout_constraintTop_toBottomOf="@+id/textView_title_1" />
+
+        <ImageView
+            android:id="@+id/imageView_party_popper_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:scaleX="-1"
+            app:layout_constraintBottom_toBottomOf="@+id/textView_title_1"
+            app:layout_constraintStart_toEndOf="@+id/textView_title_1"
+            app:layout_constraintTop_toTopOf="@+id/textView_title_1"
+            app:srcCompat="@drawable/ic_party_popper" />
+
+        <include
+            android:id="@+id/buttonComplete"
+            layout="@layout/button_common"
+            app:buttonText="@{@string/confirm}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="33dp"
+            android:layout_marginBottom="86dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

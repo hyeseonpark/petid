@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="petid_clear_blue">#3397FF</color>
+    <color name="petid_title">#242424</color>
+    <color name="petid_subtitle">#848484</color>
+    <color name="petid_light_gray">#D9D9D9</color>
+<!--    <color name="selector_848484_3397FF">-->
+<!--        <selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+<!--            <item android:color="#3397FF" android:state_selected="true"/>-->
+<!--            <item android:color="#848484"/>-->
+<!--        </selector>-->
+<!--    </color>-->
+</resources>

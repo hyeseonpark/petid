@@ -1,0 +1,84 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.android.petid'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.android.petid"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures{
+        viewBinding = true
+    }
+    dataBinding {
+        enabled true
+    }
+}
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.activity
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.legacy.support.v4
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+
+    implementation(project(":domain")) // Domain Layer에 대한 의존성
+    implementation(project(":data")) // Data Layer에 대한 의존성
+
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+
+    //splashscreen api
+    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
+    implementation "com.airbnb.android:lottie:6.4.1"
+
+    // kakao Login
+    implementation "com.kakao.sdk:v2-all:2.20.0"
+    implementation "com.kakao.sdk:v2-user:2.20.0"
+
+    // Google Play services
+    implementation 'com.google.gms:google-services:4.4.2'
+    implementation 'com.google.firebase:firebase-auth:23.0.0'
+    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging-ktx' //FCM-push
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+}

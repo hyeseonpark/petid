@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.generate.PetIdStartActivity">
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="84.81dp"
+            android:text="펫아이디 만들기를 시작합니다"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="반려동물 등록이 필요해요"
+            android:textSize="16sp"
+            android:textFontWeight="400"
+            app:layout_constraintEnd_toEndOf="@+id/textView_title"
+            app:layout_constraintStart_toStartOf="@+id/textView_title"
+            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+
+        <include
+            android:id="@+id/buttonStart"
+            layout="@layout/button_common"
+            app:buttonText="@{@string/start}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="33dp"
+            android:layout_marginBottom="86dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_generated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:text="이미 등록되어있어요"
+            android:textSize="14sp"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="@+id/buttonStart"
+            app:layout_constraintStart_toStartOf="@+id/buttonStart"
+            app:layout_constraintTop_toBottomOf="@+id/buttonStart" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

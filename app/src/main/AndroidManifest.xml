@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:name = ".common.GlobalApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PetId"
+        tools:targetApi="31">
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_native_app_key"/>
+
+        <!-- 카카오 로그인, 인가코드를 받기 위한 액티비티 -->
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="oauth"
+                    android:scheme="kakaoe73834f33dc8405c99f414788b9b1b23" />
+            </intent-filter>
+        </activity>
+
+        <!-- FCM -->
+        <service
+            android:name=".messages.MyFirebaseMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name=".view.sign.PermissionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.CompleteCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.GenerateCompleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.SignatureActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.CheckingInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.ScannedInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.PetPhotoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.PetInfoInputActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.generate.PetIdStartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.sign.SignupCompleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.sign.TermsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.sign.SocialAuthActivity"
+            android:exported="true">
+
+            <!-- android:theme="@style/Theme.AppCompat"> -->
+            <!-- android:theme="@style/Theme.App.Starting"> -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.main.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.sign.IntroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.sign.SignupActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
