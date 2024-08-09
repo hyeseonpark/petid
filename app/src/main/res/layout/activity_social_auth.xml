@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="92dp"
+        android:text="@string/social_auth_activity_title"
+        android:textSize="24sp"
+        android:textFontWeight="500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:text="@string/social_auth_acitivity_sub_title"
+        android:textFontWeight="400"
+        app:layout_constraintEnd_toEndOf="@+id/textView_title"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView_title"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+
+    <Button
+        android:id="@+id/button_kakao_auth"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#FEE500"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:stateListAnimator="@null"
+        android:text="@string/social_auth_kakao"
+        android:textColor="#242424"
+        android:textSize="16sp"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_kakao"
+        app:iconPadding="-22dp"
+        app:iconTint="#392020"
+        app:layout_constraintBottom_toTopOf="@+id/button_naver_auth"
+        app:layout_constraintEnd_toEndOf="@+id/button_naver_auth"
+        app:layout_constraintStart_toStartOf="@+id/button_naver_auth" />
+
+    <Button
+        android:id="@+id/button_naver_auth"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#2CC623"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:stateListAnimator="@null"
+        android:text="@string/social_auth_naver"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:cornerRadius="10dp"
+        app:icon="@drawable/ic_naver"
+        app:iconPadding="-21dp"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/button_google_auth"
+        app:layout_constraintEnd_toEndOf="@+id/button_google_auth"
+        app:layout_constraintStart_toStartOf="@+id/button_google_auth" />
+
+    <Button
+        android:id="@+id/button_google_auth"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="33dp"
+        android:layout_marginBottom="41dp"
+        android:backgroundTint="@color/white"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:stateListAnimator="@null"
+        android:text="@string/social_auth_google"
+        android:textColor="#242424"
+        android:textSize="16sp"
+        app:cornerRadius="10dp"
+        android:drawableLeft="@drawable/ic_google_svg"
+        app:iconPadding="-22dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_problem"
+        app:layout_constraintEnd_toEndOf="@+id/button_problem"
+        app:layout_constraintStart_toStartOf="@+id/button_problem"
+        app:strokeColor="#D9D9D9"
+        app:strokeWidth="1dp" />
+
+<!--    <Button-->
+<!--        android:id="@+id/button_apple_auth"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="55dp"-->
+<!--        android:layout_marginStart="33dp"-->
+<!--        android:layout_marginEnd="33dp"-->
+<!--        android:layout_marginBottom="49dp"-->
+<!--        android:backgroundTint="@color/black"-->
+<!--        android:insetTop="0dp"-->
+<!--        android:insetBottom="0dp"-->
+<!--        android:stateListAnimator="@null"-->
+<!--        android:text="@string/social_auth_apple"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="16sp"-->
+<!--        app:cornerRadius="10dp"-->
+<!--        app:icon="@drawable/ic_apple"-->
+<!--        app:iconPadding="0dp"-->
+<!--        app:iconTint="@color/white"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/button_problem"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/button_problem"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/button_problem"-->
+<!--        app:strokeColor="#D9D9D9"-->
+<!--        app:strokeWidth="1dp" />-->
+
+    <Button
+        android:id="@+id/button_problem"
+        android:layout_width="185dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="59dp"
+        android:backgroundTint="#F1F1F1"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/problem_social_auth"
+        android:textColor="#B2B2B2"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

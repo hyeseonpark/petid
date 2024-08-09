@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/top_bar"
+                layout="@layout/top_bar_common"
+                app:title="@{@string/main_hospital_title}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@drawable/edittext_search"
+                android:hint="@string/search"
+                android:inputType="text"
+                android:textSize="14dp"
+                android:textColor="@color/petid_title"
+                android:textColorHint="#BFBFBF"
+                android:paddingEnd="16dp"
+                android:drawableEnd="@drawable/ic_search"
+                android:drawableTint="@color/petid_title"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="18dp"/>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="12dp"
+                android:background="#EFEFEF"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_hospital_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="13dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>
