@@ -24,7 +24,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/hospital_image"
+        android:src="@drawable/img_hospital_image"
         android:alpha="0.5"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="53dp" />
