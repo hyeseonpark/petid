@@ -1,4 +1,4 @@
-package com.android.petid.view.generate
+package com.android.petid.view.deleted
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

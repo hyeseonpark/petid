@@ -1,5 +1,6 @@
 package com.android.petid.view.generate
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,8 +14,25 @@ import com.android.petid.databinding.ActivityCompleteCardBinding
 import com.android.petid.databinding.ActivityGenerateCompleteBinding
 import com.android.petid.ui.CustomDialogCommon
 import com.android.petid.ui.CustomDialogInterface
+import com.android.petid.view.main.MainActivity
 
-class CompleteCardActivity : AppCompatActivity(), CustomDialogInterface {
+class CompleteCardActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityCompleteCardBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCompleteCardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.buttonComplete.button.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+        }
+    }
+
+}
+
+/*class CompleteCardActivity : AppCompatActivity(), CustomDialogInterface {
     private lateinit var binding: ActivityCompleteCardBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,4 +50,4 @@ class CompleteCardActivity : AppCompatActivity(), CustomDialogInterface {
 
     override fun onYesButtonClick() {
     }
-}
+}*/

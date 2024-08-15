@@ -1,19 +1,18 @@
-package com.android.petid.view.sign
+package com.android.petid.view.generate
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
-import android.view.View.OnFocusChangeListener
 import androidx.appcompat.app.AppCompatActivity
-import com.android.petid.databinding.ActivitySignupBinding
+import com.android.petid.databinding.ActivityUserInfoInputBinding
+import com.android.petid.view.sign.SignupCompleteActivity
 
-class SignupActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
+class UserInfoInputActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityUserInfoInputBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignupBinding.inflate(layoutInflater)
+        binding = ActivityUserInfoInputBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.editTextName.editText.addTextChangedListener(object : TextWatcher{
@@ -33,11 +32,11 @@ class SignupActivity : AppCompatActivity() {
 
         binding.buttonNext.button.setOnClickListener{
             val nameValue = binding.editTextName.editText.text.toString()
-            val regidencyValue = binding.editTextResidencyNumber.text.toString() + binding.editTextResidencyNumber2.text.toString()
+//            val regidencyValue = binding.editTextResidencyNumber.text.toString() + binding.editTextResidencyNumber2.text.toString()
             val phoneValue = binding.editTextPhone.editText.text.toString()
             val addressValue = binding.editTextAddress.editText.text.toString()
 
-            val intent = Intent(this, SignupCompleteActivity::class.java)
+            val intent = Intent(this, PetInfoInputActivity::class.java)
             startActivity(intent)
             finish()
         }

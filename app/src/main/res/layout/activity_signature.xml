@@ -3,36 +3,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".view.generate.CheckingInfoActivity">
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
             <include
                 android:id="@+id/top_bar"
                 layout="@layout/top_bar_common" />
 
             <TextView
+                android:id="@+id/textView_current_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:layout_marginLeft="1dp"
+                android:text="@string/last"
+                android:textSize="18sp"
+                android:textColor="@color/petid_clear_blue"
+                android:textFontWeight="700"
+                android:layout_marginHorizontal="34dp"/>
+
+            <TextView
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="33dp"
-                android:layout_marginTop="30dp"
-                android:text="마지막으로\n신청인의 서명 또는\n사인을 해주세요"
-                android:textSize="24sp"
+                android:text="@string/petid_generate_step_7_title"
+                android:layout_marginTop="10dp"
+                android:textSize="24dp"
+                android:textFontWeight="500"
                 android:textColor="@color/petid_title"
-                app:layout_constraintEnd_toEndOf="@+id/top_bar"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/top_bar"
-                app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+                android:layout_marginHorizontal="33dp"/>
+
+            <TextView
+                android:id="@+id/textView_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/petid_generate_step_7_subtitle"
+                android:textFontWeight="400"
+                android:textColor="#B2B2B2"
+                android:layout_marginHorizontal="33dp"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_signature"
                 android:layout_width="match_parent"
                 android:layout_height="182dp"
                 android:layout_marginHorizontal="33dp"
-                android:layout_marginTop="98dp"
+                android:layout_marginTop="34dp"
+                android:layout_weight="1"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -43,13 +63,13 @@
                     android:id="@+id/layout_signature"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/solid_fafafa_stroke_adadad_radius_16">
+                    android:background="@drawable/solid_dbdbdb_radius_16">
 
                     <TextView
                         android:id="@+id/textView_signature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="이곳에 서명 입력 또는 사인을 해주세요"
+                        android:text="@string/petid_generate_step_7_signature_desc"
                         android:textColor="#b4b4b4"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="@+id/layout_signature"
@@ -75,12 +95,10 @@
                 app:buttonText="@{@string/next}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="50dp"
-                android:layout_marginHorizontal="33dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_marginBottom="68dp"
+                android:layout_marginTop="56dp"
+                android:layout_marginHorizontal="33dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>

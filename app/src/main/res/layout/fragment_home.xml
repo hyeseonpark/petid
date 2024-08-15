@@ -121,7 +121,7 @@
 
                 </androidx.cardview.widget.CardView>
 
-
+                <!-- pet id card -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="271dp"
                     android:layout_height="406dp"
@@ -171,7 +171,7 @@
                         <include
                             layout="@layout/button_common"
                             app:buttonText="@{@string/start}"
-                            android:id="@+id/buttonStart"
+                            android:id="@+id/button_create_start"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="26dp"

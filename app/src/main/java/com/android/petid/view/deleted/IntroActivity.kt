@@ -1,9 +1,10 @@
-package com.android.petid.view.sign
+package com.android.petid.view.deleted
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.databinding.ActivityIntroBinding
+import com.android.petid.view.sign.TermsActivity
 
 class IntroActivity : AppCompatActivity() {
     private lateinit var binding: ActivityIntroBinding

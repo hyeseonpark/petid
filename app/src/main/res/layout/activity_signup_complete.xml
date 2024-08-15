@@ -9,12 +9,25 @@
         android:layout_height="match_parent"
         tools:context=".view.sign.SignupCompleteActivity">
 
+
+        <ImageButton
+            android:id="@+id/imageButton_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@null"
+            android:padding="0dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="18dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="101.81dp"
-            android:text="펫아이디 회원가입을\n축하드립니다."
+            android:layout_marginTop="129dp"
+            android:text="@string/signup_complete_title"
             android:textSize="24sp"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="33dp"
-            android:layout_marginBottom="86dp"
+            android:layout_marginBottom="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

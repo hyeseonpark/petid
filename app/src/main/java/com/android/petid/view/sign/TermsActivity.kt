@@ -1,5 +1,6 @@
 package com.android.petid.view.sign
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.R
@@ -53,6 +54,8 @@ class TermsActivity : AppCompatActivity() {
         }
 
         binding.buttonNext.button.setOnClickListener{
+            val intent = Intent(this, SignupCompleteActivity::class.java)
+            startActivity(intent)
             finish()
         }
     }
