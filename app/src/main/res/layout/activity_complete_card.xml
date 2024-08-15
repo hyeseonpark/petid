@@ -3,57 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.generate.CompleteCardActivity">
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/textView_title_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="77.79dp"
-            android:text="@string/complete_card_activity_title_1"
-            android:textSize="24sp"
-            android:textColor="@color/petid_clear_blue"
-            android:textFontWeight="600"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/top_bar"
+            layout="@layout/top_bar_common" />
 
         <ImageView
-            android:id="@+id/imageView_party_popper_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView_title_1"
-            app:layout_constraintEnd_toStartOf="@+id/textView_title_1"
-            app:layout_constraintTop_toTopOf="@+id/textView_title_1"
-            app:srcCompat="@drawable/ic_party_popper" />
+            android:id="@+id/imageView"
+            android:layout_width="98dp"
+            android:layout_height="115dp"
+            android:src="@drawable/img_create_petid_logo"
+            android:backgroundTint="@android:color/transparent"
+            android:layout_marginTop="29dp"/>
 
         <TextView
-            android:id="@+id/textView_title_2"
+            android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/complete_card_activity_title_2"
+            android:text="@string/petid_generate_complete_title"
             android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@+id/textView_title_1"
-            app:layout_constraintEnd_toEndOf="@+id/textView_title_1"
-            app:layout_constraintTop_toBottomOf="@+id/textView_title_1" />
+            android:layout_marginTop="15dp"/>
 
-        <ImageView
-            android:id="@+id/imageView_party_popper_2"
+
+        <TextView
+            android:id="@+id/textView_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:scaleX="-1"
-            app:layout_constraintBottom_toBottomOf="@+id/textView_title_1"
-            app:layout_constraintStart_toEndOf="@+id/textView_title_1"
-            app:layout_constraintTop_toTopOf="@+id/textView_title_1"
-            app:srcCompat="@drawable/ic_party_popper" />
+            android:layout_marginTop="13dp"
+            android:text="@string/petid_generate_complete_desc"
+            android:textFontWeight="400"
+            android:textColor="#B2B2B2"
+            android:layout_weight="1"/>
 
         <include
             android:id="@+id/buttonComplete"
@@ -62,11 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="33dp"
-            android:layout_marginBottom="86dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginBottom="68dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </layout>

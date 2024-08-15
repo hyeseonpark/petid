@@ -25,17 +25,30 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/textView_current_step"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginLeft="1dp"
+                    android:text="3/7"
+                    android:textSize="18sp"
+                    android:textColor="@color/petid_clear_blue"
+                    android:textFontWeight="700"/>
+
+                <TextView
                     android:id="@+id/textView_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="46dp"
-                    android:text="@string/pet_info_input_activity_title"
-                    android:textSize="24sp" />/>
+                    android:text="@string/petid_generate_step_3_title"
+                    android:layout_marginTop="10dp"
+                    android:textSize="24dp"
+                    android:textFontWeight="500"
+                    android:textColor="@color/petid_title"/>
 
                 <include
                     android:id="@+id/edit_text_name"
                     layout="@layout/edittext_common_rectangle"
-                    app:title="@{@string/name}"
+                    app:title="@{@string/pet_name}"
                     app:hint="@{@string/name_hint}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -60,31 +73,41 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="26dp" />
 
+
                 <include
+                    android:id="@+id/edit_neutering_date"
+                    layout="@layout/edittext_calendar"
+                    app:title="@{@string/neutering_date}"
+                    app:hint="@{@string/neutering_date_hint}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="37dp" />
+
+                <!--include
                     android:id="@+id/radio_group_neutering"
                     layout="@layout/radio_group_common"
-                    app:title="@{@string/neutering_status}"
+                    app:title="@{@string/neutering_date}"
                     app:textFirst="@{@string/Y}"
                     app:textSecond="@{@string/N}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="26dp" />
+                    android:layout_marginTop="26dp" /-->
 
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_marginTop="7dp">-->
+                <!--<com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="7dp">
 
-<!--                    <com.google.android.material.textfield.TextInputEditText-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="서울특별시 강남구 덕구대로 3길 34\n덕구빌라 202호"-->
-<!--                        android:textColor="@color/petid_title"-->
-<!--                        android:background="@drawable/edittext_rounded_corner_rectangle"-->
-<!--                        android:focusable="false"-->
-<!--                        />-->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="서울특별시 강남구 덕구대로 3길 34\n덕구빌라 202호"
+                        android:textColor="@color/petid_title"
+                        android:background="@drawable/edittext_rounded_corner_rectangle"
+                        android:focusable="false"
+                        />
 
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <include
                     android:id="@+id/edit_text_address"
@@ -106,7 +129,7 @@
                     android:hint="상세주소를 입력해주세요."
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:paddingEnd="17.96dp"/>
+                    android:paddingEnd="17.96dp"/>-->
 
             </LinearLayout>
 

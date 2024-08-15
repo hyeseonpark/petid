@@ -3,59 +3,91 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".view.generate.PetIdStartActivity">
+
+        <include
+            android:id="@+id/top_bar"
+            layout="@layout/top_bar_common"/>
+
+        <TextView
+            android:id="@+id/textView_current_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:layout_marginLeft="34dp"
+            android:text="1/7"
+            android:textSize="18sp"
+            android:textColor="@color/petid_clear_blue"
+            android:textFontWeight="700"/>
 
         <TextView
             android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="84.81dp"
-            android:text="펫아이디 만들기를 시작합니다"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@string/petid_generate_step_1_title"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="33dp"
+            android:textSize="24dp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"/>
 
         <TextView
             android:id="@+id/textView_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:text="반려동물 등록이 필요해요"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="33dp"
+            android:text="@string/petid_generate_step_1_subtitle"
             android:textSize="16sp"
-            android:textFontWeight="400"
-            app:layout_constraintEnd_toEndOf="@+id/textView_title"
-            app:layout_constraintStart_toStartOf="@+id/textView_title"
-            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+            android:textFontWeight="400" />
 
-        <include
-            android:id="@+id/buttonStart"
-            layout="@layout/button_common"
-            app:buttonText="@{@string/start}"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="53dp"
+            android:background="@drawable/button_background_grey"
+            android:text="@string/petid_generate_step_1_button_1"
+            android:textSize="16sp"
+            android:textColor="@color/petid_title"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
             android:layout_marginHorizontal="33dp"
-            android:layout_marginBottom="86dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="102dp"/>
 
-        <TextView
-            android:id="@+id/textView_generated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:text="이미 등록되어있어요"
-            android:textSize="14sp"
-            android:clickable="true"
-            app:layout_constraintEnd_toEndOf="@+id/buttonStart"
-            app:layout_constraintStart_toStartOf="@+id/buttonStart"
-            app:layout_constraintTop_toBottomOf="@+id/buttonStart" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_2"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:background="@drawable/button_background_grey"
+            android:text="@string/petid_generate_step_1_button_2"
+            android:textSize="16sp"
+            android:textColor="@color/petid_title"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            android:layout_marginHorizontal="33dp"
+            android:layout_marginTop="16dp"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_3"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:background="@drawable/button_background_grey"
+            android:text="@string/petid_generate_step_1_button_3"
+            android:textSize="16sp"
+            android:textColor="@color/petid_title"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:stateListAnimator="@null"
+            android:layout_marginHorizontal="33dp"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
 
 </layout>

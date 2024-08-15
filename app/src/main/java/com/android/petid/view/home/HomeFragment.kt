@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.android.petid.R
 import com.android.petid.databinding.FragmentHomeBinding
-import com.android.petid.view.generate.PetInfoInputActivity
+import com.android.petid.view.generate.PetIdStartActivity
 
 class HomeFragment : Fragment() {
     lateinit var binding:FragmentHomeBinding
@@ -34,8 +33,8 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_home, container, false)
 
-        binding.buttonStart.button.setOnClickListener{
-            val intent = Intent(activity, PetInfoInputActivity::class.java)
+        binding.buttonCreateStart.button.setOnClickListener{
+            val intent = Intent(activity, PetIdStartActivity::class.java)
             startActivity(intent)
         }
 

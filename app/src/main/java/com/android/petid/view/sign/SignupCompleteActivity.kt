@@ -11,6 +11,7 @@ import com.android.petid.databinding.ActivityIntroBinding
 import com.android.petid.databinding.ActivitySignupCompleteBinding
 import com.android.petid.view.generate.PetIdStartActivity
 import com.android.petid.view.generate.PetInfoInputActivity
+import com.android.petid.view.main.MainActivity
 
 class SignupCompleteActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupCompleteBinding
@@ -20,7 +21,13 @@ class SignupCompleteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonConfirm.button.setOnClickListener{
-            val intent = Intent(this, PetIdStartActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.imageButtonClose.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }

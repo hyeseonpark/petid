@@ -62,11 +62,12 @@ class PetInfoInputActivity : AppCompatActivity() {
 
         binding.buttonNext.button.setOnClickListener{
             var nextIntent : Intent
-            if(intent.getBooleanExtra("generated", false)) {
-                nextIntent = Intent(this, CompleteCardActivity::class.java)
-            } else {
-                nextIntent = Intent(this, PetPhotoActivity::class.java)
-            }
+            nextIntent = Intent(this, PetPhotoActivity::class.java)
+//            if(intent.getBooleanExtra("generated", false)) {
+//                nextIntent = Intent(this, CompleteCardActivity::class.java)
+//            } else {
+//                nextIntent = Intent(this, PetPhotoActivity::class.java)
+//            }
             startActivity(nextIntent)
         }
     }

@@ -16,7 +16,7 @@ class SignatureActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.buttonNext.button.setOnClickListener{
-            val intent = Intent(this, GenerateCompleteActivity::class.java)
+            val intent = Intent(this, CompleteCardActivity::class.java)
             val bitmap = getBitmapFromView(binding.drawingViewSignature)
 //            val base64Bitmap = bitmapToBase64(bitmap)
 //            sendBitmapToServer(base64Bitmap)

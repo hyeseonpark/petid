@@ -47,7 +47,7 @@
             android:name=".view.generate.CompleteCardActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.GenerateCompleteActivity"
+            android:name=".view.deleted.GenerateCompleteActivity"
             android:exported="false" />
         <activity
             android:name=".view.generate.SignatureActivity"
@@ -89,10 +89,10 @@
             android:name=".view.main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".view.sign.IntroActivity"
+            android:name=".view.deleted.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".view.sign.SignupActivity"
+            android:name=".view.generate.UserInfoInputActivity"
             android:exported="false" />
     </application>
 
