@@ -7,11 +7,13 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/white">
 
         <include
             android:id="@+id/top_bar"
-            layout="@layout/top_bar_common" />
+            layout="@layout/top_bar_common"
+            app:back="@{true}"  />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -100,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
-                android:background="@drawable/layout_background_common"
+                android:background="@drawable/layout_round_background_fafafa"
                 android:orientation="vertical"
                 android:paddingVertical="32dp"
                 android:paddingLeft="17dp"

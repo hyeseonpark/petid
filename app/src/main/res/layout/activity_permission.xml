@@ -11,7 +11,8 @@
         android:orientation="vertical"
         android:paddingTop="42dp"
         android:paddingLeft="33dp"
-        android:paddingRight="32dp">
+        android:paddingRight="32dp"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/textView_title"

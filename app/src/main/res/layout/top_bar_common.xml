@@ -5,10 +5,17 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View"/>
+
         <variable
             name="title"
             type="String" />
+
+        <variable
+            name="back"
+            type="boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         app:layout_constraintBottom_toTopOf="@+id/iconButton"
-        app:layout_constraintTop_toTopOf="@+id/iconButton">
+        app:layout_constraintTop_toTopOf="@+id/iconButton"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/textView"
@@ -38,6 +46,7 @@
             android:layout_marginLeft="17dp"
             android:background="@null"
             android:src="@drawable/ic_back"
+            android:visibility="@{back ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

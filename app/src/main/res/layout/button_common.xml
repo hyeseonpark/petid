@@ -26,7 +26,8 @@
             android:enabled="@{!disable}"
             android:contentDescription="common button"
             android:insetTop="0dp"
-            android:insetBottom="0dp" />
+            android:insetBottom="0dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless" />
 
     </LinearLayout>
 

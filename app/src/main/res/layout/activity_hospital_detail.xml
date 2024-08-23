@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".view.hospital.HospitalDetailActivity"
+        android:background="@color/white">
+
+        <include
+            android:id="@+id/top_bar"
+            layout="@layout/top_bar_common"
+            app:title="@{`동물병원`}"
+            app:back="@{true}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/imageView_hospital_photo"
+            android:layout_width="match_parent"
+            android:layout_height="266dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/img_pet_photo_sample"
+            android:layout_marginTop="9dp"/>
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="도그마루 동물병원"
+            android:layout_marginTop="38dp"
+            android:textSize="20dp"
+            android:textFontWeight="700"
+            android:layout_marginLeft="24dp"
+            android:textColor="@color/petid_title"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="18dp">
+
+            <ImageView
+                android:id="@+id/imageView_vet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_person"
+                app:tint="#838383" />
+
+            <TextView
+                android:id="@+id/textView_vet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="홍길동 원장"
+                android:textColor="@color/petid_subtitle"
+                android:textFontWeight="500" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="18dp">
+
+            <ImageView
+                android:id="@+id/imageView_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_time"
+                app:tint="#838383" />
+
+            <TextView
+                android:id="@+id/textView_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="10:00 - 20:00 (13:00 - 14:00 휴게시간)"
+                android:textColor="@color/petid_subtitle"
+                android:textFontWeight="500" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="18dp">
+
+            <ImageView
+                android:id="@+id/imageView_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_place"
+                app:tint="#838383" />
+
+            <TextView
+                android:id="@+id/textView_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="서울 송파구 송파대로11길 1-1 A동 1층"
+                android:textColor="@color/petid_subtitle"
+                android:textFontWeight="500" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="18dp">
+
+            <ImageView
+                android:id="@+id/imageView_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_hospital_call"
+                app:tint="#838383" />
+
+            <TextView
+                android:id="@+id/textView_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="02-123-1234"
+                android:textColor="@color/petid_subtitle"
+                android:textFontWeight="500" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <include
+            layout="@layout/button_common"
+            app:buttonText="@{@string/hospital_make_reservation}"
+            android:id="@+id/buttonReserve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginBottom="68dp" />
+
+    </LinearLayout>
+
+</layout>
