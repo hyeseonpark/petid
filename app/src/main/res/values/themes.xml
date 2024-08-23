@@ -4,12 +4,13 @@
         <!-- Customize your light theme here. -->
         <!-- TODO temporary solution -->
         <item name="colorPrimary">@color/petid_clear_blue</item>
-        <item name="android:background">@color/white</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+<!--        <item name="android:background">@color/white</item>-->
         <item name="android:fontFamily">@font/font_family</item>
         <item name="android:textFontWeight" tools:targetApi="p">500</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
     </style>
 
     <style name="Theme.PetId" parent="Base.Theme.PetId" />
@@ -22,13 +23,35 @@
         <item name="android:background">@null</item>
     </style>
 
-    <style name="TransparentDialogTheme" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
 
 <!--    <style name="Theme.App.Starting" parent="Theme.SplashScreen">-->
 <!--        <item name="windowSplashScreenBackground">@color/petid_clear_blue</item>-->
 <!--        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app</item>-->
 <!--        <item name="postSplashScreenTheme">@style/Base.Theme.PetId</item>-->
 <!--    </style>-->
+
+    <!-- 캘린더의 날짜(Day)의 스타일 설정 -->
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+<!--        <item name="android:textColor">@drawable/calendar_selector_textcolor</item>-->
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- 캘린더의 날짜(Day)의 스타일 설정 -->
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+<!--        <item name="android:textColor">@drawable/calendar_selector_textcolor</item>-->
+    </style>
+
+    <!-- 캘린더의 요일에 적용되는 스타일 -->
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/petid_gray</item>
+        <item name="android:textFontWeight" tools:targetApi="p">400</item>
+    </style>
+
+    <!-- 연, 월을 표시하는 헤더에 적용되는 스타일 -->
+    <style name="CalendarWidgetHeader">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/petid_title</item>
+        <item name="android:textFontWeight" tools:targetApi="p">600</item>
+    </style>
+
 </resources>

@@ -6,6 +6,7 @@
     <color name="petid_clear_blue">#3397FF</color>
     <color name="petid_title">#242424</color>
     <color name="petid_subtitle">#848484</color>
+    <color name="petid_gray">#838383</color>
     <color name="petid_light_gray">#D9D9D9</color>
 <!--    <color name="selector_848484_3397FF">-->
 <!--        <selector xmlns:android="http://schemas.android.com/apk/res/android">-->

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/main"
@@ -14,7 +14,7 @@
         <include
             android:id="@+id/top_bar"
             layout="@layout/top_bar_common"
-            app:back="@{true}"  />
+            app:back="@{true}" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -22,36 +22,41 @@
             android:layout_height="115dp"
             android:src="@drawable/img_create_petid_logo"
             android:backgroundTint="@android:color/transparent"
-            android:layout_marginTop="29dp"/>
+            android:layout_marginTop="14dp"/>
 
         <TextView
             android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/petid_generate_complete_title"
+            android:text="@string/hospital_waiting_reservation_title"
+            android:textFontWeight="500"
             android:textSize="24sp"
             android:layout_marginTop="15dp"/>
-
 
         <TextView
             android:id="@+id/textView_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
-            android:text="@string/petid_generate_complete_desc"
+            android:text="@string/hospital_waiting_reservation_subtitle"
             android:textFontWeight="400"
-            android:textColor="#B2B2B2"
+            android:textSize="15dp"
+            android:textColor="@color/petid_subtitle"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_weight="1"/>
 
         <include
-            android:id="@+id/buttonComplete"
+            android:id="@+id/buttonConfirm"
             layout="@layout/button_common"
             app:buttonText="@{@string/confirm}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="33dp"
-            android:layout_marginBottom="68dp" />
+            android:layout_marginBottom="68dp"
+            android:layout_marginHorizontal="33dp"/>
 
     </LinearLayout>
 

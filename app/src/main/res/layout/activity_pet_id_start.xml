@@ -8,11 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.generate.PetIdStartActivity">
+        tools:context=".view.generate.PetIdStartActivity"
+        android:background="@color/white">
 
         <include
             android:id="@+id/top_bar"
-            layout="@layout/top_bar_common"/>
+            layout="@layout/top_bar_common"
+            app:back="@{true}" />
 
         <TextView
             android:id="@+id/textView_current_step"
@@ -58,7 +60,8 @@
             android:insetBottom="0dp"
             android:stateListAnimator="@null"
             android:layout_marginHorizontal="33dp"
-            android:layout_marginTop="102dp"/>
+            android:layout_marginTop="102dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_2"
@@ -72,7 +75,8 @@
             android:insetBottom="0dp"
             android:stateListAnimator="@null"
             android:layout_marginHorizontal="33dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_3"
@@ -86,7 +90,8 @@
             android:insetBottom="0dp"
             android:stateListAnimator="@null"
             android:layout_marginHorizontal="33dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"/>
 
     </LinearLayout>
 

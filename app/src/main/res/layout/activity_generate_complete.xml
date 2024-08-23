@@ -7,11 +7,13 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.generate.CheckingInfoActivity">
+        tools:context=".view.generate.CheckingInfoActivity"
+        android:background="@color/white">
 
         <include
             android:id="@+id/top_bar"
-            layout="@layout/top_bar_common" />
+            layout="@layout/top_bar_common"
+            app:back="@{true}"  />
 
         <ImageView
             android:id="@+id/imageView_complete"
@@ -38,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="33dp"
-            android:background="@drawable/layout_background_common"
+            android:background="@drawable/layout_round_background_fafafa"
             android:orientation="vertical"
             android:paddingHorizontal="23dp"
             android:paddingVertical="22dp"
