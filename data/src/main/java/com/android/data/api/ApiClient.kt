@@ -9,7 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    private const val BASE_URL = "http://43.203.1.26:8080"
+    private const val BASE_URL =  "http://yourpet-id.com:8080"
 
 //    fun getApiClient(): Retrofit {
 //

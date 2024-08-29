@@ -17,19 +17,19 @@
         android:theme="@style/Theme.PetId"
         tools:targetApi="31">
         <activity
-            android:name=".view.hospital.ReservationCalendarActivity"
+            android:name=".viewmodel.hospital.ReservationCalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".view.hospital.WatingReservationActivity"
+            android:name=".viewmodel.hospital.WatingReservationActivity"
             android:exported="false" />
         <activity
-            android:name=".view.hospital.CompleteReservationActivity"
+            android:name=".viewmodel.hospital.CompleteReservationActivity"
             android:exported="false" />
         <activity
-            android:name=".view.hospital.ModalLocationBottomSheet"
+            android:name=".viewmodel.hospital.ModalLocationBottomSheet"
             android:exported="false" />
         <activity
-            android:name=".view.hospital.HospitalDetailActivity"
+            android:name=".viewmodel.hospital.HospitalDetailActivity"
             android:exported="false" />
 
         <meta-data
@@ -58,40 +58,40 @@
         </service>
 
         <activity
-            android:name=".view.sign.PermissionActivity"
+            android:name=".viewmodel.auth.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.CompleteCardActivity"
+            android:name=".viewmodel.generate.CompleteCardActivity"
             android:exported="false" />
         <activity
-            android:name=".view.deleted.GenerateCompleteActivity"
+            android:name=".ui.view.deleted.GenerateCompleteActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.SignatureActivity"
+            android:name=".viewmodel.generate.SignatureActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.CheckingInfoActivity"
+            android:name=".viewmodel.generate.CheckingInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.ScannedInfoActivity"
+            android:name=".viewmodel.generate.ScannedInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.PetPhotoActivity"
+            android:name=".viewmodel.generate.PetPhotoActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.PetInfoInputActivity"
+            android:name=".viewmodel.generate.PetInfoInputActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.PetIdStartActivity"
+            android:name=".viewmodel.generate.PetIdStartActivity"
             android:exported="false" />
         <activity
-            android:name=".view.sign.SignupCompleteActivity"
+            android:name=".viewmodel.auth.SignupCompleteActivity"
             android:exported="false" />
         <activity
-            android:name=".view.sign.TermsActivity"
+            android:name=".viewmodel.auth.TermsActivity"
             android:exported="false" />
         <activity
-            android:name=".view.sign.SocialAuthActivity"
+            android:name=".viewmodel.auth.SocialAuthActivity"
             android:exported="true">
 
             <!-- android:theme="@style/Theme.AppCompat"> -->
@@ -103,13 +103,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.main.MainActivity"
+            android:name=".viewmodel.main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".view.deleted.IntroActivity"
+            android:name=".ui.view.deleted.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".view.generate.UserInfoInputActivity"
+            android:name=".viewmodel.generate.UserInfoInputActivity"
             android:exported="false" />
     </application>
 
