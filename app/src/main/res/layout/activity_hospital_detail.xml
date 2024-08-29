@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".viewmodel.hospital.HospitalDetailActivity"
+        tools:context=".ui.view.hospital.HospitalDetailActivity"
         android:background="@color/white">
 
         <include

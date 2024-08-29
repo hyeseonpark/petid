@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.android.petid.R
 import com.android.petid.databinding.FragmentHomeBinding
-import com.android.petid.viewmodel.generate.PetIdStartActivity
+import com.android.petid.ui.view.generate.PetIdStartActivity
 
 class HomeFragment : Fragment() {
     lateinit var binding:FragmentHomeBinding

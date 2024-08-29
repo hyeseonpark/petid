@@ -10,9 +10,9 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen
 import androidx.fragment.app.Fragment
 import com.android.petid.databinding.ActivityMainBinding
-import com.android.petid.viewmodel.home.HomeFragment
-import com.android.petid.viewmodel.hospital.HospitalFragment
-import com.android.petid.viewmodel.my.MyFragment
+import com.android.petid.ui.view.home.HomeFragment
+import com.android.petid.ui.view.hospital.HospitalFragment
+import com.android.petid.ui.view.my.MyFragment
 import com.google.android.material.tabs.TabLayout
 
 
