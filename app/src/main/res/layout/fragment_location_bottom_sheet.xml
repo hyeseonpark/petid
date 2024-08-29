@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/white_round_top_border_10"
-    tools:context=".view.hospital.LocationBottomSheetFragment">
+    tools:context=".viewmodel.hospital.LocationBottomSheetFragment">
 
     <TextView
         android:id="@+id/textView_title"
