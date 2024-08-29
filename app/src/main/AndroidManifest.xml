@@ -17,19 +17,16 @@
         android:theme="@style/Theme.PetId"
         tools:targetApi="31">
         <activity
-            android:name=".viewmodel.hospital.ReservationCalendarActivity"
+            android:name=".ui.view.hospital.ReservationCalendarActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.hospital.WatingReservationActivity"
+            android:name=".ui.view.hospital.WatingReservationActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.hospital.CompleteReservationActivity"
+            android:name=".ui.view.hospital.CompleteReservationActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.hospital.ModalLocationBottomSheet"
-            android:exported="false" />
-        <activity
-            android:name=".viewmodel.hospital.HospitalDetailActivity"
+            android:name=".ui.view.hospital.HospitalDetailActivity"
             android:exported="false" />
 
         <meta-data
@@ -58,40 +55,40 @@
         </service>
 
         <activity
-            android:name=".viewmodel.auth.PermissionActivity"
+            android:name=".ui.view.auth.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.CompleteCardActivity"
+            android:name=".ui.view.generate.CompleteCardActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.deleted.GenerateCompleteActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.SignatureActivity"
+            android:name=".ui.view.generate.SignatureActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.CheckingInfoActivity"
+            android:name=".ui.view.generate.CheckingInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.ScannedInfoActivity"
+            android:name=".ui.view.generate.ScannedInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.PetPhotoActivity"
+            android:name=".ui.view.generate.PetPhotoActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.PetInfoInputActivity"
+            android:name=".ui.view.generate.PetInfoInputActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.PetIdStartActivity"
+            android:name=".ui.view.generate.PetIdStartActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.auth.SignupCompleteActivity"
+            android:name=".ui.view.auth.SignupCompleteActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.auth.TermsActivity"
+            android:name=".ui.view.auth.TermsActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.auth.SocialAuthActivity"
+            android:name=".ui.view.auth.SocialAuthActivity"
             android:exported="true">
 
             <!-- android:theme="@style/Theme.AppCompat"> -->
@@ -103,13 +100,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".viewmodel.main.MainActivity"
+            android:name=".ui.view.main.MainActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.deleted.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.generate.UserInfoInputActivity"
+            android:name=".ui.view.generate.UserInfoInputActivity"
             android:exported="false" />
     </application>
 

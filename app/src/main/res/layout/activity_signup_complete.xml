@@ -7,7 +7,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".viewmodel.auth.SignupCompleteActivity"
+        tools:context=".ui.view.auth.SignupCompleteActivity"
         android:background="@color/white">
 
 

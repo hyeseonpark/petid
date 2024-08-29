@@ -1,6 +1,6 @@
 package com.android.data.api
 
-import com.android.data.BuildConfig
+import androidx.multidex.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request

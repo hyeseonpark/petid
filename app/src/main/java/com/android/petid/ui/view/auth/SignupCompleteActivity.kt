@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.databinding.ActivitySignupCompleteBinding
-import com.android.petid.viewmodel.main.MainActivity
+import com.android.petid.ui.view.main.MainActivity
 
 class SignupCompleteActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupCompleteBinding

@@ -79,7 +79,7 @@
                         app:layout_constraintStart_toStartOf="@+id/layout_signature"
                         app:layout_constraintTop_toTopOf="@+id/layout_signature" />
 
-                    <com.android.petid.ui.DrawingView
+                    <com.android.petid.ui.component.DrawingView
                         android:id="@+id/drawingView_signature"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

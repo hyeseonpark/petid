@@ -7,7 +7,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".viewmodel.generate.CheckingInfoActivity"
+        tools:context=".ui.view.generate.CheckingInfoActivity"
         android:background="@color/white">
 
         <include

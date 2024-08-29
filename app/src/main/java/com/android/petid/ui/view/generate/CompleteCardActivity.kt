@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.databinding.ActivityCompleteCardBinding
-import com.android.petid.viewmodel.main.MainActivity
+import com.android.petid.ui.view.main.MainActivity
 
 class CompleteCardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCompleteCardBinding
