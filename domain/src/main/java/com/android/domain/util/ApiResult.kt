@@ -1,8 +1,10 @@
 package com.android.domain.util
 
+import com.android.domain.entity.ErrorEntity
+
 sealed class ApiResult<T> {
     data class Success<T>(val data: T) : ApiResult<T>()
-    data class Error<T>(val error: Throwable) : ApiResult<T>()
+    data class Error<T>(val error: ErrorEntity) : ApiResult<T>()
 }
 
 inline fun <T, R> ApiResult<T>.getResult(
@@ -23,6 +25,7 @@ inline fun <T> ApiResult<T>.onSuccess(
 inline fun <T> ApiResult<T>.onError(
     action: (Throwable) -> Unit
 ): ApiResult<T> {
-    if (this is ApiResult.Error) action(error)
+//    TODO
+//    if (this is ApiResult.Error) action(error)
     return this
 }
