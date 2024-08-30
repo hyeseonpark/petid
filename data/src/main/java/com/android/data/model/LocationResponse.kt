@@ -2,12 +2,11 @@ package com.android.data.model
 
 import com.android.domain.entity.LocationEntity
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class LocationResponse(
-    @SerializedName("id")
     val id: Int,
-
-    @SerializedName("name")
     val name: String
 )
 

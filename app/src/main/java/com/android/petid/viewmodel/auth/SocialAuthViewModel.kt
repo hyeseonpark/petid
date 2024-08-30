@@ -2,10 +2,14 @@ package com.android.petid.viewmodel.auth
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.android.domain.entity.AuthEntity
+import androidx.lifecycle.viewModelScope
 import com.android.domain.usecase.login.DoLoginUseCase
 import com.android.domain.util.ApiResult
+import com.android.petid.ui.state.LoginResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,33 +18,26 @@ class SocialAuthViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
-    suspend fun login(sub: String, fcmToken: String): ApiResult<AuthEntity> {
-        return doLoginUseCase(sub, fcmToken)
-    }
-
-    /*val loginEvent = MutableLiveData<Event<LoginState>>()
+    private val _loginResult = MutableSharedFlow<LoginResult>()
+    val loginResult: SharedFlow<LoginResult> = _loginResult
 
     fun login(sub: String, fcmToken: String) {
         viewModelScope.launch {
-            when (val result = getLoginUseCase(sub, fcmToken)) {
-                is ApiResult.Success -> {
-                    // 로그인 성공 처리
-                    loginEvent.value = Event(LoginState.Success(result.data))
-                }
+            _loginResult.emit(LoginResult.Loading)  // 로딩 상태 전송
 
+            when (val result = doLoginUseCase(sub, fcmToken)) {
+                is ApiResult.Success -> {
+                    // TODO 응답값을 localRepository 를 통해 처리할수 있도록 바꾸기
+                    _loginResult.emit(LoginResult.Success(result.data))  // 성공 시 데이터 전송
+                }
                 is ApiResult.Error -> {
-                    val errorMessage = result.error.message
-                    if (result.error is HttpException && result.error.code() == 404 &&
-                        errorMessage?.contains("Member UID") == true
-                    ) {
-                        // 비회원 에러 처리: 회원가입 화면으로 이동하도록 상태 변경
-                        loginEvent.value = Event(LoginState.NavigateToSignUp)
+                    if (result.error.status == 404 && result.error.error.contains("Member UID")) {
+                        _loginResult.emit(LoginResult.NeedToSignUp)  // 회원가입 필요 시 전송
                     } else {
-                        // 일반적인 에러 처리
-                        loginEvent.value = Event(LoginState.Error(result.error))
+                        _loginResult.emit(LoginResult.Error(result.error.error))  // 오류 시 메시지 전송
                     }
                 }
             }
         }
-    }*/
+    }
 }
