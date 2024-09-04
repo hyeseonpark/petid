@@ -2,6 +2,8 @@ package com.android.petid.di
 
 import com.android.data.source.remote.SocialAuthRemoteDataSource
 import com.android.data.source.remote.SocialAuthRemoteDataSourceImpl
+import com.android.data.source.remote.TermsRemoteDataSource
+import com.android.data.source.remote.TermsRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,6 +19,12 @@ abstract class DataModule {
     abstract fun bindLoginRemoteDataSource(
         impl: SocialAuthRemoteDataSourceImpl
     ): SocialAuthRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindTermsRemoteDataSource(
+        impl: TermsRemoteDataSourceImpl
+    ): TermsRemoteDataSource
 
     /*companion object {
         @Provides

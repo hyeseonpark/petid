@@ -8,9 +8,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
-import com.android.petid.common.Constants.SHARED_VALUE_FCM_TOKEN
-import com.android.petid.common.PreferencesControl
 import com.android.petid.databinding.ActivitySocialAuthBinding
+import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.LoginResult
 import com.android.petid.ui.view.main.MainActivity
 import com.android.petid.viewmodel.auth.SocialAuthViewModel
@@ -26,7 +25,6 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.orhanobut.logger.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,6 +40,8 @@ class SocialAuthActivity : AppCompatActivity() {
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
+
+    private var kakaoAccessToken : String? = null
 
     private val googleSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -63,8 +63,13 @@ class SocialAuthActivity : AppCompatActivity() {
         if (error != null) {
             Log.e(TAG, "카카오계정으로 로그인 실패", error)
         } else if (token != null) {
-            Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
-            loginWithSocialToken(token.accessToken)
+            requestKakaoUserInfo()
+            kakaoAccessToken = token.accessToken
+            /*var idToken = token.idToken
+            if (idToken != null) {
+                Log.i(TAG, "카카오계정으로 로그인 성공 ${token}")
+                loginWithSocialToken(idToken)
+            }*/
         }
     }
 
@@ -76,10 +81,10 @@ class SocialAuthActivity : AppCompatActivity() {
         binding = ActivitySocialAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initComponent()
-        initGoogleLogin()
+        initGoogle()
         initFcm()
         setupObservers()
+        initLoginComponent()
 
 
         /*checkProcessing()
@@ -93,38 +98,61 @@ class SocialAuthActivity : AppCompatActivity() {
     }
 
     /*
-     * initializing view component
+     * initializing login component
      */
-    private fun initComponent() {
+    private fun initLoginComponent() {
         binding.buttonKakaoAuth.setOnClickListener {
-            // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
-            if (UserApiClient.instance.isKakaoTalkLoginAvailable(applicationContext)) {
-                UserApiClient.instance.loginWithKakaoTalk(applicationContext) { token, error ->
-                    if (error != null) {
-                        //Log.e(TAG, "카카오톡으로 로그인 실패2", error)
-
-                        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
-                        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
-                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                            return@loginWithKakaoTalk
-                        }
-
-                        // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
-                        UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
-
-                    } /*else if (token != null) {
-                        Log.i(TAG, "카카오톡으로 로그인 성공2 ${token.accessToken}")
-                    }*/
-
-                }
-            } else {
-                UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
-            }
+            viewModel.platform = PlatformType.kakao
+            handleKakaoLogin()
         }
         binding.buttonNaverAuth.setOnClickListener {
-            val intent = Intent(this, TermsActivity::class.java)
-            startActivity(intent)
+            viewModel.platform = PlatformType.naver
+            handleNaverLogin()
         }
+        binding.buttonGoogleAuth.setOnClickListener {
+            viewModel.platform = PlatformType.google
+            handleGoogleLogin()
+        }
+    }
+
+    private fun handleKakaoLogin() {
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(applicationContext)) {
+            UserApiClient.instance.loginWithKakaoTalk(applicationContext) { token, error ->
+                if (error != null) {
+                    // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        return@loginWithKakaoTalk
+                    }
+                    // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+                    UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
+                }/*else if (token != null) {
+                    loginWithSocialToken(token.accessToken)
+                }*/
+
+            }
+        } else {
+            UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
+        }
+    }
+
+    private fun requestKakaoUserInfo() {
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                // 사용자 정보 요청 실패 처리
+                Log.e(TAG, "사용자 정보 요청 실패: ${error.message}")
+            } else if (user != null) {
+                val userId = user.id
+                loginWithSocialToken(userId.toString())
+            }
+        }
+    }
+    private fun handleNaverLogin() {
+        goTermsActivity()
+    }
+
+    private fun handleGoogleLogin() {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
     }
 
     /**
@@ -136,19 +164,16 @@ class SocialAuthActivity : AppCompatActivity() {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
-
-            // Get new FCM registration token
             val token = task.result
-
-            PreferencesControl.saveStringValue(applicationContext, SHARED_VALUE_FCM_TOKEN, token)
+            viewModel.fcmToken = token
             Log.d(TAG, "FCM TOKEN: $token")
         })
     }
 
     /**
-     * init Google Login
+     * init Google
      */
-    private fun initGoogleLogin() {
+    private fun initGoogle() {
         // Firebase Authentication 인스턴스 초기화
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -170,11 +195,6 @@ class SocialAuthActivity : AppCompatActivity() {
         // GoogleSignInClient를 초기화합니다.
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        // 구글 로그인 버튼 클릭 이벤트 처리
-        binding.buttonGoogleAuth.setOnClickListener {
-            val signInIntent = googleSignInClient.signInIntent
-            googleSignInLauncher.launch(signInIntent)
-        }
     }
 
     /**
@@ -199,25 +219,30 @@ class SocialAuthActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * 각 social 로그인 성공 후 login 시도
+     */
     private fun loginWithSocialToken(subValue: String) {
-        val sub = subValue
-        val fcmToken = PreferencesControl.getStringValue(applicationContext, SHARED_VALUE_FCM_TOKEN)
-        if (fcmToken != null) {
-            viewModel.login(sub, fcmToken)
-        }
+        viewModel.subValue = subValue
+        viewModel.login()
     }
+
+    /**
+     * login 결과 값에 따른
+     */
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.loginResult.collectLatest { result ->
                 when (result) {
                     is LoginResult.Success -> {
                         val loginEntity = result.data
+                        goMainActivity()
                         Log.d(TAG, "Login successful: ${loginEntity}")
                     }
                     is LoginResult.NeedToSignUp -> {
                         // 회원가입 화면으로 이동
-                        goTermsActivity()
                         Log.d(TAG, "goTermsActivity...")
+                        goTermsActivity()
                     }
                     is LoginResult.Error -> {
                             // 오류 처리
@@ -232,10 +257,31 @@ class SocialAuthActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 이용 약관 페이지로 이동
+     */
     private fun goTermsActivity() {
-        // 회원가입 화면으로 이동
-        val intent = Intent(this, TermsActivity::class.java)
+        val platform = viewModel.platform.toString()
+        val sub = viewModel.subValue
+        val fcmToken = viewModel.fcmToken
+
+        if (platform != null && sub != null && fcmToken != null) {
+            val intent = Intent(this, TermsActivity::class.java).apply {
+                putExtra("platform", platform)
+                putExtra("sub", kakaoAccessToken)
+                putExtra("fcmToken", fcmToken)
+            }
+            startActivity(intent)
+        } else {
+            // 데이터가 null일 경우의 처리
+            // TODO 오류 팝업
+        }
+    }
+
+    private fun goMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     /*

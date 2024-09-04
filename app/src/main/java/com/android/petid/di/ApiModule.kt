@@ -1,7 +1,9 @@
 package com.android.petid.di
 
-import com.android.data.api.LoggingInterceptor
 import com.android.data.api.AuthAPI
+import com.android.data.api.AuthInterceptor
+import com.android.data.api.LoggingInterceptor
+import com.android.data.util.PreferencesHelper
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -19,14 +21,6 @@ class ApiModule {
 
     val BASE_URL = "http://yourpet-id.com:8080/"
 
-    /*@Provides
-    @Singleton
-    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-    }*/
-
 
     @Provides
     @Singleton
@@ -36,9 +30,20 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: LoggingInterceptor): OkHttpClient {
+    fun provideAuthInterceptor(preferencesHelper: PreferencesHelper): AuthInterceptor {
+        return AuthInterceptor(preferencesHelper)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        loggingInterceptor: LoggingInterceptor,
+        authInterceptor: AuthInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
             .build()
     }
 

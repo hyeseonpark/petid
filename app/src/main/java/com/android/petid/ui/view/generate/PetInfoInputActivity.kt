@@ -8,8 +8,8 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.R
 import com.android.petid.databinding.ActivityPetInfoInputBinding
-import com.android.petid.common.getCurrentDate
-import com.android.petid.common.setStyleSpan
+import com.android.petid.util.getCurrentDate
+import com.android.petid.util.setStyleSpan
 
 class PetInfoInputActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPetInfoInputBinding

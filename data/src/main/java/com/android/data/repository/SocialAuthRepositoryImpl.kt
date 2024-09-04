@@ -15,9 +15,11 @@ class SocialAuthRepositoryImpl @Inject constructor(
     override suspend fun doLogin(sub: String, fcmToken: String): ApiResult<AuthEntity> {
         return when (val result = remoteDataSource.getLogin(sub, fcmToken)) {
             is ApiResult.Success -> {
+                // TODO
 //                localDataSource.saveLogin(result.data)
                 result
             }
+            is ApiResult.HttpError -> result
             is ApiResult.Error -> result
         }
     }

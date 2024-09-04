@@ -9,7 +9,7 @@ package com.android.petid.messages
 //import android.widget.Toast
 //import com.android.petid.R
 //import com.android.petid.common.Constants.SHARED_VALUE_FCM_TOKEN
-//import com.android.petid.common.PreferencesControl
+//import com.android.petid.util.PreferencesControl
 //import com.google.firebase.messaging.FirebaseMessagingService
 //import com.google.firebase.messaging.RemoteMessage
 //
