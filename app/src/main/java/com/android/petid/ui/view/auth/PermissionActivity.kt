@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.R
-import com.android.petid.common.setStyleSpan
+import com.android.petid.util.setStyleSpan
 import com.android.petid.databinding.ActivityPermissionBinding
 
 class PermissionActivity : AppCompatActivity() {

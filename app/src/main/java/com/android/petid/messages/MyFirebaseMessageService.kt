@@ -5,8 +5,6 @@ import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import com.android.petid.R
-import com.android.petid.common.Constants.SHARED_VALUE_FCM_TOKEN
-import com.android.petid.common.PreferencesControl
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -90,8 +88,8 @@ class MyFirebaseMessageService : FirebaseMessagingService() {
     private fun sendRegistrationToServer(token: String) {
 //        Log.e(TAG,"[FCM] new Token -> sendRegistrationToServer token: $token")
 
-        PreferencesControl.saveStringValue(
+        /*PreferencesControl.saveStringValue(
             applicationContext, SHARED_VALUE_FCM_TOKEN, token
-        )
+        )*/
     }
 }

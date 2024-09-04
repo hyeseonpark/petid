@@ -1,4 +1,4 @@
-package com.android.petid.common
+package com.android.petid.util
 
 import android.content.Context
 import android.graphics.Typeface

@@ -8,11 +8,15 @@ import com.android.petid.ui.view.main.MainActivity
 
 class SignupCompleteActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupCompleteBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupCompleteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initComponent()
+    }
 
+    private fun initComponent() {
         binding.buttonConfirm.button.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

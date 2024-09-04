@@ -12,10 +12,10 @@ class LoggingInterceptor @Inject constructor() : Interceptor {
         val request = chain.request()
 
         // Request 정보 로그 출력
-        /*Logger.d("Sending request to URL: ${request.url}${"\n"}Request Headers: ${request.headers}")
+        Logger.d("Sending request to URL: ${request.url}${"\n"}Request Headers: ${request.headers}")
         request.body?.let {
             Logger.d("Request Body: ${it}")
-        }*/
+        }
 
         val response = chain.proceed(request)
 
