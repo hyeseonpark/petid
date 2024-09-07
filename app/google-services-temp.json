@@ -14,15 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "920376783702-aj0ncfaeaucjof5vf9p20v28nmti4rni.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.android.petid",
-            "certificate_hash": "5a0e91f60c55952915fa8983452e562b9d837df0"
-          }
-        },
-        {
-          "client_id": "920376783702-lqbm89i7kp8go8jihgop6ocatcotvtm5.apps.googleusercontent.com",
+          "client_id": "920376783702-omjfg0dhc2uma4uuecufj7vshj37j65p.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,15 +27,8 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "920376783702-dtppu2k7976t6ebbbbuvbd06ar2pqvvg.apps.googleusercontent.com",
+              "client_id": "920376783702-omjfg0dhc2uma4uuecufj7vshj37j65p.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "920376783702-jf01pqsmnobqasn0mkrcog69gejtqlu9.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.pet-id-iOS"
-              }
             }
           ]
         }

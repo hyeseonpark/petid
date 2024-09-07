@@ -25,6 +25,11 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,7 +46,7 @@ class SocialAuthActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
 
-    private var kakaoAccessToken : String? = null
+    private var socialAccessToken : String? = null
 
     private val googleSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -50,8 +55,11 @@ class SocialAuthActivity : AppCompatActivity() {
             try {
                 // Google 로그인이 성공하면, Firebase로 인증합니다.
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d("LOGIN--22", account.idToken!!)
-                firebaseAuthWithGoogle(account.idToken!!)
+                Log.d(TAG, "구글 로그인 성공")
+                Log.d(TAG, account.id.toString())
+                Log.d(TAG, account.idToken.toString())
+                Log.d(TAG, account.serverAuthCode.toString())
+                firebaseAuthWithGoogle(account.serverAuthCode.toString())
             } catch (e: ApiException) {
                 // Google 로그인 실패
             }
@@ -64,7 +72,7 @@ class SocialAuthActivity : AppCompatActivity() {
             Log.e(TAG, "카카오계정으로 로그인 실패", error)
         } else if (token != null) {
             requestKakaoUserInfo()
-            kakaoAccessToken = token.accessToken
+            socialAccessToken = token.accessToken
             /*var idToken = token.idToken
             if (idToken != null) {
                 Log.i(TAG, "카카오계정으로 로그인 성공 ${token}")
@@ -115,6 +123,9 @@ class SocialAuthActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 카카오 로그인
+     */
     private fun handleKakaoLogin() {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(applicationContext)) {
             UserApiClient.instance.loginWithKakaoTalk(applicationContext) { token, error ->
@@ -146,14 +157,62 @@ class SocialAuthActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * 네이버 로그인
+     */
     private fun handleNaverLogin() {
-        goTermsActivity()
+        NaverIdLoginSDK.initialize(applicationContext,
+            getString(R.string.social_login_info_naver_client_id),
+            getString(R.string.social_login_info_naver_client_secret),
+            getString(R.string.social_login_info_naver_client_name))
+
+        NaverIdLoginSDK.authenticate(this, oauthNaverLoginCallback)
     }
 
+
+    val oauthNaverLoginCallback = object : OAuthLoginCallback {
+        override fun onSuccess() {
+            socialAccessToken = NaverIdLoginSDK.getAccessToken()
+
+            NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
+                override fun onError(errorCode: Int, message: String) {
+                    Log.d(TAG, "NaverLoginError: $message")
+                }
+
+                override fun onFailure(httpStatus: Int, message: String) {
+                    Log.d(TAG, "$httpStatus\n" + message)
+                }
+
+                override fun onSuccess(result: NidProfileResponse) {
+                    val id = result.profile?.id.toString()
+                    loginWithSocialToken(id)
+
+                }
+            })
+        }
+
+        override fun onFailure(httpStatus: Int, message: String) {
+            val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+            val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+            Log.e("test", "$errorCode $errorDescription")
+        }
+
+        override fun onError(errorCode: Int, message: String) {
+            onFailure(errorCode, message)
+        }
+    }
+
+
+    /**
+     * 구글 로그인
+     */
     private fun handleGoogleLogin() {
+        googleSignInClient.signOut()
         val signInIntent = googleSignInClient.signInIntent
         googleSignInLauncher.launch(signInIntent)
     }
+
 
     /**
      * init FCM setting
@@ -268,7 +327,7 @@ class SocialAuthActivity : AppCompatActivity() {
         if (platform != null && sub != null && fcmToken != null) {
             val intent = Intent(this, TermsActivity::class.java).apply {
                 putExtra("platform", platform)
-                putExtra("sub", kakaoAccessToken)
+                putExtra("sub", socialAccessToken)
                 putExtra("fcmToken", fcmToken)
             }
             startActivity(intent)
