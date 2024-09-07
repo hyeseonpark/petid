@@ -115,6 +115,9 @@ dependencies {
 
     implementation 'androidx.activity:activity-ktx:1.9.1'
     implementation 'androidx.fragment:fragment-ktx:1.8.2'
+
+    // naver
+    implementation("com.navercorp.nid:oauth-jdk8:5.10.0")
 }
 kapt {
     correctErrorTypes = true
