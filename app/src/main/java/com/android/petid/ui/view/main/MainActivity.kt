@@ -11,11 +11,13 @@ import androidx.core.splashscreen.SplashScreen
 import androidx.fragment.app.Fragment
 import com.android.petid.databinding.ActivityMainBinding
 import com.android.petid.ui.view.home.HomeFragment
-import com.android.petid.ui.view.hospital.HospitalFragment
+import com.android.petid.ui.view.hospital.HospitalMainFragment
 import com.android.petid.ui.view.my.MyFragment
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 var selectedFragment: Fragment? = null
                 when (tab?.position) {
                     0 -> selectedFragment = HomeFragment()
-                    1 -> selectedFragment = HospitalFragment()
+                    1 -> selectedFragment = HospitalMainFragment()
                     2 -> selectedFragment = com.android.petid.ui.view.blog.BlogFragment()
                     3 -> selectedFragment = MyFragment()
                 }

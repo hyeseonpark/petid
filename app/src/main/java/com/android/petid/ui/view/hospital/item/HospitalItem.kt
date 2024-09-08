@@ -1,4 +1,4 @@
-package com.android.petid.ui.view.hospital
+package com.android.petid.ui.view.hospital.item
 
 data class HospitalItem(
     val id: Int,

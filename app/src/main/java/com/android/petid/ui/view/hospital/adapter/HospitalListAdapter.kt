@@ -1,10 +1,11 @@
-package com.android.petid.ui.view.hospital
+package com.android.petid.ui.view.hospital.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.petid.databinding.ItemHospitalBinding
+import com.android.petid.ui.view.hospital.item.HospitalItem
 import com.bumptech.glide.Glide
 
 class HospitalListAdapter(

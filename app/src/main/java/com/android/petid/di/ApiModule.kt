@@ -2,6 +2,7 @@ package com.android.petid.di
 
 import com.android.data.api.AuthAPI
 import com.android.data.api.AuthInterceptor
+import com.android.data.api.LocationAPI
 import com.android.data.api.LoggingInterceptor
 import com.android.data.util.PreferencesHelper
 import com.google.gson.Gson
@@ -38,12 +39,12 @@ class ApiModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        loggingInterceptor: LoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        loggingInterceptor: LoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 
@@ -68,5 +69,11 @@ class ApiModule {
     @Singleton
     fun provideAuthAPI(retrofit: Retrofit): AuthAPI {
         return retrofit.create(AuthAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationAPI(retrofit: Retrofit): LocationAPI {
+        return retrofit.create(LocationAPI::class.java)
     }
 }

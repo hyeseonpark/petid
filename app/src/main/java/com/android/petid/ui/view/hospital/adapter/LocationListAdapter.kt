@@ -1,15 +1,16 @@
-package com.android.petid.ui.view.hospital
+package com.android.petid.ui.view.hospital.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.android.domain.entity.LocationEntity
 import com.android.petid.databinding.ItemLocationBinding
 
 class LocationListAdapter(
-private val locationList: ArrayList<LocationItem>,
-private val mContext: Context,
-private val onItemClick: (LocationItem) -> Unit
+    private val locationList: ArrayList<LocationEntity>,
+    private val mContext: Context,
+    private val onItemClick: (LocationEntity) -> Unit
 ) : RecyclerView.Adapter<LocationListAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = ItemLocationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,7 +24,7 @@ private val onItemClick: (LocationItem) -> Unit
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val locationItem = locationList[position]
         with(holder) {
-            name.text = locationItem.location
+            name.text = locationItem.name
 
             itemView.setOnClickListener{
                 onItemClick(locationItem)

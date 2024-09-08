@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.usecase.login.DoLoginUseCase
 import com.android.domain.util.ApiResult
+import com.android.petid.common.Constants
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.LoginResult
+import com.android.petid.util.PreferencesControl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SocialAuthViewModel @Inject constructor(
     private val doLoginUseCase: DoLoginUseCase,
+    private val preferencesControl: PreferencesControl,
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
@@ -35,7 +38,8 @@ class SocialAuthViewModel @Inject constructor(
 
             when (val result = doLoginUseCase(sub, fcmToken)) {
                 is ApiResult.Success -> {
-                    // TODO 응답값을 localRepository 를 통해 처리할수 있도록 바꾸기
+                    preferencesControl.saveStringValue(Constants.SHARED_VALUE_ACCESS_TOKEN, result.data.accessToken)
+                    preferencesControl.saveStringValue(Constants.SHARED_VALUE_REFRESH_TOKEN, result.data.refreshToken)
                     _loginResult.emit(LoginResult.Success(result.data))  // 성공 시 데이터 전송
                 }
                 is ApiResult.HttpError -> {
