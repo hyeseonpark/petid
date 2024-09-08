@@ -1,5 +1,7 @@
 package com.android.petid.di
 
+import com.android.data.source.remote.HospitalMainRemoteDataSource
+import com.android.data.source.remote.HospitalMainRemoteDataSourceImpl
 import com.android.data.source.remote.SocialAuthRemoteDataSource
 import com.android.data.source.remote.SocialAuthRemoteDataSourceImpl
 import com.android.data.source.remote.TermsRemoteDataSource
@@ -26,53 +28,10 @@ abstract class DataModule {
         impl: TermsRemoteDataSourceImpl
     ): TermsRemoteDataSource
 
-    /*companion object {
-        @Provides
-        @Singleton
-        fun provideSignUpAPI(retrofit: Retrofit): SignUpAPI {
-            return retrofit.create(SignUpAPI::class.java)
-        }
-    }*/
-
-    /*@Binds
-    @Singleton
-    abstract fun bindLoginRemoteDataSource(
-        impl: LoginRemoteDataSourceImpl
-    ): LoginRemoteDataSource*/
-
-    /*@Binds
-    @Singleton
-    abstract fun bindLoginLocalDataSource(
-        impl: LoginLocalDataSourceImpl
-    ): LoginLocalDataSource*/
-}
-
-/*@Module
-@InstallIn(SingletonComponent::class)
-abstract class DataModule {
-    @Provides
-    @Singleton
-    fun provideLoginRemoteDataSource(
-        signUpAPI: SignUpAPI
-    ): LoginRemoteDataSource {
-        return LoginRemoteDataSourceImpl(signUpAPI)
-    }
-
     @Binds
-    abstract fun bindLoginRemoteDataSource(
-        impl: LoginRemoteDataSourceImpl
-    ): LoginRemoteDataSource
+    @Singleton
+    abstract fun bindHospitalMainRemoteDataSource(
+        impl: HospitalMainRemoteDataSourceImpl
+    ): HospitalMainRemoteDataSource
 
-//    @Provides
-//    @Singleton
-//    fun provideLoginRepository(
-//        loginRemote: LoginDataSource.Remote
-//    ): LoginRepository {
-//        return LoginRepositoryImpl(loginRemote)
-//    }
-
-//    @Provides
-//    fun provideGetLoginUseCase(loginRepository: LoginRepository){
-//        return GetLoginUseCase(loginRepository)
-//    }
-}*/
+}

@@ -1,62 +1,82 @@
 package com.android.petid.ui.view.hospital
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.petid.R
+import com.android.domain.entity.LocationEntity
+import com.android.petid.common.Constants
 import com.android.petid.databinding.FragmentLocationBottomSheetBinding
+import com.android.petid.ui.view.hospital.adapter.LocationListAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 class LocationBottomSheetFragment : BottomSheetDialogFragment() {
     lateinit var binding: FragmentLocationBottomSheetBinding
+    private var locationList: List<LocationEntity>? = null
+    private var locationType: Int? = null
+
+    companion object {
+        const val TAG = "LocationBottomSheetFragment"
+
+        fun newInstance(locationType: Int, locationList: List<LocationEntity>): LocationBottomSheetFragment {
+            val fragment = LocationBottomSheetFragment()
+            val args = Bundle().apply {
+                putInt("locationType", locationType)
+                putParcelableArrayList("locationList", ArrayList(locationList))
+            }
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLocationBottomSheetBinding.inflate(inflater)
-        initHospitalList()
+
+        locationList = arguments?.getParcelableArrayList("locationList")
+        locationType = arguments?.getInt("locationType")
+
+        if (locationType == Constants.LOCATION_SIDO_TYPE) {
+            binding.textViewTitle.text = "시/도"
+        } else if (locationType == Constants.LOCATION_SIGUNGU_TYPE) {
+            binding.textViewTitle.text = "시/군/구"
+        }
+
+        initLocationList()
 
         return binding.root
     }
 
-    companion object {
-        const val TAG = "LocationBottomSheetFragment"
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
-    private fun initHospitalList() {
+    private fun initLocationList() {
         binding.recyclerviewLocationList.layoutManager = LinearLayoutManager(requireContext())
 
-        val locationList = arrayListOf<LocationItem>()
-        locationList.add(LocationItem(1, "서초구"))
-        locationList.add(LocationItem(2, "송파구"))
-        locationList.add(LocationItem(3, "서초구"))
-        locationList.add(LocationItem(4, "서초구"))
-        locationList.add(LocationItem(5, "서초구"))
-        locationList.add(LocationItem(3, "서초구"))
-        locationList.add(LocationItem(4, "서초구"))
-        locationList.add(LocationItem(5, "서초구"))
+        locationList?.let { list ->
+            val locationItems = list.map { LocationEntity(it.id, it.name) }
 
-        val locationListAdapter = activity?.let {
-            LocationListAdapter(locationList, it) {item ->
-                val result = item.location
-                setFragmentResult("sigunguKey", bundleOf("bundleKey" to result))
-                dismiss()
-            } }
-        binding.recyclerviewLocationList.adapter = locationListAdapter
-
+            val locationListAdapter = activity?.let {
+                LocationListAdapter(ArrayList(locationItems), it) { item ->
+                    val result = Bundle().apply {
+                        putParcelable("selectedItem", item)
+                        putInt("locationType", locationType ?: 0)
+                    }
+                    setFragmentResult("locationItemSelected", result)
+                    dismiss()
+                }
+            }
+            binding.recyclerviewLocationList.adapter = locationListAdapter
+        }
     }
 
     override fun onStart() {
