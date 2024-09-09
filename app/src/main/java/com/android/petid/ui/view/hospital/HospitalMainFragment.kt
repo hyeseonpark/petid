@@ -2,6 +2,7 @@ package com.android.petid.ui.view.hospital
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,23 +16,27 @@ import com.android.domain.entity.LocationEntity
 import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
 import com.android.petid.databinding.FragmentHospitalMainBinding
+import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.state.LoginResult
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
-import com.android.petid.ui.view.hospital.item.HospitalItem
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HospitalMainFragment : Fragment() {
     lateinit var binding: FragmentHospitalMainBinding
     private val viewModel: HospitalMainViewModel by activityViewModels()
+
+    private val TAG = "HospitalMainFragment"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHospitalMainBinding.inflate(inflater)
 
-        initHospitalList()
         initComponent()
 
         return binding.root
@@ -43,6 +48,7 @@ class HospitalMainFragment : Fragment() {
 
         observeCurrentSidoState()
         observeCurrentSigunguState()
+        observeCurrentHospitalListState()
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
             "locationItemSelected", this
@@ -67,6 +73,10 @@ class HospitalMainFragment : Fragment() {
 
 
     private fun initComponent() {
+        binding.recyclerviewHospitalList.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerviewHospitalList.addItemDecoration(
+            DividerItemDecoration(context, LinearLayout.VERTICAL))
+
         binding.buttonSido.setOnClickListener{
             viewModel.currentSidoList?.let { data -> modalBottomSheet(LOCATION_SIDO_TYPE, data) }
         }
@@ -84,34 +94,6 @@ class HospitalMainFragment : Fragment() {
         return frag
     }
 
-    private fun initHospitalList() {
-        binding.recyclerviewHospitalList.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerviewHospitalList.addItemDecoration(
-            DividerItemDecoration(context, LinearLayout.VERTICAL))
-
-        val hospitalList = arrayListOf<HospitalItem>()
-        hospitalList.add(
-            HospitalItem(
-            1, "https://bit.ly/3yAt3za",
-            "서울특별시 서초구 방배동 758번지 2호 삼호상가 109호",
-            "한나동물병원", "08:00 - 18:00", "02-595-8875", "김땡땡")
-        )
-        hospitalList.add(
-            HospitalItem(
-            2, "https://bit.ly/3yAt3za",
-            "서울특별시 서초구 방배동 758번지 2호 삼호상가 109호",
-            "한나동물병원", "08:00 - 18:00", "02-595-8875", "박땡땡")
-        )
-
-        val hospitalListAdapter = activity?.let {
-            HospitalListAdapter(hospitalList, it) {item ->
-                val intent = Intent(activity, HospitalDetailActivity::class.java)
-                startActivity(intent)
-            } }
-        binding.recyclerviewHospitalList.adapter = hospitalListAdapter
-
-    }
-
     private fun observeCurrentSidoState() {
         lifecycleScope.launch {
             viewModel.currentSidoState.collect { sido ->
@@ -125,8 +107,8 @@ class HospitalMainFragment : Fragment() {
 
     private fun observeCurrentSigunguState() {
         lifecycleScope.launch {
-            viewModel.currentSigunguState.collect { sido ->
-                sido?.let {
+            viewModel.currentSigunguState.collect { sigungu ->
+                sigungu?.let {
                     val name = it.name
                     binding.buttonSigungu.text = name
                 }
@@ -134,6 +116,40 @@ class HospitalMainFragment : Fragment() {
         }
     }
 
+    /**
+     * 병원 리스트 조회
+     */
+    private fun observeCurrentHospitalListState() {
+        lifecycleScope.launch {
+            viewModel.hospitalApiState.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        val hospitalList = result.data
+
+                        if (hospitalList != null) {
+                            val hospitalListAdapter = HospitalListAdapter(hospitalList, requireActivity()) { item ->
+                                val intent = Intent(activity, HospitalDetailActivity::class.java)
+                                    .putExtra("hospitalDetail", item)
+                                startActivity(intent)
+                            }
+                            binding.recyclerviewHospitalList.adapter = hospitalListAdapter
+                        }
+                    }
+                    is CommonApiState.Error -> {
+                        // 오류 처리
+                        Log.e(TAG, "Login error: ${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        // 로딩 상태 처리
+                        Log.d(TAG, "Loading....................")
+                    }
+                    else -> {
+                        Log.d(TAG, "else..")
+                    }
+                }
+            }
+        }
+    }
     private fun modalBottomSheet(locationType: Int, locationList: List<LocationEntity>) {
         val bottomSheet = LocationBottomSheetFragment.newInstance(locationType, locationList)
         bottomSheet.show(requireActivity().supportFragmentManager, LocationBottomSheetFragment.TAG)

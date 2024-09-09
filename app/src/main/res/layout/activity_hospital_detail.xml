@@ -132,7 +132,7 @@
                 app:tint="#838383" />
 
             <TextView
-                android:id="@+id/textView_call"
+                android:id="@+id/textView_tel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"

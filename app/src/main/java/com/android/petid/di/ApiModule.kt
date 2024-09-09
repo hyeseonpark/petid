@@ -2,6 +2,7 @@ package com.android.petid.di
 
 import com.android.data.api.AuthAPI
 import com.android.data.api.AuthInterceptor
+import com.android.data.api.HosptialAPI
 import com.android.data.api.LocationAPI
 import com.android.data.api.LoggingInterceptor
 import com.android.data.util.PreferencesHelper
@@ -75,5 +76,11 @@ class ApiModule {
     @Singleton
     fun provideLocationAPI(retrofit: Retrofit): LocationAPI {
         return retrofit.create(LocationAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHosptialAPI(retrofit: Retrofit): HosptialAPI {
+        return retrofit.create(HosptialAPI::class.java)
     }
 }

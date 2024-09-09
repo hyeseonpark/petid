@@ -3,7 +3,10 @@ package com.android.petid.viewmodel.hospital
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
+import com.android.domain.usecase.hospital.GetEupmundongUseCase
+import com.android.domain.usecase.hospital.GetHospitalListUseCase
 import com.android.domain.usecase.hospital.GetSidoUseCase
 import com.android.domain.usecase.hospital.GetSigunguUseCase
 import com.android.domain.util.ApiResult
@@ -18,6 +21,8 @@ import javax.inject.Inject
 class HospitalMainViewModel @Inject constructor(
     private val getSidoUseCase: GetSidoUseCase,
     private val getSigunguUseCase: GetSigunguUseCase,
+    private val getEupmundongUseCase: GetEupmundongUseCase,
+    private val getHospitalListUseCase: GetHospitalListUseCase,
     private val savedStateHandle: SavedStateHandle
     ): ViewModel() {
 
@@ -40,13 +45,33 @@ class HospitalMainViewModel @Inject constructor(
     var currentSigunguList: List<LocationEntity>? = null
 
     /**
-     * 현재 선택된 시/도 및 시/군/구
+     * 읍,면,동 api 호출 결과
+     */
+    private val _eupmundongApiState = MutableStateFlow<CommonApiState<List<LocationEntity>>>(
+        CommonApiState.Loading
+    )
+    val eupmundongApiState: StateFlow<CommonApiState<List<LocationEntity>>> = _eupmundongApiState
+    var currentEupmundongList: List<LocationEntity>? = null
+
+    /**
+     * 병원 List api 호출 결과
+     */
+    private val _hospitalApiState = MutableStateFlow<CommonApiState<List<HospitalEntity>>>(
+        CommonApiState.Loading
+    )
+    val hospitalApiState: StateFlow<CommonApiState<List<HospitalEntity>>> = _hospitalApiState
+
+    /**
+     * 현재 선택된 시/도 및 시/군/구 및 읍/면/동
      */
     private var _currentSidoState = MutableStateFlow<LocationEntity?>(null)
     var currentSidoState: StateFlow<LocationEntity?> = _currentSidoState
 
     private var _currentSigunguState = MutableStateFlow<LocationEntity?>(null)
     var currentSigunguState: StateFlow<LocationEntity?> = _currentSigunguState
+
+    private var _currentEupmondongState = MutableStateFlow<LocationEntity?>(null)
+    var currentEupmundongState: StateFlow<LocationEntity?> = _currentEupmondongState
 
 
 
@@ -83,8 +108,9 @@ class HospitalMainViewModel @Inject constructor(
                     _sigunguApiState.emit(CommonApiState.Success(result.data))
                     currentSigunguList = result.data
 
-                    result.data.firstOrNull()?.let { firstSido ->
-                        _currentSigunguState.emit(firstSido)
+                    result.data.firstOrNull()?.let { firstSigungu ->
+                        _currentSigunguState.emit(firstSigungu)
+                        getEupmondongList()
                     }
                 }
                 is ApiResult.HttpError -> {
@@ -97,6 +123,47 @@ class HospitalMainViewModel @Inject constructor(
         }
     }
 
+    fun getEupmondongList() {
+        viewModelScope.launch {
+            when (val result = getEupmundongUseCase(currentSigunguState.value!!.id)) {
+                is ApiResult.Success -> {
+                    _sigunguApiState.emit(CommonApiState.Success(result.data))
+                    currentEupmundongList = result.data
+
+                    result.data.firstOrNull()?.let { firstEupmundong ->
+                        _currentEupmondongState.emit(firstEupmundong)
+                        getHospitalList()
+                    }
+                }
+                is ApiResult.HttpError -> {
+                    _eupmundongApiState.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _eupmundongApiState.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
+    fun getHospitalList() {
+        viewModelScope.launch {
+            when (val result = getHospitalListUseCase(
+                currentSidoState.value!!.id,
+                currentSigunguState.value!!.id,
+                currentEupmundongState.value!!.id)) {
+                is ApiResult.Success -> {
+                    _hospitalApiState.emit(CommonApiState.Success(result.data))
+                }
+                is ApiResult.HttpError -> {
+                    _hospitalApiState.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _hospitalApiState.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
     fun updateCurrentSidoState(sido: LocationEntity) {
         _currentSidoState.value = sido
         getSigunguList()
@@ -104,5 +171,9 @@ class HospitalMainViewModel @Inject constructor(
 
     fun updateCurrentSigunguState(sigungu: LocationEntity) {
         _currentSigunguState.value = sigungu
+    }
+
+    fun updateCurrentEupmundongState(eupmundong: LocationEntity) {
+        _currentEupmondongState.value = eupmundong
     }
 }

@@ -4,14 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.android.domain.entity.HospitalEntity
 import com.android.petid.databinding.ItemHospitalBinding
-import com.android.petid.ui.view.hospital.item.HospitalItem
 import com.bumptech.glide.Glide
 
 class HospitalListAdapter(
-    private val hospitalList: ArrayList<HospitalItem>,
+    private val hospitalList: List<HospitalEntity>,
     private val mContext: Context,
-    private val onItemClick: (HospitalItem) -> Unit
+    private val onItemClick: (HospitalEntity) -> Unit
 ) : RecyclerView.Adapter<HospitalListAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = ItemHospitalBinding.inflate(LayoutInflater.from(parent.context), parent, false)

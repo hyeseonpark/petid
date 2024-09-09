@@ -25,9 +25,8 @@ inline fun <T> ApiResult<T>.onSuccess(
 }
 
 inline fun <T> ApiResult<T>.onError(
-    action: (Throwable) -> Unit
+    action: (String?) -> Unit
 ): ApiResult<T> {
-//    TODO
-//    if (this is ApiResult.Error) action(error)
+    if (this is ApiResult.Error) action(errorMessage)
     return this
 }
