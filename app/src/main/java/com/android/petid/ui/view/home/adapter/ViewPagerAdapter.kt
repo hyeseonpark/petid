@@ -1,10 +1,11 @@
-package com.android.petid.ui.view.home
+package com.android.petid.ui.view.home.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.petid.R
+import com.android.petid.ui.view.home.BannerItem
 
 class ViewPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {

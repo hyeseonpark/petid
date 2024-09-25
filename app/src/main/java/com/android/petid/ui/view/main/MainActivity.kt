@@ -10,7 +10,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen
 import androidx.fragment.app.Fragment
 import com.android.petid.databinding.ActivityMainBinding
-import com.android.petid.ui.view.home.HomeFragment
+import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.ui.view.hospital.HospitalMainFragment
 import com.android.petid.ui.view.my.MyFragment
 import com.google.android.material.tabs.TabLayout
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // 초기 프래그먼트 설정
-        val initialFragment = HomeFragment()
+        val initialFragment = HomeMainFragment()
         supportFragmentManager.beginTransaction().apply {
             replace(binding.frameLayout.id, initialFragment)
             commit()
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 var selectedFragment: Fragment? = null
                 when (tab?.position) {
-                    0 -> selectedFragment = HomeFragment()
+                    0 -> selectedFragment = HomeMainFragment()
                     1 -> selectedFragment = HospitalMainFragment()
                     2 -> selectedFragment = com.android.petid.ui.view.blog.BlogFragment()
                     3 -> selectedFragment = MyFragment()

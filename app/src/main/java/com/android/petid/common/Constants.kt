@@ -10,4 +10,6 @@ object Constants {
     const val LOCATION_SIGUNGU_TYPE = 1
     const val LOCATION_EUPMUNDONG = 2
 
+    const val BANNER_TYPE_MAIN = "main"
+    const val BANNER_TYPE_CONTENT = "content"
 }
