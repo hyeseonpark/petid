@@ -2,6 +2,7 @@ package com.android.petid.di
 
 import com.android.data.api.AuthAPI
 import com.android.data.api.AuthInterceptor
+import com.android.data.api.BannerAPI
 import com.android.data.api.HosptialAPI
 import com.android.data.api.LocationAPI
 import com.android.data.api.LoggingInterceptor
@@ -82,5 +83,10 @@ class ApiModule {
     @Singleton
     fun provideHosptialAPI(retrofit: Retrofit): HosptialAPI {
         return retrofit.create(HosptialAPI::class.java)
+    }
+    @Provides
+    @Singleton
+    fun provideBannerAPI(retrofit: Retrofit): BannerAPI {
+        return retrofit.create(BannerAPI::class.java)
     }
 }

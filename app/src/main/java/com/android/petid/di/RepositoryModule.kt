@@ -1,8 +1,10 @@
 package com.android.petid.di
 
+import com.android.data.repository.HomeMainRepositoryImpl
 import com.android.data.repository.HospitalMainRepositoryImpl
 import com.android.data.repository.SocialAuthRepositoryImpl
 import com.android.data.repository.TermsRepositoryImpl
+import com.android.domain.repository.HomeMainRepository
 import com.android.domain.repository.HospitalMainRepository
 import com.android.domain.repository.SocialAuthRepository
 import com.android.domain.repository.TermsRepository
@@ -33,6 +35,13 @@ abstract class RepositoryModule {
     abstract fun bindHospitalMainRepository(
         hospitalMainRepositoryImpl: HospitalMainRepositoryImpl
     ): HospitalMainRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeMainRepository(
+        homeMainRepositoryImpl: HomeMainRepositoryImpl
+    ): HomeMainRepository
+
 
     /*@Binds
     @Singleton

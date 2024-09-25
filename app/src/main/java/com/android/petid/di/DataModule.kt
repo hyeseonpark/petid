@@ -1,5 +1,7 @@
 package com.android.petid.di
 
+import com.android.data.source.remote.HomeMainRemoteDataSource
+import com.android.data.source.remote.HomeMainRemoteDataSourceImpl
 import com.android.data.source.remote.HospitalMainRemoteDataSource
 import com.android.data.source.remote.HospitalMainRemoteDataSourceImpl
 import com.android.data.source.remote.SocialAuthRemoteDataSource
@@ -33,5 +35,11 @@ abstract class DataModule {
     abstract fun bindHospitalMainRemoteDataSource(
         impl: HospitalMainRemoteDataSourceImpl
     ): HospitalMainRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeMainRemoteDataSource(
+        impl: HomeMainRemoteDataSourceImpl
+    ): HomeMainRemoteDataSource
 
 }

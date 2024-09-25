@@ -1,24 +1,24 @@
-package com.android.petid.ui.view.home
+package com.android.petid.ui.view.home.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.android.domain.entity.BannerEntity
 import com.android.petid.R
+import com.android.petid.ui.view.home.BannerItem
 import com.bumptech.glide.Glide
 
 class HomeBannerAdapter(
-    private val imageList: ArrayList<BannerItem>,
+    private val imageList: ArrayList<BannerEntity>,
     private val mContext: Context
 ): RecyclerView.Adapter<HomeBannerAdapter.CustomViewHolder>() {
 
     private val total: Int = imageList.size
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeBannerAdapter.CustomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_banner, parent, false)
         return CustomViewHolder(view).apply {
             itemView.setOnClickListener {
@@ -32,10 +32,10 @@ class HomeBannerAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: HomeBannerAdapter.CustomViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         // 아이템 수로 굉장히 큰 수를 줬으므로 position으로 어떤 수가 나오든 5로 나눈 나머지 값 순서의의 데이터를 사해 5단위로 데이터가 반복되도록 한다.
         // 다른 곳에서도 position값은 5로 나눈 나머지를 사용하면 된다.
-        Glide.with(mContext).load(imageList[position % total].image).into(holder.img)
+        Glide.with(mContext).load(imageList[position % total].imageUrl).into(holder.img)
     }
 
     override fun getItemCount(): Int {
