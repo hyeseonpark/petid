@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object Utils {
 }
@@ -47,4 +48,10 @@ fun setBoldSpan(context: Context, content: String, word: String, color: Int) : S
  fun getCurrentDate(): String {
     val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
     return sdf.format(Date())
+}
+
+fun formatDateToISO8601(date: Date): String {
+    val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    isoFormat.timeZone = TimeZone.getTimeZone("UTC") // UTC 시간대로 설정
+    return isoFormat.format(date)
 }

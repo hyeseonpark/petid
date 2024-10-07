@@ -47,4 +47,5 @@ class HospitalMainRepositoryImpl @Inject constructor(
             is ApiResult.Error -> result
         }
     }
+
 }

@@ -1,6 +1,5 @@
 package com.android.data.source.remote
 
-import android.util.Log
 import com.android.data.api.HosptialAPI
 import com.android.data.api.LocationAPI
 import com.android.data.model.ErrorResponse
@@ -89,4 +88,5 @@ class HospitalMainRemoteDataSourceImpl @Inject constructor(
             ApiResult.Error(e.message)
         }
     }
+
 }

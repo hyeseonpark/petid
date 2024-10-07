@@ -13,11 +13,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.domain.entity.LocationEntity
+import com.android.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
 import com.android.petid.databinding.FragmentHospitalMainBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.state.LoginResult
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,6 +48,8 @@ class HospitalMainFragment : Fragment() {
 
         observeCurrentSidoState()
         observeCurrentSigunguState()
+        observeCurrentEupmundongState()
+
         observeCurrentHospitalListState()
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
@@ -61,6 +63,8 @@ class HospitalMainFragment : Fragment() {
                     viewModel.updateCurrentSidoState(it)
                 } else if (locationType == LOCATION_SIGUNGU_TYPE) {
                      viewModel.updateCurrentSigunguState(it)
+                } else if (locationType == LOCATION_EUPMUNDONG_TYPE) {
+                    viewModel.updateCurrentEupmundongState(it)
                 }
             }
         }
@@ -83,6 +87,10 @@ class HospitalMainFragment : Fragment() {
 
         binding.buttonSigungu.setOnClickListener{
             viewModel.currentSigunguList?.let { data -> modalBottomSheet(LOCATION_SIGUNGU_TYPE, data) }
+        }
+
+        binding.buttonEupmundong.setOnClickListener{
+            viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
         }
     }
 
@@ -116,6 +124,17 @@ class HospitalMainFragment : Fragment() {
         }
     }
 
+    private fun observeCurrentEupmundongState() {
+        lifecycleScope.launch {
+            viewModel.currentEupmundongState.collect { eupmundong ->
+                eupmundong?.let {
+                    val name = it.name
+                    binding.buttonEupmundong.text = name
+                }
+            }
+        }
+    }
+
     /**
      * 병원 리스트 조회
      */
@@ -142,9 +161,6 @@ class HospitalMainFragment : Fragment() {
                     is CommonApiState.Loading -> {
                         // 로딩 상태 처리
                         Log.d(TAG, "Loading....................")
-                    }
-                    else -> {
-                        Log.d(TAG, "else..")
                     }
                 }
             }

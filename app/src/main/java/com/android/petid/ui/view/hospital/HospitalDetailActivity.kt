@@ -26,14 +26,19 @@ class HospitalDetailActivity : AppCompatActivity() {
             intent.getParcelableExtra("hospitalDetail") as?  HospitalEntity
         }
 
-        binding.textViewTitle.text = hospitalDetail!!.name
-        binding.textViewVet.text = hospitalDetail!!.vet
-        binding.textViewTime.text = hospitalDetail!!.hours
-        binding.textViewTel.text = hospitalDetail!!.tel
+        if (hospitalDetail != null) {
+            binding.topBar.title = hospitalDetail.name
+            binding.textViewTitle.text = hospitalDetail.name
+            binding.textViewVet.text = hospitalDetail.vet
+            binding.textViewTime.text = hospitalDetail.hours
+            binding.textViewTel.text = hospitalDetail.tel
 
-        binding.buttonReserve.button.setOnClickListener{
-            val intent = Intent(this, ReservationCalendarActivity::class.java)
-            startActivity(intent)
+            binding.buttonReserve.button.setOnClickListener{
+                val intent = Intent(this, ReservationCalendarActivity::class.java)
+                    .putExtra("hospitalId", hospitalDetail.id)
+                    .putExtra("hospitalName", hospitalDetail.name)
+                startActivity(intent)
+            }
         }
     }
 }

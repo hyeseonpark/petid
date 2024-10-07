@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/hospital_waiting_reservation_title"
+            android:text="@string/hospital_process_finish_title"
             android:textFontWeight="500"
             android:textSize="24sp"
             android:layout_marginTop="15dp"/>
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
-            android:text="@string/hospital_waiting_reservation_subtitle"
+            android:text="@string/hospital_process_finish_subtitle"
             android:textFontWeight="400"
             android:textSize="15dp"
             android:textColor="@color/petid_subtitle"/>

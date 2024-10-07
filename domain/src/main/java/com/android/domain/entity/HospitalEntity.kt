@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class HospitalEntity(
     val id: Int,
-    val imageUrl: String?,
+    val imageUrl: List<String>,
     val address: String,
     val name: String,
     val hours: String?,

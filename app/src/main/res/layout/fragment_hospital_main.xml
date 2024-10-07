@@ -83,6 +83,27 @@
                 android:paddingLeft="14dp"
                 android:stateListAnimator="@null"/>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_eupmundong"
+                android:layout_width="wrap_content"
+                android:layout_height="31dp"
+                android:layout_marginLeft="8dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:background="@drawable/button_outline_ededed"
+                android:text="동"
+                android:textSize="13sp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_title"
+                android:drawableEnd="@drawable/ic_down_arrow"
+                android:drawableTint="@color/petid_title"
+                android:drawablePadding="8dp"
+                android:paddingEnd="14dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingLeft="14dp"
+                android:stateListAnimator="@null"/>
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
