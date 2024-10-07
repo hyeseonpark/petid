@@ -38,6 +38,8 @@
     <string name="name">이름</string>
     <string name="birth">생일</string>
     <string name="place">장소</string>
+    <string name="noon">오전</string>
+    <string name="afternoon">오후</string>
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 
@@ -150,11 +152,14 @@
     <!-- hospital reservation calendar -->
     <string name="hospital_reservation_calendar_visit_date_time">방문일시</string>
     <string name="hospital_reservation_calendar_visit_date_time_desc">오늘 기준으로 7일 이내만 예약할 수 있어요.</string>
-    <string name="hospital_reservation_calendar_avilable_time">예약가능시간</string>
+    <string name="hospital_reservation_calendar_available_time">예약가능시간</string>
+    <string name="hospital_reservation_calendar_day_off">동물병원 휴일</string>
+    <string name="hospital_reservation_calendar_day_off_desc">휴일에는 서비스를 운영하지 않아요.\n다른 날짜를 확인해 주세요!</string>
+    <string name="hospital_complete_reservation">예약 완료하기</string>
 
-    <!-- hospital waiting reservation -->
-    <string name="hospital_waiting_reservation_title">동물병원에서 예약을\n확인하고 있어요!</string>
-    <string name="hospital_waiting_reservation_subtitle">예약 확정은 알림으로 알려드려요</string>
+    <!-- hospital process finish reservation -->
+    <string name="hospital_process_finish_title">동물병원에서 예약을\n확인하고 있어요!</string>
+    <string name="hospital_process_finish_subtitle">예약 확정은 알림으로 알려드려요</string>
 
     <!-- hospital complete reservation -->
     <string name="hospital_complete_reservation_title">예약 확정되었습니다!</string>

@@ -80,6 +80,9 @@ class HospitalMainViewModel @Inject constructor(
         getSido()
     }*/
 
+    /**
+     * 시, 도 목록 조회
+     */
     fun getSidoList() {
         viewModelScope.launch {
             when (val result = getSidoUseCase()) {
@@ -101,6 +104,10 @@ class HospitalMainViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 시,군,구 목록 조회
+     */
     fun getSigunguList() {
         viewModelScope.launch {
             when (val result = getSigunguUseCase(currentSidoState.value!!.id)) {
@@ -110,7 +117,7 @@ class HospitalMainViewModel @Inject constructor(
 
                     result.data.firstOrNull()?.let { firstSigungu ->
                         _currentSigunguState.emit(firstSigungu)
-                        getEupmondongList()
+                        getEupmundongList()
                     }
                 }
                 is ApiResult.HttpError -> {
@@ -123,7 +130,10 @@ class HospitalMainViewModel @Inject constructor(
         }
     }
 
-    fun getEupmondongList() {
+    /**
+     * 읍,면,동 목록 조회
+     */
+    fun getEupmundongList() {
         viewModelScope.launch {
             when (val result = getEupmundongUseCase(currentSigunguState.value!!.id)) {
                 is ApiResult.Success -> {
@@ -145,6 +155,24 @@ class HospitalMainViewModel @Inject constructor(
         }
     }
 
+    fun updateCurrentSidoState(sido: LocationEntity) {
+        _currentSidoState.value = sido
+        getSigunguList()
+    }
+
+    fun updateCurrentSigunguState(sigungu: LocationEntity) {
+        _currentSigunguState.value = sigungu
+        getEupmundongList()
+    }
+
+    fun updateCurrentEupmundongState(eupmundong: LocationEntity) {
+        _currentEupmondongState.value = eupmundong
+        getHospitalList()
+    }
+
+    /**
+     * 병원 목록 조회
+     */
     fun getHospitalList() {
         viewModelScope.launch {
             when (val result = getHospitalListUseCase(
@@ -162,18 +190,5 @@ class HospitalMainViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun updateCurrentSidoState(sido: LocationEntity) {
-        _currentSidoState.value = sido
-        getSigunguList()
-    }
-
-    fun updateCurrentSigunguState(sigungu: LocationEntity) {
-        _currentSigunguState.value = sigungu
-    }
-
-    fun updateCurrentEupmundongState(eupmundong: LocationEntity) {
-        _currentEupmondongState.value = eupmundong
     }
 }

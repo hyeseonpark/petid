@@ -14,7 +14,6 @@
         <include
             android:id="@+id/top_bar"
             layout="@layout/top_bar_common"
-            app:title="@{`동물병원`}"
             app:back="@{true}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

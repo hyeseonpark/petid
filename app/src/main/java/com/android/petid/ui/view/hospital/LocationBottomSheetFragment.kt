@@ -48,6 +48,8 @@ class LocationBottomSheetFragment : BottomSheetDialogFragment() {
             binding.textViewTitle.text = "시/도"
         } else if (locationType == Constants.LOCATION_SIGUNGU_TYPE) {
             binding.textViewTitle.text = "시/군/구"
+        } else if (locationType == Constants.LOCATION_EUPMUNDONG_TYPE) {
+            binding.textViewTitle.text = "읍/면/동"
         }
 
         initLocationList()

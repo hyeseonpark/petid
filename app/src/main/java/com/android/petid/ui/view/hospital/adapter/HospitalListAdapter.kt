@@ -26,11 +26,11 @@ class HospitalListAdapter(
             vet.text = hospitalItem.vet + " 원장"
 
             // 병원 이미지 로드 (Glide 사용)
-            hospitalItem.imageUrl?.let {
+            /*hospitalItem.imageUrl?.let {
                 Glide.with(mContext)
                     .load(it)
                     .into(thumbnail)
-            }
+            }*/
 
             itemView.setOnClickListener{
                 onItemClick(hospitalItem)

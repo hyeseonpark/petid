@@ -118,6 +118,8 @@ dependencies {
 
     // naver
     implementation("com.navercorp.nid:oauth-jdk8:5.10.0")
+
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 }
 kapt {
     correctErrorTypes = true
