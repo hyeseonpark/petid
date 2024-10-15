@@ -1,6 +1,7 @@
 package com.android.data.repository
 
-import com.android.data.source.remote.ReservationCalendarDataSource
+import com.android.data.dto.request.HospitalOrderRequest
+import com.android.data.source.remote.ReservationCalendarRemoteDataSource
 import com.android.domain.entity.HospitalOrderEntity
 import com.android.domain.repository.ReservationCalendarRepository
 import com.android.domain.util.ApiResult
@@ -10,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ReservationCalendarRepositoryImpl @Inject constructor(
-    private val remoteDataSource: ReservationCalendarDataSource
+    private val remoteDataSource: ReservationCalendarRemoteDataSource
 ): ReservationCalendarRepository{
     override suspend fun getHospitalOrderTimeList(
         hospitalId: Int,
@@ -26,7 +27,7 @@ class ReservationCalendarRepositoryImpl @Inject constructor(
 
     override suspend fun createHospitalOrder(
         hospitalId: Int,
-        date: Date
+        date: String
     ): ApiResult<HospitalOrderEntity> {
         return when (val result = remoteDataSource.createHospitalOrder(hospitalId, date)) {
             is ApiResult.Success -> result

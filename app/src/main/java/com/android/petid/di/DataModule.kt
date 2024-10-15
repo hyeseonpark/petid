@@ -4,8 +4,10 @@ import com.android.data.source.remote.HomeMainRemoteDataSource
 import com.android.data.source.remote.HomeMainRemoteDataSourceImpl
 import com.android.data.source.remote.HospitalMainRemoteDataSource
 import com.android.data.source.remote.HospitalMainRemoteDataSourceImpl
-import com.android.data.source.remote.ReservationCalendarDataSource
-import com.android.data.source.remote.ReservationCalendarDataSourceImpl
+import com.android.data.source.remote.ReservationCalendarRemoteDataSource
+import com.android.data.source.remote.ReservationCalendarRemoteDataSourceImpl
+import com.android.data.source.remote.ReservationHistoryInfoRemoteDataSource
+import com.android.data.source.remote.ReservationHistoryInfoRemoteDataSourceImpl
 import com.android.data.source.remote.SocialAuthRemoteDataSource
 import com.android.data.source.remote.SocialAuthRemoteDataSourceImpl
 import com.android.data.source.remote.TermsRemoteDataSource
@@ -47,7 +49,12 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindReservationCalendarRemoteDataSource(
-        impl: ReservationCalendarDataSourceImpl
-    ): ReservationCalendarDataSource
+        impl: ReservationCalendarRemoteDataSourceImpl
+    ): ReservationCalendarRemoteDataSource
 
+    @Binds
+    @Singleton
+    abstract fun bindReservationHistoryInfoRemoteDataSource(
+        impl: ReservationHistoryInfoRemoteDataSourceImpl
+    ): ReservationHistoryInfoRemoteDataSource
 }

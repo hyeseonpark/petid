@@ -1,20 +1,20 @@
 package com.android.data.source.remote
 
 import com.android.data.api.HosptialAPI
-import com.android.data.model.ErrorResponse
-import com.android.data.model.toDomain
+import com.android.data.dto.request.HospitalOrderRequest
+import com.android.data.dto.response.ErrorResponse
+import com.android.data.dto.response.toDomain
 import com.android.domain.entity.HospitalOrderEntity
 import com.android.domain.util.ApiResult
 import com.google.gson.Gson
 import retrofit2.HttpException
-import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ReservationCalendarDataSourceImpl @Inject constructor(
+class ReservationCalendarRemoteDataSourceImpl @Inject constructor(
     private val hosptialAPI: HosptialAPI
-): ReservationCalendarDataSource {
+): ReservationCalendarRemoteDataSource {
     override suspend fun getHospitalOrderTimeList(
         hospitalId: Int,
         day: String,
@@ -37,11 +37,14 @@ class ReservationCalendarDataSourceImpl @Inject constructor(
     }
 
     override suspend fun createHospitalOrder(
+//        request: HospitalOrderRequest
         hospitalId: Int,
-        date: Date
+        date: String
     ): ApiResult<HospitalOrderEntity> {
         return try {
-            val response = hosptialAPI.createHospitalOrder(hospitalId, date)
+            val response = hosptialAPI.createHospitalOrder(
+                HospitalOrderRequest(hospitalId, date)
+            )
             ApiResult.Success(response.toDomain())
 
         } catch (e: HttpException) {

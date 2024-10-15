@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.android.petid.databinding.ActivityMainBinding
 import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.ui.view.hospital.HospitalMainFragment
-import com.android.petid.ui.view.my.MyFragment
+import com.android.petid.ui.view.my.MyMainFragment
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                     0 -> selectedFragment = HomeMainFragment()
                     1 -> selectedFragment = HospitalMainFragment()
                     2 -> selectedFragment = com.android.petid.ui.view.blog.BlogFragment()
-                    3 -> selectedFragment = MyFragment()
+                    3 -> selectedFragment = MyMainFragment()
                 }
                 selectedFragment?.let {
                     supportFragmentManager.beginTransaction().replace(

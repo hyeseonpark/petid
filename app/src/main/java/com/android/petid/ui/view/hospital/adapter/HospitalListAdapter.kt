@@ -47,6 +47,5 @@ class HospitalListAdapter(
         val name = binding.textViewName
         val address = binding.textViewAddress
         val vet = binding.textViewVet
-
     }
 }

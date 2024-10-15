@@ -9,7 +9,7 @@ import javax.inject.Inject
 class CreateHospitalOrderUseCase @Inject constructor(
     private val reservationCalendarRepository: ReservationCalendarRepository
 ){
-    suspend operator fun invoke(hospitalId: Int, date: Date): ApiResult<HospitalOrderEntity> {
+    suspend operator fun invoke(hospitalId: Int, date: String): ApiResult<HospitalOrderEntity> {
         return reservationCalendarRepository.createHospitalOrder(hospitalId, date)
     }
 }

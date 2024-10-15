@@ -1,9 +1,7 @@
-package com.android.data.model
+package com.android.data.dto.response
 
-import com.android.domain.entity.AuthEntity
 import com.android.domain.entity.ErrorEntity
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.Serializable
 
 data class ErrorResponse(
     @SerializedName("timestamp")

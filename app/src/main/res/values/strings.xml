@@ -40,6 +40,7 @@
     <string name="place">장소</string>
     <string name="noon">오전</string>
     <string name="afternoon">오후</string>
+    <string name="update">수정</string>
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 
@@ -167,6 +168,30 @@
     <string name="hospital_complete_reservation_subtitle">예약 내용은 MY > 예약 내역에서 확인할 수 있습니다.</string>
     <string name="hospital_complete_reservation_info">예약 정보는 방문 전에 다시 알려드려요!</string>
     <string name="reservation_date_time">예약일시</string>
+
+    <!-- my main fragment -->
+    <string name="main_my_title">my</string>
+    <string name="update_my_info">내 정보 수정하기</string>
+
+    <string name="pet_info_title">반려동물 정보</string>
+    <string name="reservation_history_title">예약 내역</string>
+    <string name="terms_agree_info_title">약관 및 개인정보 처리 동의</string>
+    <string name="personal_service_info_title">개인정보 처리방침</string>
+    <string name="notice_title">공지사항</string>
+    <string name="qna_title">자주하는 질문</string>
+    <string name="withdraw_title">탈퇴하기</string>
+
+    <string name="app_version">앱 버전</string>
+
+    <string name="my_info_title">내 정보</string>
+
+    <!-- my pet info activity -->
+    <string name="pet_create_status">반려동물 등록</string>
+
+    <!-- reservation history activity -->
+    <string name="no_history">예약 내역이 없습니다</string>
+    <string name="write_review">리뷰 쓰기</string>
+    <string name="cancel_reservation">예약 취소</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

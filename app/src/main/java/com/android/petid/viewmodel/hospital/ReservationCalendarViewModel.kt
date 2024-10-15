@@ -13,8 +13,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -74,8 +76,10 @@ class ReservationCalendarViewModel @Inject constructor(
      */
     fun createHospitalOrder() {
         viewModelScope.launch {
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
+            val formatDateTime = sdf.format(selectedDateTime)
             when(val result = createHospitalOrderUseCase(
-                hospitalId, selectedDateTime)) {
+                hospitalId, formatDateTime)) {
                 is ApiResult.Success -> {
                     _createHospitalOrderApiState.emit(CommonApiState.Success(result.data))
                 }

@@ -1,6 +1,6 @@
 package com.android.data.api
 
-import com.android.data.model.BannerResponse
+import com.android.data.dto.response.BannerResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

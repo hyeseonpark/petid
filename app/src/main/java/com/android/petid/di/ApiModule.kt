@@ -84,6 +84,7 @@ class ApiModule {
     fun provideHosptialAPI(retrofit: Retrofit): HosptialAPI {
         return retrofit.create(HosptialAPI::class.java)
     }
+
     @Provides
     @Singleton
     fun provideBannerAPI(retrofit: Retrofit): BannerAPI {

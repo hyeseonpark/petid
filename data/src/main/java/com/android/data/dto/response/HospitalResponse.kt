@@ -1,4 +1,4 @@
-package com.android.data.model
+package com.android.data.dto.response
 
 import com.android.domain.entity.HospitalEntity
 import kotlinx.serialization.Serializable
