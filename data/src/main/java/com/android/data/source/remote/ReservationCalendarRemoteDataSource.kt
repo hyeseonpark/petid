@@ -1,11 +1,12 @@
-package com.android.domain.repository
+package com.android.data.source.remote
 
+import com.android.data.dto.request.HospitalOrderRequest
 import com.android.domain.entity.HospitalOrderEntity
 import com.android.domain.util.ApiResult
 import java.util.Date
 
-interface ReservationCalendarRepository {
+interface ReservationCalendarRemoteDataSource {
     suspend fun getHospitalOrderTimeList(hospitalId: Int, day: String, date: String): ApiResult<List<String>>
     suspend fun createHospitalOrder(hospitalId: Int, date: String): ApiResult<HospitalOrderEntity>
-//    suspend fun createHospitalOrder(hospitalOrderRequest: HospitalOrderRequestd): ApiResult<HospitalOrderEntity>
+//    suspend fun createHospitalOrder(hospitalOrderRequest: HospitalOrderRequest): ApiResult<HospitalOrderEntity>
 }

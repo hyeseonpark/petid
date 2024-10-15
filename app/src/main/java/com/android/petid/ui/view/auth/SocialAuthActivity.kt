@@ -51,15 +51,12 @@ class SocialAuthActivity : AppCompatActivity() {
     private val googleSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            Log.d("LOGIN--", task.toString())
             try {
                 // Google 로그인이 성공하면, Firebase로 인증합니다.
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "구글 로그인 성공")
-                Log.d(TAG, account.id.toString())
-                Log.d(TAG, account.idToken.toString())
-                Log.d(TAG, account.serverAuthCode.toString())
-                firebaseAuthWithGoogle(account.serverAuthCode.toString())
+                socialAccessToken = account.idToken.toString()
+                loginWithSocialToken(account.id.toString())
             } catch (e: ApiException) {
                 // Google 로그인 실패
             }

@@ -1,6 +1,6 @@
 package com.android.data.api
 
-import com.android.data.model.LocationResponse
+import com.android.data.dto.response.LocationResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

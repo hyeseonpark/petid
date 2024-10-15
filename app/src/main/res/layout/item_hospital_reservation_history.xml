@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:paddingVertical="26dp"
+    android:paddingStart="34dp"
+    android:paddingEnd="14dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/textView_hospital_name"
+            android:text="동물병원"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            android:textFontWeight="400"
+            android:textColor="@color/petid_title"/>
+
+        <TextView
+            android:id="@+id/textView_date_time"
+            android:text="_월 _일(_) __:__"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="15sp"
+            android:textFontWeight="400"
+            android:textColor="#838383"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="143dp"
+        android:layout_height="37dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/button_background_common"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:stateListAnimator="@null"
+        android:text="@string/write_review"
+        android:textColor="@drawable/button_text_color_common"
+        android:textFontWeight="500"
+        android:textSize="12sp" />
+
+
+</LinearLayout>

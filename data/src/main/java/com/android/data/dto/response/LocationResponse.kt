@@ -1,7 +1,6 @@
-package com.android.data.model
+package com.android.data.dto.response
 
 import com.android.domain.entity.LocationEntity
-import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable

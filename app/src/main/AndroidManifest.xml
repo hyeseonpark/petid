@@ -17,6 +17,24 @@
         android:theme="@style/Theme.PetId"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.my.NoticeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.ReservationHistoryInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.MyPetInfoUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.MyPetInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.MyInfoUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.MyInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.hospital.ReservationProcessFinishActivity"
             android:exported="false" />
         <activity

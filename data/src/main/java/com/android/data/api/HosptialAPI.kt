@@ -1,16 +1,16 @@
 package com.android.data.api
 
-import com.android.data.model.HospitalOrderDetailResponse
-import com.android.data.model.HospitalOrderResponse
-import com.android.data.model.HospitalResponse
+import com.android.data.dto.request.HospitalOrderRequest
+import com.android.data.dto.response.HospitalOrderDetailResponse
+import com.android.data.dto.response.HospitalOrderResponse
+import com.android.data.dto.response.HospitalResponse
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
-import java.util.Date
 
 interface HosptialAPI {
 
@@ -37,11 +37,19 @@ interface HosptialAPI {
     /**
      * 동물병원 예약 내역 생성
      */
-    @FormUrlEncoded
+    /*@FormUrlEncoded
     @POST("/v1/hospital/order")
     suspend fun createHospitalOrder(
         @Field("hospitalId") hospitalId: Int,
-        @Field("date") date: Date // ISO-8601
+        @Field("date") date: String // ISO-8601
+    ) : HospitalOrderResponse*/
+
+    /**
+     * 동물병원 예약 내역 생성
+     */
+    @POST("/v1/hospital/order")
+    suspend fun createHospitalOrder(
+        @Body request: HospitalOrderRequest
     ) : HospitalOrderResponse
 
     /**
@@ -65,7 +73,7 @@ interface HosptialAPI {
      * 동물병원 예약 목록 조회
      */
     @GET("/v1/hospital/order")
-    suspend fun createHospitalOrder(
+    suspend fun getHospitalOrderList(
         @Query("status") status: String,
     ) : List<HospitalOrderDetailResponse>
 }

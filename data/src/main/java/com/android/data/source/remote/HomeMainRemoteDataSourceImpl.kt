@@ -1,8 +1,8 @@
 package com.android.data.source.remote
 
 import com.android.data.api.BannerAPI
-import com.android.data.model.ErrorResponse
-import com.android.data.model.toDomain
+import com.android.data.dto.response.ErrorResponse
+import com.android.data.dto.response.toDomain
 import com.android.domain.entity.BannerEntity
 import com.android.domain.util.ApiResult
 import com.google.gson.Gson

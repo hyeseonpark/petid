@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@color/white">
+
+        <include
+            android:id="@+id/top_bar"
+            layout="@layout/top_bar_common"
+            app:back="@{true}"
+            app:title="@{@string/reservation_history_title}"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_hospital_reservation_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="14dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_history"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</layout>

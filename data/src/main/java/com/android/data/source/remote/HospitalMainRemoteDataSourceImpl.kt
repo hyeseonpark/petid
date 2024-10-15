@@ -2,8 +2,8 @@ package com.android.data.source.remote
 
 import com.android.data.api.HosptialAPI
 import com.android.data.api.LocationAPI
-import com.android.data.model.ErrorResponse
-import com.android.data.model.toDomain
+import com.android.data.dto.response.ErrorResponse
+import com.android.data.dto.response.toDomain
 import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
 import com.android.domain.util.ApiResult
