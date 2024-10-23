@@ -81,13 +81,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
+                    `<TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/hospital_reservation_calendar_available_time"
                         android:textColor="@color/petid_title"
                         android:textFontWeight="500"
-                        android:textSize="20dp" />
+                        android:textSize="20dp" />`
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -1,5 +1,9 @@
 package com.android.petid.di
 
+import com.android.data.source.remote.BlogMainRemoteDataSource
+import com.android.data.source.remote.BlogMainRemoteDataSourceImpl
+import com.android.data.source.remote.ContentDetailRemoteDataSource
+import com.android.data.source.remote.ContentDetailRemoteRemoteDataSourceImpl
 import com.android.data.source.remote.HomeMainRemoteDataSource
 import com.android.data.source.remote.HomeMainRemoteDataSourceImpl
 import com.android.data.source.remote.HospitalMainRemoteDataSource
@@ -57,4 +61,16 @@ abstract class DataModule {
     abstract fun bindReservationHistoryInfoRemoteDataSource(
         impl: ReservationHistoryInfoRemoteDataSourceImpl
     ): ReservationHistoryInfoRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindBlogMainRemoteDataSource(
+        impl: BlogMainRemoteDataSourceImpl
+    ): BlogMainRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindContentDetailRemoteDataSource(
+        impl: ContentDetailRemoteRemoteDataSourceImpl
+    ): ContentDetailRemoteDataSource
 }

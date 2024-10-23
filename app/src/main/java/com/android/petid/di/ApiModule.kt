@@ -3,6 +3,7 @@ package com.android.petid.di
 import com.android.data.api.AuthAPI
 import com.android.data.api.AuthInterceptor
 import com.android.data.api.BannerAPI
+import com.android.data.api.ContentAPI
 import com.android.data.api.HosptialAPI
 import com.android.data.api.LocationAPI
 import com.android.data.api.LoggingInterceptor
@@ -89,5 +90,11 @@ class ApiModule {
     @Singleton
     fun provideBannerAPI(retrofit: Retrofit): BannerAPI {
         return retrofit.create(BannerAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideContentAPI(retrofit: Retrofit): ContentAPI {
+        return retrofit.create(ContentAPI::class.java)
     }
 }

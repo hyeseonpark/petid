@@ -26,14 +26,22 @@ class HomeMainVIewModel @Inject constructor(
     )
     val bannerApiState: StateFlow<CommonApiState<List<BannerEntity>>> = _bannerApiState
 
+
     private val _bannerImageApiState = MutableStateFlow<CommonApiState<String>>(CommonApiState.Loading)
     val bannerImageApiState: StateFlow<CommonApiState<String>> = _bannerImageApiState
+
 
     fun getBannerList(type: String) {
         viewModelScope.launch {
             when (val result = getBannerListUseCase(type)) {
                 is ApiResult.Success -> {
-                    _bannerApiState.emit(CommonApiState.Success(result.data))
+                    var bannerList = result.data
+
+                    /*bannerList = bannerList.map { item ->
+                        val updatedImageUrl = getBannerImage(item.imageUrl)
+                        item.copy(imageUrl = updatedImageUrl.toString())
+                    }*/
+                    _bannerApiState.emit(CommonApiState.Success(bannerList))
                 }
                 is ApiResult.HttpError ->{
                     _bannerApiState.emit(CommonApiState.Error(result.error.error))
@@ -44,6 +52,7 @@ class HomeMainVIewModel @Inject constructor(
             }
         }
     }
+
 
     fun getBannerImage(imagePath: String) {
         viewModelScope.launch {

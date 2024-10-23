@@ -8,6 +8,7 @@
     <color name="petid_subtitle">#848484</color>
     <color name="petid_gray">#838383</color>
     <color name="petid_light_gray">#D9D9D9</color>
+    <color name="petid_underbar">#515151</color>
 <!--    <color name="selector_848484_3397FF">-->
 <!--        <selector xmlns:android="http://schemas.android.com/apk/res/android">-->
 <!--            <item android:color="#3397FF" android:state_selected="true"/>-->

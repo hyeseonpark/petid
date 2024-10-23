@@ -1,7 +1,10 @@
 package com.android.data.api
 
+import com.android.data.dto.request.PresignedGetUrlRequest
 import com.android.data.dto.response.BannerResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface BannerAPI {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 눌러진 상태 (pressed) -->
+    <item android:state_selected="true">
+        <shape>
+            <solid android:color="@color/white" />
+            <stroke android:color="@color/petid_clear_blue" android:width="1dp" />
+            <corners android:radius="7dp" />
+        </shape>
+    </item>
+    <item
+        android:state_selected="false"
+        android:drawable="@drawable/button_content_detail_action_button_default_background" />
+</selector>

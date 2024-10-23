@@ -145,18 +145,16 @@ class HospitalMainFragment : Fragment() {
                     is CommonApiState.Success -> {
                         val hospitalList = result.data
 
-                        if (hospitalList != null) {
-                            val hospitalListAdapter = HospitalListAdapter(hospitalList, requireActivity()) { item ->
-                                val intent = Intent(activity, HospitalDetailActivity::class.java)
-                                    .putExtra("hospitalDetail", item)
-                                startActivity(intent)
-                            }
-                            binding.recyclerviewHospitalList.adapter = hospitalListAdapter
+                        val hospitalListAdapter = HospitalListAdapter(hospitalList, requireActivity()) { item ->
+                            val intent = Intent(activity, HospitalDetailActivity::class.java)
+                                .putExtra("hospitalDetail", item)
+                            startActivity(intent)
                         }
+                        binding.recyclerviewHospitalList.adapter = hospitalListAdapter
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리
-                        Log.e(TAG, "Login error: ${result.message}")
+                        Log.e(TAG, "${result.message}")
                     }
                     is CommonApiState.Loading -> {
                         // 로딩 상태 처리

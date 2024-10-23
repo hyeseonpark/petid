@@ -17,6 +17,9 @@
         android:theme="@style/Theme.PetId"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.blog.ContentDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.my.NoticeActivity"
             android:exported="false" />
         <activity

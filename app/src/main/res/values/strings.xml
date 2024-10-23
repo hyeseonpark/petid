@@ -41,6 +41,8 @@
     <string name="noon">오전</string>
     <string name="afternoon">오후</string>
     <string name="update">수정</string>
+    <string name="like">좋아요</string>
+    <string name="share">공유하기</string>
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 
@@ -193,7 +195,18 @@
     <string name="write_review">리뷰 쓰기</string>
     <string name="cancel_reservation">예약 취소</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- blog main fragment -->
+    <string name="main_blog_title">펫blog</string>
+    <string name="tab_recommendation_title">추천</string>
+    <string name="tab_about_pet_title">어바웃펫</string>
+    <string name="tab_tips_title">반려TIP</string>
+    <string name="tab_venue_title">장소</string>
+    <string name="tab_support_title">지원</string>
+    <string name="tab_no_data">준비중입니다</string>
+
+    <!-- content detail activity -->
+    <string name="content_like_desc">%d명이 좋아했어요</string>
+    <string name="content_detail_hospital_recommendation_desc">내 근처 동물병원을 모아봤어요</string>
 
 </resources>

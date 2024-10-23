@@ -137,7 +137,7 @@ class ReservationCalendarActivity : AppCompatActivity() {
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리
-                        Log.e(TAG, "Login error: ${result.message}")
+                        Log.e(TAG, "${result.message}")
                     }
                     is CommonApiState.Loading -> {
                         // 로딩 상태 처리
@@ -164,7 +164,7 @@ class ReservationCalendarActivity : AppCompatActivity() {
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리
-                        Log.e(TAG, "Login error: ${result.message}")
+                        Log.e(TAG, "${result.message}")
                     }
                     is CommonApiState.Loading -> {
                         // 로딩 상태 처리
