@@ -37,7 +37,6 @@ class ReservationCalendarRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun createHospitalOrder(
-//        request: HospitalOrderRequest
         hospitalId: Int,
         date: String
     ): ApiResult<HospitalOrderEntity> {

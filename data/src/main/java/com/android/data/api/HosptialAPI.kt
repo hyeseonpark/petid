@@ -25,6 +25,18 @@ interface HosptialAPI {
     ) : List<HospitalResponse>
 
     /**
+     * 병원 리스트 조회(거리 순 정렬)
+     */
+    @GET("/v1/hospital/location")
+    suspend fun getHospitalListByLocation(
+        @Query("sido") sido: Int,
+        @Query("sigungu") sigungu: Int,
+        @Query("eupmundong") eupmundong: Int,
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double
+    ) : List<HospitalResponse>
+
+    /**
      * 동물병원 예약 가능 시간 리스트 조회
      */
     @GET("/v1/hospital/order/time")

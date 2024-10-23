@@ -37,14 +37,14 @@ class MainActivity : AppCompatActivity() {
 
         binding.tabLayoutMain.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                var selectedFragment: Fragment? = null
-                when (tab?.position) {
-                    0 -> selectedFragment = HomeMainFragment()
-                    1 -> selectedFragment = HospitalMainFragment()
-                    2 -> selectedFragment = com.android.petid.ui.view.blog.BlogFragment()
-                    3 -> selectedFragment = MyMainFragment()
+                var selectedFragment = when (tab?.position) {
+                    0 -> HomeMainFragment()
+                    1 -> HospitalMainFragment()
+                    2 -> com.android.petid.ui.view.blog.BlogMainFragment()
+                    3 -> MyMainFragment()
+                    else -> HomeMainFragment()
                 }
-                selectedFragment?.let {
+                selectedFragment.let {
                     supportFragmentManager.beginTransaction().replace(
                         binding.frameLayout.id,
                         it

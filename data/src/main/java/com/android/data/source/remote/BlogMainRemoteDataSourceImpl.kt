@@ -1,23 +1,20 @@
 package com.android.data.source.remote
 
-import com.android.data.api.BannerAPI
-import com.android.data.dto.request.PresignedGetUrlRequest
+import com.android.data.api.ContentAPI
 import com.android.data.dto.response.ErrorResponse
 import com.android.data.dto.response.toDomain
-import com.android.domain.entity.BannerEntity
+import com.android.domain.entity.ContentEntity
 import com.android.domain.util.ApiResult
 import com.google.gson.Gson
 import retrofit2.HttpException
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class HomeMainRemoteDataSourceImpl @Inject constructor(
-    private val bannerAPI: BannerAPI,
-) : HomeMainRemoteDataSource{
-    override suspend fun getBannerList(type: String): ApiResult<List<BannerEntity>> {
+class BlogMainRemoteDataSourceImpl @Inject constructor(
+    private val contentAPI: ContentAPI
+): BlogMainRemoteDataSource {
+    override suspend fun getContentList(category: String): ApiResult<List<ContentEntity>> {
         return try {
-            val response = bannerAPI.getBannerList(type)
+            val response = contentAPI.getContentList(category)
             ApiResult.Success(response.toDomain())
 
         } catch (e: HttpException) {
@@ -32,12 +29,9 @@ class HomeMainRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getBannerImage(imagePath: String): ApiResult<String> {
+    override suspend fun doContentLike(contentId: Int): ApiResult<Unit> {
         return try {
-            val response = bannerAPI.getBannerImage(
-                imagePath
-//                PresignedGetUrlRequest(imagePath)
-            )
+            val response = contentAPI.doContentLike(contentId)
             ApiResult.Success(response)
 
         } catch (e: HttpException) {
