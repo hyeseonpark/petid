@@ -1,17 +1,26 @@
 package com.android.petid.ui.view.my
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.petid.R
-import com.android.petid.databinding.ActivityMyPetInfoBinding
 import com.android.petid.databinding.ActivityReservationHistoryInfoBinding
-import com.android.petid.viewmodel.auth.TermsViewModel
+import com.android.petid.enum.ReservationStatus
+import com.android.petid.ui.component.CustomDialogCommon
+import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.hospital.HospitalDetailActivity
+import com.android.petid.ui.view.my.adapter.HospitalReservationListAdapter
 import com.android.petid.viewmodel.hospital.ReservationHistoryInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ReservationHistoryInfoActivity : AppCompatActivity() {
@@ -25,10 +34,125 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
         binding = ActivityReservationHistoryInfoBinding.inflate(layoutInflater)
 
         initComponent()
+
+        observeReservationHospitalListState()
+        observeCancelHospitalReservation()
+        viewModel.getHospitalReservationHistoryListApiState()
+
         setContentView(binding.root)
     }
 
     private fun initComponent() {
+        binding.recyclerviewHospitalReservationList.layoutManager = LinearLayoutManager(this)
+        binding.recyclerviewHospitalReservationList.addItemDecoration(
+            DividerItemDecoration(this, LinearLayout.VERTICAL)
+        )
+    }
 
+    /**
+     * 예약 목록 api observer
+     */
+    private fun observeReservationHospitalListState() {
+        lifecycleScope.launch {
+            viewModel.hospitalReservationHistoryListApiState.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        val reservationList = result.data
+
+                        when(reservationList.isNotEmpty()) {
+                            true -> {
+                                val adapter =
+                                    HospitalReservationListAdapter(
+                                        reservationList,
+                                        applicationContext
+                                    ) { id, status ->
+                                        when(status) {
+                                            ReservationStatus.CONFIRMED.name -> cancelDialog(id)
+                                            ReservationStatus.PENDING.name -> cancelDialog(id)
+                                            ReservationStatus.CANCELLED.name -> goHospitalDetailActivity(id)
+                                            ReservationStatus.COMPLETED.name -> goHospitalDetailActivity(id)
+                                        }
+                                    }
+
+                                binding.recyclerviewHospitalReservationList.adapter = adapter
+
+                                isDataAvailable(true)
+                            }
+                            false -> isDataAvailable(false)
+                        }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                        isDataAvailable(false)
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                        isDataAvailable(false)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 예약 목록 데이터 여부에 따른 화면 전환
+     */
+    private fun isDataAvailable(boolean: Boolean) {
+        when(boolean) {
+            true -> {
+                if (binding.recyclerviewHospitalReservationList.visibility != View.VISIBLE) {
+                    binding.recyclerviewHospitalReservationList.visibility = View.VISIBLE
+                    binding.textViewNoData.visibility = View.GONE
+                }
+            }
+            false -> {
+                if (binding.textViewNoData.visibility != View.VISIBLE) {
+                    binding.textViewNoData.visibility = View.VISIBLE
+                    binding.recyclerviewHospitalReservationList.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    /**
+     * 예약취소 observer
+     */
+    private fun observeCancelHospitalReservation() {
+        lifecycleScope.launch {
+            viewModel.cancelHospitalReservationApiState.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        viewModel.getHospitalReservationHistoryListApiState()
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 예약 취소 dialog
+     */
+    private fun cancelDialog(id: Int) {
+        val dialog = CustomDialogCommon(
+            getString(R.string.cancel_reservation_dialog), {
+                viewModel.cancelHospitalReservationApiState(id)
+            })
+
+        dialog.show(this.supportFragmentManager, "CustomDialogCommon")
+    }
+
+    /**
+     * HospitalDetailActivity 이동
+     */
+    private fun goHospitalDetailActivity(id: Int) {
+        val intent = Intent(this, HospitalDetailActivity::class.java)
+            .putExtra("hospitalDetail", id)
+        startActivity(intent)
     }
 }

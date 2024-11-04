@@ -6,16 +6,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HospitalOrderDetailResponse (
     val id: Int,
-    val uid: String,
-    val hospitalId: Int,
+    val hospitalName: String,
     val date: Long,
     val status: String
 )
 
 fun HospitalOrderDetailResponse.toDomain() = HospitalOrderDetailEntity(
     id = id,
-    uid = uid,
-    hospitalId = hospitalId,
+    hospitalName = hospitalName,
     date = date,
     status = status
 )

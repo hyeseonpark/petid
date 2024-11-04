@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.android.petid.R
 import com.android.petid.databinding.ActivityMyInfoBinding
 import com.android.petid.databinding.ActivityMyInfoUpdateBinding
+import com.android.petid.ui.component.CustomDialogCommon
 
 /**
  * 마이페이지 메인 > 내 정보 > 내 정보 수정
@@ -25,6 +26,21 @@ class MyInfoUpdateActivity : AppCompatActivity() {
     }
 
     private fun initComponent() {
+        binding.buttonComplete.button.setOnClickListener {
+            completeDialog()
+        }
+    }
 
+
+    /**
+     * 예약 취소 dialog
+     */
+    private fun completeDialog() {
+        val dialog = CustomDialogCommon(
+            getString(R.string.update_complete_dialog), {
+                // viewModel.cancelHospitalReservationApiState(id)
+            })
+
+        dialog.show(this.supportFragmentManager, "CustomDialogCommon")
     }
 }

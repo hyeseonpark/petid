@@ -13,7 +13,67 @@
             android:id="@+id/top_bar"
             layout="@layout/top_bar_common"
             app:back="@{true}"
-            app:title="@{@string/pet_info_title}"/>
+            app:title="@{@string/update_my_info_title}"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="33dp"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/edit_text_name"
+                layout="@layout/edittext_common_rectangle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="47dp"
+                app:hint="@{@string/name_hint}"
+                app:title="@{@string/user_name}"
+                app:disabled="@{true}"/>
+
+            <include
+                android:id="@+id/edit_text_phone"
+                layout="@layout/edittext_common_rectangle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                app:hint="@{@string/phone_number_hint}"
+                app:title="@{@string/phone_number}" />
+
+            <include
+                android:id="@+id/edit_text_address"
+                layout="@layout/edittext_common_rectangle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                app:hint="@{@string/address_hint}"
+                app:icon="@{@drawable/ic_search}"
+                app:title="@{@string/address}" />
+
+            <EditText
+                android:id="@+id/edit_text_address_detail"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="27dp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:hint="상세주소를 입력해주세요."
+                android:inputType="text"
+                android:textSize="14dp"
+                android:paddingEnd="17.96dp"/>
+
+        </LinearLayout>
+
+
+        <include
+            android:id="@+id/button_complete"
+            layout="@layout/button_common"
+            app:buttonText="@{@string/update_complete}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="33dp"
+            android:layout_marginBottom="68dp" />
 
     </LinearLayout>
 

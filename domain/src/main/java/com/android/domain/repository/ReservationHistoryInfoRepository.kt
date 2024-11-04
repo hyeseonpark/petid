@@ -5,4 +5,5 @@ import com.android.domain.util.ApiResult
 
 interface ReservationHistoryInfoRepository {
     suspend fun getHospitalReservationHistoryList(status: String): ApiResult<List<HospitalOrderDetailEntity>>
+    suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int>
 }

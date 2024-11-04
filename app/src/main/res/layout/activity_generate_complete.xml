@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:text="@string/user_name"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -73,7 +73,7 @@
                     android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="덕구"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textFontWeight="600"
                     android:textSize="16sp" />
 
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:text="@string/birthday"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -102,7 +102,7 @@
                     android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="2022.03.02"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textFontWeight="600"
                     android:textSize="16sp" />
 
@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:text="@string/gender"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -131,7 +131,7 @@
                     android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="남, 중성화X"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textFontWeight="600"
                     android:textSize="16sp" />
 
@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:text="@string/type"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -160,7 +160,7 @@
                     android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="믹스 푸들"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textFontWeight="600"
                     android:textSize="16sp" />
 
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:background="#FAFAFA"
                     android:text="@string/feature"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textSize="16sp" />
 
                 <TextView
@@ -188,7 +188,7 @@
                     android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="갈색, 곱슬, 장모"
-                    android:textColor="#333333"
+                    android:textColor="@color/petid_midblack"
                     android:textFontWeight="600"
                     android:textSize="16sp" />
 

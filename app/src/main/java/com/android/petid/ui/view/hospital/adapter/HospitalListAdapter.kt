@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.domain.entity.HospitalEntity
 import com.android.petid.databinding.ItemHospitalBinding
-import com.bumptech.glide.Glide
 
 class HospitalListAdapter(
     private val hospitalList: List<HospitalEntity>,

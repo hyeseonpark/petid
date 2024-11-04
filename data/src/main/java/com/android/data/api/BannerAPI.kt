@@ -21,6 +21,6 @@ interface BannerAPI {
 
     @GET("/v1/banner/presigned-get-url")
     suspend fun getBannerImage(
-        @Query("imagePath") imagePath: String
+        @Query("filePath") filePath: String
     ): String
 }

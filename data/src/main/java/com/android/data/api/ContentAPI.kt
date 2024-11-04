@@ -1,5 +1,6 @@
 package com.android.data.api
 
+import com.android.data.dto.response.ContentLikeResponse
 import com.android.data.dto.response.ContentResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -22,5 +23,5 @@ interface ContentAPI {
     @POST("/v1/content/{contentId}/like")
     suspend fun doContentLike(
         @Path("contentId") contentId: Int
-    )
+    ): ContentLikeResponse
 }

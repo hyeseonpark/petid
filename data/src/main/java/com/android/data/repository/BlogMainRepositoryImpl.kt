@@ -2,6 +2,7 @@ package com.android.data.repository
 
 import com.android.data.source.remote.BlogMainRemoteDataSource
 import com.android.domain.entity.ContentEntity
+import com.android.domain.entity.ContentLikeEntity
 import com.android.domain.repository.BlogMainRepository
 import com.android.domain.util.ApiResult
 import javax.inject.Inject
@@ -19,7 +20,7 @@ class BlogMainRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun doContentLike(contentId: Int): ApiResult<Unit> {
+    override suspend fun doContentLike(contentId: Int): ApiResult<ContentLikeEntity> {
         return when (val result = remoteDataSource.doContentLike(contentId)) {
             is ApiResult.Success -> result
             is ApiResult.HttpError -> result
