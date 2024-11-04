@@ -4,6 +4,7 @@ import com.android.data.repository.BlogMainRepositoryImpl
 import com.android.data.repository.ContentDetailRepositoryImpl
 import com.android.data.repository.HomeMainRepositoryImpl
 import com.android.data.repository.HospitalMainRepositoryImpl
+import com.android.data.repository.MyInfoRepositoryImpl
 import com.android.data.repository.ReservationCalendarRepositoryImpl
 import com.android.data.repository.ReservationHistoryInfoRepositoryImpl
 import com.android.data.repository.SocialAuthRepositoryImpl
@@ -12,6 +13,7 @@ import com.android.domain.repository.BlogMainRepository
 import com.android.domain.repository.ContentDetailRepository
 import com.android.domain.repository.HomeMainRepository
 import com.android.domain.repository.HospitalMainRepository
+import com.android.domain.repository.MyInfoRepository
 import com.android.domain.repository.ReservationCalendarRepository
 import com.android.domain.repository.ReservationHistoryInfoRepository
 import com.android.domain.repository.SocialAuthRepository
@@ -75,6 +77,12 @@ abstract class RepositoryModule {
     abstract fun bindContentDetailRepository(
         contentDetailRepositoryImpl: ContentDetailRepositoryImpl
     ): ContentDetailRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMyInfoRepository(
+        myInfoRepositoryImpl: MyInfoRepositoryImpl
+    ): MyInfoRepository
 
 
     /*@Binds

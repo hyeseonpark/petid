@@ -8,7 +8,10 @@ import javax.inject.Inject
 class GetBannerImageUseCase @Inject constructor(
     private val homeMainRepository: HomeMainRepository,
 ){
-    suspend operator fun invoke(imagePath: String): ApiResult<String> {
+//    suspend operator fun invoke(imagePath: String): ApiResult<String> {
+//        return homeMainRepository.getBannerImage(imagePath)
+//    }
+    suspend operator fun invoke(imagePath: String): String {
         return homeMainRepository.getBannerImage(imagePath)
     }
 }

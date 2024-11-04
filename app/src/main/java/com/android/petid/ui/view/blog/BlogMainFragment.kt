@@ -125,6 +125,9 @@ class BlogMainFragment : Fragment() {
         }
     }
 
+    /**
+     * 데이터 유무에 따른 화면 전환
+     */
     private fun visibleLayoutDataAvailable(boolean: Boolean) {
         when(boolean) {
             true -> {
@@ -152,10 +155,10 @@ class BlogMainFragment : Fragment() {
                     is CommonApiState.Success -> {
                         val result = result.data
 
+                        var updatedContent = contentList.find { it.contentId == result.contentId }
+                        updatedContent?.isLiked = true
+                        updatedContent?.likesCount = result.likeCount
 
-                        var updatedContent = contentList.find { it.contentId == 4 }
-                        //updatedContent?.isLiked = true
-                        //updatedContent?.likesCount = result.likesCount
                         binding.recyclerviewBlogContentList.adapter?.notifyDataSetChanged()
                     }
                     is CommonApiState.Error -> {

@@ -14,6 +14,9 @@
         <variable
             name="icon"
             type="android.graphics.drawable.Drawable" />
+        <variable
+            name="disabled"
+            type="boolean" />
     </data>
 
     <LinearLayout
@@ -25,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{title}"
-            android:textColor="@color/petid_title"
+            android:textColor="@color/petid_gray"
             android:textSize="14dp"
             android:layout_marginBottom="13dp"/>
 
@@ -37,9 +40,12 @@
             android:hint="@{hint}"
             android:inputType="text"
             android:textSize="14dp"
+            android:textFontWeight="400"
+            android:textColor="@color/petid_title"
             android:paddingEnd="17.96dp"
             android:drawableEnd="@{icon == null ? null : icon}"
-            android:drawableTint="#2E2E2E"/>
+            android:drawableTint="#2E2E2E"
+            android:enabled="@{!disabled}"/>
 
     </LinearLayout>
 

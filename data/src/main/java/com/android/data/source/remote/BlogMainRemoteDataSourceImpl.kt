@@ -4,6 +4,7 @@ import com.android.data.api.ContentAPI
 import com.android.data.dto.response.ErrorResponse
 import com.android.data.dto.response.toDomain
 import com.android.domain.entity.ContentEntity
+import com.android.domain.entity.ContentLikeEntity
 import com.android.domain.util.ApiResult
 import com.google.gson.Gson
 import retrofit2.HttpException
@@ -29,10 +30,10 @@ class BlogMainRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun doContentLike(contentId: Int): ApiResult<Unit> {
+    override suspend fun doContentLike(contentId: Int): ApiResult<ContentLikeEntity> {
         return try {
             val response = contentAPI.doContentLike(contentId)
-            ApiResult.Success(response)
+            ApiResult.Success(response.toDomain())
 
         } catch (e: HttpException) {
             val gson = Gson()

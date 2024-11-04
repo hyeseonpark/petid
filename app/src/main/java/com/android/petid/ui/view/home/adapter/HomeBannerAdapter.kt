@@ -22,9 +22,8 @@ class HomeBannerAdapter(
         return CustomViewHolder(view).apply {
             itemView.setOnClickListener {
                 val curPosition = this.position
-                //val img: ModelImageOnly = imageList[curPosition]
                 // 클릭 시 관련 페이지로 이동하기
-                Toast.makeText(mContext, "${curPosition % total}번째 배너 클릭됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext, imageList[curPosition % total].text, Toast.LENGTH_SHORT).show()
 //                val intent = Intent(mContext, DetailActivity::class.java)
 //                mContext.startActivity(intent)
             }
@@ -32,9 +31,11 @@ class HomeBannerAdapter(
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        // 아이템 수로 굉장히 큰 수를 줬으므로 position으로 어떤 수가 나오든 5로 나눈 나머지 값 순서의의 데이터를 사해 5단위로 데이터가 반복되도록 한다.
-        // 다른 곳에서도 position값은 5로 나눈 나머지를 사용하면 된다.
-        // Glide.with(mContext).load(imageList[position % total].imageUrl).into(holder.img)
+        when (val imgUrl = imageList[position % total].imageUrl) {
+            "" -> Glide.with(mContext).load(mContext.getDrawable(R.drawable.layout_home_banner_background)).into(holder.img)
+            else -> Glide.with(mContext).load(imgUrl).into(holder.img)
+        }
+
     }
 
     override fun getItemCount(): Int {

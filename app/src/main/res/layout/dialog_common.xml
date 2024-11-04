@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:minWidth="300dp"
+    android:background="@drawable/dialog_background_common"
+    android:gravity="center"
+    android:paddingTop="37dp"
+    android:paddingHorizontal="21dp"
+    android:paddingBottom="21dp">
+
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="@color/petid_title"
+        tools:text="@string/cancel_reservation_dialog"
+        android:layout_marginBottom="32dp"/>
+
+    <!--ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/img_hospital_image"
+        android:alpha="0.5"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="53dp" /-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_no"
+            android:background="@drawable/button_background_d9"
+            android:stateListAnimator="@null"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:text="@string/no"
+            android:textSize="16sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_subtitle"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_yes"
+            android:background="@drawable/button_background_common"
+            android:stateListAnimator="@null"
+            android:layout_width="0dp"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:text="@string/yes"
+            android:textSize="16sp"
+            android:textFontWeight="500"
+            android:textColor="@color/white"
+            android:layout_marginLeft="7dp"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_single"
+        android:background="@drawable/button_background_common"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:text="병원 예약하기"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:visibility="gone"/>
+
+</LinearLayout>

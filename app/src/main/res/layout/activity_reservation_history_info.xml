@@ -16,6 +16,7 @@
             layout="@layout/top_bar_common"
             app:back="@{true}"
             app:title="@{@string/reservation_history_title}"/>
+        <!-- 걷어 내기 -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_hospital_reservation_list"
@@ -24,6 +25,7 @@
             android:layout_marginHorizontal="14dp"/>
 
         <TextView
+            android:id="@+id/textView_no_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/no_history"

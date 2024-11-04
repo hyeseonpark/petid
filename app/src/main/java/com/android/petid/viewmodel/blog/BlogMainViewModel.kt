@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.ContentEntity
+import com.android.domain.entity.ContentLikeEntity
 import com.android.domain.entity.LocationEntity
 import com.android.domain.usecase.content.DoContentLikeUseCase
 import com.android.domain.usecase.content.GetContentListUseCase
@@ -34,8 +35,8 @@ class BlogMainViewModel @Inject constructor(
     val contentListApiState: StateFlow<CommonApiState<List<ContentEntity>>> = _contentListApiState
 
     // 좋아요 결과
-    private val _doLikeApiResult = MutableSharedFlow<CommonApiState<Unit>>()
-    val doLikeApiResult: SharedFlow<CommonApiState<Unit>> = _doLikeApiResult
+    private val _doLikeApiResult = MutableSharedFlow<CommonApiState<ContentLikeEntity>>()
+    val doLikeApiResult: SharedFlow<CommonApiState<ContentLikeEntity>> = _doLikeApiResult
 
     /**
      * 콘텐츠 목록 가져오기

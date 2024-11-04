@@ -7,7 +7,7 @@ enum class PlatformType(val value: String) {
 
     companion object {
         fun fromValue(value: String?): PlatformType? {
-            return values().find { it.value == value }
+            return entries.find { it.value == value }
         }
     }
 }

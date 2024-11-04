@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SocialAuthActivity : AppCompatActivity() {
+    // saa: single activity
     private lateinit var binding: ActivitySocialAuthBinding
     private val viewModel: SocialAuthViewModel by viewModels()
 

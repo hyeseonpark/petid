@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeMainFragment">
+
+    <fragment
+        android:id="@+id/homeMainFragment"
+        android:name="com.android.petid.ui.view.home.HomeMainFragment"
+        android:label="fragment_home_main"
+        tools:layout="@layout/fragment_home_main" />
+
+    <fragment
+        android:id="@+id/blogMainFragment"
+        android:name="com.android.petid.ui.view.blog.BlogMainFragment"
+        android:label="fragment_blog_main"
+        tools:layout="@layout/fragment_blog_main" />
+    <fragment
+        android:id="@+id/customDialogCommon"
+        android:name="com.android.petid.ui.component.CustomDialogCommon"
+        android:label="CustomDialogCommon" />
+
+</navigation>

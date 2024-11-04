@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:background="@color/white"
     android:paddingVertical="26dp"
-    android:paddingStart="34dp"
+    android:paddingStart="31dp"
     android:paddingEnd="14dp">
 
     <LinearLayout
@@ -16,6 +16,12 @@
         android:orientation="vertical"
         android:background="@color/white">
 
+        <ImageView
+            android:id="@+id/image_status_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chip_cancelled" />
+
         <TextView
             android:id="@+id/textView_hospital_name"
             android:text="동물병원"
@@ -24,7 +30,8 @@
             android:layout_marginTop="8dp"
             android:textSize="16sp"
             android:textFontWeight="400"
-            android:textColor="@color/petid_title"/>
+            android:textColor="@color/petid_title"
+            android:layout_marginLeft="3dp"/>
 
         <TextView
             android:id="@+id/textView_date_time"
@@ -34,21 +41,23 @@
             android:layout_marginTop="5dp"
             android:textSize="15sp"
             android:textFontWeight="400"
-            android:textColor="#838383"/>
+            android:textColor="#838383"
+            android:layout_marginLeft="3dp"/>
 
     </LinearLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         android:layout_width="143dp"
         android:layout_height="37dp"
         android:layout_gravity="bottom"
         android:background="@drawable/button_background_common"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:stateListAnimator="@null"
         android:text="@string/write_review"
-        android:textColor="@drawable/button_text_color_common"
+        android:textColor="@color/white"
         android:textFontWeight="500"
         android:textSize="12sp" />
 

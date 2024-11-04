@@ -6,8 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class HospitalOrderDetailEntity (
     val id: Int,
-    val uid: String,
-    val hospitalId: Int,
+    val hospitalName: String,
     val date: Long, // Unix timestamp
     val status: String
 ) : Parcelable

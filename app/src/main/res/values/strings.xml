@@ -23,6 +23,8 @@
     <string name="female">여</string>
     <string name="Y">Y</string>
     <string name="N">N</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
     <string name="main_home">홈</string>
     <string name="main_hospital">등록대행병원</string>
     <string name="main_blog">펫블로그</string>
@@ -36,6 +38,7 @@
     <string name="hair_feature">털 특징</string>
     <string name="weight">몸무게</string>
     <string name="name">이름</string>
+    <string name="age">나이</string>
     <string name="birth">생일</string>
     <string name="place">장소</string>
     <string name="noon">오전</string>
@@ -43,6 +46,7 @@
     <string name="update">수정</string>
     <string name="like">좋아요</string>
     <string name="share">공유하기</string>
+    <string name="owner">보호자</string>
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 
@@ -82,12 +86,17 @@
     <string name="problem_social_auth">로그인에 문제가 있나요?</string>
 
     <!-- home fragment -->
+    <string name="home_no_petid">펫 아이디를 만들어보세요.</string>
     <string name="check_list_info_sub_title">반려동물과 나가기 전 체크하세요!</string>
     <string name="check_list_info_title">외출 체크리스트 확인하기</string>
     <string name="info_create_petid_sub_title">반려동물을 지키는\n가장 확실한 방법이에요.</string>
     <string name="info_create_petid_title">펫 아이디 만들고\n간편하게 등록해보세요.</string>
     <string name="info_create_petid_title_span">펫 아이디</string>
-    <string name="life_style_recommend_title">반려인 라이프 스타일 추천 🐶</string>
+    <string name="info_create_petid_desc">펫 아이디\n카드</string>
+    <string name="do_register_petid">지금 반려동물을 등록하세요</string>
+    <string name="flip_card_front_side">앞면보기</string>
+    <string name="flip_card_back_side">뒷면보기</string>
+    <string name="life_style_recommend_title">🐶 반려 정보 tip</string>
 
     <string name="pet_info_input_activity_title">반려동물의 정보를\n입력해주세요.</string>
     <string name="pet_info_input_activity_title_span">반려동물의 정보</string>
@@ -186,6 +195,10 @@
     <string name="app_version">앱 버전</string>
 
     <string name="my_info_title">내 정보</string>
+    <string name="update_my_info_title">내 정보 수정</string>
+    <string name="update_complete">수정 완료</string>
+
+    <string name="update_complete_dialog">수정 내용을 저장할까요?</string>
 
     <!-- my pet info activity -->
     <string name="pet_create_status">반려동물 등록</string>
@@ -194,6 +207,8 @@
     <string name="no_history">예약 내역이 없습니다</string>
     <string name="write_review">리뷰 쓰기</string>
     <string name="cancel_reservation">예약 취소</string>
+    <string name="re_reservation">다시 예약</string>
+    <string name="cancel_reservation_dialog">예약을 취소 하시겠습니까?</string>
 
 
     <!-- blog main fragment -->
@@ -208,5 +223,6 @@
     <!-- content detail activity -->
     <string name="content_like_desc">%d명이 좋아했어요</string>
     <string name="content_detail_hospital_recommendation_desc">내 근처 동물병원을 모아봤어요</string>
+
 
 </resources>

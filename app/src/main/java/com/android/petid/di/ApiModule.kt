@@ -7,6 +7,9 @@ import com.android.data.api.ContentAPI
 import com.android.data.api.HosptialAPI
 import com.android.data.api.LocationAPI
 import com.android.data.api.LoggingInterceptor
+import com.android.data.api.NullOnEmptyConverterFactory
+import com.android.data.api.PetAPI
+import com.android.data.api.MemberAPI
 import com.android.data.util.PreferencesHelper
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -17,6 +20,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -63,6 +67,8 @@ class ApiModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
+            .addConverterFactory(NullOnEmptyConverterFactory())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -96,5 +102,17 @@ class ApiModule {
     @Singleton
     fun provideContentAPI(retrofit: Retrofit): ContentAPI {
         return retrofit.create(ContentAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserAPI(retrofit: Retrofit): MemberAPI {
+        return retrofit.create(MemberAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePetAPI(retrofit: Retrofit): PetAPI {
+        return retrofit.create(PetAPI::class.java)
     }
 }

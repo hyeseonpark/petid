@@ -3,6 +3,7 @@ package com.android.petid.viewmodel.blog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.ContentEntity
+import com.android.domain.entity.ContentLikeEntity
 import com.android.domain.usecase.content.DoContentLikeUseCase
 import com.android.domain.usecase.content.GetContentDetailUseCase
 import com.android.domain.util.ApiResult
@@ -32,8 +33,8 @@ class ContentDetailViewModel @Inject constructor(
 
 
     // 좋아요 결과
-    private val _doLikeApiResult = MutableSharedFlow<CommonApiState<Unit>>()
-    val doLikeApiResult: SharedFlow<CommonApiState<Unit>> = _doLikeApiResult
+    private val _doLikeApiResult = MutableSharedFlow<CommonApiState<ContentLikeEntity>>()
+    val doLikeApiResult: SharedFlow<CommonApiState<ContentLikeEntity>> = _doLikeApiResult
 
     /**
      * 콘텐츠 내용 가져오기
