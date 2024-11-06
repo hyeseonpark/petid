@@ -1,5 +1,6 @@
 package com.android.data.api
 
+import com.android.data.dto.response.PetDetailsResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -16,7 +17,7 @@ interface PetAPI {
     @GET("/v1/pet/{petId}")
     suspend fun getPetDetails(
         @Path("petId") petId: Long
-    )//: Response<PetDetailsResponse>
+    ): PetDetailsResponse
 
     /**
      * 2.2 애완동물 등록 API
