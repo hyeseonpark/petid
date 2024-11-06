@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="덕구"
+                    android:text=""
                     android:textColor="@color/petid_subtitle"
                     android:textSize="16sp"
                     android:textFontWeight="400"/>
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="2022.03.02"
+                    android:text=""
                     android:textColor="@color/petid_subtitle"
                     android:textSize="16sp"
                     android:textFontWeight="400" />
@@ -131,13 +131,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="010-0000-000"
+                    android:text=""
                     android:textColor="@color/petid_subtitle"
                     android:textSize="16sp"
                     android:textFontWeight="400" />
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -160,7 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="서울특별시 송파구 송파대로 12길 11\n101동"
+                    android:text=""
                     android:textColor="@color/petid_subtitle"
                     android:textSize="16sp"
                     android:textFontWeight="400" />

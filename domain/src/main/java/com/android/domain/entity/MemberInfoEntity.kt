@@ -6,7 +6,9 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class MemberInfoEntity  (
     val name: String,
-    val address: String,
-    val phone: String,
-    val image: String?
+    val address: String?,
+    val addressDetails: String?,
+    val phone: String?,
+    var image: String?,
+    val petId: Int?,
 ) : Parcelable
