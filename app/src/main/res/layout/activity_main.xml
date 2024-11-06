@@ -10,33 +10,45 @@
     tools:context=".ui.view.main.MainActivity"
     android:background="@color/white">
 
-    <FrameLayout
+    <!--FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" /-->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_layout_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:name="androidx.navigation.fragment.NavHostFragment"
-
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph"
-
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="84dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:labelVisibilityMode="labeled"
+        android:background="@drawable/main_bottom_navigation_background"
+        app:itemBackground="@color/white"
+        app:itemActiveIndicatorStyle="@android:color/transparent"
+        app:itemTextColor="@color/main_bottom_navigation_item_color"
+        app:itemIconTint="@color/main_bottom_navigation_item_color"
+        app:itemPaddingBottom="20dp"
+        app:elevation="16dp"
+        app:menu="@menu/main_menu" />
 
-    </androidx.fragment.app.FragmentContainerView>-->
-
-    <com.google.android.material.tabs.TabLayout
+    <!--com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout_main"
         android:layout_width="match_parent"
         android:layout_height="92dp"
@@ -73,6 +85,6 @@
             android:icon="@drawable/ic_my"
             android:text="@string/main_my" />
 
-    </com.google.android.material.tabs.TabLayout>
+    </com.google.android.material.tabs.TabLayout-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeMainFragment"
+        android:icon="@drawable/ic_home"
+        android:enabled="true"
+        android:title="@string/main_home" />
+
+    <item
+        android:id="@+id/hospitalMainFragment"
+        android:icon="@drawable/ic_hospital"
+        android:enabled="true"
+        android:title="@string/main_hospital" />
+
+    <item
+        android:id="@+id/blogMainFragment"
+        android:icon="@drawable/ic_blog"
+        android:enabled="true"
+        android:title="@string/main_blog" />
+
+    <item
+        android:id="@+id/myMainFragment"
+        android:icon="@drawable/ic_my"
+        android:enabled="true"
+        android:title="@string/main_my" />
+
+</menu>
