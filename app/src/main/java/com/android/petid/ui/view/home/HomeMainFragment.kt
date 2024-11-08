@@ -17,7 +17,8 @@ import com.android.domain.entity.BannerEntity
 import com.android.petid.common.Constants.BANNER_TYPE_MAIN
 import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.view.generate.PetIdStartActivity
+import com.android.petid.ui.view.generate.GeneratePetidMainActivity
+import com.android.petid.ui.view.generate.PetIdStartFragment
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
 import com.android.petid.viewmodel.home.HomeMainVIewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +47,13 @@ class HomeMainFragment : Fragment() {
         setupBannerObservers()
 
         binding.buttonCreateStart.button.setOnClickListener{
-            val intent = Intent(activity, PetIdStartActivity::class.java)
+            val intent = Intent(activity, PetIdStartFragment::class.java)
+            startActivity(intent)
+        }
+
+        // temp
+        binding.imageViewNoti.setOnClickListener{
+            val intent = Intent(activity, GeneratePetidMainActivity::class.java)
             startActivity(intent)
         }
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_generate_pet"
+    app:startDestination="@id/petIdStartFragment">
+
+    <fragment
+        android:id="@+id/petIdStartFragment"
+        android:name="com.android.petid.ui.view.generate.PetIdStartFragment"
+        android:label="PetIdStartFragment"
+        tools:layout="@layout/fragment_pet_id_start">
+
+        <action
+            android:id="@+id/action_petIdStartFragment_to_userInfoInputFragment"
+            app:destination="@id/userInfoInputFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/userInfoInputFragment"
+        android:name="com.android.petid.ui.view.generate.UserInfoInputFragment"
+        android:label="fragment_user_info_input"
+        tools:layout="@layout/fragment_user_info_input" >
+
+        <action
+            android:id="@+id/action_userInfoInputFragment_to_petInfoInputFragment"
+            app:destination="@id/petInfoInputFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/petInfoInputFragment"
+        android:name="com.android.petid.ui.view.generate.PetInfoInputFragment"
+        android:label="fragment_pet_info_input"
+        tools:layout="@layout/fragment_pet_info_input" >
+
+        <action
+            android:id="@+id/action_petInfoInputFragment_to_petPhotoFragment"
+            app:destination="@id/petPhotoFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/petPhotoFragment"
+        android:name="com.android.petid.ui.view.generate.PetPhotoFragment"
+        android:label="fragment_pet_photo"
+        tools:layout="@layout/fragment_pet_photo" >
+
+        <action
+            android:id="@+id/action_petPhotoFragment_to_scannedInfoFragment"
+            app:destination="@id/scannedInfoFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/scannedInfoFragment"
+        android:name="com.android.petid.ui.view.generate.ScannedInfoFragment"
+        android:label="fragment_scanned_info"
+        tools:layout="@layout/fragment_scanned_info" >
+
+        <action
+            android:id="@+id/action_scannedInfoFragment_to_checkingInfoFragment"
+            app:destination="@id/checkingInfoFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/checkingInfoFragment"
+        android:name="com.android.petid.ui.view.generate.CheckingInfoFragment"
+        android:label="fragment_checking_info"
+        tools:layout="@layout/fragment_checking_info" >
+
+        <action
+            android:id="@+id/action_checkingInfoFragment_to_signatureFragment"
+            app:destination="@id/signatureFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/signatureFragment"
+        android:name="com.android.petid.ui.view.generate.SignatureFragment"
+        android:label="fragment_signature"
+        tools:layout="@layout/fragment_signature" >
+
+        <action
+            android:id="@+id/action_signatureFragment_to_completeCardFragment"
+            app:destination="@id/signatureFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/completeCardFragment"
+        android:name="com.android.petid.ui.view.generate.CompleteCardFragment"
+        android:label="fragment_complete_card"
+        tools:layout="@layout/fragment_complete_card" />
+
+</navigation>

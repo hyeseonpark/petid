@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.android.petid.databinding.FragmentMyMainBinding
-import com.android.petid.ui.view.generate.PetInfoInputActivity
 
 /**
  * 마이페이지 메인
