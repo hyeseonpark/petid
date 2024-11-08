@@ -48,7 +48,7 @@ class UserInfoInputFragment : Fragment() {
                 val phoneValue = editTextPhone.editText.text.toString()
                 val addressValue = editTextAddress.editText.text.toString()
 
-                findNavController().navigate(R.id.action_petIdStartFragment_to_userInfoInputFragment)
+                findNavController().navigate(R.id.action_userInfoInputFragment_to_petInfoInputFragment)
             }
         }
     }

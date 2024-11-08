@@ -18,7 +18,6 @@ class GeneratePetidMainActivity : AppCompatActivity() {
             setContentView(it.root)
         }
 
-        var navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragment_layout_generate) as NavHostFragment
+        supportFragmentManager.findFragmentById(R.id.fragment_layout_generate) as NavHostFragment
     }
 }
