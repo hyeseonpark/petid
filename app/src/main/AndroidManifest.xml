@@ -17,6 +17,9 @@
         android:theme="@style/Theme.PetId"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.generate.GeneratePetidMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.blog.ContentDetailActivity"
             android:exported="false" />
         <activity
@@ -42,9 +45,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.view.hospital.ReservationCalendarActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.hospital.ReservationProcessFinishActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.hospital.CompleteReservationActivity"
@@ -82,28 +82,28 @@
             android:name=".ui.view.auth.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.CompleteCardActivity"
+            android:name=".ui.view.generate.CompleteCardFragment"
             android:exported="false" />
         <activity
             android:name=".ui.view.deleted.GenerateCompleteActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.SignatureActivity"
+            android:name=".ui.view.generate.SignatureFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.CheckingInfoActivity"
+            android:name=".ui.view.generate.CheckingInfoFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.ScannedInfoActivity"
+            android:name=".ui.view.generate.ScannedInfoFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.PetPhotoActivity"
+            android:name=".ui.view.generate.PetPhotoFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.PetInfoInputActivity"
+            android:name=".ui.view.generate.PetInfoInputFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.PetIdStartActivity"
+            android:name=".ui.view.generate.PetIdStartFragment"
             android:exported="false" />
         <activity
             android:name=".ui.view.auth.SignupCompleteActivity"
@@ -130,7 +130,7 @@
             android:name=".ui.view.deleted.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.UserInfoInputActivity"
+            android:name=".ui.view.generate.UserInfoInputFragment"
             android:exported="false" />
     </application>
 

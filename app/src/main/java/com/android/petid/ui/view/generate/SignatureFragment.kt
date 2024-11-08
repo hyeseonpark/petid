@@ -1,26 +1,35 @@
 package com.android.petid.ui.view.generate
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.android.petid.databinding.ActivitySignatureBinding
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.android.petid.R
+import com.android.petid.databinding.FragmentSignatureBinding
 
-class SignatureActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignatureBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySignatureBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+class SignatureFragment : Fragment() {
+    private lateinit var binding: FragmentSignatureBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSignatureBinding.inflate(layoutInflater)
+        initComponent()
+
+        return binding.root
+    }
+
+    fun initComponent() {
         binding.buttonNext.button.setOnClickListener{
-            val intent = Intent(this, CompleteCardActivity::class.java)
             val bitmap = getBitmapFromView(binding.drawingViewSignature)
 //            val base64Bitmap = bitmapToBase64(bitmap)
 //            sendBitmapToServer(base64Bitmap)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
         }
     }
 

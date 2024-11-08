@@ -1,25 +1,35 @@
 package com.android.petid.ui.view.generate
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.databinding.ActivityPetInfoInputBinding
+import com.android.petid.databinding.FragmentPetInfoInputBinding
 import com.android.petid.util.getCurrentDate
 import com.android.petid.util.setStyleSpan
 
-class PetInfoInputActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityPetInfoInputBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPetInfoInputBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+class PetInfoInputFragment : Fragment() {
+    private lateinit var binding: FragmentPetInfoInputBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentPetInfoInputBinding.inflate(layoutInflater)
+        initComponent()
+
+        return binding.root
+    }
+
+    fun initComponent() {
         binding.textViewTitle.text =
-            setStyleSpan(applicationContext, binding.textViewTitle.text.toString(),
+            setStyleSpan(requireContext(), binding.textViewTitle.text.toString(),
                 resources.getString(R.string.pet_info_input_activity_title_span), R.color.petid_clear_blue)
 
         binding.editTextName.editText.addTextChangedListener(object : TextWatcher {
@@ -46,7 +56,7 @@ class PetInfoInputActivity : AppCompatActivity() {
 
             val etSDateStr = textBirth.replace("[^0-9]".toRegex(), "")
             DatePickerDialog(
-                this,
+                requireContext() ,
                 { _, year, monthOfYear, dayOfMonth ->
                     binding.editTextBirth.editText.setText(
                         "${year}.${monthOfYear + 1}.${dayOfMonth}"
@@ -61,14 +71,7 @@ class PetInfoInputActivity : AppCompatActivity() {
         }
 
         binding.buttonNext.button.setOnClickListener{
-            var nextIntent : Intent
-            nextIntent = Intent(this, PetPhotoActivity::class.java)
-//            if(intent.getBooleanExtra("generated", false)) {
-//                nextIntent = Intent(this, CompleteCardActivity::class.java)
-//            } else {
-//                nextIntent = Intent(this, PetPhotoActivity::class.java)
-//            }
-            startActivity(nextIntent)
+            findNavController().navigate(R.id.action_petInfoInputFragment_to_petPhotoFragment)
         }
     }
 }
