@@ -1,12 +1,18 @@
 package com.android.petid.util
 
+import android.app.Activity
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,7 +32,7 @@ fun setStyleSpan(context: Context, content: String, word: String, color: Int, bo
         ForegroundColorSpan(ContextCompat.getColor(context, color)),
         start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-    if (bold == true)
+    if (bold)
         spannableString.setSpan(
             StyleSpan(Typeface.BOLD),
             start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -45,8 +51,11 @@ fun setBoldSpan(context: Context, content: String, word: String, color: Int) : S
     return spannableString
 }
 
+/**
+ * 오늘 날짜
+ */
  fun getCurrentDate(): String {
-    val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return sdf.format(Date())
 }
 

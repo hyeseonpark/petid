@@ -44,7 +44,7 @@
             android:textColor="@color/petid_title"
             android:paddingEnd="17.96dp"
             android:drawableEnd="@{icon == null ? null : icon}"
-            android:drawableTint="#2E2E2E"
+            android:drawableTint="@color/b4"
             android:enabled="@{!disabled}"/>
 
     </LinearLayout>
