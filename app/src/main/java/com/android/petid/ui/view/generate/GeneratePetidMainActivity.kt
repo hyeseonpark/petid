@@ -1,6 +1,10 @@
 package com.android.petid.ui.view.generate
 
+import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.android.petid.R
@@ -19,5 +23,16 @@ class GeneratePetidMainActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.findFragmentById(R.id.fragment_layout_generate) as NavHostFragment
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+
+        if(currentFocus is EditText) {
+            currentFocus!!.clearFocus()
+        }
+
+        return super.dispatchTouchEvent(ev)
     }
 }

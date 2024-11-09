@@ -1,6 +1,5 @@
 package com.android.petid.ui.view.generate
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.databinding.FragmentUserInfoInputBinding
+import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 
 class UserInfoInputFragment : Fragment() {
     private lateinit var binding: FragmentUserInfoInputBinding
+    private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +45,9 @@ class UserInfoInputFragment : Fragment() {
             })
 
             buttonNext.button.setOnClickListener{
-                val nameValue = editTextName.editText.text.toString()
+                /*viewModel.memberInfo.apply {
+                    name = editTextName.editText.text.toString()
+                }*/
 //            val regidencyValue = editTextResidencyNumber.text.toString() + editTextResidencyNumber2.text.toString()
                 val phoneValue = editTextPhone.editText.text.toString()
                 val addressValue = editTextAddress.editText.text.toString()

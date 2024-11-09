@@ -6,15 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.databinding.FragmentPetIdStartBinding
+import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
+import com.android.petid.viewmodel.home.HomeMainVIewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  *
  */
+@AndroidEntryPoint
 class PetIdStartFragment : Fragment() {
     private lateinit var binding: FragmentPetIdStartBinding
+    private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,14 +33,21 @@ class PetIdStartFragment : Fragment() {
     }
 
     fun initComponent() {
+        val chipTypes = arrayOf("NA", "EXTERNAL", "INTERNAL")
         with (binding) {
-            radioButtonGroup.setOnCheckedChangeListener { _, checkId ->
-                when(checkId != -1) {
-                    true -> buttonNext.isEnabled = true
-                    false -> buttonNext.isEnabled = false
+            var selectedChipIdx = -1
+            radioButtonGroup.setOnCheckedChangeListener { _, checkedId ->
+                buttonNext.isEnabled = checkedId != -1
+
+                selectedChipIdx = when(checkedId) {
+                    buttonNa.id -> 0
+                    buttonExternal.id -> 1
+                    buttonInternal.id -> 2
+                    else -> -1
                 }
             }
             buttonNext.setOnClickListener{
+                viewModel.petInfo.setChipType(chipTypes[selectedChipIdx])
                 findNavController().navigate(R.id.action_petIdStartFragment_to_userInfoInputFragment)
             }
         }

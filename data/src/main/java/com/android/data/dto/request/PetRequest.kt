@@ -1,0 +1,69 @@
+package com.android.data.dto.request
+
+/**
+ *
+ * @param petRegNo 펫 등록번호
+ * @param petName 펫 이름
+ * @param ownerId 보호자 ID
+ * @param petBirthDate 펫 생년월일
+ * @param petSex 펫 성별 (M/W)
+ * @param petNeuteredYn 펫 중성화 여부 (Y/N)
+ * @param petNeuteredDate 펫 중성화 일시 (펫 중성화 여부가 N일 시, null)
+ * @param petAddr 펫 주소
+ * @param chipType 칩 타입 (NA / INTERNAL / EXTERNAL)
+ * @param appearance 펫 외형
+ * @param petImages 펫 사진
+ */
+data class PetRequest(
+    val petRegNo: String?,
+    val petName: String?,
+    val petBirthDate: String?,
+    val petSex: Char?,
+    val petNeuteredYn: Char?,
+    val petNeuteredDate: String?,
+    var petAddr: String?,
+    val chipType: String?,
+    val appearance: PetAppearanceRequest?,
+    val petImages: List<PetImageRequest>?,
+) {
+    class Builder {
+        private var petRegNo: String? = null
+        private var petName: String? = null
+        private var petBirthDate: String? = null
+        private var petSex: Char? = null
+        private var petNeuteredYn: Char? = null
+        private var petNeuteredDate: String? = null
+        private var petAddr: String? = null
+        private var chipType: String? = null
+        private var appearance: PetAppearanceRequest? = null
+        private var petImages: List<PetImageRequest>? = null
+
+        /* PetIdStartFragment */
+        fun setChipType(chipType: String) = apply { this.chipType = chipType }
+
+        /* UserInfoInputFragment */
+        fun setPetAddr(petAddr: String) = apply {this.petAddr = petAddr}
+
+        /* PetInfoInputFragment */
+        fun setPetInfo(petName: String, petBirthDate: String, petSex: Char,
+            petNeuteredYn: Char, petNeuteredDate: String?) = apply {
+                this.petName = petName
+                this.petBirthDate = petBirthDate
+                this.petSex = petSex
+                this.petNeuteredYn = petNeuteredYn
+                this.petNeuteredDate = petNeuteredDate
+            }
+
+        /* ScannedInfoFragment */
+        fun setAppearance(breed: String, hairColor: String, weight: Int, hairLength: String) = apply {
+            this.appearance.apply {
+                PetAppearanceRequest(breed, hairColor, weight, hairLength)
+            }
+        }
+
+        fun build(): PetRequest {
+            return PetRequest(petRegNo, petName, petBirthDate, petSex, petNeuteredYn,
+                petNeuteredDate, petAddr, chipType, appearance, petImages)
+        }
+    }
+}
