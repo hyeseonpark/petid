@@ -12,6 +12,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface HosptialAPI {
@@ -78,9 +79,9 @@ interface HosptialAPI {
     /**
      * 동물병원 예약 내역 취소
      */
-    @DELETE("/v1/hospital/order")
+    @DELETE("/v1/hospital/order/{orderId}")
     suspend fun deleteHospitalOrder(
-        @Field("orderId") orderId: Int,
+        @Path("orderId") orderId: Int,
     ) : Int
 
     /**
