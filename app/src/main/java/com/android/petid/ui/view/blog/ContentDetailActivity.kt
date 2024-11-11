@@ -2,7 +2,9 @@ package com.android.petid.ui.view.blog
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -26,6 +28,12 @@ import com.android.petid.viewmodel.blog.ContentDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class ContentDetailActivity : AppCompatActivity() {
@@ -91,6 +99,9 @@ class ContentDetailActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * 컨텐츠 상세 정보
+     */
     private fun observeGetContentDetailState() {
         lifecycleScope.launch {
             viewModel.contentDetailApiState.collectLatest { result ->
@@ -100,8 +111,12 @@ class ContentDetailActivity : AppCompatActivity() {
 
                         with(binding) {
                             textViewContentTitle.text = result.title
-                            textViewContentBody.text = result.body
-                            textViewDate.text = result.createdAt
+                            textViewContentBody.text =
+                                Html.fromHtml(result.body, Html.FROM_HTML_MODE_LEGACY)
+
+                            textViewDate.text =
+                                formatInstantToDateTime(result.createdAt.split(".")[0].toLong())
+
                             textViewContentCategory.text = when(result.category) {
                                 ContentCategoryType.RECOMMENDED.name -> getString(R.string.tab_recommendation_title)
                                 ContentCategoryType.TIPS.name -> getString(R.string.tab_tips_title)
@@ -141,14 +156,14 @@ class ContentDetailActivity : AppCompatActivity() {
             viewModel.doLikeApiResult.collectLatest { result ->
                 when (result) {
                     is CommonApiState.Success -> {
-                        val result = result.data
+                        val resultData = result.data
                         // TODO api result 값 수정 되면 화면 반영
                         if (!binding.buttonContentLike.isSelected) {
                             binding.buttonContentLike.isSelected = true
                         }
-                        /*binding.textViewLike.text =
-                            String.format(getString(R.string.content_like_desc), result.likesCount)
-*/
+                        binding.textViewLike.text =
+                            String.format(getString(R.string.content_like_desc), resultData.likeCount)
+
                     }
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
@@ -159,5 +174,17 @@ class ContentDetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * date 값 변환
+     */
+    private fun formatInstantToDateTime(timestamp: Long): String {
+        val instant = Instant.ofEpochSecond(timestamp)
+
+        val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+        val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) HH:mm", Locale.KOREAN)
+
+        return dateTime.format(formatter)
     }
 }

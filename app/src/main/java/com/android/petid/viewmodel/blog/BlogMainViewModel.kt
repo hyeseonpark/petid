@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.ContentEntity
 import com.android.domain.entity.ContentLikeEntity
 import com.android.domain.entity.LocationEntity
+import com.android.domain.repository.BlogMainRepository
 import com.android.domain.usecase.content.DoContentLikeUseCase
 import com.android.domain.usecase.content.GetContentListUseCase
 import com.android.domain.util.ApiResult
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class BlogMainViewModel @Inject constructor(
     private val getContentListUseCase: GetContentListUseCase,
     private val doContentLikeUseCase: DoContentLikeUseCase,
+    private val blogMainRepository: BlogMainRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -45,7 +47,17 @@ class BlogMainViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getContentListUseCase(category.name)) {
                 is ApiResult.Success -> {
-                    _contentListApiState.emit(CommonApiState.Success(result.data))
+                    var contentList = result.data
+
+                    contentList = contentList.map { item ->
+                        val updatedImageUrl = when (item.imageUrl != null) {
+                            true -> getContentImage(item.imageUrl!!)
+                            false -> ""
+                        }
+                        item.copy(imageUrl = updatedImageUrl)
+                    }
+
+                    _contentListApiState.emit(CommonApiState.Success(contentList))
                 }
                 is ApiResult.HttpError -> {
                     _contentListApiState.emit(CommonApiState.Error(result.error.error))
@@ -54,6 +66,17 @@ class BlogMainViewModel @Inject constructor(
                     _contentListApiState.emit(CommonApiState.Error(result.errorMessage))
                 }
             }
+        }
+    }
+
+    /**
+     * 컨텐츠 이미지 가져오기
+     */
+    private suspend fun getContentImage(filePath: String): String {
+        return try {
+            blogMainRepository.getContentImage(filePath)
+        } catch (e: Exception) {
+            ""
         }
     }
 
