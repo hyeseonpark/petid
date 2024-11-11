@@ -9,7 +9,7 @@ data class ContentEntity(
     val title: String,
     val body: String,
     val category: String,
-    val imageUrl: String,
+    val imageUrl: String?, // TODO 백엔드 수정 시 nullable 삭제
     val createdAt: String,
     val updatedAt: String,
     var likesCount: Int,

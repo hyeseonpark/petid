@@ -12,17 +12,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Visibility
-import com.android.data.dto.response.ContentResponse
 import com.android.domain.entity.ContentEntity
 import com.android.petid.databinding.FragmentBlogMainBinding
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.blog.adapter.ContentListAdapter
-import com.android.petid.ui.view.hospital.HospitalDetailActivity
-import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
 import com.android.petid.viewmodel.blog.BlogMainViewModel
-import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -36,6 +31,7 @@ class BlogMainFragment : Fragment() {
     private val TAG = "BlogMainFragment"
 
     lateinit var contentList : List<ContentEntity>
+    var currentCategory = ContentCategoryType.RECOMMENDED
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +50,8 @@ class BlogMainFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getContentList(ContentCategoryType.RECOMMENDED)
+        // 마지막으로 접속한 탭의 화면 업데이트
+        viewModel.getContentList(currentCategory)
     }
 
     private fun initComponent() {
@@ -65,7 +62,7 @@ class BlogMainFragment : Fragment() {
 
         binding.tabLayoutBlogMain.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val category = when (tab?.position) {
+                currentCategory = when (tab?.position) {
                     0 -> ContentCategoryType.RECOMMENDED
                     1 -> ContentCategoryType.ABOUTPET
                     2 -> ContentCategoryType.TIPS
@@ -73,7 +70,7 @@ class BlogMainFragment : Fragment() {
                     4 -> ContentCategoryType.SUPPORT
                     else -> ContentCategoryType.ALL
                 }
-                viewModel.getContentList(category)
+                viewModel.getContentList(currentCategory)
             }
 
             override fun onTabUnselected(p0: TabLayout.Tab?) {
@@ -155,7 +152,7 @@ class BlogMainFragment : Fragment() {
                     is CommonApiState.Success -> {
                         val result = result.data
 
-                        var updatedContent = contentList.find { it.contentId == result.contentId }
+                        val updatedContent = contentList.find { it.contentId == result.contentId }
                         updatedContent?.isLiked = true
                         updatedContent?.likesCount = result.likeCount
 

@@ -1,5 +1,6 @@
 package com.android.data.repository
 
+import com.android.data.api.ContentAPI
 import com.android.data.source.remote.BlogMainRemoteDataSource
 import com.android.domain.entity.ContentEntity
 import com.android.domain.entity.ContentLikeEntity
@@ -11,6 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class BlogMainRepositoryImpl @Inject constructor(
     private val remoteDataSource: BlogMainRemoteDataSource,
+    private val contentAPI: ContentAPI,
 ): BlogMainRepository {
     override suspend fun getContentList(category: String): ApiResult<List<ContentEntity>> {
         return when (val result = remoteDataSource.getContentList(category)) {
@@ -18,6 +20,10 @@ class BlogMainRepositoryImpl @Inject constructor(
             is ApiResult.HttpError -> result
             is ApiResult.Error -> result
         }
+    }
+
+    override suspend fun getContentImage(filePath: String): String {
+        return contentAPI.getContentImage(filePath)
     }
 
     override suspend fun doContentLike(contentId: Int): ApiResult<ContentLikeEntity> {

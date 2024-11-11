@@ -15,6 +15,11 @@ interface ContentAPI {
         @Query("category") category: String
     ): List<ContentResponse>
 
+    @GET("/v1/content/presigned-get-url")
+    suspend fun getContentImage(
+        @Query("filePath") filePath: String
+    ): String
+
     @GET("/v1/content/{contentId}")
     suspend fun getContentDetail(
         @Path("contentId") contentId: Int
