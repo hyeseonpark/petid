@@ -2,7 +2,6 @@ package com.android.petid.ui.view.generate
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.multidex.BuildConfig
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.databinding.FragmentPetInfoInputBinding
@@ -36,6 +36,10 @@ class PetInfoInputFragment : Fragment() {
 
     fun initComponent() {
         with(binding) {
+            if (BuildConfig.DEBUG) {
+                buttonNext.isEnabled = true
+            }
+
             // 생일 달력
             editTextBirth.setOnClickListener {
                 showDatePicker(editTextBirth)

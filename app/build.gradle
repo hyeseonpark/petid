@@ -48,6 +48,9 @@ android {
         }
     }
 }
+configurations.configureEach {
+    exclude group: "com.google.protobuf", module: "protobuf-java"
+}
 
 dependencies {
 
@@ -57,6 +60,7 @@ dependencies {
     implementation libs.androidx.activity
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.legacy.support.v4
+    implementation libs.androidx.camera.core
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
@@ -144,6 +148,9 @@ dependencies {
 
     // easy flip view
     implementation 'com.wajahatkarim:EasyFlipView:3.0.3'
+
+    // mediapipe
+    implementation 'com.google.mediapipe:tasks-vision:latest.release'
 }
 kapt {
     correctErrorTypes = true

@@ -1,6 +1,7 @@
 package com.android.data.api
 
 import com.android.data.dto.response.MemberInfoResponse
+import com.android.data.dto.response.UpdateMemberInfoResponse
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -25,10 +26,11 @@ interface MemberAPI {
     @FormUrlEncoded
     @POST("/v1/member/auth")
     suspend fun updateMemberInfo(
-        @Field("name") name: Boolean,
+        @Field("name") name: String,
         @Field("address") address: String,
+        @Field("addressDetails") addressDetails: String,
         @Field("phone") phone: String
-    )
+    ): UpdateMemberInfoResponse
 
     /**
      * 1-1.3 회원 정보 저장 여부 조회 API

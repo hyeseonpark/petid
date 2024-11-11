@@ -12,6 +12,8 @@ constraintlayout = "2.1.4"
 legacySupportV4 = "1.0.0"
 jetbrainsKotlinJvm = "1.9.0"
 toolsCore = "1.0.0-alpha10"
+litert = "1.0.1"
+cameraCore = "1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -24,6 +26,8 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
+litert = { group = "com.google.ai.edge.litert", name = "litert", version.ref = "litert" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
