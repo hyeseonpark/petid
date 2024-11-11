@@ -95,7 +95,7 @@ class MyInfoActivity : AppCompatActivity() {
      */
     private fun requestCameraPermission() {
         val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            Toast.makeText(this, "무야호 $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$it", Toast.LENGTH_SHORT).show()
         }
         permissionLauncher.launch(android.Manifest.permission.CAMERA)
     }
