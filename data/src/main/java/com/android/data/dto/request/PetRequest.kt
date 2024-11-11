@@ -56,9 +56,12 @@ data class PetRequest(
 
         /* ScannedInfoFragment */
         fun setAppearance(breed: String, hairColor: String, weight: Int, hairLength: String) = apply {
-            this.appearance.apply {
-                PetAppearanceRequest(breed, hairColor, weight, hairLength)
-            }
+            this.appearance = PetAppearanceRequest(breed, hairColor, weight, hairLength)
+        }
+
+        /* ScannedInfoFragment */
+        fun getAppearance() : PetAppearanceRequest? {
+            return appearance
         }
 
         fun build(): PetRequest {

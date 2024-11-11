@@ -27,7 +27,19 @@
             android:id="@+id/action_userInfoInputFragment_to_petInfoInputFragment"
             app:destination="@id/petInfoInputFragment" />
 
+        <action
+            android:id="@+id/action_userInfoInputFragment_to_addressSearchFragment"
+            app:destination="@id/addressSearchFragment"
+            app:popUpTo="@id/userInfoInputFragment"
+            app:popUpToInclusive="false" />
+
     </fragment>
+
+    <fragment
+        android:id="@+id/addressSearchFragment"
+        android:name="com.android.petid.ui.view.common.AddressSearchFragment"
+        android:label="fragment_address_search"
+        tools:layout="@layout/fragment_address_search" />
 
     <fragment
         android:id="@+id/petInfoInputFragment"

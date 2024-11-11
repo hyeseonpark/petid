@@ -19,16 +19,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{title}"
-            android:textColor="@color/petid_title"
-            android:textSize="14dp"
-            android:layout_marginBottom="13dp"/>
+            android:textColor="@color/petid_gray"
+            android:textSize="13dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="2dp"
+            android:textFontWeight="500"/>
 
         <EditText
             android:id="@+id/editTextText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:textColorHighlight="#D9D9D9"
+            android:textSize="16dp"
+            android:paddingBottom="15dp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:backgroundTint="@color/d9"
             android:drawableRight="@drawable/ic_text_delete"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

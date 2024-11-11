@@ -1,179 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.view.generate.UserInfoInputFragment"
-    tools:layout="@layout/fragment_user_info_input">
+    tools:layout="@layout/fragment_user_info_input"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <LinearLayout
-        android:id="@+id/main"
+        android:id="@+id/top_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:layout_height="48dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <include
-            android:id="@+id/top_bar"
-            layout="@layout/top_bar_common"
-            app:back="@{true}" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingHorizontal="33dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView_current_step"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="26dp"
-                    android:layout_marginLeft="1dp"
-                    android:text="2/7"
-                    android:textSize="18sp"
-                    android:textColor="@color/petid_clear_blue"
-                    android:textFontWeight="700"/>
-
-                <TextView
-                    android:id="@+id/textView_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/petid_generate_step_2_title"
-                    android:layout_marginTop="10dp"
-                    android:textSize="24dp"
-                    android:textFontWeight="500"
-                    android:textColor="@color/petid_title"/>
-
-
-                    <include
-                        android:id="@+id/edit_text_name"
-                        layout="@layout/edittext_common_rectangle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="47dp"
-                        app:hint="@{@string/name_hint}"
-                        app:layout_constraintEnd_toEndOf="@+id/textView_subtitle"
-                        app:layout_constraintStart_toStartOf="@+id/textView_subtitle"
-                        app:layout_constraintTop_toBottomOf="@+id/textView_subtitle"
-                        app:title="@{@string/user_name}" />
-
-                    <!--TextView
-                        android:id="@+id/text_view_residency"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="26dp"
-                        android:text="@string/residency_number"
-                        android:textColor="@color/petid_title"
-                        android:textSize="14dp"
-                        app:layout_constraintEnd_toEndOf="@+id/edit_text_name"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/edit_text_name"
-                        app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
-
-                    < LinearLayout
-                        android:id="@+id/layout_residency"
-                        android:layout_width="match_parent"
-                        android:layout_height="53dp"
-                        android:layout_marginTop="13dp"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="@+id/text_view_residency"
-                        app:layout_constraintStart_toStartOf="@+id/text_view_residency"
-                        app:layout_constraintTop_toBottomOf="@+id/text_view_residency">
-
-                        <EditText
-                            android:id="@+id/edit_text_residency_number"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/edittext_rounded_corner_rectangle"
-                            android:hint="@string/residency_number_hint"
-                            android:inputType="number"
-                            android:minEms="6"
-                            android:maxEms="6"
-                            android:textSize="14dp" />
-
-                        <ImageView
-                            android:id="@+id/imageView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="7.37dp"
-                            app:srcCompat="@drawable/ic_hyphen" />
-
-                        <EditText
-                            android:id="@+id/edit_text_residency_number_2"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/edittext_rounded_corner_rectangle"
-                            android:hint="*   *   *   *   *   *   *"
-                            android:inputType="numberPassword"
-                            android:textSize="14dp" />
-
-                    </LinearLayout -->
-
-                    <include
-                        android:id="@+id/edit_text_phone"
-                        layout="@layout/edittext_common_rectangle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="26dp"
-                        app:hint="@{@string/phone_number_hint}"
-                        app:layout_constraintEnd_toEndOf="@+id/layout_residency"
-                        app:layout_constraintStart_toStartOf="@+id/layout_residency"
-                        app:layout_constraintTop_toBottomOf="@+id/layout_residency"
-                        app:title="@{@string/phone_number}" />
-
-                    <include
-                        android:id="@+id/edit_text_address"
-                        layout="@layout/edittext_common_rectangle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="26dp"
-                        app:hint="@{@string/address_hint}"
-                        app:icon="@{@drawable/ic_search}"
-                        app:layout_constraintEnd_toEndOf="@+id/edit_text_phone"
-                        app:layout_constraintStart_toStartOf="@+id/edit_text_phone"
-                        app:layout_constraintTop_toBottomOf="@+id/edit_text_phone"
-                        app:title="@{@string/address}" />
-
-                    <EditText
-                        android:id="@+id/edit_text_address_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="53dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="27dp"
-                        android:background="@drawable/edittext_rounded_corner_rectangle"
-                        android:hint="상세주소를 입력해주세요."
-                        android:inputType="text"
-                        android:textSize="14dp"
-                        android:paddingEnd="17.96dp"
-                        app:layout_constraintEnd_toEndOf="@+id/edit_text_phone"
-                        app:layout_constraintStart_toStartOf="@+id/edit_text_phone"
-                        app:layout_constraintTop_toBottomOf="@+id/edit_text_phone"/>
-
-
-
-            </LinearLayout>
-
-        </ScrollView>
-
-        <include
-            android:id="@+id/buttonNext"
-            layout="@layout/button_common"
-            app:buttonText="@{@string/next}"
-            app:disable="@{true}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="33dp"
-            android:layout_marginBottom="68dp" />
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="17dp"
+            android:background="@null"
+            android:src="@drawable/ic_back" />
 
     </LinearLayout>
 
-</layout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="33dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_current_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:layout_marginLeft="1dp"
+                android:text="2/7"
+                android:textSize="18sp"
+                android:textColor="@color/petid_clear_blue"
+                android:textFontWeight="700"/>
+
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/petid_generate_step_2_title"
+                android:layout_marginTop="10dp"
+                android:textSize="24dp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_title"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_name"
+                android:textColor="@color/petid_gray"
+                android:textSize="14dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:hint="@string/name_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textSize="14dp"
+                android:textFontWeight="400"
+                android:textColor="@color/petid_title"
+                android:textColorHint="@color/b4"
+                android:paddingEnd="18dp"
+                android:drawableTint="#2E2E2E"/>
+
+                <!--TextView
+                    android:id="@+id/text_view_residency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:text="@string/residency_number"
+                    android:textColor="@color/petid_title"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_text_name"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/edit_text_name"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
+
+                < LinearLayout
+                    android:id="@+id/layout_residency"
+                    android:layout_width="match_parent"
+                    android:layout_height="53dp"
+                    android:layout_marginTop="13dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@+id/text_view_residency"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_residency"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_residency">
+
+                    <EditText
+                        android:id="@+id/edit_text_residency_number"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittext_rounded_corner_rectangle"
+                        android:hint="@string/residency_number_hint"
+                        android:inputType="number"
+                        android:minEms="6"
+                        android:maxEms="6"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="7.37dp"
+                        app:srcCompat="@drawable/ic_hyphen" />
+
+                    <EditText
+                        android:id="@+id/edit_text_residency_number_2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittext_rounded_corner_rectangle"
+                        android:hint="*   *   *   *   *   *   *"
+                        android:inputType="numberPassword"
+                        android:textSize="14dp" />
+
+                </LinearLayout -->
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/phone_number"
+                android:textColor="@color/petid_gray"
+                android:textSize="14dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_phone"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:hint="@string/phone_number_hint"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textSize="14dp"
+                android:textFontWeight="400"
+                android:textColor="@color/petid_title"
+                android:textColorHint="@color/b4"
+                android:paddingEnd="18dp"
+                android:drawableTint="#2E2E2E"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address"
+                    android:textColor="@color/petid_gray"
+                    android:textSize="14dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edit_text_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="53dp"
+                    android:background="@drawable/edittext_rounded_corner_rectangle"
+                    android:hint="@string/address_hint"
+                    android:inputType="text"
+                    android:focusable="false"
+                    android:singleLine="true"
+                    android:textSize="14dp"
+                    android:textFontWeight="400"
+                    android:textColor="@color/petid_title"
+                    android:textColorHint="@color/b4"
+                    android:drawableEnd="@drawable/ic_search"
+                    android:paddingEnd="18dp"
+                    android:drawableTint="@color/petid_title" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edit_text_address_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="53dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="27dp"
+                    android:background="@drawable/edittext_rounded_corner_rectangle"
+                    android:hint="상세주소를 입력해주세요."
+                    android:inputType="text"
+                    android:textSize="14dp"
+                    android:paddingEnd="17.96dp"
+                    app:layout_constraintEnd_toEndOf="@+id/edit_text_phone"
+                    app:layout_constraintStart_toStartOf="@+id/edit_text_phone"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_phone"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_next"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:background="@drawable/button_background_common"
+        android:text="@string/next"
+        android:textSize="16sp"
+        android:textColor="@drawable/button_text_color_common"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginTop="27dp"
+        android:layout_marginBottom="68dp"
+        android:layout_marginHorizontal="33dp"
+        android:enabled="false" />
+
+</LinearLayout>

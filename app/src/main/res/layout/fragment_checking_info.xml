@@ -28,7 +28,7 @@
             android:paddingHorizontal="33dp"
             android:orientation="vertical">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_current_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:textColor="@color/petid_clear_blue"
                 android:textFontWeight="700"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                 android:textFontWeight="500"
                 android:textColor="@color/petid_title"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,43 +58,12 @@
                 android:textFontWeight="400"
                 android:textColor="#B2B2B2"/>
 
-            <!--TextView
-                android:id="@+id/textView_photo_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
-                android:text="@string/photo"
-                android:textColor="@color/petid_title"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView_title"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/textView_title"
-                app:layout_constraintTop_toBottomOf="@+id/textView_title" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="97dp"
-                android:layout_height="104dp"
-                android:layout_marginTop="15dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="@+id/textView_photo_title"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/textView_photo_title"
-                app:layout_constraintTop_toBottomOf="@+id/textView_photo_title">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/img_pet_photo_sample"
-                    android:scaleType="centerCrop" />
-
-            </androidx.cardview.widget.CardView-->
-
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_detail_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="43dp"
+                android:layout_marginLeft="8dp"
                 android:text="@string/petid_info"
                 android:textFontWeight="500"
                 android:textColor="#6E6E6E"
@@ -103,7 +72,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/layout_round_background_fafafa"
                 android:orientation="vertical"
                 android:paddingVertical="32dp"
@@ -113,20 +82,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16sp"
+                    android:layout_marginBottom="21sp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_name_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#FAFAFA"
                         android:text="@string/name"
-                        android:textColor="#ABABAB"
+                        android:textColor="@color/ab"
                         android:textSize="14sp"
                         android:textFontWeight="400"  />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -134,7 +103,7 @@
                         android:background="#FAFAFA"
                         android:gravity="end"
                         android:text="덕구"
-                        android:textColor="#000000"
+                        android:textColor="@color/petid_title"
                         android:textSize="14sp"
                         android:textFontWeight="400"/>
 
@@ -143,20 +112,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16sp"
+                    android:layout_marginBottom="21sp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_birth_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#FAFAFA"
                         android:text="@string/birth"
-                        android:textColor="#ABABAB"
+                        android:textColor="@color/ab"
                         android:textSize="14sp"
                         android:textFontWeight="400"  />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_birth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -164,7 +133,7 @@
                         android:background="#FAFAFA"
                         android:gravity="end"
                         android:text="2022.03.02"
-                        android:textColor="#000000"
+                        android:textColor="@color/petid_title"
                         android:textSize="14sp"
                         android:textFontWeight="400" />
 
@@ -173,20 +142,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16sp"
+                    android:layout_marginBottom="21sp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_gender_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#FAFAFA"
                         android:text="@string/gender"
-                        android:textColor="#ABABAB"
+                        android:textColor="@color/ab"
                         android:textSize="14sp"
                         android:textFontWeight="400"  />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -194,7 +163,7 @@
                         android:background="#FAFAFA"
                         android:gravity="end"
                         android:text="남, 중성화X"
-                        android:textColor="#000000"
+                        android:textColor="@color/petid_title"
                         android:textSize="14sp"
                         android:textFontWeight="400" />
 
@@ -203,28 +172,28 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16sp"
+                    android:layout_marginBottom="21sp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView_type_title"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textView_breed_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#FAFAFA"
                         android:text="@string/type"
-                        android:textColor="#ABABAB"
+                        android:textColor="@color/ab"
                         android:textSize="14sp"
                         android:textFontWeight="400"  />
 
-                    <TextView
-                        android:id="@+id/textView_type"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textView_breed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="#FAFAFA"
                         android:gravity="end"
                         android:text="믹스 푸들"
-                        android:textColor="#000000"
+                        android:textColor="@color/petid_title"
                         android:textSize="14sp"
                         android:textFontWeight="400" />
 
@@ -233,28 +202,28 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16sp"
+                    android:layout_marginBottom="21sp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView_feature_title"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textView_appearance_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#FAFAFA"
                         android:text="@string/feature"
-                        android:textColor="#ABABAB"
+                        android:textColor="@color/ab"
                         android:textSize="14sp"
                         android:textFontWeight="400"  />
 
-                    <TextView
-                        android:id="@+id/textView_feature"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textView_appearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="#FAFAFA"
                         android:gravity="end"
                         android:text="갈색, 곱슬, 장모"
-                        android:textColor="#000000"
+                        android:textColor="@color/petid_title"
                         android:textSize="14sp"
                         android:textFontWeight="400" />
 
@@ -265,17 +234,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_weight_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#FAFAFA"
                         android:text="@string/weight"
-                        android:textColor="#ABABAB"
+                        android:textColor="@color/ab"
                         android:textSize="14sp"
                         android:textFontWeight="400"  />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/textView_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -283,7 +252,7 @@
                         android:background="#FAFAFA"
                         android:gravity="end"
                         android:text="4kg"
-                        android:textColor="#000000"
+                        android:textColor="@color/petid_title"
                         android:textSize="14sp"
                         android:textFontWeight="400" />
 
