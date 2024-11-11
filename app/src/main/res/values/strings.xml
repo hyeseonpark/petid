@@ -188,7 +188,7 @@
 
     <string name="pet_info_title">반려동물 정보</string>
     <string name="reservation_history_title">예약 내역</string>
-    <string name="terms_agree_info_title">약관 및 개인정보 처리 동의</string>
+    <string name="terms_agree_info_title">서비스 이용약관</string>
     <string name="personal_service_info_title">개인정보 처리방침</string>
     <string name="notice_title">공지사항</string>
     <string name="qna_title">자주하는 질문</string>
