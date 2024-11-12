@@ -60,16 +60,12 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.49")
-    ksp("com.google.dagger:hilt-android-compiler:2.49")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Logger
     implementation("com.orhanobut:logger:2.2.0")
-}
-
-ksp {
-    arg("dagger.fastInit", "ENABLED")
 }
