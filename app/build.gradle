@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 
+    id 'com.google.devtools.ksp'
     id 'com.google.gms.google-services'
-    id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
 
     id 'androidx.navigation.safeargs.kotlin'
@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace 'com.android.petid'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.android.petid"
         minSdk 24
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -42,7 +42,7 @@ android {
     dataBinding {
         enabled true
     }
-    packaging {
+    packagingOptions {
         resources {
             excludes += '/META-INF/gradle/incremental.annotation.processors'
         }
@@ -98,8 +98,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.9.1")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.49")
+    ksp("com.google.dagger:hilt-android-compiler:2.49")
 
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
@@ -152,13 +152,6 @@ dependencies {
     // mediapipe
     implementation 'com.google.mediapipe:tasks-vision:latest.release'
 }
-kapt {
-    correctErrorTypes = true
-    showProcessorStats = true
-    javacOptions {
-        // These options are normally set automatically via the Hilt Gradle plugin, but we
-        // set them manually to workaround a bug in the Kotlin 1.5.20
-        option("-Adagger.fastInit=ENABLED")
-        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
-    }
+ksp {
+    arg("dagger.fastInit", "ENABLED")
 }
