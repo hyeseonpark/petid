@@ -13,13 +13,14 @@ object Constants {
     const val BANNER_TYPE_MAIN = "main"
     const val BANNER_TYPE_CONTENT = "content"
 
-    const val DAY_SUN = "SUNDAY"
-    const val DAY_MON = "MONDAY"
-    const val DAY_TUES = "TUESDAY"
-    const val DAY_WED = "WEDNESDAY"
-    const val DAY_THUR = "THURSDAY"
-    const val DAY_FRI = "FRIDAY"
-    const val DAY_SAT = "SATURDAY"
+    private const val DAY_SUN = "SUNDAY"
+    private const val DAY_MON = "MONDAY"
+    private const val DAY_TUES = "TUESDAY"
+    private const val DAY_WED = "WEDNESDAY"
+    private const val DAY_THUR = "THURSDAY"
+    private const val DAY_FRI = "FRIDAY"
+    private const val DAY_SAT = "SATURDAY"
     val DAYS_OF_WEEK = arrayOf(DAY_SUN, DAY_MON, DAY_TUES, DAY_WED, DAY_THUR, DAY_FRI, DAY_SAT)
 
+    // TODO enum -> constants
 }

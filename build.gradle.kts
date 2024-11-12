@@ -3,7 +3,7 @@
 buildscript {
     dependencies {
         classpath("com.google.gms:google-services:4.4.2")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.49")
+        classpath(libs.hilt.android.gradle.plugin)
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.8.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
     }
@@ -21,6 +21,9 @@ plugins {
     // Google services Gradle plugin
     id("com.google.gms.google-services") version "4.4.2" apply false
     id("com.google.dagger.hilt.android") version "2.49" apply false
+
+    // Navigation Safe Args
+    id("androidx.navigation.safeargs.kotlin") version "2.8.3" apply false
 }
 
 /*

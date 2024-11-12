@@ -1,33 +1,54 @@
 [versions]
 agp = "8.6.1"
-kotlin = "1.9.10"
+easyflipview = "3.0.3"
+glide = "4.12.0"
+hiltAndroidGradlePlugin = "2.51.1"
+hiltNavigationCompose = "1.2.0"
+kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
+logger = "2.2.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
 legacySupportV4 = "1.0.0"
 jetbrainsKotlinJvm = "1.9.0"
+navVersion = "2.8.3"
+oauthJdk8 = "5.10.0"
 toolsCore = "1.0.0-alpha10"
-litert = "1.0.1"
 cameraCore = "1.4.0"
+v2All = "2.20.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
+androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navVersion" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navVersion" }
+androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navVersion" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navVersion" }
+easyflipview = { module = "com.wajahatkarim:EasyFlipView", version.ref = "easyflipview" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidGradlePlugin" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidGradlePlugin" }
+hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+logger = { module = "com.orhanobut:logger", version.ref = "logger" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
-litert = { group = "com.google.ai.edge.litert", name = "litert", version.ref = "litert" }
 androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
+oauth-jdk8 = { module = "com.navercorp.nid:oauth-jdk8", version.ref = "oauthJdk8" }
+v2-all = { module = "com.kakao.sdk:v2-all", version.ref = "v2All" }
+v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "v2All" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

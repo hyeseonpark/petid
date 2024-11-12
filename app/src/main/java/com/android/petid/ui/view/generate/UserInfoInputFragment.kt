@@ -8,7 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import androidx.multidex.BuildConfig
+import com.android.petid.BuildConfig
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.databinding.FragmentUserInfoInputBinding

@@ -46,7 +46,8 @@
         app:itemIconTint="@color/main_bottom_navigation_item_color"
         app:itemPaddingBottom="20dp"
         app:elevation="16dp"
-        app:menu="@menu/main_menu" />
+        app:menu="@menu/main_menu"
+        android:alpha="0.8"/>
 
     <!--com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout_main"

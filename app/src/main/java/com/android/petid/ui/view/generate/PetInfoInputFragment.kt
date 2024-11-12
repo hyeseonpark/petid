@@ -9,8 +9,8 @@ import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.multidex.BuildConfig
 import androidx.navigation.fragment.findNavController
+import com.android.petid.BuildConfig
 import com.android.petid.R
 import com.android.petid.databinding.FragmentPetInfoInputBinding
 import com.android.petid.util.getCurrentDate
