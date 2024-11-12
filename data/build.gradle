@@ -1,14 +1,15 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     // id("org.jetbrains.kotlin.plugin.serialization") version "1.5.0"
+
+    id 'com.google.devtools.ksp'
 }
 
 android {
     namespace 'com.android.data'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 24
@@ -60,10 +61,8 @@ dependencies {
 
 
     // hilt
-//    implementation("com.google.dagger:hilt-android:2.48")
-//    implementation("com.google.dagger:hilt-android-compiler:2.48")
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.49")
+    ksp("com.google.dagger:hilt-android-compiler:2.49")
 
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
@@ -71,14 +70,6 @@ dependencies {
     // Logger
     implementation 'com.orhanobut:logger:2.2.0'
 }
-
-kapt {
-    correctErrorTypes = true
-    showProcessorStats = true
-    javacOptions {
-        // These options are normally set automatically via the Hilt Gradle plugin, but we
-        // set them manually to workaround a bug in the Kotlin 1.5.20
-        option("-Adagger.fastInit=ENABLED")
-        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
-    }
+ksp {
+    arg("dagger.fastInit", "ENABLED")
 }

@@ -1,8 +1,6 @@
 package com.android.petid.ui.view.generate
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +8,8 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.multidex.BuildConfig
 import androidx.navigation.fragment.findNavController
-import com.android.petid.BuildConfig
 import com.android.petid.R
 import com.android.petid.databinding.FragmentUserInfoInputBinding
 import com.android.petid.ui.view.common.BundleKeys
