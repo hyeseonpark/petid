@@ -60,7 +60,7 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/layout_data_available"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -81,7 +81,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
             android:id="@+id/layout_no_data"
