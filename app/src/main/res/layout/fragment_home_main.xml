@@ -643,7 +643,8 @@
                         android:layout_height="match_parent"
                         app:cardCornerRadius="21dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="@android:color/transparent">
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:strokeWidth="0dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layout_banner_1"
