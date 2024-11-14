@@ -9,7 +9,7 @@
     android:orientation="horizontal"
     android:background="@drawable/solid_f2f2f2_radius_10">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="6dp"
@@ -24,7 +24,7 @@
             app:srcCompat="@drawable/img_pet_photo_sample"
             android:scaleType="centerCrop" />
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:layout_width="0dp"

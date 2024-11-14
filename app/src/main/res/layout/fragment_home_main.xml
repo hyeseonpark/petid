@@ -125,7 +125,7 @@
                 </androidx.cardview.widget.CardView-->
 
                 <!-- no pet id card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="271dp"
                     android:layout_height="406dp"
                     android:layout_gravity="center_horizontal"
@@ -188,7 +188,7 @@
 
                 </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- has pet id card -->
                 <com.wajahatkarim3.easyflipview.EasyFlipView
@@ -203,7 +203,7 @@
                     app:autoFlipBackTime="1000">
 
                     <!-- 뒷면 -->
-                    <androidx.cardview.widget.CardView
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cardView_petid_card_back"
                         android:layout_width="271dp"
                         android:layout_height="406dp"
@@ -472,10 +472,10 @@
 
                         </LinearLayout>
 
-                    </androidx.cardview.widget.CardView>
+                    </com.google.android.material.card.MaterialCardView>
 
                     <!-- 앞면 -->
-                    <androidx.cardview.widget.CardView
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cardView_petid_card_front"
                         android:layout_width="271dp"
                         android:layout_height="406dp"
@@ -602,7 +602,7 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </androidx.cardview.widget.CardView>
+                    </com.google.android.material.card.MaterialCardView>
 
                 </com.wajahatkarim3.easyflipview.EasyFlipView>
 
@@ -638,11 +638,12 @@
                     android:layout_height="121dp"
                     android:layout_marginHorizontal="16dp">
 
-                    <androidx.cardview.widget.CardView
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:cardCornerRadius="21dp"
-                        app:cardElevation="0dp">
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@android:color/transparent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layout_banner_1"
@@ -699,7 +700,7 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </androidx.cardview.widget.CardView>
+                    </com.google.android.material.card.MaterialCardView>
 
                 </ScrollView>
 
