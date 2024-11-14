@@ -54,4 +54,9 @@
         <item name="android:textFontWeight" tools:targetApi="p">600</item>
     </style>
 
+    <!-- ShapeableImageView: 원형 -->
+    <style name="CircleImageView">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

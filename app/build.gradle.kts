@@ -78,7 +78,6 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
-    implementation("de.hdodenhof:circleimageview:3.1.0")
 
     // kakao Login
     implementation(libs.v2.all)
