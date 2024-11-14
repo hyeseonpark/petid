@@ -632,7 +632,7 @@
                     android:layout_marginLeft="31dp"/>
 
                 <!-- banner - main -->
-                <ScrollView
+                <androidx.core.widget.NestedScrollView
                     android:id="@+id/scrollView_banner_1"
                     android:layout_width="match_parent"
                     android:layout_height="121dp"
@@ -702,7 +702,7 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
-                </ScrollView>
+                </androidx.core.widget.NestedScrollView>
 
                 <View
                     android:layout_width="0dp"
