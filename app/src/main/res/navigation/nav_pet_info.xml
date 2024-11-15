@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_pet_info"
+    app:startDestination="@id/petInfoDetailFragment">
+    <fragment
+        android:id="@+id/petInfoDetailFragment"
+        android:name="com.android.petid.ui.view.my.PetInfoDetailFragment"
+        android:label="fragment_pet_info"
+        tools:layout="@layout/fragment_pet_info_detail" >
+        <action
+            android:id="@+id/action_petInfoDetailFragment_to_petInfoUpdateFragment"
+            app:destination="@id/petInfoUpdateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/petInfoUpdateFragment"
+        android:name="com.android.petid.ui.view.my.PetInfoUpdateFragment"
+        android:label="fragment_pet_info_update"
+        tools:layout="@layout/fragment_pet_info_update" />
+
+</navigation>

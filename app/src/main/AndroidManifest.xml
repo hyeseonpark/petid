@@ -62,7 +62,13 @@
             android:name=".ui.view.my.ReservationHistoryInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.my.MyPetInfoActivity"
+            android:name=".ui.view.my.PetInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.PetInfoDetailFragment"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.PetInfoUpdateFragment"
             android:exported="false" />
         <activity
             android:name=".ui.view.my.MyInfoActivity"
