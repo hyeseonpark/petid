@@ -71,7 +71,7 @@ class ScannedInfoFragment : Fragment() {
             }
 
 
-            buttonNext.button.setOnClickListener{
+            buttonNext.setOnClickListener{
                 viewModel.petInfo.setAppearance(
                     editTextType.editTextText.text.toString(),
                     editTextHairColor.editTextText.text.toString(),

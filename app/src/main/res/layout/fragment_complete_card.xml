@@ -1,60 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.view.generate.CompleteCardFragment"
-    tools:layout="@layout/fragment_complete_card" >
+    tools:layout="@layout/fragment_complete_card"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/white">
 
-    <LinearLayout
-        android:id="@+id/main"
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/top_bar_common"
+        app:back="@{true}"  />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="98dp"
+        android:layout_height="115dp"
+        android:src="@drawable/img_create_petid_logo"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_marginTop="29dp"/>
+
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/petid_generate_complete_title"
+        android:textSize="24sp"
+        android:layout_marginTop="15dp"/>
+
+
+    <TextView
+        android:id="@+id/textView_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="@string/petid_generate_complete_desc"
+        android:textFontWeight="400"
+        android:textColor="#B2B2B2"
+        android:layout_weight="1"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_complete"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:background="@color/white">
-
-        <include
-            android:id="@+id/top_bar"
-            layout="@layout/top_bar_common"
-            app:back="@{true}"  />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="98dp"
-            android:layout_height="115dp"
-            android:src="@drawable/img_create_petid_logo"
-            android:backgroundTint="@android:color/transparent"
-            android:layout_marginTop="29dp"/>
-
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/petid_generate_complete_title"
-            android:textSize="24sp"
-            android:layout_marginTop="15dp"/>
-
-
-        <TextView
-            android:id="@+id/textView_subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:text="@string/petid_generate_complete_desc"
-            android:textFontWeight="400"
-            android:textColor="#B2B2B2"
-            android:layout_weight="1"/>
-
-        <include
-            android:id="@+id/buttonComplete"
-            layout="@layout/button_common"
-            app:buttonText="@{@string/confirm}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="33dp"
-            android:layout_marginBottom="68dp" />
-
-    </LinearLayout>
-
-</layout>
+        android:layout_height="53dp"
+        android:text="@string/confirm"
+        android:textSize="16sp"
+        android:textFontWeight="500"
+        android:textColor="@color/button_text_color_common"
+        style="@style/GenerateCommonButtonStyle" />
+</LinearLayout>

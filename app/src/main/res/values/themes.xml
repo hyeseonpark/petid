@@ -23,6 +23,21 @@
         <item name="android:background">@null</item>
     </style>
 
+    <style name="GenerateCommonButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textViewStyle">@style/GenerateCommonButtonTextStyle</item>
+        <item name="android:background">@drawable/button_background_common</item>
+        <item name="android:layout_marginTop">27dp</item>
+        <item name="android:layout_marginBottom">68dp</item>
+        <item name="android:layout_marginStart">33dp</item>
+        <item name="android:layout_marginEnd">33dp</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="GenerateCommonButtonTextStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/button_text_color_common</item>
+    </style>
+
 
 <!--    <style name="Theme.App.Starting" parent="Theme.SplashScreen">-->
 <!--        <item name="windowSplashScreenBackground">@color/petid_clear_blue</item>-->

@@ -46,7 +46,7 @@ class CheckingInfoFragment : Fragment() {
     }
 
     fun initComponent() {
-        binding.buttonNext.button.setOnClickListener{
+        binding.buttonNext.setOnClickListener{
             findNavController().navigate(R.id.action_checkingInfoFragment_to_signatureFragment)
         }
     }
