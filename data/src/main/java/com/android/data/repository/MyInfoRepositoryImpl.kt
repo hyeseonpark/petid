@@ -48,9 +48,11 @@ class MyInfoRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateMemberInfo(): ApiResult<UpdateMemberInfoEntity> {
+    override suspend fun updateMemberInfo(
+        name: String, address: String, addressDetail: String, phone: String
+    ): ApiResult<UpdateMemberInfoEntity> {
         return try {
-            val response = memberAPI.updateMemberInfo("", "","","")
+            val response = memberAPI.updateMemberInfo(name, address,addressDetail,phone)
             ApiResult.Success(response.toDomain())
         } catch (e: HttpException) {
             val gson = Gson()

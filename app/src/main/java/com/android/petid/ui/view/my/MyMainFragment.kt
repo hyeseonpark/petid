@@ -22,14 +22,6 @@ class MyMainFragment : Fragment() {
         return binding.root
     }
 
-    fun newInstant() : MyMainFragment
-    {
-        val args = Bundle()
-        val frag = MyMainFragment()
-        frag.arguments = args
-        return frag
-    }
-
     private fun initComponent() {
         // 내 정보
         binding.layoutMyinfo.setOnClickListener {

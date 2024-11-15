@@ -85,62 +85,6 @@
                 android:paddingEnd="18dp"
                 android:drawableTint="#2E2E2E"/>
 
-                <!--TextView
-                    android:id="@+id/text_view_residency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="26dp"
-                    android:text="@string/residency_number"
-                    android:textColor="@color/petid_title"
-                    android:textSize="14dp"
-                    app:layout_constraintEnd_toEndOf="@+id/edit_text_name"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/edit_text_name"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
-
-                < LinearLayout
-                    android:id="@+id/layout_residency"
-                    android:layout_width="match_parent"
-                    android:layout_height="53dp"
-                    android:layout_marginTop="13dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="@+id/text_view_residency"
-                    app:layout_constraintStart_toStartOf="@+id/text_view_residency"
-                    app:layout_constraintTop_toBottomOf="@+id/text_view_residency">
-
-                    <EditText
-                        android:id="@+id/edit_text_residency_number"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/edittext_rounded_corner_rectangle"
-                        android:hint="@string/residency_number_hint"
-                        android:inputType="number"
-                        android:minEms="6"
-                        android:maxEms="6"
-                        android:textSize="14dp" />
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="7.37dp"
-                        app:srcCompat="@drawable/ic_hyphen" />
-
-                    <EditText
-                        android:id="@+id/edit_text_residency_number_2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/edittext_rounded_corner_rectangle"
-                        android:hint="*   *   *   *   *   *   *"
-                        android:inputType="numberPassword"
-                        android:textSize="14dp" />
-
-                </LinearLayout -->
-
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -198,7 +142,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="27dp"
                     android:background="@drawable/edittext_rounded_corner_rectangle"
-                    android:hint="상세주소를 입력해주세요."
+                    android:hint="@string/address_detail_hint"
                     android:inputType="text"
                     android:textSize="14dp"
                     android:paddingEnd="17.96dp"
