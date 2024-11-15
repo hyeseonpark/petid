@@ -21,6 +21,9 @@ import java.util.TimeZone
 object Utils {
 }
 
+val genderCharToString: (char: Char) -> String = {char -> if(char == 'M') "남" else "여" }
+val booleanCharToSign: (char: Char) -> String = {char -> if(char == 'Y') "O" else "X"}
+
 fun setStyleSpan(context: Context, content: String, word: String, color: Int, bold: Boolean = false) : SpannableString {
     val spannableString = SpannableString(content)
 

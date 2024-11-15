@@ -1,7 +1,9 @@
 package com.android.petid.ui.view.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import com.android.petid.BuildConfig
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -14,12 +16,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.android.domain.entity.BannerEntity
+import com.android.petid.R
 import com.android.petid.common.Constants.BANNER_TYPE_MAIN
+import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.generate.PetIdStartFragment
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
+import com.android.petid.util.booleanCharToSign
+import com.android.petid.util.genderCharToString
 import com.android.petid.viewmodel.home.HomeMainVIewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -44,18 +50,10 @@ class HomeMainFragment : Fragment() {
     ): View? {
         binding = FragmentHomeMainBinding.inflate(inflater)
 
+        initComponent()
         setupBannerObservers()
-
-        binding.buttonCreateStart.button.setOnClickListener{
-            val intent = Intent(activity, PetIdStartFragment::class.java)
-            startActivity(intent)
-        }
-
-        // temp
-        binding.imageViewNoti.setOnClickListener{
-            val intent = Intent(activity, GeneratePetidMainActivity::class.java)
-            startActivity(intent)
-        }
+        observeGetMemberInfoState()
+        observeGetPetInfoState()
 
         return binding.root
     }
@@ -64,8 +62,50 @@ class HomeMainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getBannerList(BANNER_TYPE_MAIN)
+        viewModel.getMemberInfo()
     }
 
+    override fun onResume() {
+        super.onResume()
+        autoScrollStart(intervalTime)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        autoScrollStop()
+    }
+
+    /**
+     * component 초기화
+     */
+    private fun initComponent() {
+        with(binding) {
+            buttonCreateStart.setOnClickListener{
+                val intent = Intent(activity, GeneratePetidMainActivity::class.java)
+                startActivity(intent)
+            }
+
+            layoutRegister.setOnClickListener {
+                val intent = Intent(activity, GeneratePetidMainActivity::class.java)
+                startActivity(intent)
+            }
+
+            // Debug 상태에선 로고 클릭시 카드 타입 변경 가능
+            if(BuildConfig.DEBUG) {
+                imageViewLogo.setOnClickListener {
+                    when(binding.viewNoPetidCard.visibility) {
+                        View.VISIBLE -> setPetidCardType(CHIP_TYPE[1])
+                        View.GONE -> setPetidCardType(CHIP_TYPE[0])
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 배너 초기화
+     */
+    @SuppressLint("NotifyDataSetChanged")
     private fun initBanner(bannerList: List<BannerEntity>) {
 
         val bannerAdapter = activity?.let { HomeBannerAdapter(bannerList, it) }
@@ -145,13 +185,100 @@ class HomeMainFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        autoScrollStart(intervalTime)
+    /**
+     * viewModel.getMemberInfoResult 결과값 view 반영
+     */
+    private fun observeGetMemberInfoState() {
+        lifecycleScope.launch {
+            viewModel.getMemberInfoResult.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        val memberResult = result.data
+                        when(memberResult.petId) {
+                            null -> {
+                                binding.textViewMemberName.text = getString(R.string.home_no_petid)
+                                setPetidCardType(CHIP_TYPE[0])
+                            }
+                            else -> {
+                                binding.textViewMemberName.text = memberResult.name
+                                    binding.textViewOwnerName.text =
+                                    String.format(getString(R.string.to_owner), memberResult.name)
+                                viewModel.getPetDetails(memberResult.petId!!.toLong()) // TODO API 수정되면 수정
+                            }
+                        }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                }
+            }
+        }
     }
 
-    override fun onPause() {
-        super.onPause()
-        autoScrollStop()
+    /**
+     * @param type CHIP_TYPE 에 따른 펫아이디 카드
+     */
+    private fun setPetidCardType(type: String) {
+        when(type) {
+            CHIP_TYPE[0] -> {
+                binding.viewNoPetidCard.visibility = View.VISIBLE
+                binding.viewPetidCard.visibility = View.GONE
+            }
+            CHIP_TYPE[1] -> {
+                binding.viewNoPetidCard.visibility = View.GONE
+                binding.viewPetidCard.visibility = View.VISIBLE
+                binding.layoutRegister.visibility = View.VISIBLE
+            }
+            CHIP_TYPE[2] -> {
+                binding.viewNoPetidCard.visibility = View.GONE
+                binding.viewPetidCard.visibility = View.VISIBLE
+                binding.layoutRegister.visibility = View.GONE
+            }
+        }
+    }
+
+    /**
+     * viewModel.getPetDetails 결과값 view 반영
+     */
+    private fun observeGetPetInfoState() {
+        lifecycleScope.launch {
+            viewModel.getPetDetailsResult.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        with(result.data) {
+                            setPetidCardType(chipType)
+                            /*petImages?.takeIf { it.isNotBlank() }?.let {
+                                com.bumptech.glide.Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
+                            }*/
+
+                            binding.textViewPetNameBack.text = petName
+                            binding.textViewPetNameFront.text = petName
+                            binding.textViewType.text = appearance.breed
+
+                            binding.textViewAge.text = String.format(getString(R.string.to_age), petBirthDate)
+                            binding.textViewBirth.text = petBirthDate
+                            binding.textViewGender.text =
+                                listOf(genderCharToString(petSex[0]), // TODO API 수정되면 수정
+                                    String.format(getString(R.string.neutering),
+                                        booleanCharToSign(petNeuteredYn[0])))
+                                    .joinToString(", ")
+                            binding.textViewWeight.text =
+                                String.format(getString(R.string.to_kg), appearance.weight)
+                            binding.textViewFeature.text =
+                                listOf(appearance.hairColor, appearance.hairLength).joinToString(", ")
+                        }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                }
+            }
+        }
     }
 }

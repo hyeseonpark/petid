@@ -1,6 +1,5 @@
 package com.android.petid.ui.view.generate
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.databinding.FragmentPetIdStartBinding
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
-import com.android.petid.viewmodel.home.HomeMainVIewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -33,7 +32,7 @@ class PetIdStartFragment : Fragment() {
     }
 
     fun initComponent() {
-        val chipTypes = arrayOf("NA", "EXTERNAL", "INTERNAL")
+        val chipTypes = CHIP_TYPE
         with (binding) {
             var selectedChipIdx = -1
             radioButtonGroup.setOnCheckedChangeListener { _, checkedId ->

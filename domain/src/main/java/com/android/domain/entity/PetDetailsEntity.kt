@@ -14,6 +14,7 @@ class PetDetailsEntity(
     val petNeuteredYn: String,
     val petNeuteredDate: String,
     val petAddr: String,
+    val chipType: String,
     val appearance: PetAppearanceEntity,
     val petImages: List<PetImageEntity>,
 ) : Parcelable

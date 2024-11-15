@@ -45,7 +45,7 @@ class PetInfoDetailFragment : Fragment() {
     /**
      * viewModel.getPetDetails 결과값 view 반영
      */
-    private fun observeGetMemberInfoState() {
+    private fun observeGetPetInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
                 when (result) {
