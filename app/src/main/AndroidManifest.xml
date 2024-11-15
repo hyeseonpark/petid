@@ -62,16 +62,16 @@
             android:name=".ui.view.my.ReservationHistoryInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.my.MyPetInfoUpdateActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.view.my.MyPetInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.my.MyInfoUpdateActivity"
+            android:name=".ui.view.my.MyInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.my.MyInfoActivity"
+            android:name=".ui.view.my.MyInfoUpdateFragment"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.my.MyInfoDetailFragment"
             android:exported="false" />
         <activity
             android:name=".ui.view.hospital.ReservationProcessFinishActivity"

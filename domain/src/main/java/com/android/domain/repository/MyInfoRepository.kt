@@ -8,5 +8,10 @@ interface MyInfoRepository {
     suspend fun getMemberInfo(): ApiResult<MemberInfoEntity>
     suspend fun uploadProfileImage(imagePath: String): String
     suspend fun getProfileImageUrl(imagePath: String): String
-    suspend fun updateMemberInfo(): ApiResult<UpdateMemberInfoEntity>
+    suspend fun updateMemberInfo(
+        name: String,
+        address: String,
+        addressDetail: String,
+        phone: String
+    ): ApiResult<UpdateMemberInfoEntity>
 }
