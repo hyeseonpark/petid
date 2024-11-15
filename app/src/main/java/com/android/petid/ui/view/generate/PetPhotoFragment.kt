@@ -66,7 +66,7 @@ class PetPhotoFragment : Fragment(), ImageClassifierHelper.ClassifierListener {
 
     fun initComponent() {
         with(binding) {
-            buttonTakingPhoto.button.setOnClickListener{
+            buttonTakingPhoto.setOnClickListener{
                 val cameraPermissionCheck = ContextCompat.checkSelfPermission(
                     requireContext(),
                     android.Manifest.permission.CAMERA
