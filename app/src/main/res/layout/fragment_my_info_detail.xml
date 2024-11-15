@@ -13,12 +13,10 @@
         android:id="@+id/top_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/iconButton"
-        app:layout_constraintTop_toTopOf="@+id/iconButton"
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
