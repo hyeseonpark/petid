@@ -29,6 +29,8 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
 
     private val TAG = "ReservationHistoryInfoActivity"
 
+    lateinit var cancelDialog : CustomDialogCommon
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReservationHistoryInfoBinding.inflate(layoutInflater)
@@ -123,6 +125,7 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
                 when (result) {
                     is CommonApiState.Success -> {
                         viewModel.getHospitalReservationHistoryListApiState()
+                        cancelDialog.dismiss()
                     }
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
@@ -139,12 +142,12 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
      * 예약 취소 dialog
      */
     private fun cancelDialog(id: Int) {
-        val dialog = CustomDialogCommon(
+        cancelDialog = CustomDialogCommon(
             getString(R.string.cancel_reservation_dialog), {
                 viewModel.cancelHospitalReservationApiState(id)
             })
 
-        dialog.show(this.supportFragmentManager, "CustomDialogCommon")
+        cancelDialog.show(this.supportFragmentManager, "CustomDialogCommon")
     }
 
     /**

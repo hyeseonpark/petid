@@ -1,142 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.view.home.HomeMainFragment"
-    tools:layout="@layout/fragment_home_main">
+    tools:layout="@layout/fragment_home_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="horizontal"
+                android:paddingLeft="24dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="11dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imageView_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_app_logo_main" />
+
+                <TextView
+                    android:id="@+id/textView_member_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/home_no_petid"
+                    android:textFontWeight="700"
+                    android:textColor="@color/petid_midblack"
+                    android:textSize="14dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/imageView_noti"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:padding="0dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_home_noti_alert" />
+
+            </LinearLayout>
+
+            <!-- check list view -->
+            <!--androidx.cardview.widget.CardView
+                android:id="@+id/cardView_checklist"
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                android:layout_marginHorizontal="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:paddingLeft="24dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="11dp"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imageView_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_app_logo_main" />
-
-                    <TextView
-                        android:id="@+id/textView_petid_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="@string/home_no_petid"
-                        android:textFontWeight="700"
-                        android:textColor="@color/petid_midblack"
-                        android:textSize="14dp"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-
-                    <ImageButton
-                        android:id="@+id/imageView_noti"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:padding="0dp"
-                        android:background="@null"
-                        android:src="@drawable/ic_home_noti_alert" />
-
-                </LinearLayout>
-
-                <!-- check list view -->
-                <!--androidx.cardview.widget.CardView
-                    android:id="@+id/cardView_checklist"
-                    android:layout_width="match_parent"
-                    android:layout_height="63dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="0dp"
-                    android:layout_marginHorizontal="16dp">
+                    android:background="@drawable/gradient_main_cardview"
+                    android:paddingVertical="11dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="10dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:background="@drawable/gradient_main_cardview"
-                        android:paddingVertical="11dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="10dp">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:backgroundTint="@android:color/transparent"
+                        android:layout_weight="1">
 
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/textView_checklist_subtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:backgroundTint="@android:color/transparent"
-                            android:layout_weight="1">
+                            android:text="@string/check_list_info_sub_title"
+                            android:textFontWeight="400"
+                            android:textColor="#787C81"
+                            android:textSize="12dp"
+                            android:lineHeight="18dp"/>
 
-                            <TextView
-                                android:id="@+id/textView_checklist_subtitle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/check_list_info_sub_title"
-                                android:textFontWeight="400"
-                                android:textColor="#787C81"
-                                android:textSize="12dp"
-                                android:lineHeight="18dp"/>
-
-                            <TextView
-                                android:id="@+id/textView_checklist_title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/check_list_info_title"
-                                android:textFontWeight="600"
-                                android:textColor="#242424"
-                                android:textSize="15dp"
-                                android:lineHeight="22.5dp"/>
-
-                        </LinearLayout>
-
-                        <ImageButton
-                            android:id="@+id/imageButton_checklist"
+                        <TextView
+                            android:id="@+id/textView_checklist_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_checklist_rain"
-                            android:scaleType="centerCrop"
-                            android:padding="0dp"
-                            android:backgroundTint="@android:color/transparent"
-                            android:layout_gravity="center"/>
+                            android:text="@string/check_list_info_title"
+                            android:textFontWeight="600"
+                            android:textColor="#242424"
+                            android:textSize="15dp"
+                            android:lineHeight="22.5dp"/>
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView-->
+                    <ImageButton
+                        android:id="@+id/imageButton_checklist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_checklist_rain"
+                        android:scaleType="centerCrop"
+                        android:padding="0dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:layout_gravity="center"/>
 
-                <!-- no pet id card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="271dp"
-                    android:layout_height="406dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="35dp"
-                    android:backgroundTint="#F4F4F4"
-                    android:shadowColor="#1A000000"
-                    android:shadowDx="1"
-                    android:shadowDy="3"
-                    android:shadowRadius="5.0"
-                    app:cardCornerRadius="20dp"
-                    android:visibility="gone">
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView-->
+
+            <!-- no pet id card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/view_no_petid_card"
+                android:layout_width="271dp"
+                android:layout_height="406dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="35dp"
+                android:backgroundTint="#F4F4F4"
+                android:shadowColor="#1A000000"
+                android:shadowDx="1"
+                android:shadowDy="3"
+                android:shadowRadius="5.0"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="0dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/layout_no_petid"
@@ -177,51 +177,236 @@
                         android:textFontWeight="500"
                         android:textSize="18dp" />
 
-                    <include
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_create_start"
-                        layout="@layout/button_common"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="53dp"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="26dp"
-                        app:buttonText="@{@string/start}" />
+                        android:background="@drawable/button_background_common"
+                        android:textColor="@color/button_text_color_common"
+                        android:text="@string/start"
+                        android:textSize="16sp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless" />
 
                 </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
-                <!-- has pet id card -->
-                <com.wajahatkarim3.easyflipview.EasyFlipView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:flipOnTouch="true"
-                    app:flipEnabled="true"
-                    app:flipDuration="400"
-                    app:flipFrom="right"
-                    app:flipType="horizontal"
-                    app:autoFlipBack="true"
-                    app:autoFlipBackTime="1000">
+            <!-- has pet id card -->
+            <com.wajahatkarim3.easyflipview.EasyFlipView
+                android:id="@+id/view_petid_card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:flipOnTouch="true"
+                app:flipEnabled="true"
+                app:flipDuration="400"
+                app:flipFrom="right"
+                app:flipType="horizontal"
+                app:autoFlipBack="true"
+                app:autoFlipBackTime="1000">
 
-                    <!-- 뒷면 -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardView_petid_card_back"
-                        android:layout_width="271dp"
-                        android:layout_height="406dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="35dp"
-                        android:layout_marginBottom="13dp"
-                        android:shadowColor="#1A000000"
-                        android:shadowDx="1"
-                        android:shadowDy="3"
-                        android:shadowRadius="5.0"
-                        app:cardCornerRadius="20dp">
+                <!-- 뒷면 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView_petid_card_back"
+                    android:layout_width="271dp"
+                    android:layout_height="406dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginBottom="13dp"
+                    android:shadowColor="#1A000000"
+                    android:shadowDx="1"
+                    android:shadowDy="3"
+                    android:shadowRadius="5.0"
+                    app:cardCornerRadius="20dp"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:id="@+id/layout_petid_card_back"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/gradient_main_cardview"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/layout_petid_card_back"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/gradient_main_cardview"
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView_pet_name_back"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="코코"
+                                android:textColor="@color/petid_title"
+                                android:textFontWeight="700"
+                                android:textSize="24sp"
+                                android:layout_marginTop="27dp"
+                                android:layout_marginLeft="25dp" />
+
+                            <TextView
+                                android:id="@+id/textView_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="말티즈"
+                                android:textColor="@color/petid_title"
+                                android:textFontWeight="400"
+                                android:textSize="14sp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_gravity="bottom"
+                                android:layout_marginBottom="3dp"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:paddingHorizontal="24dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="21sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView_age_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/age"
+                                    android:textColor="@color/petid_subtitle"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textView_age"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:text="2살"
+                                    android:textColor="@color/petid_title"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="21sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView_birth_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/birth"
+                                    android:textColor="@color/petid_subtitle"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textView_birth"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:text="2022.03.02"
+                                    android:textColor="@color/petid_title"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="21sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView_gender_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/gender"
+                                    android:textColor="@color/petid_subtitle"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textView_gender"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:text="남, 중성화X"
+                                    android:textColor="@color/petid_title"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="21sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView_feature_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/feature"
+                                    android:textColor="@color/petid_subtitle"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textView_feature"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:text="갈색, 곱슬, 장모"
+                                    android:textColor="@color/petid_title"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="21sp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textView_weight_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/weight"
+                                    android:textColor="@color/petid_subtitle"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textView_weight"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="end"
+                                    android:text="4kg"
+                                    android:textColor="@color/petid_title"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -229,490 +414,309 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/textView_pet_name_back"
+                                    android:id="@+id/textView_address_title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="코코"
-                                    android:textColor="@color/petid_title"
-                                    android:textFontWeight="700"
-                                    android:textSize="24sp"
-                                    android:layout_marginTop="27dp"
-                                    android:layout_marginLeft="25dp" />
+                                    android:text="@string/address"
+                                    android:textColor="@color/petid_subtitle"
+                                    android:textFontWeight="400"
+                                    android:textSize="14sp" />
 
                                 <TextView
-                                    android:id="@+id/textView_type"
+                                    android:id="@+id/textView_address"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:gravity="end"
-                                    android:text="말티즈"
+                                    android:text="서울시 서초구 서초대로 12길\n코코빌리지 101동 102호"
                                     android:textColor="@color/petid_title"
                                     android:textFontWeight="400"
-                                    android:textSize="14sp"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_gravity="bottom"
-                                    android:layout_marginBottom="3dp"/>
+                                    android:textSize="14sp" />
 
                             </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/linearLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:gravity="center"
-                                android:paddingHorizontal="24dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="21sp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/textView_name_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/age"
-                                        android:textColor="@color/petid_subtitle"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/textView_name"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="end"
-                                        android:text="2살"
-                                        android:textColor="@color/petid_title"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="21sp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/textView_birth_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/birth"
-                                        android:textColor="@color/petid_subtitle"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/textView_birth"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="end"
-                                        android:text="2022.03.02"
-                                        android:textColor="@color/petid_title"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="21sp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/textView_gender_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/gender"
-                                        android:textColor="@color/petid_subtitle"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/textView_gender"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="end"
-                                        android:text="남, 중성화X"
-                                        android:textColor="@color/petid_title"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="21sp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/textView_feature_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/feature"
-                                        android:textColor="@color/petid_subtitle"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/textView_feature"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="end"
-                                        android:text="갈색, 곱슬, 장모"
-                                        android:textColor="@color/petid_title"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="21sp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/textView_weight_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/weight"
-                                        android:textColor="@color/petid_subtitle"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/textView_weight"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="end"
-                                        android:text="4kg"
-                                        android:textColor="@color/petid_title"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/textView_address_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/address"
-                                        android:textColor="@color/petid_subtitle"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                    <TextView
-                                        android:id="@+id/textView_address"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="end"
-                                        android:text="서울시 서초구 서초대로 12길\n코코빌리지 101동 102호"
-                                        android:textColor="@color/petid_title"
-                                        android:textFontWeight="400"
-                                        android:textSize="14sp" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/layout_register_back"
-                                android:layout_width="match_parent"
-                                android:layout_height="36dp"
-                                android:layout_marginHorizontal="34dp"
-                                android:layout_marginBottom="19dp"
-                                android:background="@drawable/button_home_register_petid"
-                                android:foreground="?attr/selectableItemBackgroundBorderless"
-                                android:gravity="center"
-                                android:orientation="horizontal"
-                                android:stateListAnimator="@null">
-
-                                <ImageButton
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@null"
-                                    android:src="@drawable/ic_notice" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="4dp"
-                                    android:layout_marginRight="8dp"
-                                    android:text="@string/do_register_petid"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:textFontWeight="500"
-                                    android:textSize="12sp" />
-
-                                <ImageButton
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@null"
-                                    android:src="@drawable/ic_right_arrow_white" />
-
-                            </LinearLayout>
-
 
                         </LinearLayout>
 
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <!-- 앞면 -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardView_petid_card_front"
-                        android:layout_width="271dp"
-                        android:layout_height="406dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="35dp"
-                        android:layout_marginBottom="13dp"
-                        android:backgroundTint="#F4F4F4"
-                        android:shadowColor="#1A000000"
-                        android:shadowDx="1"
-                        android:shadowDy="3"
-                        android:shadowRadius="5.0"
-                        app:cardCornerRadius="20dp">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_petid_card_front"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/imageView_card_pet_photo"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/img_pet_photo_sample" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="20dp"
-                            android:lineHeight="23.2dp"
-                            android:shadowColor="#40000000"
-                            android:shadowDy="2.0"
-                            android:shadowRadius="6.0"
-                            android:text="@string/info_create_petid_desc"
-                            android:textColor="@color/white"
-                            android:textFontWeight="700"
-                            android:textSize="16dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textView_card_petid_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="286dp"
-                            android:lineHeight="33.6dp"
-                            android:shadowColor="#4D000000"
-                            android:shadowDy="2.0"
-                            android:shadowRadius="9.0"
-                            android:text="코코"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textFontWeight="700"
-                            android:textSize="24dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textView_card_owner_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:lineHeight="33.6dp"
-                            android:shadowColor="#4D000000"
-                            android:shadowDy="2.0"
-                            android:shadowRadius="9.0"
-                            android:text="@string/owner"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textFontWeight="500"
-                            android:textSize="16dp"
-                            app:layout_constraintEnd_toEndOf="@+id/textView_card_petid_name"
-                            app:layout_constraintStart_toStartOf="@+id/textView_card_petid_name"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_card_petid_name" />
-
-
                         <LinearLayout
-                            android:id="@+id/layout_register"
+                            android:id="@+id/layout_register_back"
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
-                            android:layout_marginTop="7dp"
                             android:layout_marginHorizontal="34dp"
-                            android:orientation="horizontal"
+                            android:layout_marginBottom="19dp"
                             android:background="@drawable/button_home_register_petid"
                             android:foreground="?attr/selectableItemBackgroundBorderless"
-                            android:stateListAnimator="@null"
                             android:gravity="center"
-                            app:layout_constraintEnd_toEndOf="@+id/textView_card_owner_name"
-                            app:layout_constraintStart_toStartOf="@+id/textView_card_owner_name"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_card_owner_name">
+                            android:orientation="horizontal"
+                            android:stateListAnimator="@null">
 
                             <ImageButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@null"
-                                android:src="@drawable/ic_notice"/>
+                                android:src="@drawable/ic_notice" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textFontWeight="500"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="8dp"
                                 android:text="@string/do_register_petid"
                                 android:textAlignment="center"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="8dp"/>
+                                android:textColor="@color/white"
+                                android:textFontWeight="500"
+                                android:textSize="12sp" />
 
                             <ImageButton
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:background="@null"
-                                android:src="@drawable/ic_right_arrow_white"/>
+                                android:src="@drawable/ic_right_arrow_white" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 앞면 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardView_petid_card_front"
+                    android:layout_width="271dp"
+                    android:layout_height="406dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginBottom="13dp"
+                    android:backgroundTint="#F4F4F4"
+                    android:shadowColor="#1A000000"
+                    android:shadowDx="1"
+                    android:shadowDy="3"
+                    android:shadowRadius="5.0"
+                    app:cardCornerRadius="20dp"
+                    app:strokeWidth="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_petid_card_front"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageView_card_pet_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/img_pet_photo_sample" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        android:lineHeight="23.2dp"
+                        android:shadowColor="#40000000"
+                        android:shadowDy="2.0"
+                        android:shadowRadius="6.0"
+                        android:text="@string/info_create_petid_desc"
+                        android:textColor="@color/white"
+                        android:textFontWeight="700"
+                        android:textSize="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView_pet_name_front"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="286dp"
+                        android:lineHeight="33.6dp"
+                        android:shadowColor="#4D000000"
+                        android:shadowDy="2.0"
+                        android:shadowRadius="9.0"
+                        android:text="코코"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textFontWeight="700"
+                        android:textSize="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView_owner_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineHeight="33.6dp"
+                        android:shadowColor="#4D000000"
+                        android:shadowDy="2.0"
+                        android:shadowRadius="9.0"
+                        android:text="@string/to_owner"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textFontWeight="500"
+                        android:textSize="16dp"
+                        app:layout_constraintEnd_toEndOf="@+id/textView_pet_name_front"
+                        app:layout_constraintStart_toStartOf="@+id/textView_pet_name_front"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_pet_name_front" />
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginHorizontal="34dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/button_home_register_petid"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:stateListAnimator="@null"
+                        android:gravity="center"
+                        app:layout_constraintEnd_toEndOf="@+id/textView_owner_name"
+                        app:layout_constraintStart_toStartOf="@+id/textView_owner_name"
+                        app:layout_constraintTop_toBottomOf="@+id/textView_owner_name">
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:src="@drawable/ic_notice"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:textFontWeight="500"
+                            android:text="@string/do_register_petid"
+                            android:textAlignment="center"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="8dp"/>
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:src="@drawable/ic_right_arrow_white"/>
+
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+            <TextView
+                android:id="@+id/textView_flip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/flip_card_back_side"
+                android:textFontWeight="400"
+                android:textColor="@color/b4"
+                android:textSize="14dp"
+                android:lineHeight="23.8dp"
+                android:layout_gravity="center"/>
+
+
+            <TextView
+                android:id="@+id/textView_life_style_recommend_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/life_style_recommend_title"
+                android:textFontWeight="600"
+                android:textColor="@color/petid_title"
+                android:textSize="17dp"
+                android:lineHeight="23.8dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="31dp"/>
+
+            <!-- banner - main -->
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scrollView_banner_1"
+                android:layout_width="match_parent"
+                android:layout_height="121dp"
+                android:layout_marginHorizontal="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="21dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:strokeWidth="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_banner_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/viewPager_banner_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="121dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="47dp"
+                            android:layout_height="22dp"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="13dp"
+                            android:layout_marginRight="12dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/viewPager_banner_1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="center"
+                            android:background="@drawable/layout_home_banner_background">
+
+                            <TextView
+                                android:id="@+id/textView_current_page"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textSize="11dp"
+                                android:textFontWeight="500"
+                                android:textColor="#ffffff"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / "
+                                android:textSize="11dp"
+                                android:textFontWeight="500"
+                                android:textColor="#D9D9D9"/>
+
+                            <TextView
+                                android:id="@+id/textView_total_page"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4"
+                                android:textSize="11dp"
+                                android:textFontWeight="500"
+                                android:textColor="#D9D9D9"/>
 
                         </LinearLayout>
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                </com.wajahatkarim3.easyflipview.EasyFlipView>
+            </androidx.core.widget.NestedScrollView>
 
-                <TextView
-                    android:id="@+id/textView_flip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/flip_card_back_side"
-                    android:textFontWeight="400"
-                    android:textColor="@color/b4"
-                    android:textSize="14dp"
-                    android:lineHeight="23.8dp"
-                    android:layout_gravity="center"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="123dp" />
 
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView_life_style_recommend_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/life_style_recommend_title"
-                    android:textFontWeight="600"
-                    android:textColor="@color/petid_title"
-                    android:textSize="17dp"
-                    android:lineHeight="23.8dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="31dp"/>
+    </androidx.core.widget.NestedScrollView>
 
-                <!-- banner - main -->
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/scrollView_banner_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="121dp"
-                    android:layout_marginHorizontal="16dp">
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:cardCornerRadius="21dp"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="@android:color/transparent"
-                        app:strokeWidth="0dp">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_banner_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                            <androidx.viewpager2.widget.ViewPager2
-                                android:id="@+id/viewPager_banner_1"
-                                android:layout_width="match_parent"
-                                android:layout_height="121dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <LinearLayout
-                                android:layout_width="47dp"
-                                android:layout_height="22dp"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="13dp"
-                                android:layout_marginRight="12dp"
-                                app:layout_constraintBottom_toBottomOf="@+id/viewPager_banner_1"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                android:gravity="center"
-                                android:background="@drawable/layout_home_banner_background">
-
-                                <TextView
-                                    android:id="@+id/textView_current_page"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="1"
-                                    android:textSize="11dp"
-                                    android:textFontWeight="500"
-                                    android:textColor="#ffffff"/>
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text=" / "
-                                    android:textSize="11dp"
-                                    android:textFontWeight="500"
-                                    android:textColor="#D9D9D9"/>
-
-                                <TextView
-                                    android:id="@+id/textView_total_page"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="4"
-                                    android:textSize="11dp"
-                                    android:textFontWeight="500"
-                                    android:textColor="#D9D9D9"/>
-
-                            </LinearLayout>
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                </androidx.core.widget.NestedScrollView>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="123dp" />
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-    </LinearLayout>
-
-</layout>
+</LinearLayout>

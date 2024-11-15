@@ -23,6 +23,9 @@ class PetInfoViewModel @Inject constructor(
     )
     val getPetDetailsResult: StateFlow<CommonApiState<PetDetailsEntity>> = _getPetDetailsResult
 
+    /**
+     * 펫 정보 가져오기
+     */
     fun getPetDetails(petId: Long) {
         viewModelScope.launch {
             when (val result = petInfoRepository.getPetDetails(petId)) {

@@ -1,14 +1,14 @@
 package com.android.petid.viewmodel.home
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.BannerEntity
-import com.android.domain.entity.LocationEntity
+import com.android.domain.entity.MemberInfoEntity
+import com.android.domain.entity.PetDetailsEntity
 import com.android.domain.repository.HomeMainRepository
-import com.android.domain.repository.ReservationHistoryInfoRepository
-import com.android.domain.usecase.main.GetBannerImageUseCase
+import com.android.domain.repository.MyInfoRepository
+import com.android.domain.repository.PetInfoRepository
 import com.android.domain.usecase.main.GetBannerListUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.ui.state.CommonApiState
@@ -21,8 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeMainVIewModel @Inject constructor(
     private val getBannerListUseCase: GetBannerListUseCase,
-    private val getBannerImageUseCase: GetBannerImageUseCase,
     private val homeMainRepository: HomeMainRepository,
+    private val myInfoRepository: MyInfoRepository,
+    private val petInfoRepository: PetInfoRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _bannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
@@ -64,6 +65,59 @@ class HomeMainVIewModel @Inject constructor(
             homeMainRepository.getBannerImage(imagePath)
         } catch (e: Exception) {
             ""
+        }
+    }
+
+
+    private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
+        CommonApiState.Loading
+    )
+    val getMemberInfoResult: StateFlow<CommonApiState<MemberInfoEntity>> = _getMemberInfoResult
+
+    /**
+     * member 정보 가져오기
+     */
+    fun getMemberInfo() {
+        viewModelScope.launch {
+            when (val result = myInfoRepository.getMemberInfo()) {
+                is ApiResult.Success -> {
+                    val memberInfo = result.data
+                    _getMemberInfoResult.emit(CommonApiState.Success(memberInfo))
+                }
+                is ApiResult.HttpError -> {
+                    _getMemberInfoResult.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _getMemberInfoResult.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
+    private val _getPetDetailsResult = MutableStateFlow<CommonApiState<PetDetailsEntity>>(
+        CommonApiState.Loading
+    )
+    val getPetDetailsResult: StateFlow<CommonApiState<PetDetailsEntity>> = _getPetDetailsResult
+
+    /**
+     * 펫 정보 가져오기
+     */
+    fun getPetDetails(petId: Long) {
+        viewModelScope.launch {
+            when (val result = petInfoRepository.getPetDetails(petId)) {
+                is ApiResult.Success -> {
+                    val petDetails = result.data
+                    //memberInfo.image = memberInfo.image?.let{getMemberImage(it)}
+
+                    _getPetDetailsResult.emit(CommonApiState.Success(petDetails))
+                }
+                is ApiResult.HttpError -> {
+                    _getPetDetailsResult.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _getPetDetailsResult.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
         }
     }
 }

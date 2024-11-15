@@ -46,9 +46,10 @@
     <string name="update">수정</string>
     <string name="like">좋아요</string>
     <string name="share">공유하기</string>
-    <string name="owner">보호자</string>
+    <string name="to_owner">보호자 %s</string>
     <string name="neutering">중성화 %s</string>
     <string name="to_kg">%dkg</string>
+    <string name="to_age">%s살</string>
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 
