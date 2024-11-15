@@ -25,7 +25,7 @@ class SignatureFragment : Fragment() {
     }
 
     fun initComponent() {
-        binding.buttonNext.button.setOnClickListener{
+        binding.buttonNext.setOnClickListener{
             findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
             /* val bitmap = getBitmapFromView(binding.drawingViewSignature)
             val base64Bitmap = bitmapToBase64(bitmap)

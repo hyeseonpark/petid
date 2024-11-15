@@ -23,7 +23,7 @@ class CompleteCardFragment : Fragment() {
     }
 
     fun initComponent() {
-        binding.buttonComplete.button.setOnClickListener{
+        binding.buttonComplete.setOnClickListener{
             val intent = Intent(context, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
