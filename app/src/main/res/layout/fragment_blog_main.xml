@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.view.blog.BlogMainFragment"
-    tools:layout="@layout/fragment_blog_main">
+    tools:layout="@layout/fragment_blog_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="@string/main_blog_title"
+        android:textColor="@color/petid_title"
+        android:textSize="16sp"
+        android:textFontWeight="400"
+        android:layout_gravity="center_horizontal"/>
 
-        <include
-            android:id="@+id/top_bar"
-            layout="@layout/top_bar_common"
-            app:title="@{@string/main_blog_title}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout_blog_main"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        app:tabSelectedTextColor="@color/petid_title"
+        app:tabTextColor="#848484"
+        app:tabRippleColor="@null"
+        android:textSize="14sp"
+        android:background="@drawable/tab_underline"
+        app:tabIndicatorFullWidth="true"
+        app:tabIndicatorColor="@color/petid_title"
+        app:tabIndicatorHeight="1dp">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout_blog_main"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            app:tabSelectedTextColor="@color/petid_title"
-            app:tabTextColor="#848484"
-            app:tabRippleColor="@null"
-            android:textSize="14sp"
-            android:background="@drawable/tab_underline"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorColor="@color/petid_title"
-            app:tabIndicatorHeight="1dp">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_recommendation_title" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_recommendation_title" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_about_pet_title" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_about_pet_title" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_tips_title" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_tips_title" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_venue_title" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_venue_title" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_support_title" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_support_title" />
+    </com.google.android.material.tabs.TabLayout>
 
-        </com.google.android.material.tabs.TabLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/layout_data_available"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginBottom="118dp"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_blog_content_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="16dp"/>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_data_available"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="118dp"
+        android:visibility="gone">
 
         <LinearLayout
-            android:id="@+id/layout_no_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="37dp"
-                android:layout_height="38dp"
-                android:src="@drawable/ic_no_data"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tab_no_data"
-                android:textColor="@color/petid_subtitle"
-                android:textFontWeight="400"
-                android:textSize="18dp"
-                android:layout_marginTop="9dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_blog_content_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"/>
 
         </LinearLayout>
 
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/layout_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="37dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_no_data"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_no_data"
+            android:textColor="@color/petid_subtitle"
+            android:textFontWeight="400"
+            android:textSize="18dp"
+            android:layout_marginTop="9dp"/>
+
     </LinearLayout>
 
-</layout>
+</LinearLayout>

@@ -12,12 +12,16 @@
         android:background="@color/white"
         android:paddingBottom="92dp">
 
-        <include
-            android:id="@+id/top_bar"
-            layout="@layout/top_bar_common"
-            app:title="@{@string/main_my_title}"
+        <TextView
+            android:id="@+id/textView_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="@string/main_my_title"
+            android:textColor="@color/petid_title"
+            android:textSize="16sp"
+            android:textFontWeight="400"
+            android:layout_gravity="center_horizontal"/>
 
         <!-- 내 정보 -->
         <LinearLayout
