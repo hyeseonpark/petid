@@ -277,6 +277,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/pet_create_status"
+                    android:layout_weight="1"
                     android:textColor="@color/petid_title"
                     android:textSize="16sp"
                     android:textFontWeight="400"  />
@@ -285,10 +286,9 @@
                     android:id="@+id/textView_pet_create_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="end"
                     android:text="미등록 상태 >"
-                    android:textColor="@color/petid_subtitle"
+                    android:textColor="@color/red"
                     android:textSize="16sp"
                     android:textFontWeight="400" />
 

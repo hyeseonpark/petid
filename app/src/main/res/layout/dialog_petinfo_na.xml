@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:minWidth="300dp"
+    android:background="@drawable/dialog_background_common"
+    android:gravity="center"
+    android:paddingTop="32dp"
+    android:paddingHorizontal="19dp"
+    android:paddingBottom="22dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textFontWeight="700"
+        android:textColor="@color/petid_clear_blue"
+        android:text="@string/pet_info_dialog_chip_na_title" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_desc_1_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textFontWeight="700"
+        android:textColor="@color/petid_title"
+        android:text="@string/pet_info_dialog_chip_na_desc1_1"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_desc_1_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textFontWeight="500"
+        android:textColor="@color/petid_title"
+        android:text="@string/pet_info_dialog_chip_na_desc1_2"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_desc_2_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textFontWeight="500"
+        android:textColor="@color/petid_title"
+        android:text="@string/pet_info_dialog_chip_na_desc2_1"
+        android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/img_petinfo_na1"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="3dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_single"
+        android:background="@drawable/button_background_common"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:text="@string/next"
+        android:textSize="16sp"
+        android:textColor="@color/white"/>
+
+</LinearLayout>
