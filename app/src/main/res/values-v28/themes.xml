@@ -6,4 +6,24 @@
         <item name="android:textColor">@color/petid_title</item>
         <item name="android:textFontWeight">600</item>
     </style>
+
+    <style name="CommonEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/petid_title</item>
+        <item name="android:textColorHint">@color/b4</item>
+        <item name="android:paddingEnd">18dp</item>
+        <item name="android:drawableTint">#2E2E2E</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/petid_gray</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="android:textColor">@color/calendar_text_color</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
 </resources>

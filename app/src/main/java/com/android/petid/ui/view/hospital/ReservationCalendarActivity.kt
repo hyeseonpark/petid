@@ -1,10 +1,12 @@
 package com.android.petid.ui.view.hospital
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
@@ -12,6 +14,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
 import com.android.petid.common.Constants.DAYS_OF_WEEK
@@ -22,6 +25,9 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
+import com.prolificinteractive.materialcalendarview.DayViewFacade
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -49,46 +55,82 @@ class ReservationCalendarActivity : AppCompatActivity() {
         observeCreateHospitalOrder()
     }
 
+    /**
+     * init component
+     */
     private fun initComponent() {
-        viewModel.hospitalId = intent.getIntExtra("hospitalId", -1)
-        binding.topBar.title = intent.getStringExtra("hospitalName")
+        with(binding) {
+            viewModel.hospitalId = intent.getIntExtra("hospitalId", -1)
+            textViewTitle.text = intent.getStringExtra("hospitalName")
 
-        // 선택된 날짜 변경 시
-        binding.calendarView.setOnDateChangedListener{ widget, date, selected ->
-            triggerDateChangeListener(date)
+            // 예약 완료 버튼
+            buttonConfirm.button.setOnClickListener{
+                viewModel.createHospitalOrder()
+            }
+
+            // chip group 줄 간격 설정
+            morningChipGroup.chipSpacingVertical = 0
+            afternoonChipGroup.chipSpacingVertical = 0
+
+            initCalendarView()
         }
+    }
 
-        // 선택 가능한 날짜 범위: from
-        val tomorrow = CalendarDay.from(LocalDate.now().plusDays(1))
-        binding.calendarView.currentDate = tomorrow
-        binding.calendarView.selectedDate = tomorrow
+    /**
+     * Calendar View init
+     */
+    private fun initCalendarView() {
+        with(binding.calendarView) {
 
-        triggerDateChangeListener(tomorrow)
+            // 선택 가능한 날짜 범위: from
+            val tomorrow = CalendarDay.from(LocalDate.now().plusDays(1))
+            currentDate = tomorrow
+            selectedDate = tomorrow
 
-        // 선택 가능한 날짜 범위: to
-        val maxCalendar = Calendar.getInstance()
-        maxCalendar.add(Calendar.DAY_OF_YEAR, 7)
+            val todayDecorator = TodayDecorator(context)
+            addDecorators(todayDecorator,
+                DayDecorator(context, tomorrow))
 
-        binding.calendarView.state().edit()
-            .setMinimumDate(
-                CalendarDay.from(
-                    tomorrow.year,
-                    tomorrow.month,
-                    tomorrow.day
+            // 좌우 화살표 사이 연, 월의 폰트 스타일 설정
+            setHeaderTextAppearance(R.style.CalendarWidgetHeader)
+            // 타이틀 형식 변경
+            setTitleFormatter(CustomTitleFormatter())
+
+            // 선택된 날짜 변경 시
+            setOnDateChangedListener { widget, date, selected ->
+                triggerDateChangeListener(date)
+
+                // decorator 초기화
+                removeDecorators()
+                invalidateDecorators()
+
+                //
+                val dayDecorator = DayDecorator(context, date)
+                addDecorators(todayDecorator, dayDecorator)
+            }
+
+            triggerDateChangeListener(tomorrow)
+
+            // 선택 가능한 날짜 범위: to
+            val maxCalendar = Calendar.getInstance()
+            maxCalendar.add(Calendar.DAY_OF_YEAR, 7)
+
+            state().edit()
+                .setMinimumDate(
+                    CalendarDay.from(
+                        tomorrow.year,
+                        tomorrow.month,
+                        tomorrow.day
+                    )
+                ).setMaximumDate(
+                    CalendarDay.from(
+                        maxCalendar.get(Calendar.YEAR),
+                        maxCalendar.get(Calendar.MONTH) + 1,
+                        maxCalendar.get(Calendar.DAY_OF_MONTH)
+                    )
                 )
-            ).setMaximumDate(
-                CalendarDay.from(
-                    maxCalendar.get(Calendar.YEAR),
-                    maxCalendar.get(Calendar.MONTH) + 1,
-                    maxCalendar.get(Calendar.DAY_OF_MONTH)
-                )
-            )
-            .setCalendarDisplayMode(CalendarMode.MONTHS)
-            .commit()
-
-        // 예약 완료 버튼
-        binding.buttonConfirm.button.setOnClickListener{
-            viewModel.createHospitalOrder()
+                .setCalendarDisplayMode(CalendarMode.MONTHS)
+                .commit()
         }
     }
 
@@ -194,13 +236,13 @@ class ReservationCalendarActivity : AppCompatActivity() {
                 setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
                 setPadding(0, 0, 0, 0)
                 setTypeface(null, Typeface.NORMAL)
-                setTextAlignment(View.TEXT_ALIGNMENT_CENTER)
+                textAlignment = View.TEXT_ALIGNMENT_CENTER
 
                 // 테두리
                 chipStrokeColor = ColorStateList(
                     arrayOf(
                         intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)
-                    ), intArrayOf(Color.parseColor("#E9E9E9"), Color.TRANSPARENT))
+                    ), intArrayOf(getColor(R.color.e9), Color.TRANSPARENT))
 
                 // 백그라운드
                 chipBackgroundColor = ColorStateList(
@@ -217,7 +259,6 @@ class ReservationCalendarActivity : AppCompatActivity() {
                         intArrayOf(resources.getColor(R.color.petid_title, null), Color.WHITE)
                     )
                 )
-
 
                 // 크기 및 여백 설정
                 val layoutParams = ChipGroup.LayoutParams(
@@ -246,7 +287,7 @@ class ReservationCalendarActivity : AppCompatActivity() {
             // Chip 선택 시 텍스트 값 업데이트
             chip.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    viewModel.selectedDateTime?.let { selectedDateTime ->
+                    viewModel.selectedDateTime.let { selectedDateTime ->
                         val timeParts = chip.text.toString().split(":")
 
                         if (timeParts.size == 2) {
@@ -292,4 +333,47 @@ class ReservationCalendarActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * CalendarView Custom : 년월 타이틀 형식 변경
+     */
+    inner class CustomTitleFormatter : TitleFormatter {
+        override fun format(day: CalendarDay?): CharSequence {
+            val simpleDateFormat =
+                SimpleDateFormat(getString(R.string.hospital_reservation_calendar_title), Locale.KOREA)
+
+            return simpleDateFormat.format(Calendar.getInstance().time)
+        }
+
+    }
+
+    /**
+     * CalendarView Custom : 선택한 날짜 drawable 설정
+     */
+    private inner class DayDecorator(context: Context, private val selectedDate: CalendarDay) : DayViewDecorator {
+        private val drawable = ContextCompat.getDrawable(context,R.drawable.ic_calendar_selector)
+
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            return day.equals(selectedDate)
+        }
+
+        override fun decorate(view: DayViewFacade) {
+            view.setSelectionDrawable(drawable!!)
+        }
+    }
+
+    /**
+     * CalendarView Custom : 오늘 날짜의 색상 설정
+     */
+    private class TodayDecorator(context: Context) : DayViewDecorator {
+        private var date = CalendarDay.today()
+        private val color = ContextCompat.getColor(context,R.color.petid_clear_blue)
+
+        override fun shouldDecorate(day: CalendarDay): Boolean {
+            return day.equals(date)
+        }
+
+        override fun decorate(view: DayViewFacade) {
+            view.addSpan(object: ForegroundColorSpan(color){})
+        }
+    }
 }

@@ -11,12 +11,42 @@
         android:orientation="vertical"
         android:background="@color/white">
 
-        <include
-            android:id="@+id/top_bar"
-            layout="@layout/top_bar_common"
-            app:back="@{true}"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/iconButton"
+            app:layout_constraintTop_toTopOf="@+id/iconButton"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="동물병원"
+                android:textColor="@color/petid_title"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="17dp"
+                android:background="@null"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -51,27 +81,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="-8dp"
                     android:layout_marginTop="18dp"
                     android:layout_marginBottom="42dp"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="27dp"
                     android:orientation="horizontal"
-                    android:background="@drawable/layout_round_background_fafafa">
+                    android:background="@drawable/layout_f5_radius_16">
 
                     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                         android:id="@+id/calendar_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:mcv_leftArrow="@drawable/ic_back"
-                        app:mcv_rightArrow="@drawable/ic_right_arrow"
                         app:mcv_selectionMode="single"
                         app:mcv_firstDayOfWeek="monday"
                         app:mcv_showOtherDates="all"
-                        app:mcv_selectionColor="@color/petid_clear_blue" />
-        <!--
+                        android:theme="@style/CalenderViewCustom"
                         app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
-                        app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText"-->
+                        app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+                        app:mcv_selectionColor="@color/petid_clear_blue" />
 
                 </LinearLayout>
 
@@ -94,13 +121,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
                         android:text="@string/noon"
-                        android:textColor="#515151"
+                        android:textColor="@color/petid_underbar"
                         android:textFontWeight="500"
                         android:textSize="13dp" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/morning_chip_group"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
                         app:singleSelection="true" />
@@ -110,13 +137,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
                         android:text="@string/afternoon"
-                        android:textColor="#515151"
+                        android:textColor="@color/petid_underbar"
                         android:textFontWeight="500"
                         android:textSize="13dp" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/afternoon_chip_group"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
                         app:singleSelection="true" />
@@ -139,11 +166,14 @@
                         android:textSize="20dp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="18dp"
+                        android:paddingVertical="20dp"
+                        android:background="@drawable/layout_f5_radius_16"
+                        android:gravity="center_horizontal"
                         android:text="@string/hospital_reservation_calendar_day_off_desc"
-                        android:textColor="#515151"
+                        android:textColor="@color/petid_underbar"
                         android:textFontWeight="400"
                         android:textSize="14dp" />
 
