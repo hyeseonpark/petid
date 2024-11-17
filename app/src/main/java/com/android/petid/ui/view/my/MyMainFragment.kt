@@ -31,7 +31,7 @@ class MyMainFragment : Fragment() {
 
         // 반려동물 정보
         binding.layoutPetInfo.layout.setOnClickListener {
-            val intent = Intent(activity, PetInfoDetailFragment::class.java)
+            val intent = Intent(activity, PetInfoActivity::class.java)
             startActivity(intent)
         }
 

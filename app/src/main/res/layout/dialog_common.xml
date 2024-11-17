@@ -12,14 +12,14 @@
     android:paddingHorizontal="21dp"
     android:paddingBottom="21dp">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="@color/petid_title"
-        tools:text="@string/cancel_reservation_dialog"
+        android:text="@string/cancel_reservation_dialog"
         android:layout_marginBottom="32dp"/>
 
     <!--ImageView
@@ -61,15 +61,5 @@
             android:layout_marginLeft="7dp"/>
 
     </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_single"
-        android:background="@drawable/button_background_common"
-        android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:text="병원 예약하기"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:visibility="gone"/>
 
 </LinearLayout>

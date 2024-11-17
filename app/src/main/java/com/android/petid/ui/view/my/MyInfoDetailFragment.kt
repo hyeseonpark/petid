@@ -40,7 +40,7 @@ class MyInfoDetailFragment : Fragment() {
     private lateinit var binding: FragmentMyInfoDetailBinding
     private val viewModel: MyInfoViewModel by activityViewModels()
 
-    private val TAG = "MyInfoActivity"
+    private val TAG = "MyInfoDetailFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,10 +87,12 @@ class MyInfoDetailFragment : Fragment() {
                                 requireContext().contentResolver,
                                 currentImageUri
                             )
+                            // view에 이미지 적용
                             binding.imageViewProfile.setImageBitmap(bitmap)
                         } else {
                             val source = ImageDecoder.createSource(requireContext().contentResolver, currentImageUri)
                             val bitmap = ImageDecoder.decodeBitmap(source)
+                            // view에 이미지 적용
                             binding.imageViewProfile.setImageBitmap(bitmap)
                         }
                     }

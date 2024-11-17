@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.databinding.FragmentPetInfoDetailBinding
+import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.viewmodel.my.PetInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +40,19 @@ class PetInfoDetailFragment : Fragment() {
             textViewUpdate.setOnClickListener{
                 findNavController().navigate(R.id.action_petInfoDetailFragment_to_petInfoUpdateFragment)
             }
+
+            textViewPetCreateStatus.setOnClickListener {
+                // 미등록 상태, dialog 보여주기
+                infoDialog()
+            }
         }
+    }
+    /**
+     * 예약 취소 dialog
+     */
+    private fun infoDialog() {
+        val dialog = CustomDialogPetInfoNa()
+        dialog.show(this.parentFragmentManager, "CustomDialogPetInfoNa")
     }
 
     /**

@@ -37,10 +37,6 @@ class CustomDialogCommon(
             yesButtonClick?.invoke()
         }
 
-        /*binding.buttonSingle.setOnClickListener {
-            dismiss()
-        }*/
-
         return binding.root
     }
 
