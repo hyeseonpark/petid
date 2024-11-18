@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.view.hospital.ReservationCalendarFragment"
+    tools:layout="@layout/fragment_reservation_calendar"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="동물병원"
+            android:textColor="@color/petid_title"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="17dp"
+            android:background="@null"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="52dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hospital_reservation_calendar_visit_date_time"
+                android:layout_marginTop="22dp"
+                android:textSize="20dp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_title"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/hospital_reservation_calendar_visit_date_time_desc"
+                android:textSize="14dp"
+                android:textFontWeight="400"
+                android:textColor="@color/petid_subtitle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="42dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="27dp"
+                android:orientation="horizontal"
+                android:background="@drawable/layout_f5_radius_16">
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendar_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mcv_selectionMode="single"
+                    app:mcv_firstDayOfWeek="monday"
+                    app:mcv_showOtherDates="all"
+                    android:theme="@style/CalenderViewCustom"
+                    app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
+                    app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+                    app:mcv_selectionColor="@color/petid_clear_blue" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/available_time_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hospital_reservation_calendar_available_time"
+                    android:textColor="@color/petid_title"
+                    android:textFontWeight="500"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/noon"
+                    android:textColor="@color/petid_underbar"
+                    android:textFontWeight="500"
+                    android:textSize="13dp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/morning_chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    app:singleSelection="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:text="@string/afternoon"
+                    android:textColor="@color/petid_underbar"
+                    android:textFontWeight="500"
+                    android:textSize="13dp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/afternoon_chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    app:singleSelection="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/day_off_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hospital_reservation_calendar_day_off"
+                    android:textColor="@color/petid_title"
+                    android:textFontWeight="500"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:paddingVertical="20dp"
+                    android:background="@drawable/layout_f5_radius_16"
+                    android:gravity="center_horizontal"
+                    android:text="@string/hospital_reservation_calendar_day_off_desc"
+                    android:textColor="@color/petid_underbar"
+                    android:textFontWeight="400"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:text="@string/hospital_complete_reservation"
+        android:textSize="16sp"
+        android:textFontWeight="500"
+        android:textColor="@color/button_text_color_common"
+        style="@style/GenerateCommonButtonStyle"
+        android:enabled="false"/>
+
+</LinearLayout>

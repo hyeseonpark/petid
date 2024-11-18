@@ -38,6 +38,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PetId"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.view.hospital.HospitalActivity"
+            android:exported="false" />
         <!-- FileProvider 선언 -->
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -80,16 +83,16 @@
             android:name=".ui.view.my.MyInfoDetailFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.hospital.ReservationProcessFinishActivity"
+            android:name=".ui.view.hospital.ReservationProcessFinishFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.hospital.ReservationCalendarActivity"
+            android:name=".ui.view.hospital.ReservationCalendarFragment"
             android:exported="false" />
         <activity
             android:name=".ui.view.hospital.CompleteReservationActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.hospital.HospitalDetailActivity"
+            android:name=".ui.view.hospital.HospitalDetailFragment"
             android:exported="false" />
 
         <meta-data

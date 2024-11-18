@@ -146,7 +146,7 @@ class HospitalMainFragment : Fragment() {
                         val hospitalList = result.data
 
                         val hospitalListAdapter = HospitalListAdapter(hospitalList, requireActivity()) { item ->
-                            val intent = Intent(activity, HospitalDetailActivity::class.java)
+                            val intent = Intent(activity, HospitalActivity::class.java)
                                 .putExtra("hospitalDetail", item)
                             startActivity(intent)
                         }

@@ -3,31 +3,34 @@ package com.android.petid.viewmodel.hospital
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.HospitalOrderEntity
 import com.android.domain.usecase.hospital.CreateHospitalOrderUseCase
 import com.android.domain.usecase.hospital.GetHospitalOrderTimeListUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.util.formatDateToISO8601
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class ReservationCalendarViewModel @Inject constructor(
+class HospitalViewModel @Inject constructor(
     private val getHospitalOrderTimeListUseCase: GetHospitalOrderTimeListUseCase,
     private val createHospitalOrderUseCase: CreateHospitalOrderUseCase,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
+    lateinit var hospitalDetail : HospitalEntity
+
     // 예약 가능 시간 목록 조회 api request params
     var hospitalId: Int = -1
+        get() = if (::hospitalDetail.isInitialized) hospitalDetail.id else -1
+
     var day: String = ""
     var dateStr: String = ""
 
