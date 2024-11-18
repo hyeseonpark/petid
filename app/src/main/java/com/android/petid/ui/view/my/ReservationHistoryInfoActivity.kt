@@ -15,7 +15,7 @@ import com.android.petid.databinding.ActivityReservationHistoryInfoBinding
 import com.android.petid.enum.ReservationStatus
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.view.hospital.HospitalDetailActivity
+import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.ui.view.my.adapter.HospitalReservationListAdapter
 import com.android.petid.viewmodel.hospital.ReservationHistoryInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -154,7 +154,7 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
      * HospitalDetailActivity 이동
      */
     private fun goHospitalDetailActivity(id: Int) {
-        val intent = Intent(this, HospitalDetailActivity::class.java)
+        val intent = Intent(this, HospitalActivity::class.java)
             .putExtra("hospitalDetail", id)
         startActivity(intent)
     }

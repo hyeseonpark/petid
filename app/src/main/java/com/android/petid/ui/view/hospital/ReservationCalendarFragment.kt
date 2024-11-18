@@ -1,7 +1,6 @@
 package com.android.petid.ui.view.hospital
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
@@ -10,17 +9,20 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.common.Constants.DAYS_OF_WEEK
-import com.android.petid.databinding.ActivityReservationCalendarBinding
+import com.android.petid.databinding.FragmentReservationCalendarBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.viewmodel.hospital.ReservationCalendarViewModel
+import com.android.petid.viewmodel.hospital.HospitalViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -38,21 +40,25 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class ReservationCalendarActivity : AppCompatActivity() {
-    lateinit var binding: ActivityReservationCalendarBinding
-    private val viewModel: ReservationCalendarViewModel by viewModels()
+class ReservationCalendarFragment : Fragment() {
+    lateinit var binding: FragmentReservationCalendarBinding
+    private val viewModel: HospitalViewModel by activityViewModels()
 
-    private val TAG = "ReservationCalendarActivity"
+    private val TAG = "ReservationCalendarFragment"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityReservationCalendarBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentReservationCalendarBinding.inflate(layoutInflater)
 
         initComponent()
 
         observeHospitalOrderTimeList()
         observeCreateHospitalOrder()
+
+        return binding.root
+
     }
 
     /**
@@ -60,11 +66,11 @@ class ReservationCalendarActivity : AppCompatActivity() {
      */
     private fun initComponent() {
         with(binding) {
-            viewModel.hospitalId = intent.getIntExtra("hospitalId", -1)
-            textViewTitle.text = intent.getStringExtra("hospitalName")
+            viewModel.hospitalId = viewModel.hospitalId
+            textViewTitle.text = viewModel.hospitalDetail.name
 
             // 예약 완료 버튼
-            buttonConfirm.button.setOnClickListener{
+            buttonConfirm.setOnClickListener{
                 viewModel.createHospitalOrder()
             }
 
@@ -174,7 +180,7 @@ class ReservationCalendarActivity : AppCompatActivity() {
                             // 예약 가능 시간이 없을 때
                             binding.availableTimeLayout.visibility = View.GONE
                             binding.dayOffLayout.visibility = View.VISIBLE
-                            binding.buttonConfirm.disable = true
+                            binding.buttonConfirm.isEnabled = false
                         }
                     }
                     is CommonApiState.Error -> {
@@ -197,13 +203,10 @@ class ReservationCalendarActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.createHospitalOrderApiState.collect { result ->
                 when(result) {
-                    is CommonApiState.Success -> {
-                        val intent = Intent(
-                            this@ReservationCalendarActivity,
-                            ReservationProcessFinishActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
+                    is CommonApiState.Success ->
+                        findNavController().navigate(
+                            R.id.action_reservationCalendarFragment_to_reservationProcessFinishFragment)
+
                     is CommonApiState.Error -> {
                         // 오류 처리
                         Log.e(TAG, "${result.message}")
@@ -228,7 +231,7 @@ class ReservationCalendarActivity : AppCompatActivity() {
         // orderTimeList 데이터에 따른 Chip 추가
         orderTimeList.forEach { time ->
             // init chip style
-            var chip = Chip(this).apply {
+            var chip = Chip(context).apply {
                 isCheckable = true
                 chipStrokeWidth = 1f
                 CornerRadius(6f, 6f)
@@ -242,7 +245,7 @@ class ReservationCalendarActivity : AppCompatActivity() {
                 chipStrokeColor = ColorStateList(
                     arrayOf(
                         intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked)
-                    ), intArrayOf(getColor(R.color.e9), Color.TRANSPARENT))
+                    ), intArrayOf(resources.getColor(R.color.e9), Color.TRANSPARENT))
 
                 // 백그라운드
                 chipBackgroundColor = ColorStateList(
@@ -311,10 +314,10 @@ class ReservationCalendarActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    binding.buttonConfirm.disable = false
+                    binding.buttonConfirm.isEnabled = true
                 } else {
                     // 선택된 chip이 없는 경우
-                    binding.buttonConfirm.disable = true
+                    binding.buttonConfirm.isEnabled = false
                 }
             }
         }

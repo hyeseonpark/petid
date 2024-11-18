@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.view.hospital.ReservationProcessFinishFragment"
+    tools:layout="@layout/fragment_reservation_calendar"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/iconButton"
+        app:layout_constraintTop_toTopOf="@+id/iconButton"
+        android:background="@color/white">
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="17dp"
+            android:background="@null"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="98dp"
+        android:layout_height="115dp"
+        android:src="@drawable/img_create_petid_logo"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_marginTop="14dp"/>
+
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/hospital_process_finish_title"
+        android:textFontWeight="500"
+        android:textSize="24sp"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/textView_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="@string/hospital_process_finish_subtitle"
+        android:textFontWeight="400"
+        android:textSize="15dp"
+        android:textColor="@color/petid_subtitle"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:text="@string/confirm"
+        android:textSize="16sp"
+        android:textFontWeight="500"
+        android:textColor="@color/button_text_color_common"
+        style="@style/GenerateCommonButtonStyle"/>
+
+</LinearLayout>
