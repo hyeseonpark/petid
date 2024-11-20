@@ -1,3 +1,13 @@
+import java.util.Properties
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use {
+        localProperties.load(it)
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -21,6 +31,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GOOGLE_LOGIN_CLIENT_ID", "\"${localProperties["GOOGLE_LOGIN_CLIENT_ID"]}\"")
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${localProperties["KAKAO_NATIVE_APP_KEY"]}\"")
+        buildConfigField("String", "NAVER_CLIENT_ID", "\"${localProperties["NAVER_CLIENT_ID"]}\"")
+        buildConfigField("String", "NAVER_CLIENT_SECRET", "\"${localProperties["NAVER_CLIENT_SECRET"]}\"")
     }
 
     buildTypes {
@@ -86,6 +101,10 @@ dependencies {
     // naver
     implementation(libs.oauth.jdk8)
 
+    // google one-tap login
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
     // Google Play services
     implementation("com.google.gms:google-services:4.4.2")
     implementation("com.google.firebase:firebase-auth:23.1.0")
@@ -150,4 +169,10 @@ dependencies {
 
     // mediapipe
     implementation("com.google.mediapipe:tasks-vision:latest.release")
+
+
+    // AWS
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.13.5")
+    implementation("com.amazonaws:aws-android-sdk-cognito:2.13.5")
+    implementation("com.amazonaws:aws-android-sdk-s3:2.13.5")
 }

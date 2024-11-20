@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.android.petid.BuildConfig
 import com.android.petid.R
 import com.android.petid.databinding.ActivitySocialAuthBinding
 import com.android.petid.enum.PlatformType
@@ -163,6 +164,8 @@ class SocialAuthActivity : AppCompatActivity() {
         NaverIdLoginSDK.initialize(applicationContext,
             getString(R.string.social_login_info_naver_client_id),
             getString(R.string.social_login_info_naver_client_secret),
+            BuildConfig.NAVER_CLIENT_ID,
+            BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.social_login_info_naver_client_name))
 
         NaverIdLoginSDK.authenticate(this, oauthNaverLoginCallback)
@@ -244,8 +247,8 @@ class SocialAuthActivity : AppCompatActivity() {
 
         // GoogleSignInOptions를 구성합니다.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode(getString(R.string.google_login_client_id))
-            .requestIdToken(getString(R.string.google_login_client_id))
+            .requestServerAuthCode(BuildConfig.GOOGLE_LOGIN_CLIENT_ID)
+            .requestIdToken(BuildConfig.GOOGLE_LOGIN_CLIENT_ID)
             .requestEmail()
             .build()
 

@@ -2,6 +2,7 @@ package com.android.petid.common
 
 import android.app.Application
 import androidx.multidex.MultiDexApplication
+import com.android.petid.BuildConfig
 import com.android.petid.R
 import com.kakao.sdk.common.KakaoSdk
 import com.orhanobut.logger.AndroidLogAdapter
@@ -14,7 +15,7 @@ class GlobalApplication : MultiDexApplication() {
         super.onCreate()
 
         // Kakao Sdk 초기화
-        KakaoSdk.init(this, getString(R.string.kakao_native_app_key))
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
 
         Logger.addLogAdapter(AndroidLogAdapter())
     }

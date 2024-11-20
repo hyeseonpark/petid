@@ -1,3 +1,13 @@
+import java.util.Properties
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use {
+        localProperties.load(it)
+    }
+}
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -14,6 +24,9 @@ android {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "AWS_ACCESS_KEY", "\"${localProperties["AWS_ACCESS_KEY"]}\"")
+        buildConfigField("String", "AWS_SECRET_KEY", "\"${localProperties["AWS_SECRET_KEY"]}\"")
     }
 
     buildTypes {
@@ -68,4 +81,9 @@ dependencies {
 
     // Logger
     implementation("com.orhanobut:logger:2.2.0")
+
+    // AWS
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.13.5")
+    implementation("com.amazonaws:aws-android-sdk-cognito:2.13.5")
+    implementation("com.amazonaws:aws-android-sdk-s3:2.13.5")
 }

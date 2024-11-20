@@ -5,12 +5,6 @@
     <string name="notification_channel_id">PetIdChannelId</string>
     <string name="notification_channel_name">PetId</string>
 
-    <string name="google_login_client_id">920376783702-lqbm89i7kp8go8jihgop6ocatcotvtm5.apps.googleusercontent.com</string>
-
-    <string name="kakao_native_app_key">e73834f33dc8405c99f414788b9b1b23</string>
-
-    <string name="social_login_info_naver_client_id">StRE9znYGIIGSMx1WZQT</string>
-    <string name="social_login_info_naver_client_secret">CeCpvGoU8m</string>
     <string name="social_login_info_naver_client_name">네이버 아이디 로그인</string>
 
     <!-- common -->
