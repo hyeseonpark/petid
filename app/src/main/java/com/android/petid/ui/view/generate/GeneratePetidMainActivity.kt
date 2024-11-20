@@ -25,6 +25,9 @@ class GeneratePetidMainActivity : AppCompatActivity() {
         supportFragmentManager.findFragmentById(R.id.fragment_layout_generate) as NavHostFragment
     }
 
+    /**
+     * EditText 바깥 터치 시 키보드 숨기기
+     */
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
