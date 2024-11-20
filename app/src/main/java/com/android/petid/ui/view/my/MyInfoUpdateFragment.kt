@@ -48,7 +48,7 @@ class MyInfoUpdateFragment : Fragment() {
             val result = bundle.getString(BundleKeys.KEY_ADDRESS)
             binding.editTextAddress.setText(result)
         }
-    }
+    }                                                                  
 
     private fun initComponent() {
         with(binding) {
@@ -93,8 +93,6 @@ class MyInfoUpdateFragment : Fragment() {
     private fun completeDialog() {
         val dialog = CustomDialogCommon(
             getString(R.string.update_complete_dialog), {
-//                 viewModel.cancelHospitalReservationApiState(id)
-                // findNavController().popBackStack()
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             })
 

@@ -2,14 +2,13 @@ package com.android.petid.ui.view.my
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
-import com.android.petid.databinding.FragmentMyMainBinding
 import com.android.petid.databinding.FragmentPetInfoUpdateBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.viewmodel.my.PetInfoViewModel
@@ -30,6 +29,7 @@ class PetInfoUpdateFragment : Fragment() {
     ): View? {
         binding = FragmentPetInfoUpdateBinding.inflate(inflater)
         initComponent()
+        observeGetMemberInfoState()
         return binding.root
     }
 
