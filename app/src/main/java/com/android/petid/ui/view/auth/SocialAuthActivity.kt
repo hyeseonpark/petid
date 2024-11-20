@@ -162,8 +162,6 @@ class SocialAuthActivity : AppCompatActivity() {
      */
     private fun handleNaverLogin() {
         NaverIdLoginSDK.initialize(applicationContext,
-            getString(R.string.social_login_info_naver_client_id),
-            getString(R.string.social_login_info_naver_client_secret),
             BuildConfig.NAVER_CLIENT_ID,
             BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.social_login_info_naver_client_name))

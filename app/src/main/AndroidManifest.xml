@@ -3,28 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- camera 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- camera 권한 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /><!-- aws -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-    <uses-permission android:name="android.permission.CAMERA"/>
 
-    <!-- targetSDK 18 이하, 19부터는 MediaStore나 ContentProvider를 통해 접근해야함 -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- targetSDK 18 이하, 19부터는 MediaStore나 ContentProvider를 통해 접근해야함 -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
-    <!-- targetSDK 32 이하 -->
+        android:maxSdkVersion="18" /> <!-- targetSDK 32 이하 -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <!-- targetSDK 33 이상 -->
+        android:maxSdkVersion="32" /> <!-- targetSDK 33 이상 -->
     <uses-permission
         android:name="android.permission.READ_MEDIA_IMAGES"
-        android:minSdkVersion="33" />
-
-    <!-- targetSDK 34 이면서 Android OS 14 인 경우 -->
+        android:minSdkVersion="33" /> <!-- targetSDK 34 이면서 Android OS 14 인 경우 -->
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <application
@@ -51,6 +45,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true"/>
 
         <activity
             android:name=".ui.view.generate.GeneratePetidMainActivity"
@@ -97,7 +92,7 @@
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakao_native_app_key" /> <!-- 카카오 로그인, 인가코드를 받기 위한 액티비티 -->
+            android:value="${kakao_native_app_key}" /> <!-- 카카오 로그인, 인가코드를 받기 위한 액티비티 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -109,7 +104,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="kakaoe73834f33dc8405c99f414788b9b1b23" />
+                    android:scheme="kakao${kakao_native_app_key}" />
             </intent-filter>
         </activity> <!-- FCM -->
         <service
