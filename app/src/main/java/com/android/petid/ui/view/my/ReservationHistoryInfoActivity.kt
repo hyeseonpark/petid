@@ -29,7 +29,9 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
 
     private val TAG = "ReservationHistoryInfoActivity"
 
-    lateinit var cancelDialog : CustomDialogCommon
+    private lateinit var cancelDialog : CustomDialogCommon
+
+    private lateinit var hospitalReservationListAdapter : HospitalReservationListAdapter;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +47,26 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
     }
 
     private fun initComponent() {
-        binding.recyclerviewHospitalReservationList.layoutManager = LinearLayoutManager(this)
-        binding.recyclerviewHospitalReservationList.addItemDecoration(
-            DividerItemDecoration(this, LinearLayout.VERTICAL)
-        )
+
+        // adapter 초기화
+        hospitalReservationListAdapter =
+            HospitalReservationListAdapter(applicationContext) { id, status ->
+                when(status) {
+                    ReservationStatus.CONFIRMED.name -> cancelDialog(id)
+                    ReservationStatus.PENDING.name -> cancelDialog(id)
+                    ReservationStatus.CANCELLED.name -> goHospitalDetailActivity(id)
+                    ReservationStatus.COMPLETED.name -> goHospitalDetailActivity(id)
+                }
+            }
+
+        with(binding.recyclerviewHospitalReservationList) {
+            layoutManager = LinearLayoutManager(applicationContext)
+            addItemDecoration(
+                DividerItemDecoration(applicationContext, LinearLayout.VERTICAL)
+            )
+
+            adapter = hospitalReservationListAdapter
+        }
     }
 
     /**
@@ -63,21 +81,7 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
 
                         when(reservationList.isNotEmpty()) {
                             true -> {
-                                val adapter =
-                                    HospitalReservationListAdapter(
-                                        reservationList,
-                                        applicationContext
-                                    ) { id, status ->
-                                        when(status) {
-                                            ReservationStatus.CONFIRMED.name -> cancelDialog(id)
-                                            ReservationStatus.PENDING.name -> cancelDialog(id)
-                                            ReservationStatus.CANCELLED.name -> goHospitalDetailActivity(id)
-                                            ReservationStatus.COMPLETED.name -> goHospitalDetailActivity(id)
-                                        }
-                                    }
-
-                                binding.recyclerviewHospitalReservationList.adapter = adapter
-
+                                hospitalReservationListAdapter.submitList(reservationList)
                                 isDataAvailable(true)
                             }
                             false -> isDataAvailable(false)
