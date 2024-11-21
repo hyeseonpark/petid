@@ -12,17 +12,21 @@
     <string name="confirm">확인</string>
     <string name="start">시작하기</string>
     <string name="last">마지막</string>
+
     <string name="gender">성별</string>
     <string name="male">남</string>
     <string name="female">여</string>
+
     <string name="Y">Y</string>
     <string name="N">N</string>
     <string name="yes">예</string>
     <string name="no">아니오</string>
+
     <string name="main_home">홈</string>
     <string name="main_hospital">등록대행병원</string>
     <string name="main_blog">펫블로그</string>
     <string name="main_my">my</string>
+
     <string name="search">검색</string>
     <string name="type">품종</string>
     <string name="feature">특징</string>
@@ -40,6 +44,7 @@
     <string name="update">수정</string>
     <string name="like">좋아요</string>
     <string name="share">공유하기</string>
+
     <string name="to_owner">보호자 %s</string>
     <string name="neutering">중성화 %s</string>
     <string name="to_kg">%dkg</string>
@@ -154,6 +159,9 @@
 
     <!-- hospital fragment -->
     <string name="main_hospital_title">병원 예약</string>
+    <string name="sido_title">시/도</string>
+    <string name="sigungu_title">시/군/구</string>
+    <string name="eupmundong_title">읍/면/동</string>
 
     <!-- hospital detail -->
     <string name="hospital_make_reservation">방문 예약하기</string>

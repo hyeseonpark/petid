@@ -54,8 +54,6 @@ class HospitalReservationListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // holder.bindHospitalReservationInfo(currentList[position])
-
         val item = currentList[position]
         with(holder) {
 

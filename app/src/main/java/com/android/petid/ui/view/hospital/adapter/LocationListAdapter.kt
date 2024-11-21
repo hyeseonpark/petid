@@ -3,26 +3,35 @@ package com.android.petid.ui.view.hospital.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
 import com.android.petid.databinding.ItemLocationBinding
 
 class LocationListAdapter(
-    private val locationList: ArrayList<LocationEntity>,
     private val mContext: Context,
     private val onItemClick: (LocationEntity) -> Unit
-) : RecyclerView.Adapter<LocationListAdapter.Holder>() {
+) : ListAdapter<LocationEntity, LocationListAdapter.Holder>(diffUtil) {
+
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<LocationEntity>() {
+            override fun areContentsTheSame(oldItem: LocationEntity, newItem: LocationEntity) =
+                oldItem == newItem
+
+            override fun areItemsTheSame(oldItem: LocationEntity, newItem: LocationEntity) =
+                oldItem.id == newItem.id
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = ItemLocationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return Holder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return locationList.size
-    }
-
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val locationItem = locationList[position]
+        val locationItem = currentList[position]
         with(holder) {
             name.text = locationItem.name
 
