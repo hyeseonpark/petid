@@ -1,6 +1,7 @@
 package com.android.petid.ui.view.hospital
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -8,8 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
-import com.android.petid.common.Constants
+import com.android.petid.R
+import com.android.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
+import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
+import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
 import com.android.petid.databinding.FragmentLocationBottomSheetBinding
 import com.android.petid.ui.view.hospital.adapter.LocationListAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -20,6 +25,8 @@ class LocationBottomSheetFragment : BottomSheetDialogFragment() {
     lateinit var binding: FragmentLocationBottomSheetBinding
     private var locationList: List<LocationEntity>? = null
     private var locationType: Int? = null
+
+    private lateinit var locationListAdapter : LocationListAdapter
 
     companion object {
         const val TAG = "LocationBottomSheetFragment"
@@ -41,43 +48,43 @@ class LocationBottomSheetFragment : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentLocationBottomSheetBinding.inflate(inflater)
 
-        locationList = arguments?.getParcelableArrayList("locationList")
-        locationType = arguments?.getInt("locationType")
-
-        if (locationType == Constants.LOCATION_SIDO_TYPE) {
-            binding.textViewTitle.text = "시/도"
-        } else if (locationType == Constants.LOCATION_SIGUNGU_TYPE) {
-            binding.textViewTitle.text = "시/군/구"
-        } else if (locationType == Constants.LOCATION_EUPMUNDONG_TYPE) {
-            binding.textViewTitle.text = "읍/면/동"
-        }
-
         initLocationList()
-
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     private fun initLocationList() {
-        binding.recyclerviewLocationList.layoutManager = LinearLayoutManager(requireContext())
+        locationList = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelableArrayList("locationList", LocationEntity::class.java)!!
+        } else {
+            arguments?.getParcelableArrayList("locationList")
+        }
+
+        locationType = arguments?.getInt("locationType")
+
+        binding.textViewTitle.text = when(locationType) {
+            LOCATION_SIDO_TYPE ->  getString(R.string.sido_title)
+            LOCATION_SIGUNGU_TYPE -> getString(R.string.sigungu_title)
+            LOCATION_EUPMUNDONG_TYPE -> getString(R.string.eupmundong_title)
+            else -> return
+        }
+
+        locationListAdapter = LocationListAdapter(requireContext()) { item ->
+            val result = Bundle().apply {
+                putParcelable("selectedItem", item)
+                putInt("locationType", locationType ?: 0)
+            }
+            setFragmentResult("locationItemSelected", result)
+            dismiss()
+        }
+
+        binding.recyclerviewLocationList.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = locationListAdapter
+        }
 
         locationList?.let { list ->
             val locationItems = list.map { LocationEntity(it.id, it.name) }
-
-            val locationListAdapter = activity?.let {
-                LocationListAdapter(ArrayList(locationItems), it) { item ->
-                    val result = Bundle().apply {
-                        putParcelable("selectedItem", item)
-                        putInt("locationType", locationType ?: 0)
-                    }
-                    setFragmentResult("locationItemSelected", result)
-                    dismiss()
-                }
-            }
-            binding.recyclerviewLocationList.adapter = locationListAdapter
+            locationListAdapter.submitList(locationItems)
         }
     }
 

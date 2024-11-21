@@ -38,6 +38,8 @@ class HomeMainFragment : Fragment() {
 
     private val TAG = "HomeMainFragment"
 
+    // banner adapter
+    private lateinit var bannerAdapter : HomeBannerAdapter
     // 배너
     private var bannerPosition = 0
     private var homeBannerHandler = HomeBannerHandler()
@@ -90,6 +92,13 @@ class HomeMainFragment : Fragment() {
                 startActivity(intent)
             }
 
+            bannerAdapter = HomeBannerAdapter(requireContext())
+            viewPagerBanner1.apply {
+                orientation = ViewPager2.ORIENTATION_HORIZONTAL
+                adapter = bannerAdapter
+                setCurrentItem(bannerPosition, false) //시작 위치 지정
+            }
+
             // Debug 상태에선 로고 클릭시 카드 타입 변경 가능
             if(BuildConfig.DEBUG) {
                 imageViewLogo.setOnClickListener {
@@ -105,19 +114,12 @@ class HomeMainFragment : Fragment() {
     /**
      * 배너 초기화
      */
-    @SuppressLint("NotifyDataSetChanged")
     private fun initBanner(bannerList: List<BannerEntity>) {
-
-        val bannerAdapter = activity?.let { HomeBannerAdapter(bannerList, it) }
-        bannerAdapter?.notifyDataSetChanged()
+        bannerAdapter.submitList(bannerList)
 
         // bannerList의 총 개수를 binding.textViewTotalPage.text에 설정
         val total = bannerList.size
         binding.textViewTotalPage.text = total.toString()
-
-        binding.viewPagerBanner1.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        binding.viewPagerBanner1.adapter = bannerAdapter
-        binding.viewPagerBanner1.setCurrentItem(bannerPosition, false) //시작 위치 지정
 
         binding.viewPagerBanner1.apply {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -143,13 +145,15 @@ class HomeMainFragment : Fragment() {
 
     //배너 자동 스크롤 시작하게 하는 함수
     private fun autoScrollStart(intervalTime: Long){
-        homeBannerHandler.removeMessages(0) //이거 안하면 핸들러가 여러개로 계속 늘어남
-        homeBannerHandler.sendEmptyMessageDelayed(0, intervalTime) //intervalTime만큼 반복해서 핸들러를 실행
+        homeBannerHandler.apply {
+            removeMessages(0) // 이거 안하면 핸들러가 여러개로 계속 늘어남
+            sendEmptyMessageDelayed(0, intervalTime) // intervalTime만큼 반복해서 핸들러를 실행
+        }
     }
 
     //배너 자동 스크롤 멈추게 하는 함수
     private fun autoScrollStop(){
-        homeBannerHandler.removeMessages(0) //핸들러 중지
+        homeBannerHandler.removeMessages(0) // 핸들러 중지
     }
 
     //배너 자동 스크롤 컨트롤하는 클래스
@@ -222,20 +226,22 @@ class HomeMainFragment : Fragment() {
      * @param type CHIP_TYPE 에 따른 펫아이디 카드
      */
     private fun setPetidCardType(type: String) {
-        when(type) {
-            CHIP_TYPE[0] -> {
-                binding.viewNoPetidCard.visibility = View.VISIBLE
-                binding.viewPetidCard.visibility = View.GONE
-            }
-            CHIP_TYPE[1] -> {
-                binding.viewNoPetidCard.visibility = View.GONE
-                binding.viewPetidCard.visibility = View.VISIBLE
-                binding.layoutRegister.visibility = View.VISIBLE
-            }
-            CHIP_TYPE[2] -> {
-                binding.viewNoPetidCard.visibility = View.GONE
-                binding.viewPetidCard.visibility = View.VISIBLE
-                binding.layoutRegister.visibility = View.GONE
+        with(binding) {
+            when(type) {
+                CHIP_TYPE[0] -> {
+                    viewNoPetidCard.visibility = View.VISIBLE
+                    viewPetidCard.visibility = View.GONE
+                }
+                CHIP_TYPE[1] -> {
+                    viewNoPetidCard.visibility = View.GONE
+                    viewPetidCard.visibility = View.VISIBLE
+                    layoutRegister.visibility = View.VISIBLE
+                }
+                CHIP_TYPE[2] -> {
+                    viewNoPetidCard.visibility = View.GONE
+                    viewPetidCard.visibility = View.VISIBLE
+                    layoutRegister.visibility = View.GONE
+                }
             }
         }
     }
@@ -253,22 +259,23 @@ class HomeMainFragment : Fragment() {
                             /*petImages?.takeIf { it.isNotBlank() }?.let {
                                 com.bumptech.glide.Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
                             }*/
+                            binding.apply {
+                                textViewPetNameBack.text = petName
+                                textViewPetNameFront.text = petName
+                                textViewType.text = appearance.breed
 
-                            binding.textViewPetNameBack.text = petName
-                            binding.textViewPetNameFront.text = petName
-                            binding.textViewType.text = appearance.breed
-
-                            binding.textViewAge.text = String.format(getString(R.string.to_age), petBirthDate)
-                            binding.textViewBirth.text = petBirthDate
-                            binding.textViewGender.text =
-                                listOf(genderCharToString(petSex[0]), // TODO API 수정되면 수정
-                                    String.format(getString(R.string.neutering),
-                                        booleanCharToSign(petNeuteredYn[0])))
-                                    .joinToString(", ")
-                            binding.textViewWeight.text =
-                                String.format(getString(R.string.to_kg), appearance.weight)
-                            binding.textViewFeature.text =
-                                listOf(appearance.hairColor, appearance.hairLength).joinToString(", ")
+                                textViewAge.text = String.format(getString(R.string.to_age), petBirthDate)
+                                textViewBirth.text = petBirthDate
+                                textViewGender.text =
+                                    listOf(genderCharToString(petSex[0]), // TODO API 수정되면 수정
+                                        String.format(getString(R.string.neutering),
+                                            booleanCharToSign(petNeuteredYn[0])))
+                                        .joinToString(", ")
+                                textViewWeight.text =
+                                    String.format(getString(R.string.to_kg), appearance.weight)
+                                textViewFeature.text =
+                                    listOf(appearance.hairColor, appearance.hairLength).joinToString(", ")
+                            }
                         }
                     }
                     is CommonApiState.Error -> {

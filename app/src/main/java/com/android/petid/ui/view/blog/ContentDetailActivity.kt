@@ -4,26 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
-import android.view.View
-import android.widget.LinearLayout
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
 import com.android.petid.databinding.ActivityContentDetailBinding
-import com.android.petid.databinding.ActivityHospitalDetailBinding
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.view.hospital.HospitalDetailActivity
 import com.android.petid.ui.view.blog.adapter.HospitalListAdapter
-import com.android.petid.viewmodel.blog.BlogMainViewModel
+import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.viewmodel.blog.ContentDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -32,7 +23,6 @@ import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 @AndroidEntryPoint
@@ -63,7 +53,15 @@ class ContentDetailActivity : AppCompatActivity() {
             viewModel.doContentLike()
         }
 
-        binding.recyclerviewHospitalRecommendList.layoutManager = LinearLayoutManager(this)
+        val hospitalListAdapter = HospitalListAdapter( this@ContentDetailActivity) { item ->
+            val intent = Intent(this, HospitalActivity::class.java)
+                .putExtra("hospitalDetail", item)
+            startActivity(intent)
+        }
+        binding.recyclerviewHospitalRecommendList.apply {
+            layoutManager = LinearLayoutManager(applicationContext)
+            adapter = hospitalListAdapter
+        }
 
         // TODO temp
         val hospitalList: List<HospitalEntity> = listOf(
@@ -90,13 +88,7 @@ class ContentDetailActivity : AppCompatActivity() {
                 vet = "이영국"
             ))
 
-        val hospitalListAdapter = HospitalListAdapter(hospitalList, this@ContentDetailActivity) { item ->
-            val intent = Intent(this, HospitalDetailActivity::class.java)
-                .putExtra("hospitalDetail", item)
-            startActivity(intent)
-        }
-        binding.recyclerviewHospitalRecommendList.adapter = hospitalListAdapter
-
+        hospitalListAdapter.submitList(hospitalList)
     }
 
     /**

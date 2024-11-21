@@ -6,24 +6,35 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.domain.entity.BannerEntity
+import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
 import com.bumptech.glide.Glide
 
 class HomeBannerAdapter(
-    private val imageList: List<BannerEntity>,
     private val mContext: Context
-): RecyclerView.Adapter<HomeBannerAdapter.CustomViewHolder>() {
+): ListAdapter<BannerEntity, HomeBannerAdapter.CustomViewHolder>(diffUtil) {
 
-    private val total: Int = imageList.size
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<BannerEntity>() {
+            override fun areContentsTheSame(oldItem: BannerEntity, newItem: BannerEntity) =
+                oldItem == newItem
+
+            override fun areItemsTheSame(oldItem: BannerEntity, newItem: BannerEntity) =
+                oldItem.id == newItem.id
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_banner, parent, false)
         return CustomViewHolder(view).apply {
             itemView.setOnClickListener {
-                val curPosition = this.position
+                val curPosition = this.layoutPosition
                 // 클릭 시 관련 페이지로 이동하기
-                Toast.makeText(mContext, imageList[curPosition % total].text, Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext, currentList[curPosition % currentList.size].text, Toast.LENGTH_SHORT).show()
 //                val intent = Intent(mContext, DetailActivity::class.java)
 //                mContext.startActivity(intent)
             }
@@ -31,9 +42,12 @@ class HomeBannerAdapter(
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        when (val imgUrl = imageList[position % total].imageUrl) {
-            "" -> Glide.with(mContext).load(mContext.getDrawable(R.drawable.layout_home_banner_background)).into(holder.img)
-            else -> Glide.with(mContext).load(imgUrl).into(holder.img)
+        if (currentList.size != 0) {
+            val img = when (val imgUrl = currentList[position % currentList.size].imageUrl) {
+                "" -> mContext.getDrawable(R.drawable.layout_home_banner_background)
+                else -> imgUrl
+            }
+            Glide.with(mContext).load(img).into(holder.img)
         }
 
     }

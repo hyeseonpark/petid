@@ -30,7 +30,8 @@ class BlogMainFragment : Fragment() {
 
     private val TAG = "BlogMainFragment"
 
-    lateinit var contentList : List<ContentEntity>
+    private lateinit var contentList : List<ContentEntity>
+    private lateinit var contentListAdapter : ContentListAdapter
     var currentCategory = ContentCategoryType.RECOMMENDED
 
     override fun onCreateView(
@@ -55,30 +56,39 @@ class BlogMainFragment : Fragment() {
     }
 
     private fun initComponent() {
-        binding.recyclerviewBlogContentList.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerviewBlogContentList.addItemDecoration(
-            DividerItemDecoration(context, LinearLayout.VERTICAL)
-        )
+        with(binding) {
+            contentListAdapter = ContentListAdapter( requireActivity(), { viewModel.doContentLike(it) })
+            { contentId ->
+                val intent = Intent(activity, ContentDetailActivity::class.java)
+                    .putExtra("contentId", contentId)
+                startActivity(intent)
+            }
+            recyclerviewBlogContentList.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+                adapter = contentListAdapter
+            }
 
-        binding.tabLayoutBlogMain.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                currentCategory = when (tab?.position) {
-                    0 -> ContentCategoryType.RECOMMENDED
-                    1 -> ContentCategoryType.ABOUTPET
-                    2 -> ContentCategoryType.TIPS
-                    3 -> ContentCategoryType.VENUE
-                    4 -> ContentCategoryType.SUPPORT
-                    else -> ContentCategoryType.ALL
+            tabLayoutBlogMain.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    currentCategory = when (tab?.position) {
+                        0 -> ContentCategoryType.RECOMMENDED
+                        1 -> ContentCategoryType.ABOUTPET
+                        2 -> ContentCategoryType.TIPS
+                        3 -> ContentCategoryType.VENUE
+                        4 -> ContentCategoryType.SUPPORT
+                        else -> ContentCategoryType.ALL
+                    }
+                    viewModel.getContentList(currentCategory)
                 }
-                viewModel.getContentList(currentCategory)
-            }
 
-            override fun onTabUnselected(p0: TabLayout.Tab?) {
-            }
+                override fun onTabUnselected(p0: TabLayout.Tab?) {
+                }
 
-            override fun onTabReselected(p0: TabLayout.Tab?) {
-            }
-        })
+                override fun onTabReselected(p0: TabLayout.Tab?) {
+                }
+            })
+        }
     }
 
     /**
@@ -93,17 +103,7 @@ class BlogMainFragment : Fragment() {
 
                         when(contentList.isNotEmpty()) {
                             true -> {
-                                val contentListAdapter =
-                                    ContentListAdapter(contentList, requireActivity(), {
-                                        viewModel.doContentLike(it)
-                                    }) { contentId ->
-                                        val intent = Intent(activity, ContentDetailActivity::class.java)
-                                            .putExtra("contentId", contentId)
-                                        startActivity(intent)
-                                    }
-
-                                binding.recyclerviewBlogContentList.adapter = contentListAdapter
-
+                                contentListAdapter.submitList(contentList)
                                 visibleLayoutDataAvailable(true)
                             }
                             false -> visibleLayoutDataAvailable(false)
@@ -152,11 +152,15 @@ class BlogMainFragment : Fragment() {
                     is CommonApiState.Success -> {
                         val result = result.data
 
-                        val updatedContent = contentList.find { it.contentId == result.contentId }
-                        updatedContent?.isLiked = true
-                        updatedContent?.likesCount = result.likeCount
+                        val index = contentList.indexOfFirst { it.contentId == result.contentId }
+                        if (index != -1) {
+                            contentList[index].apply {
+                                isLiked = true
+                                likesCount = result.likeCount
+                            }
+                        }
 
-                        binding.recyclerviewBlogContentList.adapter?.notifyDataSetChanged()
+                        contentListAdapter.submitList(contentList)
                     }
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")

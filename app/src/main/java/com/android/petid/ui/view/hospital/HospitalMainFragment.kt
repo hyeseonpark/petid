@@ -1,6 +1,7 @@
 package com.android.petid.ui.view.hospital
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,12 +25,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+/**
+ * 메인 > 등록대행병원
+ */
 @AndroidEntryPoint
 class HospitalMainFragment : Fragment() {
     lateinit var binding: FragmentHospitalMainBinding
     private val viewModel: HospitalMainViewModel by activityViewModels()
 
     private val TAG = "HospitalMainFragment"
+
+    private lateinit var hospitalListAdapter : HospitalListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,16 +61,20 @@ class HospitalMainFragment : Fragment() {
         requireActivity().supportFragmentManager.setFragmentResultListener(
             "locationItemSelected", this
         ) { _, bundle ->
-            val selectedItem = bundle.getParcelable<LocationEntity>("selectedItem")
+
+            val selectedItem = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable("selectedItem", LocationEntity::class.java)!!
+            } else {
+                (bundle.getParcelable("selectedItem") as? LocationEntity)!!
+            }
+
             val locationType = bundle.getInt("locationType")
 
-            selectedItem?.let {
-                if (locationType == LOCATION_SIDO_TYPE) {
-                    viewModel.updateCurrentSidoState(it)
-                } else if (locationType == LOCATION_SIGUNGU_TYPE) {
-                     viewModel.updateCurrentSigunguState(it)
-                } else if (locationType == LOCATION_EUPMUNDONG_TYPE) {
-                    viewModel.updateCurrentEupmundongState(it)
+            selectedItem.let {
+                when(locationType) {
+                    LOCATION_SIDO_TYPE -> viewModel.updateCurrentSidoState(it)
+                    LOCATION_SIGUNGU_TYPE -> viewModel.updateCurrentSigunguState(it)
+                    LOCATION_EUPMUNDONG_TYPE -> viewModel.updateCurrentEupmundongState(it)
                 }
             }
         }
@@ -77,31 +87,37 @@ class HospitalMainFragment : Fragment() {
 
 
     private fun initComponent() {
-        binding.recyclerviewHospitalList.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerviewHospitalList.addItemDecoration(
-            DividerItemDecoration(context, LinearLayout.VERTICAL))
+        with(binding) {
+            hospitalListAdapter = HospitalListAdapter(requireActivity()) { item ->
+                val intent = Intent(activity, HospitalActivity::class.java)
+                    .putExtra("hospitalDetail", item)
+                startActivity(intent)
+            }
+            recyclerviewHospitalList.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                addItemDecoration(
+                    DividerItemDecoration(context, LinearLayout.VERTICAL))
+                adapter = hospitalListAdapter
+            }
 
-        binding.buttonSido.setOnClickListener{
-            viewModel.currentSidoList?.let { data -> modalBottomSheet(LOCATION_SIDO_TYPE, data) }
-        }
+            buttonSido.setOnClickListener{
+                viewModel.currentSidoList?.let { data -> modalBottomSheet(LOCATION_SIDO_TYPE, data) }
+            }
 
-        binding.buttonSigungu.setOnClickListener{
-            viewModel.currentSigunguList?.let { data -> modalBottomSheet(LOCATION_SIGUNGU_TYPE, data) }
-        }
+            buttonSigungu.setOnClickListener{
+                viewModel.currentSigunguList?.let { data -> modalBottomSheet(LOCATION_SIGUNGU_TYPE, data) }
+            }
 
-        binding.buttonEupmundong.setOnClickListener{
-            viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
+            buttonEupmundong.setOnClickListener{
+                viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
+            }
+
         }
     }
 
-    fun newInstant() : HospitalMainFragment
-    {
-        val args = Bundle()
-        val frag = HospitalMainFragment()
-        frag.arguments = args
-        return frag
-    }
-
+    /**
+     * 시,도 결과값
+     */
     private fun observeCurrentSidoState() {
         lifecycleScope.launch {
             viewModel.currentSidoState.collect { sido ->
@@ -113,6 +129,9 @@ class HospitalMainFragment : Fragment() {
         }
     }
 
+    /**
+     * 시,군,구 결과값
+     */
     private fun observeCurrentSigunguState() {
         lifecycleScope.launch {
             viewModel.currentSigunguState.collect { sigungu ->
@@ -124,6 +143,9 @@ class HospitalMainFragment : Fragment() {
         }
     }
 
+    /**
+     * 읍,면,동 결과값
+     */
     private fun observeCurrentEupmundongState() {
         lifecycleScope.launch {
             viewModel.currentEupmundongState.collect { eupmundong ->
@@ -144,13 +166,7 @@ class HospitalMainFragment : Fragment() {
                 when (result) {
                     is CommonApiState.Success -> {
                         val hospitalList = result.data
-
-                        val hospitalListAdapter = HospitalListAdapter(hospitalList, requireActivity()) { item ->
-                            val intent = Intent(activity, HospitalActivity::class.java)
-                                .putExtra("hospitalDetail", item)
-                            startActivity(intent)
-                        }
-                        binding.recyclerviewHospitalList.adapter = hospitalListAdapter
+                        hospitalListAdapter.submitList(hospitalList)
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리
@@ -164,6 +180,10 @@ class HospitalMainFragment : Fragment() {
             }
         }
     }
+
+    /**
+     * 하단에서 올라오는 modal 구현
+     */
     private fun modalBottomSheet(locationType: Int, locationList: List<LocationEntity>) {
         val bottomSheet = LocationBottomSheetFragment.newInstance(locationType, locationList)
         bottomSheet.show(requireActivity().supportFragmentManager, LocationBottomSheetFragment.TAG)

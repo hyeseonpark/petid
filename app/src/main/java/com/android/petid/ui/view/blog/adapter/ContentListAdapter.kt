@@ -2,13 +2,13 @@ package com.android.petid.ui.view.blog.adapter
 
 import android.content.Context
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.domain.entity.ContentEntity
-import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
 import com.android.petid.databinding.ItemBlogContentBinding
 import com.android.petid.enum.ContentCategoryType
@@ -16,18 +16,36 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
 
 class ContentListAdapter(
-    private val contentList: List<ContentEntity>,
     private val mContext: Context,
     private val doLike: (Int) -> Unit,
     private val onItemClick: (Int) -> Unit
-) : RecyclerView.Adapter<ContentListAdapter.Holder>() {
+) : ListAdapter<ContentEntity, ContentListAdapter.Holder>(diffUtil) {
+
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<ContentEntity>() {
+            override fun areContentsTheSame(oldItem: ContentEntity,newItem: ContentEntity) =
+                oldItem == newItem
+
+            override fun areItemsTheSame(oldItem: ContentEntity, newItem: ContentEntity) =
+                oldItem.contentId == newItem.contentId
+        }
+    }
+
+    inner class Holder(val binding: ItemBlogContentBinding) : RecyclerView.ViewHolder(binding.root) {
+        val imageViewContentPreview = binding.imageViewContentPreview
+        val title = binding.textViewContentTitle
+        val body = binding.textViewContentBody
+        val likeButton = binding.buttonContentLike
+        val contentTypeTextView = binding.textViewContentCategory
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContentListAdapter.Holder {
         val binding = ItemBlogContentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return Holder(binding)
     }
 
     override fun onBindViewHolder(holder: ContentListAdapter.Holder, position: Int) {
-        val contentItem = contentList[position]
+        val contentItem = currentList[position]
         with(holder) {
             contentTypeTextView.text = when(contentItem.category) {
                 ContentCategoryType.RECOMMENDED.name -> mContext.getString(R.string.tab_recommendation_title)
@@ -73,17 +91,6 @@ class ContentListAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return contentList.size
-    }
-
-    inner class Holder(val binding: ItemBlogContentBinding) : RecyclerView.ViewHolder(binding.root) {
-        val imageViewContentPreview = binding.imageViewContentPreview
-        val title = binding.textViewContentTitle
-        val body = binding.textViewContentBody
-        val likeButton = binding.buttonContentLike
-        val contentTypeTextView = binding.textViewContentCategory
-    }
 
     /**
      * 글자 수 관계 없이 말 줄임표 붙이기
