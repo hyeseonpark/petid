@@ -33,19 +33,27 @@ interface MemberAPI {
     ): UpdateMemberInfoResponse
 
     /**
-     * 1-1.3 회원 정보 저장 여부 조회 API
+     * 1-1.3 회원 프로필 사진 업데이트 API
+     */
+    @POST("/v1/member/image")
+    suspend fun updateMemberPhoto(
+        @Body filePath: String
+    ): String
+
+    /**
+     * 1-1.4 회원 정보 저장 여부 조회 API
      */
     @GET("/v1/member/auth")
     suspend fun checkMemberInfoSaved(): Boolean
 
     /**
-     * 1-1.4 회원 정보 조회 API
+     * 1-1.5 회원 정보 조회 API
      */
     @GET("/v1/member")
     suspend fun getMemberInfo(): MemberInfoResponse
 
     /**
-     * 1-1.5 회원 프로필사진 업로드 API
+     * 1-1.6 회원 프로필사진 업로드 API (S3)
      */
     @POST("/v1/member/images/presigned-url")
     suspend fun uploadProfileImage(
@@ -53,10 +61,10 @@ interface MemberAPI {
     ): String
 
     /**
-     * 1-1.6 회원 프로필사진 조회 API
+     * 1-1.7 회원 프로필사진 조회 API
      */
     @GET("/v1/member/images/presigned-url")
     suspend fun getProfileImageUrl(
-        @Query("path") imagePath: String
+        @Query("filePath") imagePath: String
     ): String
 }
