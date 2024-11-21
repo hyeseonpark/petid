@@ -14,18 +14,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.databinding.ActivityMyInfoBinding
 import com.android.petid.databinding.FragmentMyInfoDetailBinding
-import com.android.petid.databinding.FragmentMyInfoUpdateBinding
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.util.bitmapToFile
+import com.android.petid.util.getRandomFileName
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +47,9 @@ class MyInfoDetailFragment : Fragment() {
         initComponent()
         viewModel.getMemberInfo()
         observeGetMemberInfoState()
+        observeGetMemberImage()
+        observeUploadS3ResultState()
+        observeUpdateMemberPhotoResultState()
         return binding.root
     }
 
@@ -64,7 +64,6 @@ class MyInfoDetailFragment : Fragment() {
             }
             requestCameraPermission()
 
-            // Glide.with(this).load(R.drawable.myimage).circleCrop().into(binding.imageViewProfile);
             imageViewProfile.setOnClickListener{
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.setType("image/*")
@@ -82,23 +81,31 @@ class MyInfoDetailFragment : Fragment() {
                 val currentImageUri = it.data?.data
                 try {
                     currentImageUri?.let {
-                        if(Build.VERSION.SDK_INT < 28) {
-                            val bitmap = MediaStore.Images.Media.getBitmap(
+                        val bitmap = if(Build.VERSION.SDK_INT < 28) {
+                            MediaStore.Images.Media.getBitmap(
                                 requireContext().contentResolver,
                                 currentImageUri
                             )
-                            // view에 이미지 적용
-                            binding.imageViewProfile.setImageBitmap(bitmap)
                         } else {
-                            val source = ImageDecoder.createSource(requireContext().contentResolver, currentImageUri)
-                            val bitmap = ImageDecoder.decodeBitmap(source)
-                            // view에 이미지 적용
-                            binding.imageViewProfile.setImageBitmap(bitmap)
+                            val source = ImageDecoder.createSource(
+                                requireContext().contentResolver, currentImageUri)
+                            ImageDecoder.decodeBitmap(source)
+                        }
+                        // 파일 생성
+                        val file = bitmapToFile(requireContext(), bitmap, "profile_image.jpg")
+
+                        // s3 bucket 에 파일 업로드
+                        // TODO random name -> 1-1.5 회원정보조회 api에 컬럼 추가 후 수정
+                        with(viewModel) {
+                            profileImageName = when(memberImageFileName) {
+                                null -> getRandomFileName("member")
+                                else -> memberImageFileName!!
+                            }
+                            uploadFile(requireContext(), file, profileImageName)
                         }
                     }
 
-
-                }catch(e:Exception) {
+                } catch(e:Exception) {
                     e.printStackTrace()
                 }
             } else if(it.resultCode == RESULT_CANCELED){
@@ -127,19 +134,77 @@ class MyInfoDetailFragment : Fragment() {
                 when (result) {
                     is CommonApiState.Success -> {
                         with(result.data) {
-
-                            image?.takeIf { it.isNotBlank() }?.let {
-                                Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
+                            //TODO 좋은 문법인가?
+                            binding.apply {
+                                textViewName.text = name
+                                textViewPhoneNumber.text = phone
+                                textViewAddress.text =
+                                    listOfNotNull(address, addressDetails)
+                                        .filter { it.isNotBlank() }
+                                        .joinToString("\n")
                             }
-
-                            binding.textViewName.text = name
-                            // binding.textViewBirth.text =
-                            binding.textViewPhoneNumber.text = phone
-                            binding.textViewAddress.text =
-                                listOfNotNull(address, addressDetails)
-                                .filter { it.isNotBlank() }
-                                .joinToString("\n")
                         }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.getMemberImageResult 결과값 view 반영
+     */
+    private fun observeGetMemberImage() {
+        lifecycleScope.launch {
+            viewModel.getMemberImageResult.collectLatest { result ->
+                when {
+                    result.isSuccess -> {
+                        result.getOrNull()?.takeIf { it.isNotBlank() }?.let {
+                            Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
+                        }
+                    }
+                    result.isFailure -> {
+                        val exception = result.exceptionOrNull()
+                        Log.d(TAG, exception?.message.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.uploadFile 결과값 반영
+     */
+    private fun observeUploadS3ResultState() {
+        lifecycleScope.launch {
+            viewModel.uploadS3Result.collectLatest { result ->
+                when {
+                    result.isSuccess -> {
+                        viewModel.updateMemberPhoto(viewModel.profileImageName)
+                    }
+                    result.isFailure -> {
+                        val exception = result.exceptionOrNull()
+                        Log.d(TAG, exception?.message.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.uploadFile 결과값 반영
+     */
+    private fun observeUpdateMemberPhotoResultState() {
+        lifecycleScope.launch {
+            viewModel.updateMemberPhotoResult.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        viewModel.getMemberInfo()
                     }
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")

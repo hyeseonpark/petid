@@ -65,4 +65,20 @@ class MyInfoRepositoryImpl @Inject constructor(
             ApiResult.Error(e.message)
         }
     }
+
+    override suspend fun updateMemberPhoto(filePath: String): ApiResult<String> {
+        return try {
+            val response = memberAPI.updateMemberPhoto(filePath)
+            ApiResult.Success(response)
+        } catch (e: HttpException) {
+            val gson = Gson()
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+
+            ApiResult.HttpError(errorResponse.toDomain())
+
+        } catch (e: Exception) {
+            ApiResult.Error(e.message)
+        }
+    }
 }

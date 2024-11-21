@@ -1,18 +1,15 @@
 package com.android.petid.util
 
-import android.app.Activity
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -55,7 +52,7 @@ fun setBoldSpan(context: Context, content: String, word: String, color: Int) : S
 }
 
 /**
- * 오늘 날짜
+ * 오늘 날짜(yyyy-MM-dd)
  */
  fun getCurrentDate(): String {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -66,4 +63,30 @@ fun formatDateToISO8601(date: Date): String {
     val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
     isoFormat.timeZone = TimeZone.getTimeZone("UTC") // UTC 시간대로 설정
     return isoFormat.format(date)
+}
+
+
+/**
+ *  Bitmap to File
+ */
+fun bitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File {
+    // 임시 파일 경로
+    val file = File(context.cacheDir, fileName)
+    // 파일에 Bitmap을 저장
+    val fileOutputStream = FileOutputStream(file)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+    fileOutputStream.flush()
+    fileOutputStream.close()
+    return file
+}
+
+/**
+ * generate random name
+ */
+fun getRandomFileName(dir: String): String {
+    val characters = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+    val randomName = (1..10)
+        .map { characters.random() }
+        .joinToString("")
+    return "$dir/$randomName.jpg"
 }
