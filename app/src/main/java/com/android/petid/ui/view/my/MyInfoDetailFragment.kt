@@ -61,9 +61,7 @@ class MyInfoDetailFragment
 
     private fun initComponent() {
         with(binding) {
-            buttonBack.setOnClickListener {
-                activity?.finish()
-            }
+            buttonBack.setOnClickListener { activity?.finish() }
             textViewUpdate.setOnClickListener{
                 findNavController().navigate(R.id.action_myInfoDetailFragment_to_myInfoUpdateFragment)
             }
@@ -125,7 +123,7 @@ class MyInfoDetailFragment
      */
     private fun requestCameraPermission() {
         val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+            Log.d(TAG, "camera permission: $it")
         }
         permissionLauncher.launch(android.Manifest.permission.CAMERA)
     }

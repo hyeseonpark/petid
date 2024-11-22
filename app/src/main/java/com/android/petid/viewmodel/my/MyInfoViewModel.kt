@@ -30,11 +30,17 @@ class MyInfoViewModel @Inject constructor(
     /* 서버에서 받은 파일명, nullable */
     var memberImageFileName: String? = null
 
+
     /* Member info result */
     private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
         CommonApiState.Loading
     )
     val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
+
+    /* Member info update result */
+    private val _updateMemberInfoResult = MutableSharedFlow<CommonApiState<Boolean>>()
+    val updateMemberInfoResult = _updateMemberInfoResult.asSharedFlow()
+
 
     /* image result: S3 */
     private val _getMemberImageResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Loading)
@@ -128,6 +134,25 @@ class MyInfoViewModel @Inject constructor(
                 }
                 is ApiResult.Error -> {
                     _updateMemberPhotoResult.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
+    /**
+     * 회원 정보 업데이트
+     */
+    fun updateMemberInfo(address: String, addressDetails: String, phone: String) {
+        viewModelScope.launch {
+            when (val result = myInfoRepository.updateMemberInfo(address, addressDetails, phone)) {
+                is ApiResult.Success -> {
+                    _updateMemberInfoResult.emit(CommonApiState.Success(true))
+                }
+                is ApiResult.HttpError -> {
+                    _updateMemberInfoResult.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _updateMemberInfoResult.emit(CommonApiState.Error(result.errorMessage))
                 }
             }
         }

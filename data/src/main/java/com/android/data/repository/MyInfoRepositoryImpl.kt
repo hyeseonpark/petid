@@ -1,6 +1,7 @@
 package com.android.data.repository
 
 import com.android.data.api.MemberAPI
+import com.android.data.dto.request.UpdateMemberInfoRequest
 import com.android.data.dto.response.ErrorResponse
 import com.android.data.dto.response.toDomain
 import com.android.domain.entity.MemberInfoEntity
@@ -57,10 +58,11 @@ class MyInfoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateMemberInfo(
-        name: String, address: String, addressDetail: String, phone: String
+        address: String, addressDetail: String, phone: String
     ): ApiResult<UpdateMemberInfoEntity> {
         return try {
-            val response = memberAPI.updateMemberInfo(name, address,addressDetail,phone)
+            val response = memberAPI.updateMemberInfo(
+                UpdateMemberInfoRequest(address, addressDetail, phone))
             ApiResult.Success(response.toDomain())
         } catch (e: HttpException) {
             val gson = Gson()

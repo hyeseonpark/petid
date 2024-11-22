@@ -1,5 +1,6 @@
 package com.android.data.api
 
+import com.android.data.dto.request.UpdateMemberInfoRequest
 import com.android.data.dto.response.MemberInfoResponse
 import com.android.data.dto.response.UpdateMemberInfoResponse
 import retrofit2.http.Body
@@ -23,13 +24,9 @@ interface MemberAPI {
     /**
      * 1-1.2 회원 정보 업데이트 API
      */
-    @FormUrlEncoded
     @POST("/v1/member/auth")
     suspend fun updateMemberInfo(
-        @Field("name") name: String,
-        @Field("address") address: String,
-        @Field("addressDetails") addressDetails: String,
-        @Field("phone") phone: String
+        @Body request: UpdateMemberInfoRequest
     ): UpdateMemberInfoResponse
 
     /**
