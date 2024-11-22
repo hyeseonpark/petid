@@ -49,6 +49,7 @@
     <string name="neutering">중성화 %s</string>
     <string name="to_kg">%dkg</string>
     <string name="to_age">%s살</string>
+    <string name="to_vet">%s 원장</string>
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 

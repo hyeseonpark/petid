@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
+import com.android.domain.repository.BlogMainRepository
 import com.android.domain.usecase.hospital.GetEupmundongUseCase
 import com.android.domain.usecase.hospital.GetHospitalListUseCase
 import com.android.domain.usecase.hospital.GetSidoUseCase
@@ -23,6 +24,7 @@ class HospitalMainViewModel @Inject constructor(
     private val getSigunguUseCase: GetSigunguUseCase,
     private val getEupmundongUseCase: GetEupmundongUseCase,
     private val getHospitalListUseCase: GetHospitalListUseCase,
+    private val blogMainRepository: BlogMainRepository, // temporary
     private val savedStateHandle: SavedStateHandle
     ): ViewModel() {
 
@@ -173,14 +175,24 @@ class HospitalMainViewModel @Inject constructor(
     /**
      * 병원 목록 조회
      */
-    fun getHospitalList() {
+    private fun getHospitalList() {
         viewModelScope.launch {
             when (val result = getHospitalListUseCase(
                 currentSidoState.value!!.id,
                 currentSigunguState.value!!.id,
                 currentEupmundongState.value!!.id)) {
                 is ApiResult.Success -> {
-                    _hospitalApiState.emit(CommonApiState.Success(result.data))
+                    var hospitalList = result.data
+
+                    hospitalList = hospitalList.map { item ->
+                        val hospitalImageUrl = when (item.imageUrl.size) {
+                            0 -> ""
+                            else -> getHospitalImage(item.imageUrl[0]) // 배열의 첫번째 사진
+                        }
+                        item.copy(imageUrl = listOf(hospitalImageUrl))
+                    }
+
+                    _hospitalApiState.emit(CommonApiState.Success(hospitalList))
                 }
                 is ApiResult.HttpError -> {
                     _hospitalApiState.emit(CommonApiState.Error(result.error.error))
@@ -189,6 +201,14 @@ class HospitalMainViewModel @Inject constructor(
                     _hospitalApiState.emit(CommonApiState.Error(result.errorMessage))
                 }
             }
+        }
+    }
+
+    private suspend fun getHospitalImage(filePath: String): String {
+        return try {
+            blogMainRepository.getContentImage(filePath)
+        } catch (e: Exception) {
+            ""
         }
     }
 }
