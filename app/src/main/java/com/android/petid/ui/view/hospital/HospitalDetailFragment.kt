@@ -1,20 +1,21 @@
 package com.android.petid.ui.view.hospital
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentHospitalDetailBinding
 import com.android.petid.viewmodel.hospital.HospitalViewModel
 
-class HospitalDetailFragment : Fragment() {
-    private lateinit var binding: FragmentHospitalDetailBinding
+class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(FragmentHospitalDetailBinding::inflate) {
+
+    companion object{
+        fun newInstance()= HospitalDetailFragment()
+    }
     private val viewModel: HospitalViewModel by activityViewModels()
 
     private val TAG = "HospitalDetailFragment"
@@ -22,8 +23,8 @@ class HospitalDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHospitalDetailBinding.inflate(layoutInflater)
+    ): View {
+        _binding = FragmentHospitalDetailBinding.inflate(layoutInflater)
 
         initComponent()
 

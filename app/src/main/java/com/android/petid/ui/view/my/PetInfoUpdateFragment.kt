@@ -5,10 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoUpdateBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.viewmodel.my.PetInfoViewModel
@@ -17,8 +17,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PetInfoUpdateFragment : Fragment() {
-    lateinit var binding: FragmentPetInfoUpdateBinding
+class PetInfoUpdateFragment
+    : BaseFragment<FragmentPetInfoUpdateBinding>(FragmentPetInfoUpdateBinding::inflate) {
+
+    companion object{
+        fun newInstance()= PetInfoUpdateFragment()
+    }
+
     private val viewModel: PetInfoViewModel by activityViewModels()
 
     private val TAG = "PetInfoUpdateFragment"
@@ -26,8 +31,8 @@ class PetInfoUpdateFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentPetInfoUpdateBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentPetInfoUpdateBinding.inflate(inflater)
         initComponent()
         observeGetMemberInfoState()
         return binding.root

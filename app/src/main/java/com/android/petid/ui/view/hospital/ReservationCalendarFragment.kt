@@ -19,9 +19,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.common.Constants.DAYS_OF_WEEK
+import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.databinding.FragmentReservationCalendarBinding
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.viewmodel.hospital.HospitalViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -40,8 +43,13 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class ReservationCalendarFragment : Fragment() {
-    lateinit var binding: FragmentReservationCalendarBinding
+class ReservationCalendarFragment:
+    BaseFragment<FragmentReservationCalendarBinding>(FragmentReservationCalendarBinding::inflate) {
+
+    companion object{
+        fun newInstance()= ReservationCalendarFragment()
+    }
+
     private val viewModel: HospitalViewModel by activityViewModels()
 
     private val TAG = "ReservationCalendarFragment"
@@ -49,8 +57,8 @@ class ReservationCalendarFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentReservationCalendarBinding.inflate(layoutInflater)
+    ): View {
+        _binding = FragmentReservationCalendarBinding.inflate(layoutInflater)
 
         initComponent()
 
