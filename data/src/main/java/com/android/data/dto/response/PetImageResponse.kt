@@ -5,7 +5,7 @@ import com.android.domain.entity.PetImageEntity
 data class PetImageResponse(
     val petImageId: Int,
     val petId: Int,
-    val imagePath: Int,
+    val imagePath: String,
 )
 
 fun PetImageResponse.toDomain() = PetImageEntity(

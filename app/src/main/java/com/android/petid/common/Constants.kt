@@ -6,6 +6,8 @@ object Constants {
     const val SHARED_VALUE_ACCESS_TOKEN: String = "accessToken"
     const val SHARED_VALUE_REFRESH_TOKEN: String = "refreshToken"
 
+    const val SHARED_PET_ID_VALUE = "petIdValue"
+
     // location type
     const val LOCATION_SIDO_TYPE = 0
     const val LOCATION_SIGUNGU_TYPE = 1

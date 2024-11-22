@@ -73,7 +73,7 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
                 app:shapeAppearanceOverlay="@style/CircleImageView"
-                android:src="#D9D9D9"
+                android:src="@color/d9"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
