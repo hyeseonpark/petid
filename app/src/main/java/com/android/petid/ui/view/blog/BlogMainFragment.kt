@@ -64,12 +64,12 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
 
     private fun initComponent() {
         with(binding) {
-            contentListAdapter = ContentListAdapter( requireActivity(), { viewModel.doContentLike(it) })
-            { contentId ->
-                val intent = Intent(activity, ContentDetailActivity::class.java)
-                    .putExtra("contentId", contentId)
-                startActivity(intent)
-            }
+            contentListAdapter =
+                ContentListAdapter(requireActivity(), { viewModel.doContentLike(it) }) { contentId ->
+                    val intent = Intent(activity, ContentDetailActivity::class.java)
+                        .putExtra("contentId", contentId)
+                    startActivity(intent)
+                }
             recyclerviewBlogContentList.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
