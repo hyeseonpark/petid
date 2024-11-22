@@ -15,6 +15,7 @@ import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -68,11 +69,11 @@ class HomeMainVIewModel @Inject constructor(
         }
     }
 
-
+    /* member 정보 가져오기 result*/
     private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
         CommonApiState.Loading
     )
-    val getMemberInfoResult: StateFlow<CommonApiState<MemberInfoEntity>> = _getMemberInfoResult
+    val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
 
     /**
      * member 정보 가져오기

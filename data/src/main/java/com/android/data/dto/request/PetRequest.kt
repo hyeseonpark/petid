@@ -13,6 +13,8 @@ package com.android.data.dto.request
  * @param chipType 칩 타입 (NA / INTERNAL / EXTERNAL)
  * @param appearance 펫 외형
  * @param petImages 펫 사진
+ * @param proposer 신청자 정보
+ * @param sign 사인 이미지 경로
  */
 data class PetRequest(
     val petRegNo: String?,
@@ -21,10 +23,12 @@ data class PetRequest(
     val petSex: Char?,
     val petNeuteredYn: Char?,
     val petNeuteredDate: String?,
-    var petAddr: String?,
+    // var petAddr: String?,
     val chipType: String?,
     val appearance: PetAppearanceRequest?,
     val petImages: List<PetImageRequest>?,
+    val proposer: PetProposerRequest?,
+    val sign: String?,
 ) {
     class Builder {
         private var petRegNo: String? = null
@@ -33,16 +37,21 @@ data class PetRequest(
         private var petSex: Char? = null
         private var petNeuteredYn: Char? = null
         private var petNeuteredDate: String? = null
-        private var petAddr: String? = null
+        // private var petAddr: String? = null
         private var chipType: String? = null
         private var appearance: PetAppearanceRequest? = null
         private var petImages: List<PetImageRequest>? = null
+        private var proposer: PetProposerRequest? = null
+        private var sign: String? = null
 
         /* PetIdStartFragment */
         fun setChipType(chipType: String) = apply { this.chipType = chipType }
 
         /* UserInfoInputFragment */
-        fun setPetAddr(petAddr: String) = apply {this.petAddr = petAddr}
+        fun setProposer(name: String, address: String, addrressDetails: String, phone: String) {
+            this.proposer = PetProposerRequest(name, address, addrressDetails, phone)
+        }
+        // fun setPetAddr(petAddr: String) = apply {this.petAddr = petAddr}
 
         /* PetInfoInputFragment */
         fun setPetInfo(petName: String, petBirthDate: String, petSex: Char,
@@ -64,9 +73,12 @@ data class PetRequest(
             return appearance
         }
 
+        /* SignatureFragment */
+        fun setSign(sign: String) = apply { this.sign = sign }
+
         fun build(): PetRequest {
             return PetRequest(petRegNo, petName, petBirthDate, petSex, petNeuteredYn,
-                petNeuteredDate, petAddr, chipType, appearance, petImages)
+                petNeuteredDate, chipType, appearance, petImages, proposer, sign)
         }
     }
 }
