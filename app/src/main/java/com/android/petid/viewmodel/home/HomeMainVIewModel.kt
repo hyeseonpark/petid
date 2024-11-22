@@ -28,9 +28,9 @@ class HomeMainVIewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _bannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val bannerApiState: StateFlow<CommonApiState<List<BannerEntity>>> = _bannerApiState
+    val bannerApiState = _bannerApiState.asStateFlow()
 
     /**
      * 배너 목록 호출 api
@@ -71,7 +71,7 @@ class HomeMainVIewModel @Inject constructor(
 
     /* member 정보 가져오기 result*/
     private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
     val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
 
@@ -96,9 +96,9 @@ class HomeMainVIewModel @Inject constructor(
     }
 
     private val _getPetDetailsResult = MutableStateFlow<CommonApiState<PetDetailsEntity>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val getPetDetailsResult: StateFlow<CommonApiState<PetDetailsEntity>> = _getPetDetailsResult
+    val getPetDetailsResult = _getPetDetailsResult.asStateFlow()
 
     /**
      * 펫 정보 가져오기

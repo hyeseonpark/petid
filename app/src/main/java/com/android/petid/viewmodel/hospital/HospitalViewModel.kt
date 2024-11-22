@@ -12,6 +12,7 @@ import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -40,17 +41,17 @@ class HospitalViewModel @Inject constructor(
      *
      */
     private val _hospitalOrderTimeApiState = MutableStateFlow<CommonApiState<List<String>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val hospitalOrderTimeApiState: StateFlow<CommonApiState<List<String>>> = _hospitalOrderTimeApiState
+    val hospitalOrderTimeApiState = _hospitalOrderTimeApiState.asStateFlow()
 
     /**
      *
      */
     private val _createHospitalOrderApiState = MutableStateFlow<CommonApiState<HospitalOrderEntity>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val createHospitalOrderApiState: StateFlow<CommonApiState<HospitalOrderEntity>> = _createHospitalOrderApiState
+    val createHospitalOrderApiState = _createHospitalOrderApiState.asStateFlow()
 
 
 

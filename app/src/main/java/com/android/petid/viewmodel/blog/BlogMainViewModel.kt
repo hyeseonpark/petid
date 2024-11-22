@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,9 +33,9 @@ class BlogMainViewModel @Inject constructor(
 
     // content api 결과값
     private val _contentListApiState = MutableStateFlow<CommonApiState<List<ContentEntity>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val contentListApiState: StateFlow<CommonApiState<List<ContentEntity>>> = _contentListApiState
+    val contentListApiState = _contentListApiState.asStateFlow()
 
     // 좋아요 결과
     private val _doLikeApiResult = MutableSharedFlow<CommonApiState<ContentLikeEntity>>()

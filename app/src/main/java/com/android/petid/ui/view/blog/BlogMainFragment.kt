@@ -124,6 +124,7 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                         Log.d(TAG, "Loading....................")
                         visibleLayoutDataAvailable(false)
                     }
+                    is CommonApiState.Init -> visibleLayoutDataAvailable(false)
                 }
             }
         }
@@ -175,6 +176,7 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

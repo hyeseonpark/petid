@@ -109,6 +109,7 @@ class TermsActivity : AppCompatActivity() {
                         // 오류 처리
 //                        Toast.makeText(this@TermsActivity, "오류 발생: ${state.message}", Toast.LENGTH_SHORT).show()
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

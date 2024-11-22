@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,9 +24,9 @@ class ReservationHistoryInfoViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _hospitalReservationHistoryListApiState = MutableStateFlow<CommonApiState<List<HospitalOrderDetailEntity>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val hospitalReservationHistoryListApiState: StateFlow<CommonApiState<List<HospitalOrderDetailEntity>>> = _hospitalReservationHistoryListApiState
+    val hospitalReservationHistoryListApiState = _hospitalReservationHistoryListApiState.asStateFlow()
 
     private val _cancelHospitalReservationApiState = MutableSharedFlow<CommonApiState<Unit>>()
     val cancelHospitalReservationApiState: SharedFlow<CommonApiState<Unit>> = _cancelHospitalReservationApiState

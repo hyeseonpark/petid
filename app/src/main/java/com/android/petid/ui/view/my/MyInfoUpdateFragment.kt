@@ -88,6 +88,7 @@ class MyInfoUpdateFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -126,6 +127,7 @@ class MyInfoUpdateFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

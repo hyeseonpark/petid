@@ -33,7 +33,7 @@ class MyInfoViewModel @Inject constructor(
 
     /* Member info result */
     private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
     val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
 
@@ -43,7 +43,7 @@ class MyInfoViewModel @Inject constructor(
 
 
     /* image result: S3 */
-    private val _getMemberImageResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Loading)
+    private val _getMemberImageResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Init)
     val getMemberImageResult = _getMemberImageResult.asStateFlow()
 
     /* S3 upload helper 초기화 */
@@ -54,9 +54,7 @@ class MyInfoViewModel @Inject constructor(
     val uploadS3Result = _uploadS3Result.asSharedFlow()
 
     /* 서버 사진 update result */
-    private val _updateMemberPhotoResult = MutableStateFlow<CommonApiState<String>>(
-        CommonApiState.Loading
-    )
+    private val _updateMemberPhotoResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Init)
     val updateMemberPhotoResult = _updateMemberPhotoResult.asStateFlow()
 
     /**

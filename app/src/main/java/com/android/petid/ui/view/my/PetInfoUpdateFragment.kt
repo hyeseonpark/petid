@@ -74,6 +74,7 @@ class PetInfoUpdateFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
