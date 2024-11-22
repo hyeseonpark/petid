@@ -5,25 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import com.android.petid.BuildConfig
 import androidx.navigation.fragment.findNavController
+import com.android.petid.BuildConfig
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentUserInfoInputBinding
 import com.android.petid.ui.view.common.BundleKeys
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 
-class UserInfoInputFragment : Fragment() {
-    private lateinit var binding: FragmentUserInfoInputBinding
+class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(FragmentUserInfoInputBinding::inflate) {
+
+    companion object{
+        fun newInstance()= UserInfoInputFragment()
+    }
+
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUserInfoInputBinding.inflate(inflater)
+        _binding = FragmentUserInfoInputBinding.inflate(inflater)
         initComponent()
 
         return binding.root
@@ -55,15 +59,12 @@ class UserInfoInputFragment : Fragment() {
             }
 
             buttonNext.setOnClickListener{
-                /*viewModel.memberInfo.apply {
-                    name = editTextName.text.toString()
-                }
-                val regidencyValue = editTextResidencyNumber.text.toString() + editTextResidencyNumber2.text.toString()*/
+                val name = editTextName.text.toString()
+                val address = editTextAddress.text.toString()
+                val addressDetail = editTextAddressDetail.text.toString()
+                val phone = editTextPhone.text.toString()
 
-                val nameValue = editTextName.text.toString()
-                val phoneValue = editTextPhone.text.toString()
-                val addressValue = editTextAddress.text.toString()
-                val addressDetailValue = editTextAddressDetail.text.toString()
+                viewModel.petInfo.setProposer(name, address, addressDetail, phone)
 
                 findNavController().navigate(R.id.action_userInfoInputFragment_to_petInfoInputFragment)
             }

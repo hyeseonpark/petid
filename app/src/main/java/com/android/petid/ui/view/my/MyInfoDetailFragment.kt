@@ -14,11 +14,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentMyInfoDetailBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.util.bitmapToFile
@@ -33,8 +33,13 @@ import kotlinx.coroutines.launch
  * 마이페이지 메인 > 내 정보
  */
 @AndroidEntryPoint
-class MyInfoDetailFragment : Fragment() {
-    private lateinit var binding: FragmentMyInfoDetailBinding
+class MyInfoDetailFragment
+    : BaseFragment<FragmentMyInfoDetailBinding>(FragmentMyInfoDetailBinding::inflate) {
+
+    companion object{
+        fun newInstance()= MyInfoDetailFragment()
+    }
+
     private val viewModel: MyInfoViewModel by activityViewModels()
 
     private val TAG = "MyInfoDetailFragment"
@@ -42,8 +47,8 @@ class MyInfoDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMyInfoDetailBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentMyInfoDetailBinding.inflate(inflater)
         initComponent()
         viewModel.getMemberInfo()
         observeGetMemberInfoState()

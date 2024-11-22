@@ -5,13 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoDetailBinding
-import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.viewmodel.my.PetInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,8 +18,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PetInfoDetailFragment : Fragment() {
-    private lateinit var binding: FragmentPetInfoDetailBinding
+class PetInfoDetailFragment
+    : BaseFragment<FragmentPetInfoDetailBinding>(FragmentPetInfoDetailBinding::inflate) {
+
+    companion object{
+        fun newInstance()= PetInfoDetailFragment()
+    }
+
     private val viewModel: PetInfoViewModel by activityViewModels()
 
     private val TAG = "PetInfoDetailFragment"
@@ -28,10 +32,11 @@ class PetInfoDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentPetInfoDetailBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentPetInfoDetailBinding.inflate(inflater)
         initComponent()
         // viewModel.getPetDetails()
+        observeGetPetInfoState()
         return binding.root
     }
 

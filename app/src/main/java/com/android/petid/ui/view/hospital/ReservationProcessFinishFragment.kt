@@ -5,17 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.fragment.app.Fragment
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentReservationProcessFinishBinding
 
-class ReservationProcessFinishFragment : Fragment() {
-    private lateinit var binding: FragmentReservationProcessFinishBinding
+class ReservationProcessFinishFragment: BaseFragment<FragmentReservationProcessFinishBinding>(
+    FragmentReservationProcessFinishBinding::inflate) {
+
+    companion object{
+        fun newInstance()= ReservationProcessFinishFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentReservationProcessFinishBinding.inflate(layoutInflater)
+    ): View {
+        _binding = FragmentReservationProcessFinishBinding.inflate(layoutInflater)
 
         initComponent()
 

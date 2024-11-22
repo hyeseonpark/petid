@@ -5,18 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentMyInfoUpdateBinding
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BundleKeys
 import com.android.petid.viewmodel.my.MyInfoViewModel
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,16 +24,21 @@ import kotlinx.coroutines.launch
  * 마이페이지 메인 > 내 정보 > 내 정보 수정
  */
 @AndroidEntryPoint
-class MyInfoUpdateFragment : Fragment() {
-    private lateinit var binding: FragmentMyInfoUpdateBinding
+class MyInfoUpdateFragment
+    : BaseFragment<FragmentMyInfoUpdateBinding>(FragmentMyInfoUpdateBinding::inflate) {
+
+    companion object{
+        fun newInstance()= MyInfoUpdateFragment()
+    }
+
     private val viewModel: MyInfoViewModel by activityViewModels()
     private val TAG = "MyInfoUpdateFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMyInfoUpdateBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentMyInfoUpdateBinding.inflate(inflater)
         initComponent()
         observeGetMemberInfoState()
         return binding.root
