@@ -145,6 +145,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+    ksp(libs.glide.ksp)
 
     implementation("androidx.multidex:multidex:2.0.1")
 
@@ -173,9 +174,8 @@ dependencies {
     // mediapipe
     implementation("com.google.mediapipe:tasks-vision:latest.release")
 
-
     // AWS
-    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.13.5")
-    implementation("com.amazonaws:aws-android-sdk-cognito:2.13.5")
-    implementation("com.amazonaws:aws-android-sdk-s3:2.13.5")
+    implementation(libs.aws.android.sdk.mobile.client)
+    implementation(libs.aws.android.sdk.cognito)
+    implementation(libs.aws.android.sdk.s3)
 }
