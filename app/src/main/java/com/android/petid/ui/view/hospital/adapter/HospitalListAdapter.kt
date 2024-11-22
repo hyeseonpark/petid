@@ -3,12 +3,14 @@ package com.android.petid.ui.view.hospital.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.domain.entity.HospitalEntity
-import com.android.domain.entity.HospitalOrderDetailEntity
+import com.android.petid.R
 import com.android.petid.databinding.ItemHospitalBinding
+import com.bumptech.glide.Glide
 
 class HospitalListAdapter(
     private val mContext: Context,
@@ -42,14 +44,22 @@ class HospitalListAdapter(
         with(holder) {
             name.text = hospitalItem.name
             address.text = hospitalItem.address
-            vet.text = hospitalItem.vet + " 원장"
+            vet.text = String.format(mContext.getString(R.string.to_vet), hospitalItem.vet)
 
-            // 병원 이미지 로드 (Glide 사용)
-            /*hospitalItem.imageUrl?.let {
+            // 이미지
+            (R.drawable.img_hospital_list_empty).let {
+                val imgSource: Any? = when(hospitalItem.imageUrl[0]) {
+                    "" -> AppCompatResources.getDrawable(mContext, it)
+                    else -> hospitalItem.imageUrl[0]
+                }
+
                 Glide.with(mContext)
-                    .load(it)
+                    .load(imgSource)
+                    .placeholder(it)
+                    .error(it)
                     .into(thumbnail)
-            }*/
+            }
+
 
             itemView.setOnClickListener{
                 onItemClick(hospitalItem)
