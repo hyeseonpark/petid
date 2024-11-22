@@ -134,7 +134,6 @@ class MyInfoDetailFragment : Fragment() {
                 when (result) {
                     is CommonApiState.Success -> {
                         with(result.data) {
-                            //TODO 좋은 문법인가?
                             binding.apply {
                                 textViewName.text = name
                                 textViewPhoneNumber.text = phone
@@ -162,15 +161,17 @@ class MyInfoDetailFragment : Fragment() {
     private fun observeGetMemberImage() {
         lifecycleScope.launch {
             viewModel.getMemberImageResult.collectLatest { result ->
-                when {
-                    result.isSuccess -> {
-                        result.getOrNull()?.takeIf { it.isNotBlank() }?.let {
+                when (result) {
+                    is CommonApiState.Success -> {
+                        result.data.let {
                             Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
                         }
                     }
-                    result.isFailure -> {
-                        val exception = result.exceptionOrNull()
-                        Log.d(TAG, exception?.message.toString())
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
                     }
                 }
             }
