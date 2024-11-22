@@ -13,10 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.domain.entity.ContentEntity
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentBlogMainBinding
+import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.blog.adapter.ContentListAdapter
+import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.viewmodel.blog.BlogMainViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,8 +27,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class BlogMainFragment : Fragment() {
-    lateinit var binding: FragmentBlogMainBinding
+class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainBinding::inflate) {
+
+    companion object{
+        fun newInstance()= BlogMainFragment()
+    }
+
     private val viewModel: BlogMainViewModel by activityViewModels()
 
     private val TAG = "BlogMainFragment"
@@ -37,8 +44,8 @@ class BlogMainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentBlogMainBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentBlogMainBinding.inflate(inflater)
 
         initComponent()
 

@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.databinding.FragmentPetIdStartBinding
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
@@ -17,15 +17,19 @@ import dagger.hilt.android.AndroidEntryPoint
  *
  */
 @AndroidEntryPoint
-class PetIdStartFragment : Fragment() {
-    private lateinit var binding: FragmentPetIdStartBinding
+class PetIdStartFragment: BaseFragment<FragmentPetIdStartBinding>(FragmentPetIdStartBinding::inflate) {
+
+    companion object{
+        fun newInstance()= PetIdStartFragment()
+    }
+
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPetIdStartBinding.inflate(inflater)
+        _binding = FragmentPetIdStartBinding.inflate(inflater)
         initComponent()
 
         return binding.root

@@ -6,19 +6,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentSignatureBinding
 
-class SignatureFragment : Fragment() {
-    private lateinit var binding: FragmentSignatureBinding
+class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatureBinding::inflate) {
+
+    companion object{
+        fun newInstance()= SignatureFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSignatureBinding.inflate(layoutInflater)
+        _binding = FragmentSignatureBinding.inflate(layoutInflater)
         initComponent()
 
         return binding.root

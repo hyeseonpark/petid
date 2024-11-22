@@ -6,18 +6,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.android.petid.common.BaseFragment
+import com.android.petid.databinding.FragmentHospitalMainBinding
 import com.android.petid.databinding.FragmentMyMainBinding
+import com.android.petid.ui.view.hospital.HospitalMainFragment
 
 /**
  * 마이페이지 메인
  */
-class MyMainFragment : Fragment() {
-    lateinit var binding: FragmentMyMainBinding
+class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding::inflate) {
+
+    companion object{
+        fun newInstance() = HospitalMainFragment()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMyMainBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentMyMainBinding.inflate(inflater)
         initComponent()
         return binding.root
     }

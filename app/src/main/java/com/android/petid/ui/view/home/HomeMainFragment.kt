@@ -1,9 +1,7 @@
 package com.android.petid.ui.view.home
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import com.android.petid.BuildConfig
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -11,18 +9,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.android.domain.entity.BannerEntity
+import com.android.petid.BuildConfig
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.common.Constants.BANNER_TYPE_MAIN
 import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
-import com.android.petid.ui.view.generate.PetIdStartFragment
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
 import com.android.petid.util.booleanCharToSign
 import com.android.petid.util.genderCharToString
@@ -32,8 +30,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeMainFragment : Fragment() {
-    lateinit var binding: FragmentHomeMainBinding
+class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainBinding::inflate) {
+
+    companion object{
+        fun newInstance()= HomeMainFragment()
+    }
+
     private val viewModel: HomeMainVIewModel by activityViewModels()
 
     private val TAG = "HomeMainFragment"
@@ -49,8 +51,8 @@ class HomeMainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHomeMainBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentHomeMainBinding.inflate(inflater, container, false)
 
         initComponent()
         setupBannerObservers()

@@ -8,22 +8,29 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentCheckingInfoBinding
+import com.android.petid.databinding.FragmentHomeMainBinding
+import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.util.booleanCharToSign
 import com.android.petid.util.genderCharToString
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CheckingInfoFragment : Fragment() {
-    private lateinit var binding: FragmentCheckingInfoBinding
+class CheckingInfoFragment : BaseFragment<FragmentCheckingInfoBinding>(FragmentCheckingInfoBinding::inflate) {
+
+    companion object{
+        fun newInstance()= CheckingInfoFragment()
+    }
+
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCheckingInfoBinding.inflate(layoutInflater)
+        _binding = FragmentCheckingInfoBinding.inflate(layoutInflater)
         initComponent()
 
         return binding.root
