@@ -6,17 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentCompleteCardBinding
+import com.android.petid.databinding.FragmentHomeMainBinding
+import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.ui.view.main.MainActivity
 
-class CompleteCardFragment : Fragment() {
-    private lateinit var binding: FragmentCompleteCardBinding
+class CompleteCardFragment: BaseFragment<FragmentCompleteCardBinding>(FragmentCompleteCardBinding::inflate) {
+
+    companion object{
+        fun newInstance()= CompleteCardFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCompleteCardBinding.inflate(layoutInflater)
+        _binding = FragmentCompleteCardBinding.inflate(layoutInflater)
         initComponent()
 
         return binding.root

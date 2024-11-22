@@ -1,32 +1,33 @@
 package com.android.petid.ui.view.generate
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentScannedInfoBinding
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScannedInfoFragment : Fragment() {
-    private lateinit var binding: FragmentScannedInfoBinding
+class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentScannedInfoBinding::inflate) {
+
+    companion object{
+        fun newInstance()= ScannedInfoFragment()
+    }
+
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentScannedInfoBinding.inflate(layoutInflater)
+        _binding = FragmentScannedInfoBinding.inflate(layoutInflater)
         initComponent()
 
         return binding.root

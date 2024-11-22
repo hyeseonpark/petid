@@ -19,11 +19,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.BuildConfig
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentPetPhotoBinding
 import com.android.petid.image_classifier.ImageClassifierHelper
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
@@ -39,8 +39,13 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
 @AndroidEntryPoint
-class PetPhotoFragment : Fragment(), ImageClassifierHelper.ClassifierListener {
-    private lateinit var binding: FragmentPetPhotoBinding
+class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoBinding::inflate),
+    ImageClassifierHelper.ClassifierListener {
+
+    companion object{
+        fun newInstance()= PetPhotoFragment()
+    }
+
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     private val TAG = this.javaClass.simpleName
@@ -58,7 +63,7 @@ class PetPhotoFragment : Fragment(), ImageClassifierHelper.ClassifierListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPetPhotoBinding.inflate(layoutInflater)
+        _binding = FragmentPetPhotoBinding.inflate(layoutInflater)
         initComponent()
 
         return binding.root

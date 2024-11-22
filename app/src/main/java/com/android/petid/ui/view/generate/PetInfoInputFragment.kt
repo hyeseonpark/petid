@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.BuildConfig
 import com.android.petid.R
+import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoInputBinding
 import com.android.petid.util.getCurrentDate
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
@@ -20,15 +20,18 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class PetInfoInputFragment : Fragment() {
-    private lateinit var binding: FragmentPetInfoInputBinding
+class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentPetInfoInputBinding::inflate) {
+
+    companion object{
+        fun newInstance()= PetInfoInputFragment()
+    }
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPetInfoInputBinding.inflate(layoutInflater)
+        _binding = FragmentPetInfoInputBinding.inflate(layoutInflater)
         initComponent()
 
         return binding.root

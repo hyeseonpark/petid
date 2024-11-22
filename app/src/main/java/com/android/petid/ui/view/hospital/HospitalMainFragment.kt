@@ -14,11 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.domain.entity.LocationEntity
+import com.android.petid.common.BaseFragment
 import com.android.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
+import com.android.petid.databinding.FragmentBlogMainBinding
 import com.android.petid.databinding.FragmentHospitalMainBinding
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.blog.BlogMainFragment
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +32,12 @@ import kotlinx.coroutines.launch
  * 메인 > 등록대행병원
  */
 @AndroidEntryPoint
-class HospitalMainFragment : Fragment() {
-    lateinit var binding: FragmentHospitalMainBinding
+class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentHospitalMainBinding::inflate) {
+
+    companion object{
+        fun newInstance() = HospitalMainFragment()
+    }
+
     private val viewModel: HospitalMainViewModel by activityViewModels()
 
     private val TAG = "HospitalMainFragment"
@@ -40,8 +47,8 @@ class HospitalMainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHospitalMainBinding.inflate(inflater)
+    ): View {
+        _binding = FragmentHospitalMainBinding.inflate(inflater)
 
         initComponent()
 
