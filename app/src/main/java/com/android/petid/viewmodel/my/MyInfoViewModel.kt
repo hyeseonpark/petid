@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -22,33 +24,34 @@ class MyInfoViewModel @Inject constructor(
     private val myInfoRepository: MyInfoRepository,
 ): ViewModel() {
 
+    /* 새로 생성한 파일명 */
     var profileImageName : String = ""
+
+    /* 서버에서 받은 파일명, nullable */
+    var memberImageFileName: String? = null
 
     /* Member info result */
     private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
         CommonApiState.Loading
     )
-    val getMemberInfoResult: StateFlow<CommonApiState<MemberInfoEntity>> = _getMemberInfoResult
-
-    /* 서버에서 받은 파일명*/
-    var memberImageFileName: String? = null
+    val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
 
     /* image result: S3 */
-    private val _getMemberImageResult = MutableSharedFlow<Result<String>>()
-    val getMemberImageResult: SharedFlow<Result<String>> = _getMemberImageResult
+    private val _getMemberImageResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Loading)
+    val getMemberImageResult = _getMemberImageResult.asStateFlow()
 
     /* S3 upload helper 초기화 */
     private val s3UploadHelper = S3UploadHelper()
 
     /* S3 사진 upload result */
     private val _uploadS3Result = MutableSharedFlow<Result<Boolean>>()
-    val uploadS3Result: SharedFlow<Result<Boolean>> get() = _uploadS3Result
+    val uploadS3Result = _uploadS3Result.asSharedFlow()
 
     /* 서버 사진 update result */
     private val _updateMemberPhotoResult = MutableStateFlow<CommonApiState<String>>(
         CommonApiState.Loading
     )
-    val updateMemberPhotoResult: StateFlow<CommonApiState<String>> get() = _updateMemberPhotoResult
+    val updateMemberPhotoResult = _updateMemberPhotoResult.asStateFlow()
 
     /**
      * member 정보 가져오기
@@ -81,12 +84,18 @@ class MyInfoViewModel @Inject constructor(
      * 프로필 사진 가져오기 (S3 주소)
      */
     private suspend fun getMemberImage(imageUrl: String) {
-        try {
-            myInfoRepository.getProfileImageUrl(imageUrl).also {
-                _getMemberImageResult.emit(Result.success(it))
+        viewModelScope.launch {
+            when (val result = myInfoRepository.getProfileImageUrl(imageUrl)) {
+                is ApiResult.Success -> {
+                    _getMemberImageResult.emit(CommonApiState.Success(result.data))
+                }
+                is ApiResult.HttpError -> {
+                    _getMemberImageResult.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _getMemberImageResult.emit(CommonApiState.Error(result.errorMessage))
+                }
             }
-        } catch (e: Exception) {
-            _getMemberImageResult.emit(Result.failure(e))
         }
     }
 
