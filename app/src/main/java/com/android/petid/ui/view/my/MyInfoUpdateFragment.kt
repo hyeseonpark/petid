@@ -41,6 +41,7 @@ class MyInfoUpdateFragment
         _binding = FragmentMyInfoUpdateBinding.inflate(inflater)
         initComponent()
         observeGetMemberInfoState()
+        observeUpdateMemberInfoState()
         return binding.root
     }
 
@@ -56,6 +57,7 @@ class MyInfoUpdateFragment
 
     private fun initComponent() {
         with(binding) {
+            buttonBack.setOnClickListener { activity?.finish() }
             buttonComplete.setOnClickListener {
                 completeDialog()
             }
@@ -90,16 +92,42 @@ class MyInfoUpdateFragment
             }
         }
     }
-
     /**
      * my info update dialog
      */
     private fun completeDialog() {
         val dialog = CustomDialogCommon(
             getString(R.string.update_complete_dialog), {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                with(binding) {
+                    viewModel.updateMemberInfo(
+                        address = editTextAddress.text.toString(),
+                        addressDetails = editTextAddressDetail.text.toString(),
+                        phone = editTextPhone.text.toString()
+                    )
+                }
             })
 
         dialog.show(this.childFragmentManager, "CustomDialogCommon")
+    }
+
+    /**
+     * viewModel.updateMemberInfoResult: 업데이트 완료시 뒤로가기
+     */
+    private fun observeUpdateMemberInfoState() {
+        lifecycleScope.launch {
+            viewModel.updateMemberInfoResult.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                }
+            }
+        }
     }
 }

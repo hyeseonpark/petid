@@ -9,7 +9,6 @@ interface MyInfoRepository {
     suspend fun uploadProfileImage(imagePath: String): String
     suspend fun getProfileImageUrl(imagePath: String): ApiResult<String>
     suspend fun updateMemberInfo(
-        name: String,
         address: String,
         addressDetail: String,
         phone: String
