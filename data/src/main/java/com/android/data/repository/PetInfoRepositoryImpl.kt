@@ -30,4 +30,20 @@ class PetInfoRepositoryImpl @Inject constructor(
             ApiResult.Error(e.message)
         }
     }
+
+    override suspend fun getPetImageUrl(filePath: String): ApiResult<String> {
+        return try {
+            val response = petAPI.getPetImageUrl(filePath)
+            ApiResult.Success(response)
+        } catch (e: HttpException) {
+            val gson = Gson()
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+
+            ApiResult.HttpError(errorResponse.toDomain())
+
+        } catch (e: Exception) {
+            ApiResult.Error(e.message)
+        }
+    }
 }

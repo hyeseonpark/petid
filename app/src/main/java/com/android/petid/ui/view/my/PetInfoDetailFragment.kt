@@ -13,6 +13,7 @@ import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoDetailBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.viewmodel.my.PetInfoViewModel
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -35,8 +36,9 @@ class PetInfoDetailFragment
     ): View {
         _binding = FragmentPetInfoDetailBinding.inflate(inflater)
         initComponent()
-        // viewModel.getPetDetails()
+        viewModel.getPetDetails()
         observeGetPetInfoState()
+        observeGetPetImageState()
         return binding.root
     }
 
@@ -70,19 +72,44 @@ class PetInfoDetailFragment
                 when (result) {
                     is CommonApiState.Success -> {
                         with(result.data) {
+                            binding.apply {
+                                textViewName.text = petName
+                                textViewBirth.text = petBirthDate
+                                textViewGender.text = petSex
+                                textViewType.text = appearance.breed
+                                textViewWeight.text =
+                                    String.format(getString(R.string.to_kg), appearance.weight)
+                                textViewFeature.text =
+                                    listOf(appearance.hairColor, appearance.hairLength).joinToString(", ")
+                            }
+                        }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                }
+            }
+        }
+    }
 
-                            /*petImages?.takeIf { it.isNotBlank() }?.let {
-                                com.bumptech.glide.Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
-                            }*/
 
-                            binding.textViewName.text = petName
-                            binding.textViewBirth.text = petBirthDate
-                            binding.textViewGender.text = petSex
-                            binding.textViewType.text = appearance.breed
-                            binding.textViewWeight.text =
-                                String.format(getString(R.string.to_kg), appearance.weight)
-                            binding.textViewFeature.text =
-                                listOf(appearance.hairColor, appearance.hairLength).joinToString(", ")
+    /**
+     * viewModel.getPetImageUrl 결과값 view 반영
+     */
+    private fun observeGetPetImageState() {
+        lifecycleScope.launch {
+            viewModel.getPetImageUrlResult.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        R.color.d9.let {
+                            Glide.with(requireContext())
+                                .load(result.data)
+                                .placeholder(it)
+                                .error(it)
+                                .into(binding.imageViewProfile)
                         }
                     }
                     is CommonApiState.Error -> {

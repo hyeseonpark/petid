@@ -16,12 +16,14 @@ import com.android.domain.entity.BannerEntity
 import com.android.petid.BuildConfig
 import com.android.petid.R
 import com.android.petid.common.BaseFragment
+import com.android.petid.common.Constants
 import com.android.petid.common.Constants.BANNER_TYPE_MAIN
 import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
+import com.android.petid.util.PreferencesControl
 import com.android.petid.util.booleanCharToSign
 import com.android.petid.util.genderCharToString
 import com.android.petid.viewmodel.home.HomeMainVIewModel
@@ -39,6 +41,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private val viewModel: HomeMainVIewModel by activityViewModels()
 
     private val TAG = "HomeMainFragment"
+
+    lateinit var preferencesControl : PreferencesControl
 
     // banner adapter
     private lateinit var bannerAdapter : HomeBannerAdapter
@@ -84,6 +88,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun initComponent() {
         with(binding) {
+            preferencesControl = PreferencesControl(requireContext())
+
             buttonCreateStart.setOnClickListener{
                 val intent = Intent(activity, GeneratePetidMainActivity::class.java)
                 startActivity(intent)
@@ -206,10 +212,15 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                                 setPetidCardType(CHIP_TYPE[0])
                             }
                             else -> {
-                                binding.textViewMemberName.text = memberResult.name
-                                    binding.textViewOwnerName.text =
-                                    String.format(getString(R.string.to_owner), memberResult.name)
-                                viewModel.getPetDetails(memberResult.petId!!.toLong()) // TODO API 수정되면 수정
+                                memberResult.name.let {
+                                    binding.textViewMemberName.text = it
+                                    binding.textViewOwnerName.text = String.format(getString(R.string.to_owner), it)
+                                }
+
+                                memberResult.petId!!.toLong().let { petId ->
+                                    viewModel.getPetDetails(petId)
+                                    preferencesControl.saveIntValue(Constants.SHARED_PET_ID_VALUE, petId.toInt())
+                                }
                             }
                         }
                     }

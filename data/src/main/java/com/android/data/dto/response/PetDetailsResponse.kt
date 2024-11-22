@@ -5,7 +5,7 @@ import com.android.domain.entity.PetDetailsEntity
 data class PetDetailsResponse(
     val petId: Int,
     val ownerId: String,
-    val petRegNo: Int,
+    val petRegNo: String,
     val petName: String,
     val petBirthDate: String,
     val petSex: String,

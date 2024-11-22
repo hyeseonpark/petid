@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 class PetDetailsEntity(
     val petId: Int,
     val ownerId: String,
-    val petRegNo: Int,
+    val petRegNo: String,
     val petName: String,
     val petBirthDate: String,
     val petSex: String,

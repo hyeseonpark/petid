@@ -73,11 +73,10 @@ interface PetAPI {
     /**
      * 2.8 애완동물 이미지 조회 (S3) API
      */
-    @GET("/v1/pet/{petId}/images/presigned-url")
+    @GET("/v1/pet/3/images/presigned-url")
     suspend fun getPetImageUrl(
-        @Path("petId") petId: Long,
         @Query("filePath") filePath: String
-    )//: Response<String>
+    ): String
 
     /**
      * 2.9 애완동물 목록 조회 API

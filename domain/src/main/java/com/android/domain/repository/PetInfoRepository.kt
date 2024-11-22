@@ -5,4 +5,5 @@ import com.android.domain.util.ApiResult
 
 interface PetInfoRepository {
     suspend fun getPetDetails(petId: Long): ApiResult<PetDetailsEntity>
+    suspend fun getPetImageUrl(filePath: String): ApiResult<String>
 }

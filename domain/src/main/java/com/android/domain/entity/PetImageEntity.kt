@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 class PetImageEntity (
     val petImageId: Int,
     val petId: Int,
-    val imagePath: Int,
+    val imagePath: String,
 ) : Parcelable
