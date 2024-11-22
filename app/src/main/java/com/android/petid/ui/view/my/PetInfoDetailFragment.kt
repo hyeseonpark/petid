@@ -52,12 +52,13 @@ class PetInfoDetailFragment
             }
         }
     }
+
     /**
-     * 예약 취소 dialog
+     * 내장칩 미 등록시, info dialog
      */
     private fun infoDialog() {
         val dialog = CustomDialogPetInfoNa()
-        dialog.show(this.parentFragmentManager, "CustomDialogPetInfoNa")
+        dialog.show(this.childFragmentManager, "CustomDialogPetInfoNa")
     }
 
     /**
