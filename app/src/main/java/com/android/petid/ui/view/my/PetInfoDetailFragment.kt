@@ -90,6 +90,7 @@ class PetInfoDetailFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -118,6 +119,7 @@ class PetInfoDetailFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

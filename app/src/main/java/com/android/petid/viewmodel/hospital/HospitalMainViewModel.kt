@@ -15,6 +15,7 @@ import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,36 +33,36 @@ class HospitalMainViewModel @Inject constructor(
      * 시,도 api 호출 결과
      */
     private val _sidoApiState = MutableStateFlow<CommonApiState<List<LocationEntity>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val sidoApiState: StateFlow<CommonApiState<List<LocationEntity>>> = _sidoApiState
+    val sidoApiState = _sidoApiState.asStateFlow()
     var currentSidoList: List<LocationEntity>? = null
 
     /**
      * 시,군,구 api 호출 결과
      */
     private val _sigunguApiState = MutableStateFlow<CommonApiState<List<LocationEntity>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val sigunguApiState: StateFlow<CommonApiState<List<LocationEntity>>> = _sigunguApiState
+    val sigunguApiState = _sigunguApiState.asStateFlow()
     var currentSigunguList: List<LocationEntity>? = null
 
     /**
      * 읍,면,동 api 호출 결과
      */
     private val _eupmundongApiState = MutableStateFlow<CommonApiState<List<LocationEntity>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val eupmundongApiState: StateFlow<CommonApiState<List<LocationEntity>>> = _eupmundongApiState
+    val eupmundongApiState = _eupmundongApiState.asStateFlow()
     var currentEupmundongList: List<LocationEntity>? = null
 
     /**
      * 병원 List api 호출 결과
      */
     private val _hospitalApiState = MutableStateFlow<CommonApiState<List<HospitalEntity>>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val hospitalApiState: StateFlow<CommonApiState<List<HospitalEntity>>> = _hospitalApiState
+    val hospitalApiState = _hospitalApiState.asStateFlow()
 
     /**
      * 현재 선택된 시/도 및 시/군/구 및 읍/면/동

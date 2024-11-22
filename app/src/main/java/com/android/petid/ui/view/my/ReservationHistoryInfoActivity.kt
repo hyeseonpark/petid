@@ -95,6 +95,7 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
                         Log.d(TAG, "Loading....................")
                         isDataAvailable(false)
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -137,6 +138,7 @@ class ReservationHistoryInfoActivity : AppCompatActivity() {
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

@@ -192,6 +192,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -230,6 +231,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -297,6 +299,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

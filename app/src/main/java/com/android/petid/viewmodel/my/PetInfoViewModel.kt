@@ -23,13 +23,13 @@ class PetInfoViewModel @Inject constructor(
 
     /* 펫 정보 가져오기 결과*/
     private val _getPetDetailsResult = MutableStateFlow<CommonApiState<PetDetailsEntity>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
     val getPetDetailsResult = _getPetDetailsResult.asStateFlow()
 
     /* 펫 이미지 가져오기 결과*/
     private val _getPetImageUrlResult = MutableStateFlow<CommonApiState<String>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
     val getPetImageUrlResult = _getPetImageUrlResult.asStateFlow()
 

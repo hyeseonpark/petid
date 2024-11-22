@@ -199,6 +199,7 @@ class ReservationCalendarFragment:
                         // 로딩 상태 처리
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -223,6 +224,7 @@ class ReservationCalendarFragment:
                         // 로딩 상태 처리
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

@@ -135,6 +135,7 @@ class ContentDetailActivity : AppCompatActivity() {
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -163,6 +164,7 @@ class ContentDetailActivity : AppCompatActivity() {
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }

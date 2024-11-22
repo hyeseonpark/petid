@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -27,9 +28,9 @@ class ContentDetailViewModel @Inject constructor(
 
     // content api 결과값
     private val _contentDetailApiState = MutableStateFlow<CommonApiState<ContentEntity>>(
-        CommonApiState.Loading
+        CommonApiState.Init
     )
-    val contentDetailApiState: StateFlow<CommonApiState<ContentEntity>> = _contentDetailApiState
+    val contentDetailApiState = _contentDetailApiState.asStateFlow()
 
 
     // 좋아요 결과

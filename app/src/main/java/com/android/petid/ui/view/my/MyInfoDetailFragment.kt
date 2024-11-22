@@ -61,7 +61,7 @@ class MyInfoDetailFragment
 
     private fun initComponent() {
         with(binding) {
-            buttonBack.setOnClickListener { activity?.finish() }
+            buttonBack.setOnClickListener { findNavController().popBackStack() }
             textViewUpdate.setOnClickListener{
                 findNavController().navigate(R.id.action_myInfoDetailFragment_to_myInfoUpdateFragment)
             }
@@ -153,6 +153,7 @@ class MyInfoDetailFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -176,6 +177,7 @@ class MyInfoDetailFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -216,6 +218,7 @@ class MyInfoDetailFragment
                     is CommonApiState.Loading -> {
                         Log.d(TAG, "Loading....................")
                     }
+                    is CommonApiState.Init -> {}
                 }
             }
         }
