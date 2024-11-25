@@ -115,7 +115,7 @@ class PreferencesControl @Inject constructor(
             val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putBoolean(key, flag)
-            editor.commit()
+            editor.apply()
         } catch (e: Exception) {
             Log.e(TAG, "Exception: " + e.localizedMessage)
         }
@@ -132,7 +132,7 @@ class PreferencesControl @Inject constructor(
             val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putInt(key, value)
-            editor.commit()
+            editor.apply()
         } catch (e: Exception) {
             Log.e(TAG, "Exception: " + e.localizedMessage)
         }
@@ -148,7 +148,7 @@ class PreferencesControl @Inject constructor(
             val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putString(key, value)
-            editor.commit()
+            editor.apply()
         } catch (e: Exception) {
             Log.e(TAG, "Exception: " + e.localizedMessage)
         }
@@ -164,7 +164,7 @@ class PreferencesControl @Inject constructor(
             val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putLong(key, value)
-            editor.commit()
+            editor.apply()
         } catch (e: Exception) {
             Log.e(TAG, "Exception: " + e.localizedMessage)
         }
