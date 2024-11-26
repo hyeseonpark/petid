@@ -50,7 +50,10 @@ class ContentDetailActivity : AppCompatActivity() {
 
         // 콘텐츠 좋아요
         binding.buttonContentLike.setOnClickListener {
-            viewModel.doContentLike()
+            when(binding.buttonContentLike.isSelected) {
+                true -> viewModel.cancelContentLike()
+                false -> viewModel.doContentLike()
+            }
         }
 
         val hospitalListAdapter = HospitalListAdapter( this@ContentDetailActivity) { item ->
@@ -151,9 +154,7 @@ class ContentDetailActivity : AppCompatActivity() {
                     is CommonApiState.Success -> {
                         val resultData = result.data
                         // TODO api result 값 수정 되면 화면 반영
-                        if (!binding.buttonContentLike.isSelected) {
-                            binding.buttonContentLike.isSelected = true
-                        }
+                        binding.buttonContentLike.isSelected = !binding.buttonContentLike.isSelected
                         binding.textViewLike.text =
                             String.format(getString(R.string.content_like_desc), resultData.likeCount)
 

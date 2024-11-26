@@ -2,6 +2,7 @@ package com.android.petid.ui.view.blog.adapter
 
 import android.content.Context
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -18,6 +19,7 @@ import com.bumptech.glide.signature.ObjectKey
 class ContentListAdapter(
     private val mContext: Context,
     private val doLike: (Int) -> Unit,
+    private val cancelLike: (Int) -> Unit,
     private val onItemClick: (Int) -> Unit
 ) : ListAdapter<ContentEntity, ContentListAdapter.Holder>(diffUtil) {
 
@@ -46,6 +48,7 @@ class ContentListAdapter(
 
     override fun onBindViewHolder(holder: ContentListAdapter.Holder, position: Int) {
         val contentItem = currentList[position]
+
         with(holder) {
             contentTypeTextView.text = when(contentItem.category) {
                 ContentCategoryType.RECOMMENDED.name -> mContext.getString(R.string.tab_recommendation_title)
@@ -60,15 +63,17 @@ class ContentListAdapter(
             body.setTextWithEllipsis(
                 Html.fromHtml(contentItem.body, Html.FROM_HTML_MODE_LEGACY).toString())
 
-            likeButton.text = when(contentItem.likesCount) {
-                0 -> mContext.getString(R.string.like)
-                else -> contentItem.likesCount.toString()
-            }
-            likeButton.isSelected = contentItem.isLiked
-            likeButton.setOnClickListener {
-                doLike(contentItem.contentId)
-                if (!likeButton.isSelected) {
-                    likeButton.isSelected = true
+            likeButton.apply {
+                text = when(contentItem.likesCount) {
+                    0 -> mContext.getString(R.string.like)
+                    else -> contentItem.likesCount.toString()
+                }
+                isSelected = contentItem.isLiked
+                setOnClickListener {
+                    when(isSelected) {
+                        true -> cancelLike(contentItem.contentId)
+                        false -> doLike(contentItem.contentId)
+                    }
                 }
             }
 

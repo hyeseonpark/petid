@@ -65,7 +65,9 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
     private fun initComponent() {
         with(binding) {
             contentListAdapter =
-                ContentListAdapter(requireActivity(), { viewModel.doContentLike(it) }) { contentId ->
+                ContentListAdapter(requireActivity(),
+                    {viewModel.doContentLike(it)},
+                    {viewModel.cancelContentLike(it)}) { contentId ->
                     val intent = Intent(activity, ContentDetailActivity::class.java)
                         .putExtra("contentId", contentId)
                     startActivity(intent)
@@ -161,14 +163,18 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                         val result = result.data
 
                         val index = contentList.indexOfFirst { it.contentId == result.contentId }
+
                         if (index != -1) {
-                            contentList[index].apply {
-                                isLiked = true
+
+                            val newList = contentList.toMutableList()
+                            newList[index] = newList[index].copy(
+                                isLiked = !newList[index].isLiked,
                                 likesCount = result.likeCount
-                            }
+                            )
+                            contentList = newList
+                            contentListAdapter.submitList(newList)
                         }
 
-                        contentListAdapter.submitList(contentList)
                     }
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")

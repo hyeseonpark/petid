@@ -99,4 +99,23 @@ class BlogMainViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 콘텐츠 좋아요 취소하기
+     */
+    fun cancelContentLike(contentId: Int) {
+        viewModelScope.launch {
+            when (val result = blogMainRepository.cancelContentLike(contentId)) {
+                is ApiResult.Success -> {
+                    _doLikeApiResult.emit(CommonApiState.Success(result.data))
+                }
+                is ApiResult.HttpError -> {
+                    _doLikeApiResult.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _doLikeApiResult.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
 }
