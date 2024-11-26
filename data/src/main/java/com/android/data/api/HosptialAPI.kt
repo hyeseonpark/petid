@@ -50,14 +50,12 @@ interface HosptialAPI {
     ) : List<String>
 
     /**
-     * 동물병원 예약 내역 생성
+     * 4.5 병원 이미지 조회 API
      */
-    /*@FormUrlEncoded
-    @POST("/v1/hospital/order")
-    suspend fun createHospitalOrder(
-        @Field("hospitalId") hospitalId: Int,
-        @Field("date") date: String // ISO-8601
-    ) : HospitalOrderResponse*/
+    @GET("/v1/hospital/images/presigned-url")
+    suspend fun getHospitalImageUrl(
+        @Query("filePath") filePath: String
+    ): String
 
     /**
      * 동물병원 예약 내역 생성

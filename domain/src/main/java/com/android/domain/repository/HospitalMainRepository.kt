@@ -10,4 +10,6 @@ interface HospitalMainRepository {
     suspend fun getEupmundongList(id: Int): ApiResult<List<LocationEntity>>
 
     suspend fun getHospitalList(sidoId: Int, sigunguId: Int, eupmundongId: Int): ApiResult<List<HospitalEntity>>
+
+    suspend fun getHospitalImageUrl(filePath: String): String
 }

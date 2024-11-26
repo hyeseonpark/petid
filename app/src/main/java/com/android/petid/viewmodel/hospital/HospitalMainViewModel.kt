@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
 import com.android.domain.repository.BlogMainRepository
+import com.android.domain.repository.HospitalMainRepository
 import com.android.domain.usecase.hospital.GetEupmundongUseCase
 import com.android.domain.usecase.hospital.GetHospitalListUseCase
 import com.android.domain.usecase.hospital.GetSidoUseCase
@@ -25,7 +26,7 @@ class HospitalMainViewModel @Inject constructor(
     private val getSigunguUseCase: GetSigunguUseCase,
     private val getEupmundongUseCase: GetEupmundongUseCase,
     private val getHospitalListUseCase: GetHospitalListUseCase,
-    private val blogMainRepository: BlogMainRepository, // temporary
+    private val hospitalMainRepository: HospitalMainRepository, // temporary
     private val savedStateHandle: SavedStateHandle
     ): ViewModel() {
 
@@ -207,7 +208,7 @@ class HospitalMainViewModel @Inject constructor(
 
     private suspend fun getHospitalImage(filePath: String): String {
         return try {
-            blogMainRepository.getContentImage(filePath)
+            hospitalMainRepository.getHospitalImageUrl(filePath)
         } catch (e: Exception) {
             ""
         }
