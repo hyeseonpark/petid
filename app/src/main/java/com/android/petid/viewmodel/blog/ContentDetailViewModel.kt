@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.ContentEntity
 import com.android.domain.entity.ContentLikeEntity
+import com.android.domain.repository.BlogMainRepository
 import com.android.domain.usecase.content.DoContentLikeUseCase
 import com.android.domain.usecase.content.GetContentDetailUseCase
 import com.android.domain.util.ApiResult
@@ -22,6 +23,7 @@ import kotlin.properties.Delegates
 class ContentDetailViewModel @Inject constructor(
     private val getContentDetailUseCase: GetContentDetailUseCase,
     private val doContentLikeUseCase: DoContentLikeUseCase,
+    private val blogMainRepository: BlogMainRepository,
 //    private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
     var contentId by Delegates.notNull<Int>()
@@ -62,6 +64,25 @@ class ContentDetailViewModel @Inject constructor(
     fun doContentLike() {
         viewModelScope.launch {
             when (val result = doContentLikeUseCase(contentId)) {
+                is ApiResult.Success -> {
+                    _doLikeApiResult.emit(CommonApiState.Success(result.data))
+                }
+                is ApiResult.HttpError -> {
+                    _doLikeApiResult.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _doLikeApiResult.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
+    /**
+     * 콘텐츠 좋아요 취소하기
+     */
+    fun cancelContentLike() {
+        viewModelScope.launch {
+            when (val result = blogMainRepository.cancelContentLike(contentId)) {
                 is ApiResult.Success -> {
                     _doLikeApiResult.emit(CommonApiState.Success(result.data))
                 }
