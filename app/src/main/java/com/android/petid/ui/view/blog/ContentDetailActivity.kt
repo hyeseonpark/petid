@@ -8,12 +8,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.domain.entity.ContentEntity
 import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
 import com.android.petid.databinding.ActivityContentDetailBinding
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.view.blog.adapter.HospitalListAdapter
+import com.android.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.viewmodel.blog.ContentDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,42 +57,57 @@ class ContentDetailActivity : AppCompatActivity() {
             }
         }
 
-        val hospitalListAdapter = HospitalListAdapter( this@ContentDetailActivity) { item ->
-            val intent = Intent(this, HospitalActivity::class.java)
-                .putExtra("hospitalDetail", item)
+        val moreContentListAdapter = MoreContentListAdapter(applicationContext) { item ->
+            val intent = Intent(this, ContentDetailActivity::class.java)
+                .putExtra("contentId", item.contentId)
             startActivity(intent)
         }
-        binding.recyclerviewHospitalRecommendList.apply {
+        binding.recyclerviewMoreContentList.apply {
             layoutManager = LinearLayoutManager(applicationContext)
-            adapter = hospitalListAdapter
+            adapter = moreContentListAdapter
         }
 
         // TODO temp
-        val hospitalList: List<HospitalEntity> = listOf(
-            HospitalEntity(
-                id = 581,
-                imageUrl = listOf(
-                    "hospital/에코동물병원.jpeg",
-                    "hospital/에코동물병원2.jpeg",
-                    "hospital/에코동물병원3.jpeg"
-                ),
-                address = "서울특별시 송파구 가락동 137번지 3호",
-                name = "에코동물병원",
-                hours = "09:30 - 20:00/ 토,일요일 09:30 - 17:00",
-                tel = "02-443-2222",
-                vet = "김미혜"
+        val contentList: List<ContentEntity> = listOf(
+            ContentEntity(
+                contentId = 5,
+                title = "Pet-Friendly Cafes in the City",
+                body = "Looking for places to hang out with your pets? Che",
+                category = "TIPS",
+                imageUrl = "petImg/darthVader.jpg",
+                createdAt = "1695038400",
+                updatedAt = "1729063206",
+                likesCount = 1,
+                authorId = 4,
+                isLiked = false
             ),
-            HospitalEntity(
-                id = 582,
-                imageUrl = listOf("hospital/영국동물병원.jpeg"),
-                address = "서울특별시 송파구 가락동 190번지 6호",
-                name = "영국동물병원",
-                hours = "09:30 - 19:00 / 토요일 09:30 - 18:00",
-                tel = "02-430-7005",
-                vet = "이영국"
-            ))
+            ContentEntity(
+                contentId = 3,
+                title = "Pet Care Tips for New Owners",
+                body = "<p>Here are some tips to get you started.asdfasdf<",
+                category = "TIPS",
+                imageUrl = "petImg/darthVader.jpg",
+                createdAt = "1695288600",
+                updatedAt = "1729063206",
+                likesCount = 1,
+                authorId = 3,
+                isLiked = false
+            ),
+            ContentEntity(
+                contentId = 1,
+                title = "How to Groom Your Dogaaaa",
+                body = "<p>Learn the basics of grooming your dog with thes",
+                category = "TIPS",
+                imageUrl = "petImg/darthVader.jpg",
+                createdAt = "1695650400",
+                updatedAt = "1729063206",
+                likesCount = 12,
+                authorId = 1,
+                isLiked = false
+            )
+        )
 
-        hospitalListAdapter.submitList(hospitalList)
+        moreContentListAdapter.submitList(contentList)
     }
 
     /**

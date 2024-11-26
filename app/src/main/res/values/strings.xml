@@ -236,9 +236,7 @@
 
     <!-- content detail activity -->
     <string name="content_like_desc">%d명이 좋아했어요</string>
-    <string name="content_detail_hospital_recommendation_desc">내 근처 동물병원을 모아봤어요</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="content_detail_more_content_desc">알아두면 행복해지는 반려생활!\n이런 글은 어떤가요?</string>
 
 
 </resources>

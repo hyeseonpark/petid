@@ -165,13 +165,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
-            android:text="@string/content_detail_hospital_recommendation_desc"
+            android:text="@string/content_detail_more_content_desc"
             android:textFontWeight="700"
             android:textSize="18dp"
             android:textColor="@color/petid_underbar"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_hospital_recommend_list"
+            android:id="@+id/recyclerview_more_content_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
