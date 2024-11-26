@@ -23,12 +23,13 @@
         android:layout_gravity="center_horizontal"/>
 
 
-    <EditText
-        android:id="@+id/edit_text"
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edit_text_seacrh"
         android:layout_width="match_parent"
         android:layout_height="53dp"
         android:background="@drawable/edittext_search"
         android:hint="@string/search"
+        android:imeOptions="actionSearch"
         android:inputType="text"
         android:textSize="14dp"
         android:textColor="@color/petid_title"

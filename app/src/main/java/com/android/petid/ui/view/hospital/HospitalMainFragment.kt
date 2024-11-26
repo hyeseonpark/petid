@@ -7,22 +7,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
 import com.android.petid.common.BaseFragment
 import com.android.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
-import com.android.petid.databinding.FragmentBlogMainBinding
 import com.android.petid.databinding.FragmentHospitalMainBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.view.blog.BlogMainFragment
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
+import com.android.petid.util.hideKeyboardAndClearFocus
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -43,6 +43,8 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     private val TAG = "HospitalMainFragment"
 
     private lateinit var hospitalListAdapter : HospitalListAdapter
+
+    private var currentHospitalList : List<HospitalEntity>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,6 +97,26 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
 
     private fun initComponent() {
         with(binding) {
+            // 검색 기능
+            editTextSeacrh.setOnEditorActionListener { textView, actionId, _ ->
+                var check = false
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    val filteredList: List<HospitalEntity>? =
+                        when(textView.text.trim()) {
+                            "" -> currentHospitalList
+                            else -> {
+                                currentHospitalList?.filter{ hospital ->
+                                    hospital.name.contains(textView.text, ignoreCase = true)
+                                }
+                            }
+                        }
+                    hospitalListAdapter.submitList(filteredList)
+                    requireActivity().hideKeyboardAndClearFocus()
+                    check = true
+                }
+                check
+            }
+
             hospitalListAdapter = HospitalListAdapter(requireActivity()) { item ->
                 val intent = Intent(activity, HospitalActivity::class.java)
                     .putExtra("hospitalDetail", item)
@@ -172,8 +194,8 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             viewModel.hospitalApiState.collectLatest { result ->
                 when (result) {
                     is CommonApiState.Success -> {
-                        val hospitalList = result.data
-                        hospitalListAdapter.submitList(hospitalList)
+                        currentHospitalList = result.data
+                        hospitalListAdapter.submitList(currentHospitalList)
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리

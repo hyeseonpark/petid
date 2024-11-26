@@ -1,5 +1,6 @@
 package com.android.petid.util
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
@@ -7,7 +8,10 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -89,4 +93,16 @@ fun getRandomFileName(dir: String): String {
         .map { characters.random() }
         .joinToString("")
     return "$dir/$randomName.jpg"
+}
+
+/**
+ * 키보드 숨기기 및 editText Focus clear
+ */
+fun Activity.hideKeyboardAndClearFocus() {
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+
+    if (currentFocus is EditText) {
+        currentFocus?.clearFocus()
+    }
 }
