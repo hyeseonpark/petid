@@ -1,14 +1,12 @@
 package com.android.petid.ui.view.generate
 
-import android.content.Context
 import android.os.Bundle
 import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.android.petid.R
 import com.android.petid.databinding.ActivityGeneratePetidMainBinding
+import com.android.petid.util.hideKeyboardAndClearFocus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,13 +27,7 @@ class GeneratePetidMainActivity : AppCompatActivity() {
      * EditText 바깥 터치 시 키보드 숨기기
      */
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-
-        if(currentFocus is EditText) {
-            currentFocus!!.clearFocus()
-        }
-
+        hideKeyboardAndClearFocus()
         return super.dispatchTouchEvent(ev)
     }
 }
