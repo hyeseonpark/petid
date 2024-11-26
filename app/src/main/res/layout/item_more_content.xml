@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="24dp"
+    android:layout_marginVertical="7dp"
+    android:orientation="horizontal"
+    android:background="@drawable/solid_f2f2f2_radius_10"
+    android:gravity="center_vertical">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView_thumbnail"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginVertical="12dp"
+        android:layout_marginLeft="13dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_pet_photo_sample"
+        app:shapeAppearanceOverlay="@style/Radius6ImageView" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="꿈이크는 동물병원"
+        android:textColor="@color/petid_title"
+        android:textSize="16sp"
+        android:textFontWeight="700"
+        android:paddingLeft="24dp"
+        android:maxLines="1"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/icon_detail"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_right_arrow"
+        android:background="@null"
+        android:tint="@color/petid_subtitle"
+        android:layout_marginRight="19dp"/>
+
+</LinearLayout>
