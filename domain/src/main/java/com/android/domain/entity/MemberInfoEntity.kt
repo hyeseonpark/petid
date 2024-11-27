@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class MemberInfoEntity  (
+    val memberId: Int,
     val name: String,
     val address: String?,
     val addressDetails: String?,

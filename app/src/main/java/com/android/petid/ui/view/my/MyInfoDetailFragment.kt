@@ -100,11 +100,7 @@ class MyInfoDetailFragment
                         // s3 bucket 에 파일 업로드
                         // TODO random name -> 1-1.5 회원정보조회 api에 컬럼 추가 후 수정
                         with(viewModel) {
-                            profileImageName = when(memberImageFileName) {
-                                null -> getRandomFileName("member")
-                                else -> memberImageFileName!!
-                            }
-                            uploadFile(requireContext(), file, profileImageName)
+                            uploadFile(requireContext(), file, memberImageFileName!!)
                         }
                     }
 
@@ -191,7 +187,7 @@ class MyInfoDetailFragment
             viewModel.uploadS3Result.collectLatest { result ->
                 when {
                     result.isSuccess -> {
-                        viewModel.updateMemberPhoto(viewModel.profileImageName)
+                        viewModel.updateMemberPhoto(viewModel.memberImageFileName!!)
                     }
                     result.isFailure -> {
                         val exception = result.exceptionOrNull()
