@@ -33,12 +33,15 @@ class ContentDetailActivity : AppCompatActivity() {
 
     private val TAG = "ContentDetailActivity"
 
+    private lateinit var moreContentListAdapter : MoreContentListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContentDetailBinding.inflate(layoutInflater)
 
         observeDoLikeState()
         observeGetContentDetailState()
+        observeCurrentContentListState()
 
         initComponent()
 
@@ -48,6 +51,7 @@ class ContentDetailActivity : AppCompatActivity() {
     private fun initComponent() {
         viewModel.contentId = intent.getIntExtra("contentId", -1)
         viewModel.getContentDetail()
+        viewModel.getAllContentList()
 
         // 콘텐츠 좋아요
         binding.buttonContentLike.setOnClickListener {
@@ -57,7 +61,7 @@ class ContentDetailActivity : AppCompatActivity() {
             }
         }
 
-        val moreContentListAdapter = MoreContentListAdapter(applicationContext) { item ->
+        moreContentListAdapter = MoreContentListAdapter(applicationContext) { item ->
             val intent = Intent(this, ContentDetailActivity::class.java)
                 .putExtra("contentId", item.contentId)
             startActivity(intent)
@@ -66,48 +70,6 @@ class ContentDetailActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = moreContentListAdapter
         }
-
-        // TODO temp
-        val contentList: List<ContentEntity> = listOf(
-            ContentEntity(
-                contentId = 5,
-                title = "Pet-Friendly Cafes in the City",
-                body = "Looking for places to hang out with your pets? Che",
-                category = "TIPS",
-                imageUrl = "petImg/darthVader.jpg",
-                createdAt = "1695038400",
-                updatedAt = "1729063206",
-                likesCount = 1,
-                authorId = 4,
-                isLiked = false
-            ),
-            ContentEntity(
-                contentId = 3,
-                title = "Pet Care Tips for New Owners",
-                body = "<p>Here are some tips to get you started.asdfasdf<",
-                category = "TIPS",
-                imageUrl = "petImg/darthVader.jpg",
-                createdAt = "1695288600",
-                updatedAt = "1729063206",
-                likesCount = 1,
-                authorId = 3,
-                isLiked = false
-            ),
-            ContentEntity(
-                contentId = 1,
-                title = "How to Groom Your Dogaaaa",
-                body = "<p>Learn the basics of grooming your dog with thes",
-                category = "TIPS",
-                imageUrl = "petImg/darthVader.jpg",
-                createdAt = "1695650400",
-                updatedAt = "1729063206",
-                likesCount = 12,
-                authorId = 1,
-                isLiked = false
-            )
-        )
-
-        moreContentListAdapter.submitList(contentList)
     }
 
     /**
@@ -197,5 +159,37 @@ class ContentDetailActivity : AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) HH:mm", Locale.KOREAN)
 
         return dateTime.format(formatter)
+    }
+
+
+    /**
+     * 모든 콘텐츠 리스트 조회
+     */
+    private fun observeCurrentContentListState() {
+        lifecycleScope.launch {
+            viewModel.allContentListApiState.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        val allContentList = result.data
+
+                        if(allContentList.isNotEmpty()) {
+                            val filteredContentList = allContentList
+                                .filter { item -> item.contentId != viewModel.contentId }
+                                .shuffled() // 순서 섞기
+                                .take(3) // 아이템 3개만 가져오기
+
+                            moreContentListAdapter.submitList(filteredContentList)
+                        }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                    is CommonApiState.Init -> {}
+                }
+            }
+        }
     }
 }
