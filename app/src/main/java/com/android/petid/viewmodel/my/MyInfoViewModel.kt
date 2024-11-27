@@ -24,9 +24,6 @@ class MyInfoViewModel @Inject constructor(
     private val myInfoRepository: MyInfoRepository,
 ): ViewModel() {
 
-    /* 새로 생성한 파일명 */
-    var profileImageName : String = ""
-
     /* 서버에서 받은 파일명, nullable */
     var memberImageFileName: String? = null
 
@@ -67,8 +64,8 @@ class MyInfoViewModel @Inject constructor(
                 is ApiResult.Success -> {
                     val memberInfo = result.data
 
+                    memberImageFileName = "member/" + memberInfo.memberId + ".jpg"
                     memberInfo.image?.also {
-                        memberImageFileName = it
                         getMemberImage(it)
                     }
 

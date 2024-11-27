@@ -1,9 +1,9 @@
 package com.android.data.dto.response
 
-import com.android.domain.entity.LocationEntity
 import com.android.domain.entity.MemberInfoEntity
 
 data class MemberInfoResponse (
+    val memberId: Int,
     val name: String,
     val address: String?,
     val addressDetails: String?,
@@ -13,6 +13,7 @@ data class MemberInfoResponse (
 )
 
 fun MemberInfoResponse.toDomain() = MemberInfoEntity(
+    memberId = memberId,
     name = name,
     address = address,
     addressDetails = addressDetails,
