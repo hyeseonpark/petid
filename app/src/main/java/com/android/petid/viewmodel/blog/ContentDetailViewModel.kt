@@ -52,17 +52,22 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun getContentDetail() {
         viewModelScope.launch {
-            when (val result = getContentDetailUseCase(contentId)) {
+            val state = when (val result = getContentDetailUseCase(contentId)) {
                 is ApiResult.Success -> {
-                    _contentDetailApiState.emit(CommonApiState.Success(result.data))
+                    val contentDetail = result.data
+                    val updatedDetail = contentDetail.copy(
+                        imageUrl = contentDetail.imageUrl?.let { getContentImage(it) } ?: ""
+                    )
+                    CommonApiState.Success(updatedDetail)
                 }
                 is ApiResult.HttpError -> {
-                    _contentDetailApiState.emit(CommonApiState.Error(result.error.error))
+                    CommonApiState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    _contentDetailApiState.emit(CommonApiState.Error(result.errorMessage))
+                    CommonApiState.Error(result.errorMessage)
                 }
             }
+            _contentDetailApiState.emit(state)
         }
     }
 

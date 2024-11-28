@@ -1,13 +1,19 @@
 package com.android.petid.ui.view.blog
 
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Html
+import android.util.Base64
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Visibility
 import com.android.domain.entity.ContentEntity
 import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
@@ -17,6 +23,7 @@ import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.viewmodel.blog.ContentDetailViewModel
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,6 +31,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import java.net.URL
 import java.util.Locale
 
 @AndroidEntryPoint
@@ -84,8 +92,29 @@ class ContentDetailActivity : AppCompatActivity() {
 
                         with(binding) {
                             textViewContentTitle.text = result.title
-                            textViewContentBody.text =
-                                Html.fromHtml(result.body, Html.FROM_HTML_MODE_LEGACY)
+
+                            textViewContentBody.text  = Html.fromHtml(result.body, Html.FROM_HTML_MODE_LEGACY, { source ->
+                                try {
+                                    if (source.startsWith("data:")) {
+                                        // Base64 이미지 처리
+                                        val base64Data = source.substringAfter("base64,")
+                                        val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
+                                        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                                        val drawable = BitmapDrawable(resources, bitmap)
+                                        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+                                        drawable
+                                    } else {
+                                        // 일반 URL 이미지 처리
+                                        val inputStream = URL(source).openStream()
+                                        val drawable = Drawable.createFromStream(inputStream, null)
+                                        drawable?.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+                                        drawable
+                                    }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    null // 실패 시 null 반환
+                                }
+                            }, null)
 
                             textViewDate.text =
                                 formatInstantToDateTime(result.createdAt.split(".")[0].toLong())
@@ -103,11 +132,17 @@ class ContentDetailActivity : AppCompatActivity() {
                                 String.format(getString(R.string.content_like_desc), result.likesCount)
                             buttonContentLike.isSelected = result.isLiked
 
-                            /*contentItem.imageUrl?.let {
-                                Glide.with(mContext)
-                                    .load(it)
-                                    .into(imageViewContentPreview)
-                            }*/
+                            if (result.imageUrl.isNullOrEmpty()) {
+                                imageViewContentPreview.visibility = View.GONE
+                            } else {
+                                (R.color.d9).let {
+                                    Glide.with(applicationContext)
+                                        .load(result.imageUrl)
+                                        .placeholder(it)
+                                        .error(it)
+                                        .into(imageViewContentPreview)
+                                }
+                            }
                         }
                     }
                     is CommonApiState.Error -> {
