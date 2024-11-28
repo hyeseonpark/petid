@@ -2,18 +2,20 @@ package com.android.petid.ui.view.main
 
 import android.os.Bundle
 import android.view.MotionEvent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.android.petid.R
 import com.android.petid.databinding.ActivityMainBinding
+import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.util.hideKeyboardAndClearFocus
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,10 +23,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var navMainFragment =
+        val navMainFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_layout_main) as NavHostFragment
         val navController = navMainFragment.findNavController()
-        binding.bottomNavigation.setupWithNavController(navController)
+
+        binding.bottomNavigation.let {
+            it.setupWithNavController(navController)
+            disableBottomNavigationViewTooltips(it)
+        }
     }
 
     /**
@@ -33,5 +39,17 @@ class MainActivity : AppCompatActivity() {
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         hideKeyboardAndClearFocus()
         return super.dispatchTouchEvent(ev)
+    }
+
+    /**
+     * tooltip 제거
+     */
+    private fun disableBottomNavigationViewTooltips(bottomNavigationView: BottomNavigationView) {
+        val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
+        for (i in 0 until menuView.childCount) {
+            val itemView = menuView.getChildAt(i)
+            itemView.setOnLongClickListener { true }
+            itemView.tooltipText = null
+        }
     }
 }

@@ -1,15 +1,10 @@
 package com.android.petid.ui.view.hospital
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.android.petid.R
 import com.android.petid.databinding.ActivityCompleteReservationBinding
-import com.android.petid.databinding.ActivityMainBinding
+import com.android.petid.ui.view.common.BaseActivity
 
-class CompleteReservationActivity : AppCompatActivity() {
+class CompleteReservationActivity : BaseActivity() {
     private lateinit var binding: ActivityCompleteReservationBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

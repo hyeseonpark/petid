@@ -1,10 +1,10 @@
 package com.android.petid.ui.view.deleted
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.databinding.ActivityGenerateCompleteBinding
+import com.android.petid.ui.view.common.BaseActivity
 
-class GenerateCompleteActivity : AppCompatActivity() {
+class GenerateCompleteActivity : BaseActivity() {
     private lateinit var binding: ActivityGenerateCompleteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

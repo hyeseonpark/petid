@@ -165,7 +165,7 @@
     <string name="eupmundong_title">읍/면/동</string>
 
     <!-- hospital detail -->
-    <string name="hospital_make_reservation">방문 예약하기</string>
+    <string name="hospital_make_reservation">방문 날짜/시간 예약하기</string>
 
     <!-- hospital reservation calendar -->
     <string name="hospital_reservation_calendar_title">yyyy년 MM월</string>

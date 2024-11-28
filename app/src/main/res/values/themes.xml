@@ -1,16 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.PetId" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- TODO temporary solution -->
         <item name="colorPrimary">@color/petid_clear_blue</item>
-<!--        <item name="android:background">@color/white</item>-->
         <item name="android:fontFamily">@font/font_family</item>
         <item name="android:textFontWeight" tools:targetApi="p">500</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="Theme.PetId" parent="Base.Theme.PetId" />

@@ -1,19 +1,14 @@
 package com.android.petid.ui.view.my
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.android.petid.R
 import com.android.petid.databinding.ActivityMyInfoBinding
-import com.android.petid.databinding.FragmentMyInfoDetailBinding
+import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyInfoActivity : AppCompatActivity() {
+class MyInfoActivity : BaseActivity() {
     private lateinit var binding: ActivityMyInfoBinding
     private val viewModel: MyInfoViewModel by viewModels()
 

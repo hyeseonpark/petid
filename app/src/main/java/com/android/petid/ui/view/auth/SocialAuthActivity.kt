@@ -12,6 +12,7 @@ import com.android.petid.R
 import com.android.petid.databinding.ActivitySocialAuthBinding
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.LoginResult
+import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.ui.view.main.MainActivity
 import com.android.petid.viewmodel.auth.SocialAuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -36,7 +37,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SocialAuthActivity : AppCompatActivity() {
+class SocialAuthActivity : BaseActivity() {
     // saa: single activity
     private lateinit var binding: ActivitySocialAuthBinding
     private val viewModel: SocialAuthViewModel by viewModels()

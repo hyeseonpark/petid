@@ -2,15 +2,15 @@ package com.android.petid.ui.view.generate
 
 import android.os.Bundle
 import android.view.MotionEvent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.android.petid.R
 import com.android.petid.databinding.ActivityGeneratePetidMainBinding
+import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.util.hideKeyboardAndClearFocus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class GeneratePetidMainActivity : AppCompatActivity() {
+class GeneratePetidMainActivity : BaseActivity() {
     private lateinit var binding: ActivityGeneratePetidMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

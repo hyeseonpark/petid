@@ -10,7 +10,6 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Visibility
@@ -21,6 +20,7 @@ import com.android.petid.databinding.ActivityContentDetailBinding
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.blog.adapter.MoreContentListAdapter
+import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.viewmodel.blog.ContentDetailViewModel
 import com.bumptech.glide.Glide
@@ -35,7 +35,7 @@ import java.net.URL
 import java.util.Locale
 
 @AndroidEntryPoint
-class ContentDetailActivity : AppCompatActivity() {
+class ContentDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityContentDetailBinding
     private val viewModel: ContentDetailViewModel by viewModels()
 

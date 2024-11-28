@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +14,7 @@ import com.android.petid.databinding.ActivityReservationHistoryInfoBinding
 import com.android.petid.enum.ReservationStatus
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.ui.view.my.adapter.HospitalReservationListAdapter
 import com.android.petid.viewmodel.hospital.ReservationHistoryInfoViewModel
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ReservationHistoryInfoActivity : AppCompatActivity() {
+class ReservationHistoryInfoActivity : BaseActivity() {
     private lateinit var binding: ActivityReservationHistoryInfoBinding
     private val viewModel: ReservationHistoryInfoViewModel by viewModels()
 

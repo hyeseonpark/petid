@@ -1,12 +1,12 @@
 package com.android.petid.ui.view.my
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.databinding.ActivityPetInfoBinding
+import com.android.petid.ui.view.common.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PetInfoActivity : AppCompatActivity() {
+class PetInfoActivity : BaseActivity() {
     private lateinit var binding: ActivityPetInfoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
