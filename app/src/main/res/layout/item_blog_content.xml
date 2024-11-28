@@ -8,54 +8,41 @@
     android:orientation="vertical"
     android:paddingBottom="26dp">
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="209dp"
-        android:layout_marginTop="26dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0dp">
+        android:layout_marginTop="26dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView_content_preview"
             android:layout_width="match_parent"
-            android:layout_height="209dp">
+            android:layout_height="match_parent"
+            android:src="@color/d9"
+            android:scaleType="fitXY"
+            app:shapeAppearanceOverlay="@style/Radius10ImageView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/imageView_content_preview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="#D9D9D9"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_content_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginRight="12dp"
+            android:paddingVertical="3dp"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/layout_content_preview_chip_background"
+            android:text="반려Tip"
+            android:textColor="@color/petid_underbar"
+            android:textFontWeight="400"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="23dp"
-                android:background="@drawable/layout_content_preview_chip_background"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="14dp"
-                android:layout_marginRight="12dp"
-                android:paddingHorizontal="10dp">
 
-                <TextView
-                    android:id="@+id/textView_content_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="반려Tip"
-                    android:textColor="@color/petid_underbar"
-                    android:textFontWeight="400"
-                    android:textSize="12dp" />
-
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_content_title"
@@ -112,7 +99,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/imageButton_share"
             android:layout_width="24dp"
             android:layout_height="24dp"
