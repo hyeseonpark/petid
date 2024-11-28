@@ -1,10 +1,10 @@
 package com.android.petid.ui.view.my
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.databinding.ActivityNoticeBinding
+import com.android.petid.ui.view.common.BaseActivity
 
-class NoticeActivity : AppCompatActivity() {
+class NoticeActivity : BaseActivity() {
     private lateinit var binding: ActivityNoticeBinding
     private val TAG = "NoticeActivity"
 

@@ -4,19 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
 import com.android.petid.databinding.ActivityTermsBinding
 import com.android.petid.util.setStyleSpan
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.viewmodel.auth.TermsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TermsActivity : AppCompatActivity() {
+class TermsActivity : BaseActivity() {
     private lateinit var binding: ActivityTermsBinding
     private val viewModel: TermsViewModel by viewModels()
 

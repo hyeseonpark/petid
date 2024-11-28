@@ -2,12 +2,12 @@ package com.android.petid.ui.view.auth
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.android.petid.R
-import com.android.petid.util.setStyleSpan
 import com.android.petid.databinding.ActivityPermissionBinding
+import com.android.petid.ui.view.common.BaseActivity
+import com.android.petid.util.setStyleSpan
 
-class PermissionActivity : AppCompatActivity() {
+class PermissionActivity : BaseActivity() {
     private lateinit var binding: ActivityPermissionBinding
     private val TAG = "PermissionActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
