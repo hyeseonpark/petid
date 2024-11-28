@@ -2,8 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 선택 불가능한 영역 -->
     <item
-        android:state_activated="false" android:state_enabled="false"
+        android:state_enabled="false"
         android:color="@color/petid_light_gray" />
+
     <!-- 선택된 경우-->
     <item
         android:state_checked="true"

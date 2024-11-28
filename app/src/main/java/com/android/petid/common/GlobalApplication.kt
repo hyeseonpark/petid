@@ -1,9 +1,7 @@
 package com.android.petid.common
 
-import android.app.Application
 import androidx.multidex.MultiDexApplication
 import com.android.petid.BuildConfig
-import com.android.petid.R
 import com.kakao.sdk.common.KakaoSdk
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
