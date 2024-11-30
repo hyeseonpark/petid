@@ -10,7 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentMyInfoUpdateBinding
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState

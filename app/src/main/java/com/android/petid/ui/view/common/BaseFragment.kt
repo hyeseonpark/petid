@@ -1,11 +1,16 @@
-package com.android.petid.common
+package com.android.petid.ui.view.common
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.android.petid.common.FragmentInflate
 
 abstract class BaseFragment<VB: ViewBinding>(
     private val inflate: FragmentInflate<VB>
@@ -26,4 +31,15 @@ abstract class BaseFragment<VB: ViewBinding>(
         super.onDestroyView()
         _binding = null
     }
+
+
+    val dialog = Dialog(requireContext()).apply {
+        window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setContentView(ProgressBar(requireContext()))
+        setCanceledOnTouchOutside(false)
+        setCancelable(false)
+        show()
+    }
+
+    dialog.cancel()
 }

@@ -8,7 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentHospitalDetailBinding
 import com.android.petid.viewmodel.hospital.HospitalViewModel
 import com.bumptech.glide.Glide

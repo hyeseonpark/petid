@@ -2,12 +2,10 @@ package com.android.petid.ui.view.my
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.android.petid.common.BaseFragment
-import com.android.petid.databinding.FragmentHospitalMainBinding
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentMyMainBinding
 import com.android.petid.ui.view.hospital.HospitalMainFragment
 

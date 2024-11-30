@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentReservationProcessFinishBinding
 
 class ReservationProcessFinishFragment: BaseFragment<FragmentReservationProcessFinishBinding>(

@@ -4,14 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentCheckingInfoBinding
-import com.android.petid.databinding.FragmentHomeMainBinding
-import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.util.booleanCharToSign
 import com.android.petid.util.genderCharToString
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel

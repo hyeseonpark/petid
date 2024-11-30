@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.BuildConfig
 import com.android.petid.R
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoInputBinding
 import com.android.petid.util.getCurrentDate
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel

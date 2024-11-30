@@ -15,7 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.android.domain.entity.BannerEntity
 import com.android.petid.BuildConfig
 import com.android.petid.R
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.common.Constants
 import com.android.petid.common.Constants.BANNER_TYPE_MAIN
 import com.android.petid.common.Constants.CHIP_TYPE
