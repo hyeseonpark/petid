@@ -30,9 +30,11 @@ class TermsViewModel @Inject constructor(
                 _apiState.emit(CommonApiState.Loading)  // 로딩 상태 전송
                 when (val result = doJoinUseCase(platform.toString(), sub, fcmToken, ad)) {
                     is ApiResult.Success -> {
-                        preferencesControl.saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.data.accessToken)
-                        preferencesControl.saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.data.refreshToken)
-
+                        val result = result.data
+                        preferencesControl.apply {
+                            saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken)
+                            saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken)
+                        }
                          _apiState.emit(CommonApiState.Success(Unit))  // 성공 시 UI 상태 전송
 
                     }

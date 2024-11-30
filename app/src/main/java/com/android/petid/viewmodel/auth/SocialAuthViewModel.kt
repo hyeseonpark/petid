@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.usecase.login.DoLoginUseCase
 import com.android.domain.util.ApiResult
-import com.android.petid.common.Constants
+import com.android.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
+import com.android.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.LoginResult
 import com.android.petid.util.PreferencesControl
@@ -38,9 +39,12 @@ class SocialAuthViewModel @Inject constructor(
 
             when (val result = doLoginUseCase(sub, fcmToken)) {
                 is ApiResult.Success -> {
-                    preferencesControl.saveStringValue(Constants.SHARED_VALUE_ACCESS_TOKEN, result.data.accessToken)
-                    preferencesControl.saveStringValue(Constants.SHARED_VALUE_REFRESH_TOKEN, result.data.refreshToken)
-                    _loginResult.emit(LoginResult.Success(result.data))  // 성공 시 데이터 전송
+                    val result = result.data
+                    preferencesControl.apply {
+                        saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken)
+                        saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken)
+                    }
+                    _loginResult.emit(LoginResult.Success(result))  // 성공 시 데이터 전송
                 }
                 is ApiResult.HttpError -> {
                     if (result.error.status == 404 && result.error.error.contains("Member UID")) {
