@@ -1,6 +1,7 @@
 package com.android.petid.di
 
 import com.android.data.api.AuthAPI
+import com.android.data.api.AuthAuthenticator
 import com.android.data.api.AuthInterceptor
 import com.android.data.api.BannerAPI
 import com.android.data.api.ContentAPI
@@ -11,6 +12,7 @@ import com.android.data.api.NullOnEmptyConverterFactory
 import com.android.data.api.PetAPI
 import com.android.data.api.MemberAPI
 import com.android.data.util.PreferencesHelper
+import com.android.petid.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -27,9 +29,6 @@ import javax.inject.Singleton
 @Module
 class ApiModule {
 
-    val BASE_URL = "http://yourpet-id.com:8080/"
-
-
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): LoggingInterceptor {
@@ -42,15 +41,24 @@ class ApiModule {
         return AuthInterceptor(preferencesHelper)
     }
 
+    @Provides
+    @Singleton
+    fun provideAuthAuthenticator(
+        preferencesHelper: PreferencesHelper,
+    ): AuthAuthenticator {
+        return AuthAuthenticator(preferencesHelper)
+    }
 
     @Provides
     @Singleton
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
+        authAuthenticator: AuthAuthenticator,
         loggingInterceptor: LoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
+            .authenticator(authAuthenticator)
             .addInterceptor(loggingInterceptor)
             .build()
     }
@@ -65,7 +73,7 @@ class ApiModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(NullOnEmptyConverterFactory())
             .addConverterFactory(ScalarsConverterFactory.create())
