@@ -31,15 +31,4 @@ abstract class BaseFragment<VB: ViewBinding>(
         super.onDestroyView()
         _binding = null
     }
-
-
-    val dialog = Dialog(requireContext()).apply {
-        window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        setContentView(ProgressBar(requireContext()))
-        setCanceledOnTouchOutside(false)
-        setCancelable(false)
-        show()
-    }
-
-    dialog.cancel()
 }
