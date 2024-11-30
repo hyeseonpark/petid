@@ -51,9 +51,6 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHospitalMainBinding.inflate(inflater)
-
-        initComponent()
-
         return binding.root
 
     }
@@ -61,11 +58,10 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeCurrentSidoState()
-        observeCurrentSigunguState()
-        observeCurrentEupmundongState()
+        initComponent()
+        initObserve()
 
-        observeCurrentHospitalListState()
+        viewModel.getSidoList()
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
             "locationItemSelected", this
@@ -88,12 +84,6 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             }
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.getSidoList()
-    }
-
 
     private fun initComponent() {
         with(binding) {
@@ -142,6 +132,13 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             }
 
         }
+    }
+
+    private fun initObserve() {
+        observeCurrentSidoState()
+        observeCurrentSigunguState()
+        observeCurrentEupmundongState()
+        observeCurrentHospitalListState()
     }
 
     /**
