@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentCompleteCardBinding
-import com.android.petid.databinding.FragmentHomeMainBinding
-import com.android.petid.ui.view.home.HomeMainFragment
 import com.android.petid.ui.view.main.MainActivity
 
 class CompleteCardFragment: BaseFragment<FragmentCompleteCardBinding>(FragmentCompleteCardBinding::inflate) {

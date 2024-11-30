@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentSignatureBinding
 
 class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatureBinding::inflate) {

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE

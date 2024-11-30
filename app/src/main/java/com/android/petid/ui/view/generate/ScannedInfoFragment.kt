@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.common.BaseFragment
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentScannedInfoBinding
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
