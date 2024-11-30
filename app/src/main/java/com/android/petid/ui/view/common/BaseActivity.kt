@@ -1,10 +1,12 @@
 package com.android.petid.ui.view.common
 
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.android.petid.R
 
 open class BaseActivity : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

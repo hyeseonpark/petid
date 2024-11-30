@@ -10,15 +10,6 @@
     tools:context=".ui.view.main.MainActivity"
     android:background="@color/white">
 
-    <!--FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" /-->
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_layout_main"
         android:layout_width="match_parent"
@@ -48,44 +39,5 @@
         app:elevation="16dp"
         app:menu="@menu/main_menu"
         android:alpha="0.8"/>
-
-    <!--com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout_main"
-        android:layout_width="match_parent"
-        android:layout_height="92dp"
-        app:tabSelectedTextColor="@color/petid_clear_blue"
-        app:tabTextColor="#848484"
-        app:tabRippleColor="@null"
-        app:tabTextAppearance="@style/tab_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/white">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_home"
-            android:text="@string/main_home" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_hospital"
-            android:text="@string/main_hospital" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_blog"
-            android:text="@string/main_blog" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_my"
-            android:text="@string/main_my" />
-
-    </com.google.android.material.tabs.TabLayout-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
