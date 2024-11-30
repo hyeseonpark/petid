@@ -2,12 +2,11 @@ package com.android.petid.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
 import com.android.petid.databinding.ActivityTermsBinding
-import com.android.petid.util.setStyleSpan
+import com.android.petid.util.Utils.setStyleSpan
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseActivity

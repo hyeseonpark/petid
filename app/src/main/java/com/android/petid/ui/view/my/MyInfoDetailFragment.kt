@@ -21,8 +21,7 @@ import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentMyInfoDetailBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.util.bitmapToFile
-import com.android.petid.util.getRandomFileName
+import com.android.petid.util.Utils.bitmapToFile
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint

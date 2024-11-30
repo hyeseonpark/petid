@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.android.petid.common.FragmentInflate
+import com.android.petid.util.ProgressDialogUtil
 
 abstract class BaseFragment<VB: ViewBinding>(
     private val inflate: FragmentInflate<VB>
@@ -30,5 +31,13 @@ abstract class BaseFragment<VB: ViewBinding>(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun showLoading() {
+        _binding?.also { ProgressDialogUtil.show(requireContext()) }
+    }
+
+    fun hideLoading() {
+        ProgressDialogUtil.cancel()
     }
 }

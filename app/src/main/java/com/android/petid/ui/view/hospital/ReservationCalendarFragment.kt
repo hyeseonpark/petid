@@ -76,6 +76,7 @@ class ReservationCalendarFragment:
 
             // 예약 완료 버튼
             buttonConfirm.setOnClickListener{
+                showLoading()
                 viewModel.createHospitalOrder()
             }
 
@@ -209,19 +210,17 @@ class ReservationCalendarFragment:
         lifecycleScope.launch {
             viewModel.createHospitalOrderApiState.collect { result ->
                 when(result) {
-                    is CommonApiState.Success ->
+                    is CommonApiState.Success -> {
+                        hideLoading()
                         findNavController().navigate(
                             R.id.action_reservationCalendarFragment_to_reservationProcessFinishFragment)
-
+                    }
                     is CommonApiState.Error -> {
-                        // 오류 처리
                         Log.e(TAG, "${result.message}")
+                        hideLoading()
                     }
-                    is CommonApiState.Loading -> {
-                        // 로딩 상태 처리
-                        Log.d(TAG, "Loading....................")
-                    }
-                    is CommonApiState.Init -> {}
+                    is CommonApiState.Loading -> showLoading()
+                    is CommonApiState.Init -> hideLoading()
                 }
             }
         }

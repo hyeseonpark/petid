@@ -8,7 +8,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.android.petid.R
 import com.android.petid.databinding.ActivityMainBinding
 import com.android.petid.ui.view.common.BaseActivity
-import com.android.petid.util.hideKeyboardAndClearFocus
+import com.android.petid.util.Utils.hideKeyboardAndClearFocus
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
