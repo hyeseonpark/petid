@@ -12,16 +12,13 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Visibility
-import com.android.domain.entity.ContentEntity
-import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.ActivityContentDetailBinding
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.android.petid.ui.view.common.BaseActivity
-import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.viewmodel.blog.ContentDetailViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -136,7 +133,7 @@ class ContentDetailActivity : BaseActivity() {
                                 imageViewContentPreview.visibility = View.GONE
                             } else {
                                 (R.color.d9).let {
-                                    Glide.with(applicationContext)
+                                    Glide.with(getGlobalContext())
                                         .load(result.imageUrl)
                                         .placeholder(it)
                                         .error(it)
