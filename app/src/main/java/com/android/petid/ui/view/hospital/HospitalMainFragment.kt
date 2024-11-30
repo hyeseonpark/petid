@@ -22,7 +22,7 @@ import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
 import com.android.petid.databinding.FragmentHospitalMainBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
-import com.android.petid.util.hideKeyboardAndClearFocus
+import com.android.petid.util.Utils.hideKeyboardAndClearFocus
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

@@ -24,8 +24,8 @@ import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
 import com.android.petid.util.PreferencesControl
-import com.android.petid.util.booleanCharToSign
-import com.android.petid.util.genderCharToString
+import com.android.petid.util.Utils.booleanCharToSign
+import com.android.petid.util.Utils.genderCharToString
 import com.android.petid.viewmodel.home.HomeMainVIewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

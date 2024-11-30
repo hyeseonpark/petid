@@ -13,7 +13,7 @@ import com.android.petid.BuildConfig
 import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoInputBinding
-import com.android.petid.util.getCurrentDate
+import com.android.petid.util.Utils.getCurrentDate
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
