@@ -9,13 +9,9 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
-import com.android.petid.common.BaseFragment
 import com.android.petid.databinding.FragmentAddressSearchBinding
-import com.android.petid.databinding.FragmentHomeMainBinding
-import com.android.petid.ui.view.home.HomeMainFragment
 
 
 class AddressSearchFragment : BaseFragment<FragmentAddressSearchBinding>(FragmentAddressSearchBinding::inflate) {
