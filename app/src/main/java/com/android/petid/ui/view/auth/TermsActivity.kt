@@ -128,4 +128,3 @@ class TermsActivity : BaseActivity() {
         }
     }
 }
-// u-vjpFMMHtac_2Qd42Su3PqRpTNo9jr1AAAAAQo8JB8AAAGRtkcrK7fuZLkpz6yP
