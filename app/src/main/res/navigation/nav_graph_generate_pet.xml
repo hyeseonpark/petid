@@ -39,7 +39,12 @@
         android:id="@+id/addressSearchFragment"
         android:name="com.android.petid.ui.view.common.AddressSearchFragment"
         android:label="fragment_address_search"
-        tools:layout="@layout/fragment_address_search" />
+        tools:layout="@layout/fragment_address_search" >
+        <argument
+            android:name="Key"
+            app:argType="string"
+            android:defaultValue="addressData" />
+    </fragment>
 
     <fragment
         android:id="@+id/petInfoInputFragment"

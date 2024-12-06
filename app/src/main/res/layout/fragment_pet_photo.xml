@@ -29,7 +29,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_current_step"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         android:textColor="@color/petid_clear_blue"
         android:textFontWeight="700"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,15 +51,28 @@
         android:textFontWeight="500"
         android:textColor="@color/petid_title"/>
 
-    <TextView
-        android:id="@+id/textView_subtitle"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_notice1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="24dp"
         android:layout_marginLeft="33dp"
-        android:text="@string/petid_generate_step_4_subtitle"
+        android:text="@string/petid_generate_step_4_notice_1"
         android:textFontWeight="400"
-        android:textColor="#B2B2B2"/>
+        android:textSize="14sp"
+        android:textColor="@color/petid_title"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_notice2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="33dp"
+        android:text="@string/petid_generate_step_4_notice_2"
+        android:textFontWeight="400"
+        android:textSize="14sp"
+        android:textColor="@color/petid_title"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,24 +81,24 @@
         android:layout_weight="1"
         android:gravity="center">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView_pet_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:srcCompat="@drawable/img_pet_photo_picture" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="33dp"
         android:text="@string/pet_photo_activity_desc"
         android:textFontWeight="400"
-        android:textColor="@color/petid_title"
+        android:textColor="@color/petid_underbar"
         android:gravity="center"
         android:layout_gravity="center"
-        android:textSize="16dp"/>
+        android:textSize="14sp"/>
 
     </LinearLayout>
 

@@ -36,9 +36,16 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setFragmentResultListener(BundleKeys.KEY_ADDRESS) { _, bundle ->
-            val result = bundle.getString(BundleKeys.KEY_ADDRESS)
-            binding.editTextAddress.setText(result)
+        val keyEditTextMap = mapOf(
+            BundleKeys.KEY_ADDRESS to binding.editTextAddress,
+            BundleKeys.KEY_ADDRESS_RRA to binding.editTextRra
+        )
+
+        keyEditTextMap.forEach { (key, editText) ->
+            setFragmentResultListener(key) { _, bundle ->
+                val result = bundle.getString(key)
+                editText.setText(result)
+            }
         }
     }
 
@@ -48,7 +55,8 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
                 buttonNext.isEnabled = true
             }
 
-            listOf(editTextName, editTextPhone, editTextAddress, editTextAddressDetail).forEach { editText ->
+            listOf(editTextName, editTextPhone, editTextAddress, editTextAddressDetail,
+                editTextRra, editTextRraDetail).forEach { editText ->
                 editText.addTextChangedListener {
                     buttonNext.isEnabled = isPossibleToNextStep()
                 }
@@ -58,13 +66,29 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
                 findNavController().navigate(R.id.action_userInfoInputFragment_to_addressSearchFragment)
             }
 
+            editTextRra.setOnClickListener{
+                val action = UserInfoInputFragmentDirections
+                    .actionUserInfoInputFragmentToAddressSearchFragment(BundleKeys.KEY_ADDRESS_RRA)
+                findNavController().navigate(action)
+            }
+
+            checkboxTermsAgree.setOnCheckedChangeListener { _, isChecked ->
+                buttonNext.isEnabled = isPossibleToNextStep()
+
+                listOf(editTextRra, editTextRraDetail).forEach { editText ->
+                    editText.visibility = if(isChecked) View.GONE else View.VISIBLE
+                }
+            }
+
             buttonNext.setOnClickListener{
                 val name = editTextName.text.toString()
                 val address = editTextAddress.text.toString()
                 val addressDetail = editTextAddressDetail.text.toString()
+                val rra = editTextRra.text.toString()
+                val rraDetail = editTextRraDetail.text.toString()
                 val phone = editTextPhone.text.toString()
 
-                viewModel.petInfo.setProposer(name, address, addressDetail, phone)
+                viewModel.petInfo.setProposer(name, address, addressDetail, rra, rraDetail, phone)
 
                 findNavController().navigate(R.id.action_userInfoInputFragment_to_petInfoInputFragment)
             }
@@ -77,7 +101,10 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
     private fun isPossibleToNextStep(): Boolean {
         return with(binding) {
             listOf(editTextName, editTextPhone, editTextAddress, editTextAddressDetail)
-                .all { it.text.isNullOrEmpty().not() }
+                .all { it.text.isNullOrEmpty().not() } &&
+                    (checkboxTermsAgree.isChecked ||
+                            (editTextRra.text.isNullOrEmpty().not() &&
+                                    editTextRraDetail.text.isNullOrEmpty().not()))
         }
     }
 }

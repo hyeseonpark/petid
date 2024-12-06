@@ -124,6 +124,7 @@
     <string name="address">주소</string>
     <string name="address_hint">주소를 검색해 주세요.</string>
     <string name="address_detail_hint">상세주소를 입력해주세요.</string>
+    <string name="address_is_same">현 거주지와 주민등록상 주소가 동일해요.</string>
 
     <!--  pet id generate progress : step 3  -->
     <string name="petid_generate_step_3_title">반려동물의 정보를\n알려주세요</string>
@@ -136,8 +137,10 @@
 
     <!--  pet id generate progress : step 4  -->
     <string name="petid_generate_step_4_title">반려동물\n사진 촬영을 시작할게요</string>
-    <string name="petid_generate_step_4_subtitle">AI가 반려동물의 정보를 가져올거에요!</string>
-    <string name="pet_photo_activity_desc">가이드에 맞춰서\n사진 촬영을 해주세요!</string>
+    <!--string name="petid_generate_step_4_subtitle">AI가 반려동물의 정보를 가져올거에요!</string-->
+    <string name="petid_generate_step_4_notice_1">\u2022 사진을 촬영하면 AI가 자동으로 반려동물의\n주요 특징을 인식합니다.</string>
+    <string name="petid_generate_step_4_notice_2">\u2022 촬영된 사진은 펫 카드 제작에 사용됩니다.\n재촬영을 원하실 경우, 다시 촬영 가능합니다.</string>
+    <string name="pet_photo_activity_desc">가이드에 맞춰서 촬영해 주세요!</string>
     <string name="pet_photo_activity_start_taking_a_photo">촬영 시작</string>
 
     <!--  pet id generate progress : step 5  -->

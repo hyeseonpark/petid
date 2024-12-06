@@ -11,7 +11,6 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-
     <LinearLayout
         android:id="@+id/top_bar_layout"
         android:layout_width="match_parent"
@@ -69,50 +68,75 @@
                 android:layout_marginTop="12dp"
                 android:text="@string/petid_generate_step_5_subtitle"
                 android:textFontWeight="400"
-                android:textColor="#B2B2B2"/>
+                android:textColor="@color/petid_gray"
+                android:layout_marginBottom="56dp"/>
 
-            <LinearLayout
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type"
+                android:textColor="@color/petid_gray"
+                android:textSize="13dp"
+                android:textFontWeight="500"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp"/>
+
+            <include
+                layout="@layout/edittext_underline"
+                android:id="@+id/editTextType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginTop="41dp"
-                app:layout_constraintEnd_toEndOf="@+id/cardView_photo"
-                app:layout_constraintStart_toStartOf="@+id/cardView_photo"
-                app:layout_constraintTop_toBottomOf="@+id/cardView_photo">
+                android:layout_marginBottom="25dp" />
 
-                <include
-                    app:title="@{@string/type}"
-                    layout="@layout/edittext_underline"
-                    android:id="@+id/editTextType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hair_color"
+                android:textColor="@color/petid_gray"
+                android:textSize="13dp"
+                android:textFontWeight="500"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp"/>
 
-                <include
-                    app:title="@{@string/hair_color}"
-                    layout="@layout/edittext_underline"
-                    android:id="@+id/editTextHairColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp" />
+            <include
+                layout="@layout/edittext_underline"
+                android:id="@+id/editTextHairColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp" />
 
-                <include
-                    app:title="@{@string/hair_feature}"
-                    layout="@layout/edittext_underline"
-                    android:id="@+id/editTextHairFeature"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hair_feature"
+                android:textColor="@color/petid_gray"
+                android:textSize="13dp"
+                android:textFontWeight="500"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp"/>
 
-                <include
-                    app:title="@{@string/weight}"
-                    layout="@layout/edittext_underline"
-                    android:id="@+id/editTextWeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+            <include
+                layout="@layout/edittext_underline"
+                android:id="@+id/editTextHairFeature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp" />
 
-            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight"
+                android:textColor="@color/petid_gray"
+                android:textSize="13dp"
+                android:textFontWeight="500"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="2dp"/>
+
+            <include
+                layout="@layout/edittext_underline"
+                android:id="@+id/editTextWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
