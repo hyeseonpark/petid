@@ -65,31 +65,10 @@
             android:name=".ui.view.my.PetInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.my.PetInfoDetailFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.my.PetInfoUpdateFragment"
-            android:exported="false" />
-        <activity
             android:name=".ui.view.my.MyInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.my.MyInfoUpdateFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.my.MyInfoDetailFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.hospital.ReservationProcessFinishFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.hospital.ReservationCalendarFragment"
-            android:exported="false" />
-        <activity
             android:name=".ui.view.hospital.CompleteReservationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.hospital.HospitalDetailFragment"
             android:exported="false" />
 
         <meta-data
@@ -121,28 +100,7 @@
             android:name=".ui.view.auth.PermissionActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.generate.CompleteCardFragment"
-            android:exported="false" />
-        <activity
             android:name=".ui.view.deleted.GenerateCompleteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.generate.SignatureFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.generate.CheckingInfoFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.generate.ScannedInfoFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.generate.PetPhotoFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.generate.PetInfoInputFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.generate.PetIdStartFragment"
             android:exported="false" />
         <activity
             android:name=".ui.view.auth.SignupCompleteActivity"
@@ -167,9 +125,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.view.deleted.IntroActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.generate.UserInfoInputFragment"
             android:exported="false" />
     </application>
 

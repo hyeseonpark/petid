@@ -11,10 +11,13 @@ import android.webkit.WebViewClient
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.android.petid.databinding.FragmentAddressSearchBinding
 
 
 class AddressSearchFragment : BaseFragment<FragmentAddressSearchBinding>(FragmentAddressSearchBinding::inflate) {
+    val args: AddressSearchFragmentArgs by navArgs()
+
     companion object {
         fun newInstance()= AddressSearchFragment()
         const val url = "http://yourpet-id.com/address"
@@ -59,7 +62,7 @@ class AddressSearchFragment : BaseFragment<FragmentAddressSearchBinding>(Fragmen
         @Suppress("unused")
         fun processDATA(data: String?) {
             activity?.runOnUiThread {
-                setFragmentResult(BundleKeys.KEY_ADDRESS, bundleOf(BundleKeys.KEY_ADDRESS to data))
+                setFragmentResult(args.Key, bundleOf(args.Key to data))
                 findNavController().popBackStack()
             }
         }

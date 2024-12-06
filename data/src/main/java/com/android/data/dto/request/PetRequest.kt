@@ -17,7 +17,6 @@ package com.android.data.dto.request
  * @param sign 사인 이미지 경로
  */
 data class PetRequest(
-    val petRegNo: String?,
     val petName: String?,
     val petBirthDate: String?,
     val petSex: Char?,
@@ -31,13 +30,13 @@ data class PetRequest(
     val sign: String?,
 ) {
     class Builder {
-        private var petRegNo: String? = null
         private var petName: String? = null
         private var petBirthDate: String? = null
         private var petSex: Char? = null
         private var petNeuteredYn: Char? = null
         private var petNeuteredDate: String? = null
         // private var petAddr: String? = null
+        // private var petAddrDetails: String? = null
         private var chipType: String? = null
         private var appearance: PetAppearanceRequest? = null
         private var petImages: List<PetImageRequest>? = null
@@ -48,8 +47,9 @@ data class PetRequest(
         fun setChipType(chipType: String) = apply { this.chipType = chipType }
 
         /* UserInfoInputFragment */
-        fun setProposer(name: String, address: String, addrressDetails: String, phone: String) {
-            this.proposer = PetProposerRequest(name, address, addrressDetails, phone)
+        fun setProposer(name: String, address: String, addrressDetails: String,
+                        rra: String, rraDetails: String, phone: String) {
+            this.proposer = PetProposerRequest(name, address, addrressDetails, rra, rraDetails, phone)
         }
         // fun setPetAddr(petAddr: String) = apply {this.petAddr = petAddr}
 
@@ -77,7 +77,7 @@ data class PetRequest(
         fun setSign(sign: String) = apply { this.sign = sign }
 
         fun build(): PetRequest {
-            return PetRequest(petRegNo, petName, petBirthDate, petSex, petNeuteredYn,
+            return PetRequest(petName, petBirthDate, petSex, petNeuteredYn,
                 petNeuteredDate, chipType, appearance, petImages, proposer, sign)
         }
     }
