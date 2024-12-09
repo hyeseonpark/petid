@@ -212,6 +212,7 @@
     <!-- my info -->
     <string name="my_info_title">내 정보</string>
     <string name="update_my_info_title">내 정보 수정</string>
+    <string name="no_register">미등록 상태</string>
     <string name="update_complete">수정 완료</string>
 
     <string name="update_complete_dialog">수정 내용을 저장할까요?</string>

@@ -39,7 +39,11 @@ class PetInfoUpdateFragment
     }
 
     fun initComponent() {
-
+        with(binding) {
+            buttonNoRegister.setOnClickListener {
+                CustomDialogPetInfoNa().show(childFragmentManager, null)
+            }
+        }
     }
 
     private fun observeGetMemberInfoState() {
