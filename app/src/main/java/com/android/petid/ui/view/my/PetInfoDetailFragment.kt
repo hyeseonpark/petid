@@ -64,19 +64,10 @@ class PetInfoDetailFragment
 
             // 미등록 상태, dialog 보여주기
             textViewPetCreateStatusTitle.setOnClickListener {
-                infoDialog()
+                CustomDialogPetInfoNa().show(childFragmentManager, null)
             }
         }
     }
-
-    /**
-     * 내장칩 미 등록시, info dialog
-     */
-    private fun infoDialog() {
-        val dialog = CustomDialogPetInfoNa()
-        dialog.show(this.childFragmentManager, "CustomDialogPetInfoNa")
-    }
-
     /**
      * viewModel.getPetDetails 결과값 view 반영
      */
