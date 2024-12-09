@@ -13,8 +13,9 @@ import com.android.domain.usecase.main.GetBannerListUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,12 +42,12 @@ class HomeMainVIewModel @Inject constructor(
                 is ApiResult.Success -> {
                     var bannerList = result.data
 
-                    bannerList = bannerList.map { item ->
+                    var updatedBannerList = bannerList.map { item ->
                         val updatedImageUrl = getBannerImage(item.imageUrl)
                         item.copy(imageUrl = updatedImageUrl)
                     }
 
-                    _bannerApiState.emit(CommonApiState.Success(bannerList))
+                    _bannerApiState.emit(CommonApiState.Success(updatedBannerList))
                 }
                 is ApiResult.HttpError ->{
                     _bannerApiState.emit(CommonApiState.Error(result.error.error))
@@ -57,7 +58,6 @@ class HomeMainVIewModel @Inject constructor(
             }
         }
     }
-
     /**
      * banner 이미지 api
      */
@@ -120,5 +120,35 @@ class HomeMainVIewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    /* bannerScrollPosition 변수 */
+    private val _bannerScrollPosition = MutableStateFlow(0)
+    val bannerScrollPosition = _bannerScrollPosition.asStateFlow()
+
+    private var autoScrollJob: Job? = null
+
+    /**
+     * start banner auto scroll
+     */
+    fun startAutoScroll(intervalMillis: Long = 3000L) {
+        if (autoScrollJob?.isActive == true) return // 이미 실행 중인 작업이 있으면 실행하지 않음
+
+        autoScrollJob = viewModelScope.launch {
+            while (true) {
+                delay(intervalMillis) // 스크롤 간격
+                _bannerScrollPosition.value += 1
+            }
+        }
+
+    }
+
+    fun stopAutoScroll() {
+        autoScrollJob?.cancel() // 코루틴 작업 취소
+        autoScrollJob = null
+    }
+
+    fun updateCurrentPosition(position: Int) {
+        _bannerScrollPosition.value = position
     }
 }
