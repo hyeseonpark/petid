@@ -35,7 +35,7 @@ class PreferencesControl @Inject constructor(
      */
     override fun getIntValue(key: String): Int {
         val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
-        return pref.getInt(key, 0)
+        return pref.getInt(key, -1)
     }
 
     /**

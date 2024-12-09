@@ -26,7 +26,6 @@ class MyInfoViewModel @Inject constructor(
     /* 서버에서 받은 파일명, nullable */
     var memberImageFileName: String? = null
 
-
     /* Member info result */
     private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
         CommonApiState.Init

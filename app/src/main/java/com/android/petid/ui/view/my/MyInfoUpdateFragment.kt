@@ -27,10 +27,6 @@ import kotlinx.coroutines.launch
 class MyInfoUpdateFragment
     : BaseFragment<FragmentMyInfoUpdateBinding>(FragmentMyInfoUpdateBinding::inflate) {
 
-    companion object{
-        fun newInstance()= MyInfoUpdateFragment()
-    }
-
     private val viewModel: MyInfoViewModel by activityViewModels()
     private val TAG = "MyInfoUpdateFragment"
 
