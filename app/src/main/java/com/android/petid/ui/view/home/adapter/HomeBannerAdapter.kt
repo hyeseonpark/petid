@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.domain.entity.BannerEntity
-import com.android.domain.entity.HospitalEntity
 import com.android.petid.R
 import com.bumptech.glide.Glide
 
@@ -50,6 +49,10 @@ class HomeBannerAdapter(
             Glide.with(mContext).load(img).into(holder.img)
         }
 
+    }
+
+    fun getListSize() : Int {
+        return if(currentList.size == 0) 1 else currentList.size
     }
 
     override fun getItemCount(): Int {

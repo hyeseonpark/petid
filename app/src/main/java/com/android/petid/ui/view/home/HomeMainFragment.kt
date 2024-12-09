@@ -2,25 +2,28 @@ package com.android.petid.ui.view.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IntDef
+import androidx.annotation.NonNull
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.viewpager2.widget.ViewPager2
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.android.domain.entity.BannerEntity
 import com.android.petid.BuildConfig
 import com.android.petid.R
-import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.common.Constants
 import com.android.petid.common.Constants.BANNER_TYPE_MAIN
 import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
 import com.android.petid.util.PreferencesControl
@@ -31,12 +34,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainBinding::inflate) {
-
-    companion object{
-        fun newInstance()= HomeMainFragment()
-    }
 
     private val viewModel: HomeMainVIewModel by activityViewModels()
 
@@ -46,11 +46,10 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
 
     // banner adapter
     private lateinit var bannerAdapter : HomeBannerAdapter
-    // 배너
-    private var bannerPosition = 0
-    private var homeBannerHandler = HomeBannerHandler()
-    // 배너 시간
-    private val intervalTime = 5000.toLong()
+
+    private lateinit var snapHelper : PagerSnapHelper
+    private lateinit var layoutManager : LinearLayoutManager
+    private lateinit var snapPagerScrollListener : SnapPagerScrollListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,29 +57,24 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     ): View {
         _binding = FragmentHomeMainBinding.inflate(inflater, container, false)
 
-        initComponent()
-        setupBannerObservers()
-        observeGetMemberInfoState()
-        observeGetPetInfoState()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initComponent()
+        setupBannerObservers()
+        observeGetMemberInfoState()
+        observeGetPetInfoState()
 
         viewModel.getBannerList(BANNER_TYPE_MAIN)
         viewModel.getMemberInfo()
     }
 
-    override fun onResume() {
-        super.onResume()
-        autoScrollStart(intervalTime)
-    }
+    override fun onStop() {
+        super.onStop()
 
-    override fun onPause() {
-        super.onPause()
-        autoScrollStop()
+        viewModel.stopAutoScroll()
     }
 
     /**
@@ -101,11 +95,29 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
             }
 
             bannerAdapter = HomeBannerAdapter(requireContext())
-            viewPagerBanner1.apply {
-                orientation = ViewPager2.ORIENTATION_HORIZONTAL
-                adapter = bannerAdapter
-                setCurrentItem(bannerPosition, false) //시작 위치 지정
+
+            snapHelper = PagerSnapHelper().also {
+                it.attachToRecyclerView(recyclerviewBannerList)
             }
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            recyclerviewBannerList.apply {
+                layoutManager = layoutManager
+                adapter = bannerAdapter
+            }
+
+            snapPagerScrollListener = SnapPagerScrollListener(
+                snapHelper,
+                SnapPagerScrollListener.ON_SCROLL,
+                true,
+                object : SnapPagerScrollListener.OnChangeListener {
+                    override fun onSnapped(position: Int) {
+                        //position 받아서 이벤트 처리
+                        viewModel.updateCurrentPosition(position)
+                    }
+                }
+            )
+            binding.recyclerviewBannerList.addOnScrollListener(snapPagerScrollListener)
+            observeBannerPosition()
 
             // Debug 상태에선 로고 클릭시 카드 타입 변경 가능
             if(BuildConfig.DEBUG) {
@@ -114,6 +126,21 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                         View.VISIBLE -> setPetidCardType(CHIP_TYPE[1])
                         View.GONE -> setPetidCardType(CHIP_TYPE[0])
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Banner Position observe
+     */
+    private fun observeBannerPosition() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.bannerScrollPosition.collectLatest { position ->
+                    Log.d("banner...", "collectLatest ${position}")
+                    binding.recyclerviewBannerList.smoothScrollToPosition(position)
+                    binding.textViewCurrentPage.text = "${position % bannerAdapter.getListSize() + 1}"
                 }
             }
         }
@@ -129,49 +156,77 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         val total = bannerList.size
         binding.textViewTotalPage.text = total.toString()
 
-        binding.viewPagerBanner1.apply {
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    // 현재 포지션을 이용해 현재 페이지를 설정
-                    val currentPage = position % total + 1
-                    binding.textViewCurrentPage.text = currentPage.toString()
-                }
-                //이 메서드의 state 값으로 뷰페이저의 상태를 알 수 있음
-                override fun onPageScrollStateChanged(state: Int) {
-                    super.onPageScrollStateChanged(state)
-                    when (state) {
-                        //뷰페이저가 움직이는 중일 때 자동 스크롤 시작 함수 호출
-                        ViewPager2.SCROLL_STATE_DRAGGING -> autoScrollStop()
-                        //뷰페이저에서 손 뗐을 때, 뷰페이저가 멈춰있을 때 자동 스크롤 멈춤 함수 호출
-                        ViewPager2.SCROLL_STATE_IDLE -> autoScrollStart(intervalTime)
-                    }
-                }
-            })
+        // 자동 스크롤 시작
+        viewModel.startAutoScroll()
+    }
+
+    /**
+     *
+     */
+    class SnapPagerScrollListener(// Properties
+        private val snapHelper: PagerSnapHelper,
+        @Type private val type: Int,
+        private val notifyOnInit: Boolean,
+        private val listener: OnChangeListener
+    ) :
+        RecyclerView.OnScrollListener() {
+        @IntDef(*[ON_SCROLL, ON_SETTLED])
+        annotation class Type
+
+        interface OnChangeListener {
+            fun onSnapped(position: Int)
         }
-    }
 
-    //배너 자동 스크롤 시작하게 하는 함수
-    private fun autoScrollStart(intervalTime: Long){
-        homeBannerHandler.apply {
-            removeMessages(0) // 이거 안하면 핸들러가 여러개로 계속 늘어남
-            sendEmptyMessageDelayed(0, intervalTime) // intervalTime만큼 반복해서 핸들러를 실행
+        private var snapPosition: Int
+
+        // Constructor
+        init {
+            this.snapPosition = RecyclerView.NO_POSITION
         }
-    }
 
-    //배너 자동 스크롤 멈추게 하는 함수
-    private fun autoScrollStop(){
-        homeBannerHandler.removeMessages(0) // 핸들러 중지
-    }
-
-    //배너 자동 스크롤 컨트롤하는 클래스
-    private inner class HomeBannerHandler: Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            if(msg.what == 0){
-                binding.viewPagerBanner1.setCurrentItem(++bannerPosition, true) //다음 페이지로 이동
-                autoScrollStart(intervalTime) //스크롤 킵고잉
+        // Methods
+        override fun onScrolled(@NonNull recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if ((type == ON_SCROLL) || !hasItemPosition()) {
+                notifyListenerIfNeeded(getSnapPosition(recyclerView))
             }
+        }
+
+        override fun onScrollStateChanged(@NonNull recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (type == ON_SETTLED && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                notifyListenerIfNeeded(getSnapPosition(recyclerView))
+            }
+        }
+
+        private fun getSnapPosition(recyclerView: RecyclerView): Int {
+            val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION
+
+            val snapView = snapHelper.findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
+
+            return layoutManager.getPosition(snapView)
+        }
+
+        private fun notifyListenerIfNeeded(newSnapPosition: Int) {
+            if (snapPosition != newSnapPosition) {
+                if (notifyOnInit && !hasItemPosition()) {
+                    listener.onSnapped(newSnapPosition)
+                } else if (hasItemPosition()) {
+                    listener.onSnapped(newSnapPosition)
+                }
+
+                snapPosition = newSnapPosition
+            }
+        }
+
+        private fun hasItemPosition(): Boolean {
+            return snapPosition != RecyclerView.NO_POSITION
+        }
+
+        companion object {
+            // Constants
+            const val ON_SCROLL: Int = 0
+            const val ON_SETTLED: Int = 1
         }
     }
 
@@ -180,21 +235,27 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun setupBannerObservers() {
         lifecycleScope.launch {
-            viewModel.bannerApiState.collectLatest { result ->
-                when (result) {
-                    is CommonApiState.Success -> {
-                        val bannerList = result.data
-                        initBanner(bannerList)
+            // TODO
+            //repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.bannerApiState.collectLatest { result ->
+                    when (result) {
+                        is CommonApiState.Success -> {
+                            val bannerList = result.data
+                            initBanner(bannerList)
+                        }
+
+                        is CommonApiState.Error -> {
+                            Log.e(TAG, "${result.message}")
+                        }
+
+                        is CommonApiState.Loading -> {
+                            Log.d(TAG, "Loading....................")
+                        }
+
+                        is CommonApiState.Init -> {}
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
-                    is CommonApiState.Init -> {}
                 }
-            }
+            //}
         }
     }
 
@@ -222,6 +283,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                                     viewModel.getPetDetails(petId)
                                     preferencesControl.saveIntValue(Constants.SHARED_PET_ID_VALUE, petId.toInt())
                                 }
+                                preferencesControl.saveIntValue(Constants.SHARED_MEMBER_ID_VALUE, memberResult.memberId)
                             }
                         }
                     }
