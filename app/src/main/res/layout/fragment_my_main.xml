@@ -12,7 +12,7 @@
         android:background="@color/white"
         android:paddingBottom="92dp">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView_title"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -35,23 +35,25 @@
             android:paddingEnd="33dp"
             android:background="@color/white">
 
-            <ImageView
-                android:id="@+id/imageView_logo"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_mypage_icon"
+                android:scaleType="fitXY"
                 android:layout_marginTop="21dp"
                 android:layout_marginBottom="28dp"
-                android:layout_marginRight="18dp"/>
+                android:layout_marginRight="18dp"
+                app:shapeAppearanceOverlay="@style/CircleImageView" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center_vertical">
+                android:paddingTop="29dp">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_user_name"
                     android:text="랜덤이름"
                     android:layout_width="wrap_content"
@@ -59,7 +61,7 @@
                     android:textSize="18sp"
                     android:textFontWeight="500"/>
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:text="@string/update_my_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,7 +123,7 @@
             layout="@layout/my_main_list_item_common"
             app:title="@{@string/withdraw_title}" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView_app_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
