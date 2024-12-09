@@ -13,18 +13,19 @@ import com.amazonaws.services.s3.AmazonS3Client
 import com.android.data.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
+import kotlin.coroutines.resume
 
 class S3UploadHelper {
-    fun uploadWithTransferUtility(
+    suspend fun uploadWithTransferUtility(
         context: Context,
         file: File,
         scope: CoroutineScope,
         bucketName: String = "petid-bucket",
         keyName: String,
-        onUploadResult: suspend (Result<Boolean>) -> Unit
-    ) {
-        scope.launch {
+    ): Result<Boolean> {
+        return suspendCancellableCoroutine { continuation ->
             try {
                 val awsCredentials = BasicAWSCredentials(
                     BuildConfig.AWS_ACCESS_KEY,
@@ -49,9 +50,9 @@ class S3UploadHelper {
                     override fun onStateChanged(id: Int, state: TransferState?) {
                         scope.launch {
                             if (state == TransferState.COMPLETED) {
-                                onUploadResult(Result.success(true))
+                                continuation.resume(Result.success(true))
                             } else if (state == TransferState.FAILED) {
-                                onUploadResult(Result.failure(Exception("Upload failed")))
+                                continuation.resume(Result.failure(Exception("Upload failed")))
                             }
                         }
                     }
@@ -62,13 +63,20 @@ class S3UploadHelper {
                     }
 
                     override fun onError(id: Int, ex: Exception?) {
-                        scope.launch {
-                            onUploadResult(Result.failure(ex ?: Exception("Unknown error")))
-                        }
+                        continuation.resume(Result.failure(ex ?: Exception("Unknown error")))
                     }
                 })
+
+                continuation.invokeOnCancellation {
+                    try {
+                        transferUtility.cancel(uploadObserver.id)
+                    } catch (e: Exception) {
+                        Log.e("S3UploadHelper", "Failed to cancel upload", e)
+                    }
+                }
+
             } catch (e: Exception) {
-                onUploadResult(Result.failure(e))
+                continuation.resume(Result.failure(e))
             }
         }
     }

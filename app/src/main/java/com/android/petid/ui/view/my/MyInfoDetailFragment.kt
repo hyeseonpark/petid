@@ -15,7 +15,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
@@ -97,7 +99,6 @@ class MyInfoDetailFragment
                         val file = bitmapToFile(requireContext(), bitmap, "profile_image.jpg")
 
                         // s3 bucket 에 파일 업로드
-                        // TODO random name -> 1-1.5 회원정보조회 api에 컬럼 추가 후 수정
                         with(viewModel) {
                             uploadFile(requireContext(), file, memberImageFileName!!)
                         }
@@ -127,28 +128,30 @@ class MyInfoDetailFragment
      * viewModel.getMemberInfoResult 결과값 view 반영
      */
     private fun observeGetMemberInfoState() {
-        lifecycleScope.launch {
-            viewModel.getMemberInfoResult.collectLatest { result ->
-                when (result) {
-                    is CommonApiState.Success -> {
-                        with(result.data) {
-                            binding.apply {
-                                textViewName.text = name
-                                textViewPhoneNumber.text = phone
-                                textViewAddress.text =
-                                    listOfNotNull(address, addressDetails)
-                                        .filter { it.isNotBlank() }
-                                        .joinToString("\n")
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getMemberInfoResult.collectLatest { result ->
+                    when (result) {
+                        is CommonApiState.Success -> {
+                            with(result.data) {
+                                binding.apply {
+                                    textViewName.text = name
+                                    textViewPhoneNumber.text = phone
+                                    textViewAddress.text =
+                                        listOfNotNull(address, addressDetails)
+                                            .filter { it.isNotBlank() }
+                                            .joinToString("\n")
+                                }
                             }
                         }
+                        is CommonApiState.Error -> {
+                            Log.e(TAG, "${result.message}")
+                        }
+                        is CommonApiState.Loading -> {
+                            Log.d(TAG, "Loading....................")
+                        }
+                        is CommonApiState.Init -> {}
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
-                    is CommonApiState.Init -> {}
                 }
             }
         }

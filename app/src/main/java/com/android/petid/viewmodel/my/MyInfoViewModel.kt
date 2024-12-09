@@ -7,12 +7,11 @@ import com.android.data.util.S3UploadHelper
 import com.android.domain.entity.MemberInfoEntity
 import com.android.domain.repository.MyInfoRepository
 import com.android.domain.util.ApiResult
+import com.android.petid.common.Constants.PHOTO_PATHS
 import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -43,9 +42,6 @@ class MyInfoViewModel @Inject constructor(
     private val _getMemberImageResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Init)
     val getMemberImageResult = _getMemberImageResult.asStateFlow()
 
-    /* S3 upload helper 초기화 */
-    private val s3UploadHelper = S3UploadHelper()
-
     /* S3 사진 upload result */
     private val _uploadS3Result = MutableSharedFlow<Result<Boolean>>()
     val uploadS3Result = _uploadS3Result.asSharedFlow()
@@ -64,7 +60,7 @@ class MyInfoViewModel @Inject constructor(
                 is ApiResult.Success -> {
                     val memberInfo = result.data
 
-                    memberImageFileName = "member/" + memberInfo.memberId + ".jpg"
+                    memberImageFileName = "${PHOTO_PATHS[0]}${memberInfo.memberId}.jpg"
                     memberInfo.image?.also {
                         getMemberImage(it)
                     }
@@ -105,13 +101,22 @@ class MyInfoViewModel @Inject constructor(
      * S3 bucket upload
      */
     fun uploadFile(context: Context, file: File, fileName: String) {
-        s3UploadHelper.uploadWithTransferUtility(
-            context = context,
-            file = file,
-            scope = viewModelScope,
-            keyName = fileName
-        ) { result ->
-            _uploadS3Result.emit(result)
+        viewModelScope.launch {
+            val s3UploadHelper = S3UploadHelper()
+            val result = s3UploadHelper.uploadWithTransferUtility(
+                context = context,
+                file = file,
+                scope = this,
+                keyName = fileName
+            )
+            result.fold(
+                onSuccess = {
+                    _uploadS3Result.emit(result)
+                },
+                onFailure = { exception ->
+                    _uploadS3Result.emit(Result.failure(exception))
+                }
+            )
         }
     }
 
