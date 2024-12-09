@@ -1,27 +1,41 @@
 package com.android.petid.ui.view.generate
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentScannedInfoBinding
+import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentScannedInfoBinding::inflate) {
 
-    companion object{
-        fun newInstance()= ScannedInfoFragment()
-    }
-
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
+
+    private lateinit var backPressedCallback: OnBackPressedCallback
+
+    private lateinit var dialog : CustomDialogCommon
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                dialog.show(childFragmentManager, "CustomDialogCommon")
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,7 +85,6 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
                 }
             }
 
-
             buttonNext.setOnClickListener{
                 viewModel.petInfo.setAppearance(
                     editTextType.editTextText.text.toString(),
@@ -82,6 +95,10 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
                 findNavController().navigate(R.id.action_scannedInfoFragment_to_checkingInfoFragment)
             }
 
+            dialog = CustomDialogCommon(
+                getString(R.string.petid_generate_step_5_dialog), {
+                    findNavController().popBackStack()
+                })
         }
     }
 }

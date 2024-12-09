@@ -8,19 +8,22 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
+import com.android.petid.common.Constants
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentHospitalDetailBinding
+import com.android.petid.ui.component.CustomDialogCommon
+import com.android.petid.util.PreferencesControl
 import com.android.petid.viewmodel.hospital.HospitalViewModel
 import com.bumptech.glide.Glide
 
 class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(FragmentHospitalDetailBinding::inflate) {
-
-    companion object{
-        fun newInstance()= HospitalDetailFragment()
-    }
     private val viewModel: HospitalViewModel by activityViewModels()
 
     private val TAG = "HospitalDetailFragment"
+
+    private lateinit var infoDialog : CustomDialogCommon
+    private lateinit var petidNullDialog : CustomDialogCommon
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,29 +38,44 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
     }
 
     private fun initComponent() {
-        with(viewModel.hospitalDetail) {
+        with(binding) {
+            infoDialog = CustomDialogCommon(
+                title = getString(R.string.hospital_make_reservation_dialog_info_button),
+                yesButtonClick = {
+                    findNavController().navigate(
+                        R.id.action_hospitalDetailFragment_to_reservationCalendarFragment) },
+                isSingleButton = true,
+                singleButtonText = getString(R.string.hospital_make_reservation_dialog_info_button))
+
+            petidNullDialog = CustomDialogCommon(
+                getString(R.string.common_dialog_petid_null))
+
             // 이미지
             (R.drawable.img_hospital_list_empty).let {
-                val imgSource: Any? = when(imageUrl[0]) {
+                val imgSource: Any? = when(viewModel.hospitalDetail.imageUrl[0]) {
                     "" -> AppCompatResources.getDrawable(requireContext(), it)
-                    else -> imageUrl[0]
+                    else -> viewModel.hospitalDetail.imageUrl[0]
                 }
 
                 Glide.with(requireContext())
                     .load(imgSource)
                     .placeholder(it)
                     .error(it)
-                    .into(binding.imageViewHospitalPhoto)
+                    .into(imageViewHospitalPhoto)
             }
 
-            binding.textViewTitle.text = name
-            binding.textViewVet.text = vet
-            binding.textViewTime.text = hours
-            binding.textViewTel.text = tel
+            viewModel.hospitalDetail.run {
+                textViewTitle.text = name
+                textViewVet.text = vet
+                textViewTime.text = hours
+                textViewTel.text = tel
+            }
 
-            binding.buttonReserve.setOnClickListener{
-                findNavController().navigate(
-                    R.id.action_hospitalDetailFragment_to_reservationCalendarFragment)
+            buttonReserve.setOnClickListener{
+                when(PreferencesControl(getGlobalContext()).getIntValue(Constants.SHARED_PET_ID_VALUE)) {
+                    -1 -> petidNullDialog.show(childFragmentManager, "petidNullDialog")
+                    else -> infoDialog.show(childFragmentManager, "infoDialog")
+                }
             }
         }
     }

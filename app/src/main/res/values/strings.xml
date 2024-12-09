@@ -50,6 +50,8 @@
     <string name="to_kg">%dkg</string>
     <string name="to_age">%s살</string>
     <string name="to_vet">%s 원장</string>
+
+    <string name="common_dialog_petid_null">회원님과 반려동물 정보를\n먼저 등록해주세요!</string>
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 
@@ -146,6 +148,7 @@
     <!--  pet id generate progress : step 5  -->
     <string name="petid_generate_step_5_title">반려동물 정보를 가져왔어요!</string>
     <string name="petid_generate_step_5_subtitle">잘못된 정보는 수정할 수 있어요</string>
+    <string name="petid_generate_step_5_dialog">이전 화면으로 돌아가면 현재 사진이 삭제됩니다. 진행하시겠습니까?</string>
 
     <!--  pet id generate progress : step 6  -->
     <string name="petid_generate_step_6_title">아래 내용으로\n펫 아이디를 만들게요</string>
@@ -169,6 +172,8 @@
 
     <!-- hospital detail -->
     <string name="hospital_make_reservation">방문 날짜/시간 예약하기</string>
+    <string name="hospital_make_reservation_dialog_info">동물병원 방문 시\n외장칩 번호를 알려주세요</string>
+    <string name="hospital_make_reservation_dialog_info_button">확인했습니다</string>
 
     <!-- hospital reservation calendar -->
     <string name="hospital_reservation_calendar_title">yyyy년 MM월</string>

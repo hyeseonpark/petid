@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.android.petid.R
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.DialogCommonBinding
 
 class CustomDialogCommon(
     private val title: String,
-    private val yesButtonClick: (() -> Unit?)? = null,
-    private val noButtonClick: (() -> Unit)? = null
+    private val yesButtonClick: (() -> Any?)? = null,
+    private val noButtonClick: (() -> Any)? = null,
+    private val isSingleButton: Boolean? = null,
+    private val singleButtonText: String? = getGlobalContext().getString(R.string.yes),
 ) : DialogFragment() {
     private var _binding: DialogCommonBinding? = null
     private val binding get() = _binding!!
@@ -26,17 +30,27 @@ class CustomDialogCommon(
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.textViewTitle.text = title
+        with(binding) {
+            textViewTitle.text = title
 
-        binding.buttonNo.setOnClickListener {
-            noButtonClick?.invoke()
-            dismiss()
+            buttonNo.setOnClickListener {
+                noButtonClick?.invoke()
+                dismiss()
+            }
+
+            buttonYes.setOnClickListener {
+                when(yesButtonClick) {
+                    null -> dismiss()
+                    else -> yesButtonClick.invoke()
+                }
+            }
+
+            if (isSingleButton == true) {
+                buttonNo.visibility = View.GONE
+                buttonYes.text = singleButtonText
+            }
+
         }
-
-        binding.buttonYes.setOnClickListener {
-            yesButtonClick?.invoke()
-        }
-
         return binding.root
     }
 
