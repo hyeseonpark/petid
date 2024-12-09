@@ -1,5 +1,7 @@
 package com.android.data.dto.request
 
+import com.android.domain.entity.PetAppearanceRequestEntity
+
 /**
  *
  * @param breed 견종
@@ -12,4 +14,11 @@ data class PetAppearanceRequest (
     val hairColor: String,
     val weight: Int,
     val hairLength: String,
+)
+
+fun PetAppearanceRequest.toDomain() = PetAppearanceRequestEntity(
+    breed = breed,
+    hairColor = hairColor,
+    weight = weight,
+    hairLength = hairLength
 )

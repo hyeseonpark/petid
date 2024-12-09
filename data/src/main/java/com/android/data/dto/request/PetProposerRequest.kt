@@ -1,5 +1,7 @@
 package com.android.data.dto.request
 
+import com.android.domain.entity.PetProposerRequestEntity
+
 /**
  * @param name 신청자 이름
  * @param address 신청자 주소
@@ -15,4 +17,13 @@ data class PetProposerRequest(
     val rra: String,
     val rraDetails: String,
     val phone: String,
+)
+
+fun PetProposerRequest.toDomain() = PetProposerRequestEntity(
+    name = name,
+    address = address,
+    addressDetails = addressDetails,
+    rra = rra,
+    rraDetails = rraDetails,
+    phone = phone,
 )
