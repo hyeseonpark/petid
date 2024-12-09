@@ -40,7 +40,7 @@
             android:paddingHorizontal="33dp"
             android:orientation="vertical">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_current_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:textColor="@color/petid_clear_blue"
                 android:textFontWeight="700"/>
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,8 +82,7 @@
                 android:textFontWeight="400"
                 android:textColor="@color/petid_title"
                 android:textColorHint="@color/b4"
-                android:paddingEnd="18dp"
-                android:drawableTint="#2E2E2E"/>
+                android:paddingEnd="18dp"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -100,55 +99,96 @@
                 android:layout_height="53dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
                 android:hint="@string/phone_number_hint"
-                android:inputType="text"
+                android:inputType="phone"
                 android:singleLine="true"
                 android:textSize="14dp"
                 android:textFontWeight="400"
                 android:textColor="@color/petid_title"
                 android:textColorHint="@color/b4"
+                android:paddingEnd="18dp"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textColor="@color/petid_gray"
+                android:textSize="14dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_address"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:hint="@string/address_hint"
+                android:inputType="text"
+                android:focusable="false"
+                android:singleLine="true"
+                android:textSize="14dp"
+                android:textFontWeight="400"
+                android:textColor="@color/petid_title"
+                android:textColorHint="@color/b4"
+                android:drawableEnd="@drawable/ic_search"
                 android:paddingEnd="18dp"
-                android:drawableTint="#2E2E2E"/>
+                android:drawableTint="@color/petid_title" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/address"
-                    android:textColor="@color/petid_gray"
-                    android:textSize="14dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="10dp"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_address_detail"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:hint="@string/address_detail_hint"
+                android:inputType="text"
+                android:textSize="14dp"
+                android:paddingEnd="17.96dp"/>
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_text_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="53dp"
-                    android:background="@drawable/edittext_rounded_corner_rectangle"
-                    android:hint="@string/address_hint"
-                    android:inputType="text"
-                    android:focusable="false"
-                    android:singleLine="true"
-                    android:textSize="14dp"
-                    android:textFontWeight="400"
-                    android:textColor="@color/petid_title"
-                    android:textColorHint="@color/b4"
-                    android:drawableEnd="@drawable/ic_search"
-                    android:paddingEnd="18dp"
-                    android:drawableTint="@color/petid_title" />
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkbox_terms_agree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="20dp"
+                android:button="@null"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/checkbox_common"
+                android:drawablePadding="10dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/address_is_same"
+                android:textSize="13sp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_gray"/>
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/edit_text_address_detail"
-                    android:layout_width="match_parent"
-                    android:layout_height="53dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="27dp"
-                    android:background="@drawable/edittext_rounded_corner_rectangle"
-                    android:hint="@string/address_detail_hint"
-                    android:inputType="text"
-                    android:textSize="14dp"
-                    android:paddingEnd="17.96dp"
-                    app:layout_constraintEnd_toEndOf="@+id/edit_text_phone"
-                    app:layout_constraintStart_toStartOf="@+id/edit_text_phone"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_text_phone"/>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_rra"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:hint="@string/address_hint"
+                android:inputType="text"
+                android:focusable="false"
+                android:singleLine="true"
+                android:textSize="14dp"
+                android:textFontWeight="400"
+                android:textColor="@color/petid_title"
+                android:textColorHint="@color/b4"
+                android:drawableEnd="@drawable/ic_search"
+                android:paddingEnd="18dp"
+                android:drawableTint="@color/petid_title" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edit_text_rra_detail"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="27dp"
+                android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:hint="@string/address_detail_hint"
+                android:inputType="text"
+                android:textSize="14dp"
+                android:paddingEnd="17.96dp"/>
 
         </LinearLayout>
 

@@ -7,6 +7,7 @@ object Constants {
     const val SHARED_VALUE_REFRESH_TOKEN: String = "refreshToken"
 
     const val SHARED_PET_ID_VALUE = "petIdValue"
+    const val SHARED_MEMBER_ID_VALUE = "memberIdValue"
 
     // location type
     const val LOCATION_SIDO_TYPE = 0
@@ -32,6 +33,11 @@ object Constants {
     private const val EXTERNAL = "EXTERNAL" // 외장칩
     private const val INTERNAL = "INTERNAL" // 내장칩
     val CHIP_TYPE = arrayOf(NA, EXTERNAL, INTERNAL)
+
+    // 사진 저장 경로
+    private const val MEMBER = "member/profile/" // 멤버 프로필 이미지
+    private const val SIGN = "member/sign/" // 사인 이미지
+    val PHOTO_PATHS = arrayOf(MEMBER, SIGN)
 
     // TODO enum -> constants
 }
