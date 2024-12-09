@@ -1,5 +1,10 @@
 package com.android.data.dto.request
 
+import com.android.domain.entity.PetAppearanceRequestEntity
+import com.android.domain.entity.PetImageRequestEntity
+import com.android.domain.entity.PetProposerRequestEntity
+import com.android.domain.entity.PetRequestEntity
+
 /**
  *
  * @param petRegNo 펫 등록번호
@@ -22,7 +27,6 @@ data class PetRequest(
     val petSex: Char?,
     val petNeuteredYn: Char?,
     val petNeuteredDate: String?,
-    // var petAddr: String?,
     val chipType: String?,
     val appearance: PetAppearanceRequest?,
     val petImages: List<PetImageRequest>?,
@@ -35,8 +39,6 @@ data class PetRequest(
         private var petSex: Char? = null
         private var petNeuteredYn: Char? = null
         private var petNeuteredDate: String? = null
-        // private var petAddr: String? = null
-        // private var petAddrDetails: String? = null
         private var chipType: String? = null
         private var appearance: PetAppearanceRequest? = null
         private var petImages: List<PetImageRequest>? = null
@@ -51,7 +53,6 @@ data class PetRequest(
                         rra: String, rraDetails: String, phone: String) {
             this.proposer = PetProposerRequest(name, address, addrressDetails, rra, rraDetails, phone)
         }
-        // fun setPetAddr(petAddr: String) = apply {this.petAddr = petAddr}
 
         /* PetInfoInputFragment */
         fun setPetInfo(petName: String, petBirthDate: String, petSex: Char,
@@ -62,6 +63,11 @@ data class PetRequest(
                 this.petNeuteredYn = petNeuteredYn
                 this.petNeuteredDate = petNeuteredDate
             }
+
+        /* PetPhotoFragment */
+        fun setPetImage(petImage: String) = apply {
+            this.petImages = listOf(PetImageRequest(petImage))
+        }
 
         /* ScannedInfoFragment */
         fun setAppearance(breed: String, hairColor: String, weight: Int, hairLength: String) = apply {
@@ -76,9 +82,25 @@ data class PetRequest(
         /* SignatureFragment */
         fun setSign(sign: String) = apply { this.sign = sign }
 
+        fun getPetImageName() : String = this.petImages!!.first().imagePath
+        fun getSignImageName() : String = this.sign!!
+
         fun build(): PetRequest {
             return PetRequest(petName, petBirthDate, petSex, petNeuteredYn,
                 petNeuteredDate, chipType, appearance, petImages, proposer, sign)
         }
     }
 }
+
+fun PetRequest.toDomain() = PetRequestEntity(
+    petName = petName!!,
+    petBirthDate = petBirthDate!!,
+    petSex = petSex!!,
+    petNeuteredYn = petNeuteredYn!!,
+    petNeuteredDate = petNeuteredDate,
+    chipType = chipType!!,
+    appearance = appearance!!.toDomain(),
+    petImages = petImages!!.toDomain(),
+    proposer = proposer!!.toDomain(),
+    sign = sign!!,
+)
