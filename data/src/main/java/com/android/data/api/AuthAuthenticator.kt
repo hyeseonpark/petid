@@ -40,7 +40,7 @@ class AuthAuthenticator(
 
         return runBlocking {
             try {
-                val newAccessToken = RefreshTokenService.refreshToken(currentToken).split(" ")[1]
+                val newAccessToken = RefreshTokenService.refreshToken(currentToken)
 
                 preferencesHelper.saveStringValue(SHARED_VALUE_ACCESS_TOKEN, newAccessToken)
                 newRequestWithToken(newAccessToken, response.request)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,9 +13,12 @@
         android:id="@+id/top_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,29 +44,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="21dp"
             android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
             android:text="@string/update"
             android:textColor="@color/black"
             android:textFontWeight="400"
             android:textSize="16sp"
-            android:clickable="true"
-            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_photo"
         android:layout_width="match_parent"
         android:layout_height="88dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="31dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar_layout">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView_profile"
@@ -72,12 +77,12 @@
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/CircleImageView"
             android:src="@color/d9"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/CircleImageView" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -96,7 +101,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="24dp">
+        android:paddingHorizontal="24dp"
+        android:layout_marginTop="31dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_photo">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,16 +113,16 @@
             android:layout_marginBottom="24sp"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_name_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
                 android:textColor="@color/petid_title"
-                android:textSize="16sp"
-                android:textFontWeight="400"  />
+                android:textFontWeight="400"
+                android:textSize="16sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -121,8 +130,8 @@
                 android:gravity="end"
                 android:text=""
                 android:textColor="@color/petid_subtitle"
-                android:textSize="16sp"
-                android:textFontWeight="400"/>
+                android:textFontWeight="400"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -132,7 +141,7 @@
             android:layout_marginBottom="24sp"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_birth_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,7 +150,7 @@
                 android:textSize="16sp"
                 android:textFontWeight="400"  />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_birth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,16 +169,16 @@
             android:layout_marginBottom="24sp"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_phone_number_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/phone_number"
                 android:textColor="@color/petid_title"
-                android:textSize="16sp"
-                android:textFontWeight="400"  />
+                android:textFontWeight="400"
+                android:textSize="16sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_phone_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -177,8 +186,8 @@
                 android:gravity="end"
                 android:text=""
                 android:textColor="@color/petid_subtitle"
-                android:textSize="16sp"
-                android:textFontWeight="400" />
+                android:textFontWeight="400"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -188,16 +197,16 @@
             android:layout_marginBottom="24sp"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_address_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/address"
                 android:textColor="@color/petid_title"
-                android:textSize="16sp"
-                android:textFontWeight="400"  />
+                android:textFontWeight="400"
+                android:textSize="16sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -205,11 +214,11 @@
                 android:gravity="end"
                 android:text=""
                 android:textColor="@color/petid_subtitle"
-                android:textSize="16sp"
-                android:textFontWeight="400" />
+                android:textFontWeight="400"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
