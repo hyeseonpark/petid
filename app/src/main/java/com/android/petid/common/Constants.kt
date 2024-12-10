@@ -1,7 +1,7 @@
 package com.android.petid.common
 
 object Constants {
-    const val SHARED_VALUE_IS_FIRST = "isFirst"
+    const val SHARED_VALUE_IS_FIRST_RUN = "isFirst"
     const val REQUEST_STORAGE_PERMISSION = 1
     const val SHARED_VALUE_ACCESS_TOKEN: String = "accessToken"
     const val SHARED_VALUE_REFRESH_TOKEN: String = "refreshToken"
@@ -40,4 +40,13 @@ object Constants {
     val PHOTO_PATHS = arrayOf(MEMBER, SIGN)
 
     // TODO enum -> constants
+    // content category type
+    private const val ALL = "ALL"
+    private const val RECOMMENDED = "RECOMMENDED"
+    private const val ABOUTPET = "ABOUTPET"
+    private const val TIPS = "TIPS"
+    private const val VENUE = "VENUE"
+    private const val SUPPORT = "SUPPORT"
+    val CONTENT_CATEGORY_TYPE = arrayOf(ALL, RECOMMENDED, ABOUTPET, TIPS, VENUE, SUPPORT)
+
 }
