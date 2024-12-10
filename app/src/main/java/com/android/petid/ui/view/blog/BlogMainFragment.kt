@@ -25,18 +25,13 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainBinding::inflate) {
-
-    companion object{
-        fun newInstance()= BlogMainFragment()
-    }
-
     private val viewModel: BlogMainViewModel by activityViewModels()
 
     private val TAG = "BlogMainFragment"
 
     private lateinit var contentList : List<ContentEntity>
     private lateinit var contentListAdapter : ContentListAdapter
-    var currentCategory = ContentCategoryType.RECOMMENDED
+    var currentCategory = ContentCategoryType.ALL
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +73,7 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
             tabLayoutBlogMain.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     currentCategory = when (tab?.position) {
-                        0 -> ContentCategoryType.RECOMMENDED
+                        0 -> ContentCategoryType.ALL
                         1 -> ContentCategoryType.ABOUTPET
                         2 -> ContentCategoryType.TIPS
                         3 -> ContentCategoryType.VENUE
