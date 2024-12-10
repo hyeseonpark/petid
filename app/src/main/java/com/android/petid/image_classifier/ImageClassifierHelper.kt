@@ -34,10 +34,10 @@ import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
 
 class ImageClassifierHelper(
-    var threshold: Float = THRESHOLD_DEFAULT,
-    var maxResults: Int = MAX_RESULTS_DEFAULT,
-    var currentDelegate: Int = DELEGATE_CPU,
-    var runningMode: RunningMode = RunningMode.IMAGE,
+    private var threshold: Float = THRESHOLD_DEFAULT,
+    private var maxResults: Int = MAX_RESULTS_DEFAULT,
+    private var currentDelegate: Int = DELEGATE_CPU,
+    private var runningMode: RunningMode = RunningMode.IMAGE,
     val context: Context,
     val imageClassifierListener: ClassifierListener? = null
 ) {

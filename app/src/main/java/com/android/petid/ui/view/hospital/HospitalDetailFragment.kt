@@ -68,6 +68,7 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
                 textViewTitle.text = name
                 textViewVet.text = vet
                 textViewTime.text = hours
+                textViewPlace.text = address
                 textViewTel.text = tel
             }
 
