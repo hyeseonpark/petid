@@ -238,6 +238,7 @@
 
     <!-- blog main fragment -->
     <string name="main_blog_title">펫blog</string>
+    <string name="tab_all_title">전체</string>
     <string name="tab_recommendation_title">추천</string>
     <string name="tab_about_pet_title">어바웃펫</string>
     <string name="tab_tips_title">반려TIP</string>
