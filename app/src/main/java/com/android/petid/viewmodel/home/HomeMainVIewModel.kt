@@ -40,9 +40,9 @@ class HomeMainVIewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getBannerListUseCase(type)) {
                 is ApiResult.Success -> {
-                    var bannerList = result.data
+                    val bannerList = result.data
 
-                    var updatedBannerList = bannerList.map { item ->
+                    val updatedBannerList = bannerList.map { item ->
                         val updatedImageUrl = getBannerImage(item.imageUrl)
                         item.copy(imageUrl = updatedImageUrl)
                     }
