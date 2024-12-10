@@ -56,6 +56,8 @@
     <string name="residency_number_hint">생년월일 6자리</string-->
 
     <!--  permission acitivity  -->
+    <string name="permission_main_title">접근성 설정 안내</string>
+    <string name="permission_main_desc">PET ID 고객님의 편리한 앱 이용을 위해 다음의\n접근권한 허용이 필요합니다</string>
     <string name="permission_title_1">[필수] 기기 및 앱 기록</string>
     <string name="permission_title_1_span">[필수]</string>
     <string name="permission_subtitle_1">앱 서비스 최적화 및 오류 확인</string>
@@ -67,6 +69,9 @@
     <string name="permission_subtitle_4">이벤트와 혜택 알림</string>
     <string name="permission_title_5">[선택] 전화</string>
     <string name="permission_subtitle_5">고객센터 등 연결을 위한 통화 기능</string>
+    <string name="permission_info_title">접근권한 변경 방법</string>
+    <string name="permission_info_desc">설정 > 애플리케이션 관리자 > PETID</string>
+    <string name="permission_info_desc2">선택적 접근권한은 동의하지 않아도 해당기능 외 앱 이용이 가능합니다.</string>
 
     <!-- terms activity -->
     <string name="terms_activity_title">펫아이디 서비스\n이용 약관에 동의해 주세요.</string>

@@ -138,7 +138,6 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.bannerScrollPosition.collectLatest { position ->
-                    Log.d("banner...", "collectLatest ${position}")
                     binding.recyclerviewBannerList.smoothScrollToPosition(position)
                     binding.textViewCurrentPage.text = "${position % bannerAdapter.getListSize() + 1}"
                 }
@@ -234,9 +233,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      * banner api observer
      */
     private fun setupBannerObservers() {
-        lifecycleScope.launch {
-            // TODO
-            //repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.bannerApiState.collectLatest { result ->
                     when (result) {
                         is CommonApiState.Success -> {
@@ -255,7 +253,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                         is CommonApiState.Init -> {}
                     }
                 }
-            //}
+            }
         }
     }
 
@@ -263,7 +261,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      * viewModel.getMemberInfoResult 결과값 view 반영
      */
     private fun observeGetMemberInfoState() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getMemberInfoResult.collectLatest { result ->
                 when (result) {
                     is CommonApiState.Success -> {
