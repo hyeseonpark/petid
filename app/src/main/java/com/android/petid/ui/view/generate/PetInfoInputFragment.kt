@@ -1,6 +1,8 @@
 package com.android.petid.ui.view.generate
 
 import android.app.DatePickerDialog
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -97,8 +99,9 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
         val currentDate = editText.text.toString().ifEmpty { getCurrentDate() }
         val dateParts = currentDate.split("-")
 
-        DatePickerDialog(
+        val datePickerDialog = DatePickerDialog(
             requireContext(),
+            R.style.DatePickerDialogTheme,
             { _, year, monthOfYear, dayOfMonth ->
                 editText.setText(
                     String.format(Locale.KOREA, "%d-%02d-%02d", year, monthOfYear + 1, dayOfMonth)
@@ -107,7 +110,14 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
             dateParts[0].toInt(),
             dateParts[1].toInt() - 1,
             dateParts[2].toInt()
-        ).show()
+        )
+        datePickerDialog.apply {
+            show()
+            getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
+                resources.getColor(R.color.petid_clear_blue, null))
+            getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
+                resources.getColor(R.color.petid_subtitle, null))
+        }
     }
 
 }

@@ -21,6 +21,10 @@
         <item name="android:background">@null</item>
     </style>
 
+    <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/petid_clear_blue</item>
+    </style>
+
 
     <!-- pet id 생성 과정 화면 default 버튼 -->
     <style name="GenerateCommonButtonStyle" parent="Widget.AppCompat.Button">
