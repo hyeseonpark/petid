@@ -41,8 +41,8 @@ class SocialAuthViewModel @Inject constructor(
                 is ApiResult.Success -> {
                     val result = result.data
                     preferencesControl.apply {
-                        saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ")[1])
-                        saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ")[1])
+                        saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
+                        saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
                     }
                     _loginResult.emit(LoginResult.Success(result))  // 성공 시 데이터 전송
                 }

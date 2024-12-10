@@ -22,11 +22,15 @@ class SocialAuthRemoteDataSourceImpl @Inject constructor(
             ApiResult.Success(response.toDomain())
 
         } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+            if (e.code() == 400) {
+                val gson = Gson()
+                val errorBody = e.response()?.errorBody()?.string()
+                val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
 
-            ApiResult.HttpError(errorResponse.toDomain())
+                ApiResult.HttpError(errorResponse.toDomain() )
+            } else {
+                ApiResult.Error(e.message)
+            }
 
         } catch (e: Exception) {
             ApiResult.Error(e.message)

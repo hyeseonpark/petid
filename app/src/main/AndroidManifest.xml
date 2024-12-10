@@ -2,11 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!--  애플리케이션에서 네트워크 소켓을 열기 위해 필요함 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- 애플리케이션에서 네트워크 소켓을 열기 위해 필요함 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- camera, connectivity manager -->
     <!-- 애플리케이션에서 네트워크에 관한 정보에 접근하기 위해 필요함 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /><!-- aws, connectivity manager -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- aws, connectivity manager -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -35,9 +34,17 @@
         android:theme="@style/Theme.PetId"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.auth.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.view.hospital.HospitalActivity"
-            android:exported="false" />
-        <!-- FileProvider 선언 -->
+            android:exported="false" /> <!-- FileProvider 선언 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -47,7 +54,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <service android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService" android:enabled="true"/>
+
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
 
         <activity
             android:name=".ui.view.generate.GeneratePetidMainActivity"
@@ -110,15 +120,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.view.auth.SocialAuthActivity"
-            android:exported="true">
-
-            <!-- android:theme="@style/Theme.AppCompat"> -->
-            <!-- android:theme="@style/Theme.App.Starting"> -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
         <activity
             android:name=".ui.view.main.MainActivity"
