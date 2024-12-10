@@ -21,12 +21,19 @@ import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
 import com.android.petid.databinding.FragmentHospitalMainBinding
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.common.flowTextWatcher
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
 import com.android.petid.util.Utils.hideKeyboardAndClearFocus
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 /**
  * 메인 > 등록대행병원
@@ -88,19 +95,39 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     private fun initComponent() {
         with(binding) {
             // 검색 기능
-            editTextSeacrh.setOnEditorActionListener { textView, actionId, _ ->
-                var check = false
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            editTextSeacrh
+                .flowTextWatcher()
+                .debounce(300)
+                .onEach {
+
                     val filteredList: List<HospitalEntity>? =
-                        when(textView.text.trim()) {
+                        when(val text = editTextSeacrh.text?.trim()) {
                             "" -> currentHospitalList
                             else -> {
                                 currentHospitalList?.filter{ hospital ->
-                                    hospital.name.contains(textView.text, ignoreCase = true)
+                                    hospital.name.contains(text!!, ignoreCase = true)
                                 }
                             }
                         }
-                    hospitalListAdapter.submitList(filteredList)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        when(filteredList?.size) {
+                            0 -> {
+                                textNoResult.visibility = View.VISIBLE
+                                layoutData.visibility = View.GONE
+                            }
+                            else -> {
+                                textNoResult.visibility = View.GONE
+                                layoutData.visibility = View.VISIBLE
+                                hospitalListAdapter.submitList(filteredList)
+                            }
+                        }
+                    }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            editTextSeacrh.setOnEditorActionListener { _, actionId, _ ->
+                var check = false
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     requireActivity().hideKeyboardAndClearFocus()
                     check = true
                 }

@@ -29,7 +29,7 @@
         android:layout_height="53dp"
         android:background="@drawable/edittext_search"
         android:hint="@string/search"
-        android:imeOptions="actionSearch"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:textSize="14dp"
         android:textColor="@color/petid_title"
@@ -113,7 +113,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!--androidx.appcompat.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_filter"
             android:layout_width="67dp"
             android:layout_height="31dp"
@@ -126,11 +126,12 @@
             android:drawableTint="@color/petid_subtitle"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:stateListAnimator="@null"/-->
+            android:stateListAnimator="@null"/>
 
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_data"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -149,5 +150,16 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_no_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="검색결과가 없어요"
+        android:textFontWeight="400"
+        android:textSize="18sp"
+        android:textColor="@color/petid_subtitle"
+        android:visibility="gone"/>
 
 </LinearLayout>
