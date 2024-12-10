@@ -96,10 +96,14 @@ dependencies {
 
     implementation("androidx.preference:preference-ktx:1.2.1")
 
-    // splashscreen api
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.corbind)
+    implementation(libs.corbind.material)
 
-    implementation("com.github.prolificinteractive:material-calendarview:2.0.1")
+    // splashscreen api
+    implementation(libs.androidx.core.splashscreen)
+
+    // material calendarView
+    implementation(libs.material.calendarview)
 
     // kakao Login
     implementation(libs.v2.all)
@@ -158,6 +162,9 @@ dependencies {
 
     // 시간
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.0")
+
+    // 휴대폰번호 포맷
+    implementation("com.googlecode.libphonenumber:libphonenumber:8.12.6")
 
     // Jetpack Compose Integration
     implementation(libs.androidx.navigation.compose)
