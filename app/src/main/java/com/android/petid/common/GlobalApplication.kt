@@ -2,6 +2,7 @@ package com.android.petid.common
 
 import androidx.multidex.MultiDexApplication
 import com.android.petid.BuildConfig
+import com.android.petid.util.PreferencesControl
 import com.kakao.sdk.common.KakaoSdk
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -14,6 +15,7 @@ class GlobalApplication : MultiDexApplication() {
         super.onCreate()
 
         appInstance = this
+        preferencesControl = PreferencesControl(getGlobalContext())
 
         // Kakao Sdk 초기화
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY)
@@ -23,7 +25,9 @@ class GlobalApplication : MultiDexApplication() {
 
     companion object {
         private lateinit var appInstance: GlobalApplication
+        private lateinit var preferencesControl : PreferencesControl
         fun getGlobalContext() = appInstance
+        fun getPreferencesControl() = preferencesControl
     }
 
 }

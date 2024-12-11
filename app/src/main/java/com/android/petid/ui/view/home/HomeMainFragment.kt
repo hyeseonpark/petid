@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -21,12 +22,12 @@ import com.android.petid.R
 import com.android.petid.common.Constants
 import com.android.petid.common.Constants.BANNER_TYPE_MAIN
 import com.android.petid.common.Constants.CHIP_TYPE
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.FragmentHomeMainBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
-import com.android.petid.util.PreferencesControl
 import com.android.petid.util.Utils.booleanCharToSign
 import com.android.petid.util.Utils.genderCharToString
 import com.android.petid.viewmodel.home.HomeMainVIewModel
@@ -41,8 +42,6 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private val viewModel: HomeMainVIewModel by activityViewModels()
 
     private val TAG = "HomeMainFragment"
-
-    lateinit var preferencesControl : PreferencesControl
 
     // banner adapter
     private lateinit var bannerAdapter : HomeBannerAdapter
@@ -82,7 +81,9 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun initComponent() {
         with(binding) {
-            preferencesControl = PreferencesControl(requireContext())
+            imageViewNoti.setOnClickListener {
+                findNavController().navigate(R.id.action_homeMainFragment_to_notificationFragment)
+            }
 
             buttonCreateStart.setOnClickListener{
                 val intent = Intent(activity, GeneratePetidMainActivity::class.java)
@@ -116,7 +117,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     }
                 }
             )
-            binding.recyclerviewBannerList.addOnScrollListener(snapPagerScrollListener)
+            recyclerviewBannerList.addOnScrollListener(snapPagerScrollListener)
             observeBannerPosition()
 
             // Debug 상태에선 로고 클릭시 카드 타입 변경 가능
@@ -279,9 +280,9 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
 
                                 memberResult.petId!!.toLong().let { petId ->
                                     viewModel.getPetDetails(petId)
-                                    preferencesControl.saveIntValue(Constants.SHARED_PET_ID_VALUE, petId.toInt())
+                                    getPreferencesControl().saveIntValue(Constants.SHARED_PET_ID_VALUE, petId.toInt())
                                 }
-                                preferencesControl.saveIntValue(Constants.SHARED_MEMBER_ID_VALUE, memberResult.memberId)
+                                getPreferencesControl().saveIntValue(Constants.SHARED_MEMBER_ID_VALUE, memberResult.memberId)
                             }
                         }
                     }

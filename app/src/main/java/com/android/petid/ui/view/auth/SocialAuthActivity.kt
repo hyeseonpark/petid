@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.BuildConfig
 import com.android.petid.R
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.ActivitySocialAuthBinding
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.LoginResult
@@ -338,7 +339,7 @@ class SocialAuthActivity : BaseActivity() {
     }
 
     private fun goMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(getGlobalContext(), MainActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -9,11 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.common.Constants
-import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.FragmentHospitalDetailBinding
 import com.android.petid.ui.component.CustomDialogCommon
-import com.android.petid.util.PreferencesControl
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.viewmodel.hospital.HospitalViewModel
 import com.bumptech.glide.Glide
 
@@ -73,7 +72,7 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
             }
 
             buttonReserve.setOnClickListener{
-                when(PreferencesControl(getGlobalContext()).getIntValue(Constants.SHARED_PET_ID_VALUE)) {
+                when(getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE)) {
                     -1 -> petidNullDialog.show(childFragmentManager, "petidNullDialog")
                     else -> infoDialog.show(childFragmentManager, "infoDialog")
                 }

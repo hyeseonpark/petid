@@ -5,9 +5,9 @@ import android.os.Bundle
 import com.android.petid.R
 import com.android.petid.common.Constants
 import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.ActivityPermissionBinding
 import com.android.petid.ui.view.common.BaseActivity
-import com.android.petid.util.PreferencesControl
 import com.android.petid.util.Utils.setStyleSpan
 
 class PermissionActivity : BaseActivity() {
@@ -34,7 +34,7 @@ class PermissionActivity : BaseActivity() {
 
             buttonConfirm.setOnClickListener{
                 // TODO 권한 요청하기
-                PreferencesControl(getGlobalContext())
+                getPreferencesControl()
                     .saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
                 val intent = Intent(getGlobalContext(), SocialAuthActivity::class.java)
                 startActivity(intent)
@@ -43,6 +43,16 @@ class PermissionActivity : BaseActivity() {
         }
     }
 
+
+    /*private fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(this, "앱 설정 -> Notification 권한 허용 필요", Toast.LENGTH_SHORT).show()
+        }
+    }*/
 
     private fun checkPermission(type: Int) {
 //        Log.d(TAG, "checkPermission type: $type")

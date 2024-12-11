@@ -7,9 +7,9 @@ import com.android.domain.usecase.login.DoLoginUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.android.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.LoginResult
-import com.android.petid.util.PreferencesControl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SocialAuthViewModel @Inject constructor(
     private val doLoginUseCase: DoLoginUseCase,
-    private val preferencesControl: PreferencesControl,
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
@@ -40,7 +39,7 @@ class SocialAuthViewModel @Inject constructor(
             when (val result = doLoginUseCase(sub, fcmToken)) {
                 is ApiResult.Success -> {
                     val result = result.data
-                    preferencesControl.apply {
+                    getPreferencesControl().apply {
                         saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
                         saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
                     }
