@@ -79,15 +79,15 @@ class HospitalReservationListAdapter(
                     button.setBackgroundResource(R.drawable.button_background_f2)
                     button.setTextColor(mContext.getColor(R.color.petid_underbar))
                 }
-                ReservationStatus.COMPLETED -> {
+                /*ReservationStatus.COMPLETED -> {
                     statusChip.setImageResource(R.drawable.ic_chip_completed)
 
                     button.text = mContext.getString(R.string.write_review)
                     button.setBackgroundResource(R.drawable.button_background_common)
                     button.setTextColor(mContext.getColor(R.color.white))
 
-                }
-                ReservationStatus.CANCELLED -> {
+                }*/
+                ReservationStatus.CANCELLED, ReservationStatus.COMPLETED -> {
                     statusChip.setImageResource(R.drawable.ic_chip_cancelled)
 
                     button.text = mContext.getString(R.string.re_reservation)
