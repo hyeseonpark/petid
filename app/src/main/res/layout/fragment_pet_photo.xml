@@ -73,7 +73,6 @@
         android:textSize="14sp"
         android:textColor="@color/petid_title"/>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,24 +80,24 @@
         android:layout_weight="1"
         android:gravity="center">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView_pet_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:srcCompat="@drawable/img_pet_photo_picture" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView_pet_photo"
+            android:layout_width="194dp"
+            android:layout_height="194dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/img_pet_photo_picture" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textView_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
-        android:text="@string/pet_photo_activity_desc"
-        android:textFontWeight="400"
-        android:textColor="@color/petid_underbar"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:textSize="14sp"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="33dp"
+            android:text="@string/pet_photo_activity_desc"
+            android:textFontWeight="400"
+            android:textColor="@color/petid_underbar"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="14sp"/>
 
     </LinearLayout>
 

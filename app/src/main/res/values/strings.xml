@@ -164,7 +164,7 @@
     <!--  pet id generate progress : step 5  -->
     <string name="petid_generate_step_5_title">반려동물 정보를 가져왔어요!</string>
     <string name="petid_generate_step_5_subtitle">잘못된 정보는 수정할 수 있어요</string>
-    <string name="petid_generate_step_5_dialog">이전 화면으로 돌아가면 현재 사진이 삭제됩니다. 진행하시겠습니까?</string>
+    <string name="petid_generate_step_5_dialog">이전 화면으로 돌아가면 현재 사진은 삭제됩니다. 진행하시겠습니까?</string>
 
     <!--  pet id generate progress : step 6  -->
     <string name="petid_generate_step_6_title">아래 내용으로\n펫 아이디를 만들게요</string>
