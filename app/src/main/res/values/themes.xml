@@ -33,7 +33,7 @@
         <item name="android:textViewStyle">@style/GenerateCommonButtonTextStyle</item>
         <item name="android:background">@drawable/button_background_common</item>
         <item name="android:layout_marginTop">27dp</item>
-        <item name="android:layout_marginBottom">68dp</item>
+        <item name="android:layout_marginBottom">35dp</item>
         <item name="android:layout_marginStart">33dp</item>
         <item name="android:layout_marginEnd">33dp</item>
         <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>

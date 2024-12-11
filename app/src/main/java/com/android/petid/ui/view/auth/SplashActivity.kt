@@ -45,7 +45,9 @@ class SplashActivity : AppCompatActivity() {
                 else -> SocialAuthActivity::class.java
             }
 
-            val target = Intent(getGlobalContext(), nextActivity)
+            val target = Intent(getGlobalContext(), nextActivity).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             startActivity(target)
             finish()
         }

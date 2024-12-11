@@ -36,8 +36,10 @@ class PermissionActivity : BaseActivity() {
                 // TODO 권한 요청하기
                 getPreferencesControl()
                     .saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
-                val intent = Intent(getGlobalContext(), SocialAuthActivity::class.java)
-                startActivity(intent)
+                val target = Intent(getGlobalContext(), IntroActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                startActivity(target)
                 finish()
             }
         }
