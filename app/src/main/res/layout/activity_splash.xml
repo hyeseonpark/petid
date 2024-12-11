@@ -6,17 +6,32 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_gradient"
+    android:background="@drawable/img_splash_background"
     tools:context=".ui.view.auth.SplashActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView_logo"
         android:layout_width="212dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_app"
+        android:src="@drawable/ic_splash"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:gravity="center"
+        android:text="@string/splash_desc"
+        android:textColor="@color/white"
+        android:textFontWeight="400"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

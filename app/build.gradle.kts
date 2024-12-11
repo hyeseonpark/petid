@@ -99,9 +99,6 @@ dependencies {
     implementation(libs.corbind)
     implementation(libs.corbind.material)
 
-    // splashscreen api
-    implementation(libs.androidx.core.splashscreen)
-
     // material calendarView
     implementation(libs.material.calendarview)
 
