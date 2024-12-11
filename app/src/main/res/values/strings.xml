@@ -76,6 +76,14 @@
     <string name="permission_info_desc">설정 > 애플리케이션 관리자 > PETID</string>
     <string name="permission_info_desc2">선택적 접근권한은 동의하지 않아도 해당기능 외 앱 이용이 가능합니다.</string>
 
+    <!-- intro activity -->
+    <string name="intro_1_title">손안에 담긴\n특별한 카드</string>
+    <string name="intro_1_desc">모바일 펫 카드에서\n반려동물 정보를 쉽게 볼 수 있어요</string>
+    <string name="intro_2_title">반려동물과의 첫걸음\n안전한 등록</string>
+    <string name="intro_2_desc">내 주변 등록대행 병원 확인하고\n간편 예약해 보세요</string>
+    <string name="intro_3_title">AI 인식\n간편 정보입력</string>
+    <string name="intro_3_desc">반려동물 사진으로\n빠르게 정보를 작성해 보세요</string>
+
     <!-- terms activity -->
     <string name="terms_activity_title">펫아이디 서비스\n이용 약관에 동의해 주세요.</string>
     <string name="terms_activity_title_span">이용 약관에 동의</string>
@@ -257,6 +265,5 @@
     <!-- content detail activity -->
     <string name="content_like_desc">%d명이 좋아했어요</string>
     <string name="content_detail_more_content_desc">알아두면 행복해지는 반려생활!\n이런 글은 어떤가요?</string>
-
 
 </resources>
