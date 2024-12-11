@@ -6,9 +6,9 @@ import com.android.domain.usecase.login.DoJoinUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.android.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.util.PreferencesControl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class TermsViewModel @Inject constructor(
     private val doJoinUseCase: DoJoinUseCase,
-    private val preferencesControl: PreferencesControl,
 //    private val savedStateHandle: SavedStateHandle,
     ): ViewModel() {
 
@@ -31,7 +30,7 @@ class TermsViewModel @Inject constructor(
                 when (val result = doJoinUseCase(platform.toString(), sub, fcmToken, ad)) {
                     is ApiResult.Success -> {
                         val result = result.data
-                        preferencesControl.apply {
+                        getPreferencesControl().apply {
                             saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
                             saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
                         }

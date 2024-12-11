@@ -6,11 +6,10 @@ import com.android.domain.entity.PetDetailsEntity
 import com.android.domain.repository.PetInfoRepository
 import com.android.domain.util.ApiResult
 import com.android.petid.common.Constants
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.util.PreferencesControl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PetInfoViewModel @Inject constructor(
     private val petInfoRepository: PetInfoRepository,
-    private val preferencesControl: PreferencesControl
 ): ViewModel(){
 
     /* 펫 정보 가져오기 결과*/
@@ -38,7 +36,7 @@ class PetInfoViewModel @Inject constructor(
      */
     fun getPetDetails() {
         viewModelScope.launch {
-            val petId = preferencesControl.getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
+            val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
             when (val result = petInfoRepository.getPetDetails(petId)) {
                 is ApiResult.Success -> {
                     val petDetails = result.data

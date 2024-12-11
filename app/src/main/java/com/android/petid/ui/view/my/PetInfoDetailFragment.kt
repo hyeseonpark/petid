@@ -10,11 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.common.Constants
-import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.FragmentPetInfoDetailBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.util.PreferencesControl
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.viewmodel.my.PetInfoViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +50,7 @@ class PetInfoDetailFragment
                 findNavController().navigate(R.id.action_petInfoDetailFragment_to_petInfoUpdateFragment)
             }
 
-            when(PreferencesControl(getGlobalContext()).getIntValue(Constants.SHARED_PET_ID_VALUE)) {
+            when(getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE)) {
                 -1 -> {
                     textViewPetidStatusNull.visibility = View.VISIBLE
                     textViewPetidStatusHasData.visibility = View.GONE
