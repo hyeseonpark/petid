@@ -35,25 +35,30 @@ class MyInfoUpdateFragment
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyInfoUpdateBinding.inflate(inflater)
-        initComponent()
-        observeGetMemberInfoState()
-        observeUpdateMemberInfoState()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            title = getString(R.string.update_my_info_title),
+        )
+
         // 주소 검색 후 결과값
         setFragmentResultListener(BundleKeys.KEY_ADDRESS) { _, bundle ->
             val result = bundle.getString(BundleKeys.KEY_ADDRESS)
             binding.editTextAddress.setText(result)
         }
+        initComponent()
+        observeGetMemberInfoState()
+        observeUpdateMemberInfoState()
     }                                                                  
 
     private fun initComponent() {
         with(binding) {
-            buttonBack.setOnClickListener { activity?.finish() }
             buttonComplete.setOnClickListener {
                 completeDialog()
             }

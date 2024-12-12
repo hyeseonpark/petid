@@ -83,6 +83,11 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            title = getString(R.string.main_hospital_title),
+        )
+
         // 위치 권한 확인
         if (ContextCompat.checkSelfPermission(
                 getGlobalContext(),

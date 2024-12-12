@@ -12,28 +12,11 @@
     android:gravity="center_horizontal"
     android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/top_bar_layout"
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/custom_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/iconButton"
-        app:layout_constraintTop_toTopOf="@+id/iconButton"
-        android:background="@color/white">
-
-        <ImageButton
-            android:id="@+id/button_back"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="17dp"
-            android:background="@null"
-            android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/imageView"

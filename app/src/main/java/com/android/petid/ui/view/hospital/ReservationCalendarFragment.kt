@@ -43,10 +43,6 @@ import java.util.Locale
 class ReservationCalendarFragment:
     BaseFragment<FragmentReservationCalendarBinding>(FragmentReservationCalendarBinding::inflate) {
 
-    companion object{
-        fun newInstance()= ReservationCalendarFragment()
-    }
-
     private val viewModel: HospitalViewModel by activityViewModels()
 
     private val TAG = "ReservationCalendarFragment"
@@ -56,14 +52,22 @@ class ReservationCalendarFragment:
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentReservationCalendarBinding.inflate(layoutInflater)
+        return binding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            title = viewModel.hospitalDetail.name
+        )
         initComponent()
 
         observeHospitalOrderTimeList()
         observeCreateHospitalOrder()
-
-        return binding.root
-
     }
 
     /**
@@ -72,7 +76,6 @@ class ReservationCalendarFragment:
     private fun initComponent() {
         with(binding) {
             viewModel.hospitalId = viewModel.hospitalId
-            textViewTitle.text = viewModel.hospitalDetail.name
 
             // 예약 완료 버튼
             buttonConfirm.setOnClickListener{

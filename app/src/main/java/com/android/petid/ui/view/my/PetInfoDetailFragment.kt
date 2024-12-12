@@ -39,19 +39,30 @@ class PetInfoDetailFragment
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPetInfoDetailBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            onBackClick = { activity?.finish() },
+            showUpdateButton = true,
+            onUpdateClick = {
+                findNavController().navigate(R.id.action_petInfoDetailFragment_to_petInfoUpdateFragment)
+            },
+            title = getString(R.string.pet_info_title),
+        )
         initComponent()
         viewModel.getPetDetails()
         observeGetPetInfoState()
         observeGetPetImageState()
-        return binding.root
     }
 
     private fun initComponent() {
         with(binding) {
-            textViewUpdate.setOnClickListener{
-                findNavController().navigate(R.id.action_petInfoDetailFragment_to_petInfoUpdateFragment)
-            }
-
             when(getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE)) {
                 -1 -> {
                     textViewPetidStatusNull.visibility = View.VISIBLE

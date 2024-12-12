@@ -10,55 +10,11 @@
         android:orientation="vertical"
         android:background="@color/white">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/top_bar_layout"
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/custom_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@color/white">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textView_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/pet_info_title"
-                android:textColor="@color/petid_title"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/button_back"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="17dp"
-                android:background="@null"
-                android:src="@drawable/ic_back"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textView_update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="21dp"
-                android:background="?attr/selectableItemBackground"
-                android:text="@string/update"
-                android:textColor="@color/black"
-                android:textFontWeight="400"
-                android:textSize="16sp"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
