@@ -9,7 +9,6 @@ import com.android.domain.entity.PetDetailsEntity
 import com.android.domain.repository.HomeMainRepository
 import com.android.domain.repository.MyInfoRepository
 import com.android.domain.repository.PetInfoRepository
-import com.android.domain.usecase.main.GetBannerListUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +21,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeMainVIewModel @Inject constructor(
-    private val getBannerListUseCase: GetBannerListUseCase,
     private val homeMainRepository: HomeMainRepository,
     private val myInfoRepository: MyInfoRepository,
     private val petInfoRepository: PetInfoRepository,
@@ -38,7 +36,7 @@ class HomeMainVIewModel @Inject constructor(
      */
     fun getBannerList(type: String) {
         viewModelScope.launch {
-            when (val result = getBannerListUseCase(type)) {
+            when (val result = homeMainRepository.getBannerList(type)) {
                 is ApiResult.Success -> {
                     val bannerList = result.data
 

@@ -5,12 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
-import com.android.domain.repository.BlogMainRepository
 import com.android.domain.repository.HospitalMainRepository
-import com.android.domain.usecase.hospital.GetEupmundongUseCase
-import com.android.domain.usecase.hospital.GetHospitalListUseCase
-import com.android.domain.usecase.hospital.GetSidoUseCase
-import com.android.domain.usecase.hospital.GetSigunguUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,10 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HospitalMainViewModel @Inject constructor(
-    private val getSidoUseCase: GetSidoUseCase,
-    private val getSigunguUseCase: GetSigunguUseCase,
-    private val getEupmundongUseCase: GetEupmundongUseCase,
-    private val getHospitalListUseCase: GetHospitalListUseCase,
     private val hospitalMainRepository: HospitalMainRepository, // temporary
     private val savedStateHandle: SavedStateHandle
     ): ViewModel() {
@@ -89,7 +80,7 @@ class HospitalMainViewModel @Inject constructor(
      */
     fun getSidoList() {
         viewModelScope.launch {
-            when (val result = getSidoUseCase()) {
+            when (val result = hospitalMainRepository.getSido()) {
                 is ApiResult.Success -> {
                     _sidoApiState.emit(CommonApiState.Success(result.data))
                     currentSidoList = result.data
@@ -114,7 +105,7 @@ class HospitalMainViewModel @Inject constructor(
      */
     fun getSigunguList() {
         viewModelScope.launch {
-            when (val result = getSigunguUseCase(currentSidoState.value!!.id)) {
+            when (val result = hospitalMainRepository.getSigunguList(currentSidoState.value!!.id)) {
                 is ApiResult.Success -> {
                     _sigunguApiState.emit(CommonApiState.Success(result.data))
                     currentSigunguList = result.data
@@ -139,7 +130,7 @@ class HospitalMainViewModel @Inject constructor(
      */
     fun getEupmundongList() {
         viewModelScope.launch {
-            when (val result = getEupmundongUseCase(currentSigunguState.value!!.id)) {
+            when (val result = hospitalMainRepository.getEupmundongList(currentSigunguState.value!!.id)) {
                 is ApiResult.Success -> {
                     _sigunguApiState.emit(CommonApiState.Success(result.data))
                     currentEupmundongList = result.data
@@ -179,7 +170,7 @@ class HospitalMainViewModel @Inject constructor(
      */
     private fun getHospitalList() {
         viewModelScope.launch {
-            when (val result = getHospitalListUseCase(
+            when (val result = hospitalMainRepository.getHospitalList(
                 currentSidoState.value!!.id,
                 currentSigunguState.value!!.id,
                 currentEupmundongState.value!!.id)) {

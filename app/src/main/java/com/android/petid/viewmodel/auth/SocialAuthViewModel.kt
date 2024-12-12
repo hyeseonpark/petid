@@ -3,7 +3,7 @@ package com.android.petid.viewmodel.auth
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.domain.usecase.login.DoLoginUseCase
+import com.android.domain.repository.SocialAuthRepository
 import com.android.domain.util.ApiResult
 import com.android.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.android.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SocialAuthViewModel @Inject constructor(
-    private val doLoginUseCase: DoLoginUseCase,
+    private val socialAuthRepository : SocialAuthRepository,
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
 
@@ -36,7 +36,7 @@ class SocialAuthViewModel @Inject constructor(
         viewModelScope.launch {
             _loginResult.emit(LoginResult.Loading)  // 로딩 상태 전송
 
-            when (val result = doLoginUseCase(sub, fcmToken)) {
+            when (val result = socialAuthRepository.doLogin(sub, fcmToken)) {
                 is ApiResult.Success -> {
                     val result = result.data
                     getPreferencesControl().apply {
