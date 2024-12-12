@@ -82,7 +82,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun initComponent() {
         with(binding) {
             imageViewNoti.setOnClickListener {
-                findNavController().navigate(R.id.action_homeMainFragment_to_notificationFragment)
+                val target = Intent(activity, NotificationActivity::class.java)
+                startActivity(target)
             }
 
             buttonCreateStart.setOnClickListener{
