@@ -54,6 +54,21 @@ class HospitalMainRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getHospitalListLoc(
+        sidoId: Int,
+        sigunguId: Int,
+        eupmundongId: Int,
+        lat: Double,
+        lon: Double
+    ): ApiResult<List<HospitalEntity>> {
+        return when (val result = remoteDataSource.getHospitalListLoc(
+            sidoId, sigunguId, eupmundongId, lat, lon)) {
+            is ApiResult.Success -> result
+            is ApiResult.HttpError -> result
+            is ApiResult.Error -> result
+        }
+    }
+
     override suspend fun getHospitalImageUrl(filePath: String): String {
         return try {
             hospitalAPI.getHospitalImageUrl(filePath)
