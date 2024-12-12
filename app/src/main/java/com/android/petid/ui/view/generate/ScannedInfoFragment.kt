@@ -21,17 +21,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentScannedInfoBinding::inflate) {
 
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
-
-    private lateinit var backPressedCallback: OnBackPressedCallback
-
     private lateinit var dialog : CustomDialogCommon
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        backPressedCallback = object : OnBackPressedCallback(true) {
+        val backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                dialog.show(childFragmentManager, "CustomDialogCommon")
+                dialog.show(childFragmentManager, null)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
@@ -42,21 +39,16 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScannedInfoBinding.inflate(layoutInflater)
-        initComponent()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val appearance = viewModel.petInfo.getAppearance()
-        if (appearance != null) {
-            with(appearance) {
-                binding.editTextType.editTextText.setText(breed)
-                binding.editTextHairColor.editTextText.setText(hairColor)
-                binding.editTextHairFeature.editTextText.setText(hairLength)
-                binding.editTextWeight.editTextText.setText(weight.toString())
-            }
-        }
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            onBackClick = { dialog.show(childFragmentManager, null) }
+        )
+        initComponent()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -83,6 +75,14 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
                         false
                     }
                 }
+            }
+
+            val appearance = viewModel.petInfo.getAppearance()
+            appearance?.also {
+                editTextType.editTextText.setText(it.breed)
+                editTextHairColor.editTextText.setText(it.hairColor)
+                editTextHairFeature.editTextText.setText(it.hairLength)
+                editTextWeight.editTextText.setText(it.weight.toString())
             }
 
             buttonNext.setOnClickListener{

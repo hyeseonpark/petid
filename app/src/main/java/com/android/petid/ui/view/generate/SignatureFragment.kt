@@ -12,20 +12,22 @@ import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentSignatureBinding
 
 class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatureBinding::inflate) {
-
-    companion object{
-        fun newInstance()= SignatureFragment()
-    }
+    private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSignatureBinding.inflate(layoutInflater)
-        initComponent()
-
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+        )
+        initComponent()
 
     fun initComponent() {
         binding.buttonNext.setOnClickListener{
@@ -33,6 +35,8 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
             /* val bitmap = getBitmapFromView(binding.drawingViewSignature)
             val base64Bitmap = bitmapToBase64(bitmap)
             sendBitmapToServer(base64Bitmap)*/
+        }
+    }
         }
     }
 

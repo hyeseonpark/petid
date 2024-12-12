@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@null">
+
+    <!-- 왼쪽 뒤로가기 버튼 -->
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="17dp"
+        android:background="@null"
+        android:src="@drawable/ic_back"/>
+
+    <!-- 중앙 페이지 이름 -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/petid_title"
+        android:textSize="16sp"
+        android:textFontWeight="400"/>
+
+    <!-- 오른쪽 텍스트 또는 이미지 버튼 -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/btnRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginRight="23dp"
+        android:padding="8dp"
+        android:text="@string/update"
+        android:textColor="@color/petid_title"
+        android:textSize="16sp"
+        android:textFontWeight="400"
+        android:visibility="gone"/>
+
+</androidx.appcompat.widget.Toolbar>

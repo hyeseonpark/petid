@@ -42,10 +42,6 @@ import java.util.concurrent.ScheduledExecutorService
 class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoBinding::inflate),
     ImageClassifierHelper.ClassifierListener {
 
-    companion object{
-        fun newInstance()= PetPhotoFragment()
-    }
-
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     private val TAG = this.javaClass.simpleName
@@ -64,6 +60,16 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPetPhotoBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+        )
         initComponent()
 
         return binding.root
