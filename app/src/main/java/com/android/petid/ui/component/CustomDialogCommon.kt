@@ -17,6 +17,7 @@ class CustomDialogCommon(
     private val noButtonClick: (() -> Any)? = null,
     private val isSingleButton: Boolean? = null,
     private val singleButtonText: String? = getGlobalContext().getString(R.string.yes),
+    private val boldTitle: String? = null,
 ) : DialogFragment() {
     private var _binding: DialogCommonBinding? = null
     private val binding get() = _binding!!
@@ -45,6 +46,13 @@ class CustomDialogCommon(
                 }
             }
 
+            if (boldTitle != null) {
+                textViewTitleBold.apply {
+                    visibility = View.VISIBLE
+                    text = boldTitle
+                }
+            }
+
             if (isSingleButton == true) {
                 buttonNo.visibility = View.GONE
                 buttonYes.text = singleButtonText
@@ -65,7 +73,11 @@ class CustomDialogCommon(
             yesButtonClick: () -> Unit,
             noButtonClick: (() -> Unit)? = null
         ): CustomDialogCommon {
-            return CustomDialogCommon(title, yesButtonClick, noButtonClick)
+            return CustomDialogCommon(
+                title = title,
+                yesButtonClick = yesButtonClick,
+                noButtonClick = noButtonClick
+            )
         }
     }
 }
