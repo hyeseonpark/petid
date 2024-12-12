@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.domain.entity.ContentEntity
+import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentBlogMainBinding
 import com.android.petid.enum.ContentCategoryType
@@ -38,12 +39,16 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBlogMainBinding.inflate(inflater)
-
-        initComponent()
-
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            title = getString(R.string.main_blog_title)
+        )
+
+        initComponent()
         observeCurrentContentListState()
         observeDoLikeState()
     }

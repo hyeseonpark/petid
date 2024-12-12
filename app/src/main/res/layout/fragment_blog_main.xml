@@ -10,16 +10,11 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView_title"
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/custom_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:gravity="center"
-        android:text="@string/main_blog_title"
-        android:textColor="@color/petid_title"
-        android:textSize="16sp"
-        android:textFontWeight="400"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout_blog_main"

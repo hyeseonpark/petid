@@ -41,7 +41,7 @@ abstract class BaseFragment<VB: ViewBinding>(
         showBackButton: Boolean = false,
         showUpdateButton: Boolean = false,
         onBackClick: (() -> Unit)? = null,
-        onRightClick: (() -> Unit)? = null
+        onUpdateClick: (() -> Unit)? = null
     ) {
         (activity as? AppCompatActivity)?.apply {
             setSupportActionBar(toolbar)
@@ -63,7 +63,7 @@ abstract class BaseFragment<VB: ViewBinding>(
 
                 findViewById<TextView>(R.id.btnRight)?.apply {
                     visibility = if (showUpdateButton) View.VISIBLE else View.GONE
-                    setOnClickListener { onRightClick?.invoke() }
+                    setOnClickListener { onUpdateClick?.invoke() }
                 }
             }
         }
