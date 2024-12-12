@@ -22,10 +22,6 @@ import kotlinx.coroutines.launch
 class PetInfoUpdateFragment
     : BaseFragment<FragmentPetInfoUpdateBinding>(FragmentPetInfoUpdateBinding::inflate) {
 
-    companion object{
-        fun newInstance()= PetInfoUpdateFragment()
-    }
-
     private val viewModel: PetInfoViewModel by activityViewModels()
 
     private val TAG = "PetInfoUpdateFragment"
@@ -35,9 +31,19 @@ class PetInfoUpdateFragment
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPetInfoUpdateBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            title = getString(R.string.pet_info_update_title),
+        )
         initComponent()
         observeGetMemberInfoState()
-        return binding.root
     }
 
     fun initComponent() {

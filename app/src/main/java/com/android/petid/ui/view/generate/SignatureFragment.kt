@@ -28,15 +28,40 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
             showBackButton = true,
         )
         initComponent()
+        observeUploadS3ResultState()
+    }
 
     fun initComponent() {
         binding.buttonNext.setOnClickListener{
-            findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
-            /* val bitmap = getBitmapFromView(binding.drawingViewSignature)
-            val base64Bitmap = bitmapToBase64(bitmap)
-            sendBitmapToServer(base64Bitmap)*/
+            val bitmap = getBitmapFromView(binding.drawingViewSignature)
+
+            val memberId =
+                getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
+
+            with(viewModel) {
+                // S3 서버에 올릴 파일 세팅
+                signImage = bitmapToFile(requireContext(), bitmap, "signature.jpg")
+                petInfo.setSign("${PHOTO_PATHS[1]}${memberId}.jpg")
+            }
+
+            viewModel.uploadImageFiles()
         }
     }
+    /**
+     * viewModel.uploadFile 결과값 반영
+     */
+    private fun observeUploadS3ResultState() {
+        lifecycleScope.launch {
+            viewModel.registerPetResult.collectLatest { result ->
+                when(result) {
+                    is CommonApiState.Success -> {
+                        findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
+                    }
+                    is CommonApiState.Error -> {}
+                    CommonApiState.Init -> {}
+                    CommonApiState.Loading -> {}
+                }
+            }
         }
     }
 

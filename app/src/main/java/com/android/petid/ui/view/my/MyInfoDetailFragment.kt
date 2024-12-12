@@ -59,13 +59,24 @@ class MyInfoDetailFragment
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            onBackClick = { activity?.finish() },
+            showUpdateButton = true,
+            onUpdateClick = {
+                findNavController().navigate(R.id.action_myInfoDetailFragment_to_myInfoUpdateFragment)
+            },
+            title = getString(R.string.my_info_title),
+        )
+        initComponent()
+    }
 
     private fun initComponent() {
         with(binding) {
-            buttonBack.setOnClickListener { findNavController().popBackStack() }
-            textViewUpdate.setOnClickListener{
-                findNavController().navigate(R.id.action_myInfoDetailFragment_to_myInfoUpdateFragment)
-            }
             requestCameraPermission()
 
             imageViewProfile.setOnClickListener{

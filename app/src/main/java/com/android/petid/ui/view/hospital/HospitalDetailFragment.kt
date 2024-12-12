@@ -29,11 +29,20 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHospitalDetailBinding.inflate(layoutInflater)
-
-        initComponent()
-
         return binding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            title = viewModel.hospitalDetail.name,
+            showBackButton = true,
+            onBackClick = { activity?.finish() },
+        )
+        initComponent()
     }
 
     private fun initComponent() {
