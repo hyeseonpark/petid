@@ -240,11 +240,16 @@
     <string name="pet_info_update_title">반려동물 정보 수정</string>
     <string name="pet_info_id_null"><u>미등록 상태</u> ></string>
     <string name="pet_info_id_has_data">등록 완료</string>
+    <string name="pet_info_dialog_chip_na_bold_title">반려동물 등록\n고민하고 있나요?</string>
+    <string name="pet_info_dialog_chip_na_desc">가장 가까운 등록 대행 동물 병원에서 쉽고 안전하게 반려동물 등록해 보세요</string>
+    <string name="pet_info_dialog_chip_na_button">예약하러 가기</string>
+    <string name="search_hospital">병원 알아보기</string>
+
+    <!-- deleted -->
     <string name="pet_info_dialog_chip_na_title">반려 동물 등록은 왜 해야할까?</string>
     <string name="pet_info_dialog_chip_na_desc1_1">혹시 알고 계셨나요?</string>
     <string name="pet_info_dialog_chip_na_desc1_2">한국에는 매년 11만 마리 이상의\n반려동물이 길을 잃거나 버려지고 있어요.</string>
     <string name="pet_info_dialog_chip_na_desc2_1">내 반려동물을 안전하게 지키는 가장\n쉬운 방법은 바로 반려동물 등록이에요.</string>
-    <string name="search_hospital">병원 알아보기</string>
 
     <!-- reservation history activity -->
     <string name="no_history">예약 내역이 없습니다</string>

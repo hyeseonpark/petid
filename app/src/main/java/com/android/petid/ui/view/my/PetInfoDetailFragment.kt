@@ -12,8 +12,10 @@ import com.android.petid.R
 import com.android.petid.common.Constants
 import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.FragmentPetInfoDetailBinding
+import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.ui.view.deleted.CustomDialogPetInfoNa
 import com.android.petid.viewmodel.my.PetInfoViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,8 +64,13 @@ class PetInfoDetailFragment
             }
 
             // 미등록 상태, dialog 보여주기
-            textViewPetCreateStatusTitle.setOnClickListener {
-                CustomDialogPetInfoNa().show(childFragmentManager, null)
+            textViewPetidStatusNull.setOnClickListener {
+                CustomDialogCommon(
+                    title = getString(R.string.pet_info_dialog_chip_na_desc),
+                    boldTitle = getString(R.string.pet_info_dialog_chip_na_bold_title),
+                    isSingleButton = true,
+                    singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
+                ).show(childFragmentManager, null)
             }
         }
     }

@@ -13,14 +13,25 @@
     android:paddingBottom="21dp">
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_title_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="17dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textFontWeight="700"
+        android:textColor="@color/petid_title"
+        android:visibility="gone"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="60dp"
+        android:layout_marginHorizontal="50dp"
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="@color/petid_title"
-        android:text=""
         android:layout_marginBottom="32dp"/>
 
     <LinearLayout

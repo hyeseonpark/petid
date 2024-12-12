@@ -1,4 +1,4 @@
-package com.android.petid.ui.view.my
+package com.android.petid.ui.view.deleted
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
