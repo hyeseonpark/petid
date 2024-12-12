@@ -63,6 +63,9 @@
             android:name=".ui.view.generate.GeneratePetidMainActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.view.home.NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.blog.ContentDetailActivity"
             android:exported="false" />
         <activity

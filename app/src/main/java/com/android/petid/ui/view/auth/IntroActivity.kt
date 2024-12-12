@@ -64,7 +64,7 @@ class IntroActivity : BaseActivity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(20, 0, 20, 0)
+                setMargins(13, 0, 13, 0)
             }
 
         for (i in 0 until dotsCount) {
