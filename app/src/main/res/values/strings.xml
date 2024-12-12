@@ -185,6 +185,8 @@
     <string name="sido_title">시/도</string>
     <string name="sigungu_title">시/군/구</string>
     <string name="eupmundong_title">읍/면/동</string>
+    <string name="filter_by_location">가까운 순</string>
+    <string name="filter_by_name">이름 순</string>
 
     <!-- hospital detail -->
     <string name="hospital_make_reservation">방문 날짜/시간 예약하기</string>

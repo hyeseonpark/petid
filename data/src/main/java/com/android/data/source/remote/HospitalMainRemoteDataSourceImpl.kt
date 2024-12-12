@@ -89,4 +89,28 @@ class HospitalMainRemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getHospitalListLoc(
+        sidoId: Int,
+        sigunguId: Int,
+        eupmundongId: Int,
+        lat: Double,
+        lon: Double
+    ): ApiResult<List<HospitalEntity>> {
+        return try {
+            val response = hosptialAPI.getHospitalListByLocation(
+                sidoId, sigunguId, eupmundongId, lat, lon)
+            ApiResult.Success(response.toDomain())
+
+        } catch (e: HttpException) {
+            val gson = Gson()
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+
+            ApiResult.HttpError(errorResponse.toDomain())
+
+        } catch (e: Exception) {
+            ApiResult.Error(e.message)
+        }
+    }
+
 }

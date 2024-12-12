@@ -1,5 +1,12 @@
 package com.android.petid.viewmodel.hospital
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
+import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +14,7 @@ import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
 import com.android.domain.repository.HospitalMainRepository
 import com.android.domain.util.ApiResult
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,12 +22,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class HospitalMainViewModel @Inject constructor(
-    private val hospitalMainRepository: HospitalMainRepository, // temporary
+    private val hospitalMainRepository: HospitalMainRepository,
     private val savedStateHandle: SavedStateHandle
-    ): ViewModel() {
+): ViewModel() {
+
+    /* 현재 사용자의 lat, lon 값*/
+    var currentLat: Double? = null
+    var currentLon: Double? = null
 
     /**
      * 시,도 api 호출 결과
@@ -103,7 +116,7 @@ class HospitalMainViewModel @Inject constructor(
     /**
      * 시,군,구 목록 조회
      */
-    fun getSigunguList() {
+    private fun getSigunguList() {
         viewModelScope.launch {
             when (val result = hospitalMainRepository.getSigunguList(currentSidoState.value!!.id)) {
                 is ApiResult.Success -> {
@@ -128,7 +141,7 @@ class HospitalMainViewModel @Inject constructor(
     /**
      * 읍,면,동 목록 조회
      */
-    fun getEupmundongList() {
+    private fun getEupmundongList() {
         viewModelScope.launch {
             when (val result = hospitalMainRepository.getEupmundongList(currentSigunguState.value!!.id)) {
                 is ApiResult.Success -> {
@@ -137,7 +150,11 @@ class HospitalMainViewModel @Inject constructor(
 
                     result.data.firstOrNull()?.let { firstEupmundong ->
                         _currentEupmondongState.emit(firstEupmundong)
-                        getHospitalList()
+
+                        when(currentLat == null && currentLon == null) {
+                            true -> getHospitalList()
+                            false -> getHospitalListByLocation()
+                        }
                     }
                 }
                 is ApiResult.HttpError -> {
@@ -162,7 +179,12 @@ class HospitalMainViewModel @Inject constructor(
 
     fun updateCurrentEupmundongState(eupmundong: LocationEntity) {
         _currentEupmondongState.value = eupmundong
-        getHospitalList()
+
+        // 분기처리
+        when(currentLat == null && currentLon == null) {
+            true -> getHospitalList()
+            false -> getHospitalListByLocation()
+        }
     }
 
     /**
@@ -197,6 +219,39 @@ class HospitalMainViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 병원 목록 조회 (거리 순 정렬)
+     */
+    private fun getHospitalListByLocation() {
+        viewModelScope.launch {
+            when (val result = hospitalMainRepository.getHospitalListLoc(
+                currentSidoState.value!!.id,
+                currentSigunguState.value!!.id,
+                currentEupmundongState.value!!.id,
+                currentLat!!, currentLon!!)) {
+                is ApiResult.Success -> {
+                    var hospitalList = result.data
+
+                    hospitalList = hospitalList.map { item ->
+                        val hospitalImageUrl = when (item.imageUrl.size) {
+                            0 -> ""
+                            else -> getHospitalImage(item.imageUrl[0]) // 배열의 첫번째 사진
+                        }
+                        item.copy(imageUrl = listOf(hospitalImageUrl))
+                    }
+
+                    _hospitalApiState.emit(CommonApiState.Success(hospitalList))
+                }
+                is ApiResult.HttpError -> {
+                    _hospitalApiState.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _hospitalApiState.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
     private suspend fun getHospitalImage(filePath: String): String {
         return try {
             hospitalMainRepository.getHospitalImageUrl(filePath)
@@ -204,4 +259,48 @@ class HospitalMainViewModel @Inject constructor(
             ""
         }
     }
+
+    /**
+     * 현재 위치 가져오기
+     */
+    fun getSingleLocation(){
+        viewModelScope.launch {
+            val locationManager = getGlobalContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            // 위치 제공자 확인 (GPS, Network)
+            val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+
+            val provider = when {
+                isGpsEnabled -> LocationManager.GPS_PROVIDER
+                isNetworkEnabled -> LocationManager.NETWORK_PROVIDER
+                else -> {
+                    getSidoList()
+                    return@launch
+                }
+            }
+
+            val lastKnownLocation = locationManager.getLastKnownLocation(provider)
+            if (lastKnownLocation != null) {
+                currentLat = lastKnownLocation.latitude
+                currentLon = lastKnownLocation.longitude
+                getSidoList()
+            } else {
+                suspendCoroutine<Location> { _ ->
+                    locationManager.getCurrentLocation(
+                        provider,
+                        null, // 기본 executor
+                        ContextCompat.getMainExecutor(getGlobalContext()) // 메인 스레드에서 실행
+                    ) { location ->
+                        if (location != null) {
+                            currentLat = location.latitude
+                            currentLon = location.longitude
+                        }
+                        getSidoList()
+                    }
+                }
+            }
+        }
+    }
+
 }

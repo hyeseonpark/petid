@@ -1,6 +1,13 @@
 package com.android.petid.ui.view.hospital
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import androidx.core.content.ContextCompat
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,18 +16,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.LocationEntity
-import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.R
 import com.android.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.android.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.android.petid.common.Constants.LOCATION_SIGUNGU_TYPE
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.FragmentHospitalMainBinding
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.ui.view.common.flowTextWatcher
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
 import com.android.petid.util.Utils.hideKeyboardAndClearFocus
@@ -33,7 +44,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import ru.ldralighieri.corbind.view.clicks
+
 
 /**
  * 메인 > 등록대행병원
@@ -53,22 +64,40 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
 
     private var currentHospitalList : List<HospitalEntity>? = null
 
+    private val locationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            when(isGranted) {
+                true -> viewModel.getSingleLocation()
+                false -> viewModel.getSidoList()
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHospitalMainBinding.inflate(inflater)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 위치 권한 확인
+        if (ContextCompat.checkSelfPermission(
+                getGlobalContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // 권한 부여 안되어 있음
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        } else {
+            // 이미 권한 부여되어있으면 바로 위치 정보 가져오기
+            viewModel.getSingleLocation()
+        }
+
         initComponent()
         initObserve()
-
-        viewModel.getSidoList()
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
             "locationItemSelected", this
@@ -220,6 +249,12 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                     is CommonApiState.Success -> {
                         currentHospitalList = result.data
                         hospitalListAdapter.submitList(currentHospitalList)
+
+                        binding.buttonFilter.text = getString(
+                            when(viewModel.currentLat == null && viewModel.currentLon == null) {
+                                true -> R.string.filter_by_name
+                                false -> R.string.filter_by_location
+                            })
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리

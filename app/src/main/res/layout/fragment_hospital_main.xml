@@ -11,7 +11,7 @@
     android:background="@color/white"
     android:paddingBottom="92dp">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -33,7 +33,7 @@
         android:inputType="text"
         android:textSize="14dp"
         android:textColor="@color/petid_title"
-        android:textColorHint="#BFBFBF"
+        android:textColorHint="@color/b4"
         android:paddingStart="22dp"
         android:paddingEnd="16dp"
         android:drawableEnd="@drawable/ic_search"
@@ -115,10 +115,10 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_filter"
-            android:layout_width="67dp"
+            android:layout_width="wrap_content"
             android:layout_height="31dp"
             android:background="@null"
-            android:text="가까운 순"
+            android:text="@string/filter_by_location"
             android:textSize="13sp"
             android:textFontWeight="500"
             android:textColor="@color/petid_subtitle"

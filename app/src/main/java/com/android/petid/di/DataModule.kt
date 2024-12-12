@@ -8,6 +8,10 @@ import com.android.data.source.remote.HomeMainRemoteDataSource
 import com.android.data.source.remote.HomeMainRemoteDataSourceImpl
 import com.android.data.source.remote.HospitalMainRemoteDataSource
 import com.android.data.source.remote.HospitalMainRemoteDataSourceImpl
+import com.android.data.source.remote.MyInfoRemoteDataSource
+import com.android.data.source.remote.MyInfoRemoteDataSourceImpl
+import com.android.data.source.remote.PetInfoDataSource
+import com.android.data.source.remote.PetInfoDataSourceImpl
 import com.android.data.source.remote.ReservationCalendarRemoteDataSource
 import com.android.data.source.remote.ReservationCalendarRemoteDataSourceImpl
 import com.android.data.source.remote.ReservationHistoryInfoRemoteDataSource
@@ -73,4 +77,16 @@ abstract class DataModule {
     abstract fun bindContentDetailRemoteDataSource(
         impl: ContentDetailRemoteRemoteDataSourceImpl
     ): ContentDetailRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindMyInfoRemoteDataSource(
+        impl: MyInfoRemoteDataSourceImpl
+    ): MyInfoRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindPetInfoRemoteDataSource(
+        impl: PetInfoDataSourceImpl
+    ): PetInfoDataSource
 }
