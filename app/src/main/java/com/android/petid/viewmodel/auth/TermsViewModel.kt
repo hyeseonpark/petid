@@ -2,7 +2,7 @@ package com.android.petid.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.domain.usecase.login.DoJoinUseCase
+import com.android.domain.repository.TermsRepository
 import com.android.domain.util.ApiResult
 import com.android.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.android.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TermsViewModel @Inject constructor(
-    private val doJoinUseCase: DoJoinUseCase,
+    private val termsRepository: TermsRepository,
 //    private val savedStateHandle: SavedStateHandle,
     ): ViewModel() {
 
@@ -27,7 +27,7 @@ class TermsViewModel @Inject constructor(
         fun join(platform: PlatformType, sub: String, fcmToken: String, ad: Boolean) {
             viewModelScope.launch {
                 _apiState.emit(CommonApiState.Loading)  // 로딩 상태 전송
-                when (val result = doJoinUseCase(platform.toString(), sub, fcmToken, ad)) {
+                when (val result = termsRepository.doJoin(platform.toString(), sub, fcmToken, ad)) {
                     is ApiResult.Success -> {
                         val result = result.data
                         getPreferencesControl().apply {

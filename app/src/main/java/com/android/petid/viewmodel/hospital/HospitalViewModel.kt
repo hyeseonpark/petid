@@ -5,8 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.HospitalEntity
 import com.android.domain.entity.HospitalOrderEntity
-import com.android.domain.usecase.hospital.CreateHospitalOrderUseCase
-import com.android.domain.usecase.hospital.GetHospitalOrderTimeListUseCase
+import com.android.domain.repository.ReservationCalendarRepository
 import com.android.domain.util.ApiResult
 import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HospitalViewModel @Inject constructor(
-    private val getHospitalOrderTimeListUseCase: GetHospitalOrderTimeListUseCase,
-    private val createHospitalOrderUseCase: CreateHospitalOrderUseCase,
+    private val reservationCalendarRepository: ReservationCalendarRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -60,7 +58,8 @@ class HospitalViewModel @Inject constructor(
      */
     fun getHospitalOrderTimeList() {
         viewModelScope.launch {
-            when(val result = getHospitalOrderTimeListUseCase(hospitalId, day, dateStr)) {
+            when(val result = reservationCalendarRepository.getHospitalOrderTimeList(
+                hospitalId, day, dateStr)) {
                 is ApiResult.Success -> {
                     _hospitalOrderTimeApiState.emit(CommonApiState.Success(result.data))
 
@@ -82,7 +81,7 @@ class HospitalViewModel @Inject constructor(
         viewModelScope.launch {
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
             val formatDateTime = sdf.format(selectedDateTime)
-            when(val result = createHospitalOrderUseCase(
+            when(val result = reservationCalendarRepository.createHospitalOrder(
                 hospitalId, formatDateTime)) {
                 is ApiResult.Success -> {
                     _createHospitalOrderApiState.emit(CommonApiState.Success(result.data))

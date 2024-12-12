@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.HospitalOrderDetailEntity
 import com.android.domain.repository.ReservationHistoryInfoRepository
-import com.android.domain.usecase.hospital.ReservationHistoryInfoUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReservationHistoryInfoViewModel @Inject constructor(
-    private val reservationHistoryInfoUseCase: ReservationHistoryInfoUseCase,
     private val reservationHistoryInfoRepository: ReservationHistoryInfoRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -36,7 +34,8 @@ class ReservationHistoryInfoViewModel @Inject constructor(
      */
     fun getHospitalReservationHistoryListApiState() {
         viewModelScope.launch {
-            when(val result = reservationHistoryInfoUseCase("ALL")) {
+            when(val result = reservationHistoryInfoRepository
+                .getHospitalReservationHistoryList("ALL")) {
                 is ApiResult.Success -> {
                     _hospitalReservationHistoryListApiState.emit(CommonApiState.Success(result.data))
 

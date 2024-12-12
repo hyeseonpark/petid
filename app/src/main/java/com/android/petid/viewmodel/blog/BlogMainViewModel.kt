@@ -7,8 +7,6 @@ import com.android.domain.entity.ContentEntity
 import com.android.domain.entity.ContentLikeEntity
 import com.android.domain.entity.LocationEntity
 import com.android.domain.repository.BlogMainRepository
-import com.android.domain.usecase.content.DoContentLikeUseCase
-import com.android.domain.usecase.content.GetContentListUseCase
 import com.android.domain.util.ApiResult
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
@@ -25,8 +23,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BlogMainViewModel @Inject constructor(
-    private val getContentListUseCase: GetContentListUseCase,
-    private val doContentLikeUseCase: DoContentLikeUseCase,
     private val blogMainRepository: BlogMainRepository,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -46,7 +42,7 @@ class BlogMainViewModel @Inject constructor(
      */
     fun getContentList(category: ContentCategoryType) {
         viewModelScope.launch {
-            when (val result = getContentListUseCase(category.name)) {
+            when (val result = blogMainRepository.getContentList(category.name)) {
                 is ApiResult.Success -> {
                     var contentList = result.data
 
@@ -86,7 +82,7 @@ class BlogMainViewModel @Inject constructor(
      */
     fun doContentLike(contentId: Int) {
         viewModelScope.launch {
-            when (val result = doContentLikeUseCase(contentId)) {
+            when (val result = blogMainRepository.doContentLike(contentId)) {
                 is ApiResult.Success -> {
                     _doLikeApiResult.emit(CommonApiState.Success(result.data))
                 }

@@ -5,8 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.domain.entity.ContentEntity
 import com.android.domain.entity.ContentLikeEntity
 import com.android.domain.repository.BlogMainRepository
-import com.android.domain.usecase.content.DoContentLikeUseCase
-import com.android.domain.usecase.content.GetContentDetailUseCase
+import com.android.domain.repository.ContentDetailRepository
 import com.android.domain.util.ApiResult
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
@@ -23,9 +22,8 @@ import kotlin.properties.Delegates
 
 @HiltViewModel
 class ContentDetailViewModel @Inject constructor(
-    private val getContentDetailUseCase: GetContentDetailUseCase,
-    private val doContentLikeUseCase: DoContentLikeUseCase,
     private val blogMainRepository: BlogMainRepository,
+    private val contentDetailRepository: ContentDetailRepository,
 //    private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
     var contentId by Delegates.notNull<Int>()
@@ -52,7 +50,7 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun getContentDetail() {
         viewModelScope.launch {
-            val state = when (val result = getContentDetailUseCase(contentId)) {
+            val state = when (val result = contentDetailRepository.getContentDetail(contentId)) {
                 is ApiResult.Success -> {
                     val contentDetail = result.data
                     val updatedDetail = contentDetail.copy(
@@ -76,7 +74,7 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun doContentLike() {
         viewModelScope.launch {
-            when (val result = doContentLikeUseCase(contentId)) {
+            when (val result = blogMainRepository.doContentLike(contentId)) {
                 is ApiResult.Success -> {
                     _doLikeApiResult.emit(CommonApiState.Success(result.data))
                 }
