@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.databinding.FragmentPetIdStartBinding
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,10 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PetIdStartFragment: BaseFragment<FragmentPetIdStartBinding>(FragmentPetIdStartBinding::inflate) {
 
-    companion object{
-        fun newInstance()= PetIdStartFragment()
-    }
-
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -30,9 +26,18 @@ class PetIdStartFragment: BaseFragment<FragmentPetIdStartBinding>(FragmentPetIdS
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPetIdStartBinding.inflate(inflater)
-        initComponent()
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            onBackClick = { activity?.finish() },
+        )
+        initComponent()
     }
 
     fun initComponent() {

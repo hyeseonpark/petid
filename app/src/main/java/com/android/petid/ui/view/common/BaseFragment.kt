@@ -4,8 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
+import com.android.petid.R
 import com.android.petid.common.FragmentInflate
 import com.android.petid.util.ProgressDialogUtil
 
@@ -29,6 +35,42 @@ abstract class BaseFragment<VB: ViewBinding>(
         _binding = null
     }
 
+    protected fun setupToolbar(
+        toolbar: Toolbar,
+        title: String? = null,
+        showBackButton: Boolean = false,
+        showUpdateButton: Boolean = false,
+        onBackClick: (() -> Unit)? = null,
+        onRightClick: (() -> Unit)? = null
+    ) {
+        (activity as? AppCompatActivity)?.apply {
+            setSupportActionBar(toolbar)
+
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+
+            with(binding.root) {
+                findViewById<ImageButton>(R.id.btnBack)?.apply {
+                    visibility = if (showBackButton) View.VISIBLE else View.GONE
+                    setOnClickListener {
+                        onBackClick?.invoke() ?: findNavController().navigateUp()
+                    }
+                }
+
+                findViewById<TextView>(R.id.tvTitle)?.apply {
+                    visibility = if (title != null) View.VISIBLE else View.GONE
+                    text = title
+                }
+
+                findViewById<TextView>(R.id.btnRight)?.apply {
+                    visibility = if (showUpdateButton) View.VISIBLE else View.GONE
+                    setOnClickListener { onRightClick?.invoke() }
+                }
+            }
+        }
+    }
+
+
+    // TODo  View 확장자 파일 하나 만들어서 확장함수 만들기
     fun showLoading() {
         _binding?.also { ProgressDialogUtil.show(requireContext()) }
     }

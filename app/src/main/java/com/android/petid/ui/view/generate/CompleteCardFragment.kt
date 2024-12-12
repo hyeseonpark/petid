@@ -1,18 +1,28 @@
 package com.android.petid.ui.view.generate
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentCompleteCardBinding
 import com.android.petid.ui.view.main.MainActivity
 
 class CompleteCardFragment: BaseFragment<FragmentCompleteCardBinding>(FragmentCompleteCardBinding::inflate) {
 
-    companion object{
-        fun newInstance()= CompleteCardFragment()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val backPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                activity?.finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
     override fun onCreateView(
@@ -20,9 +30,16 @@ class CompleteCardFragment: BaseFragment<FragmentCompleteCardBinding>(FragmentCo
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCompleteCardBinding.inflate(layoutInflater)
-        initComponent()
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+            onBackClick = { activity?.finish() }
+        )
+        initComponent()
     }
 
     fun initComponent() {

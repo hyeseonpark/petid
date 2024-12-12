@@ -36,6 +36,11 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+        )
+
         val keyEditTextMap = mapOf(
             BundleKeys.KEY_ADDRESS to binding.editTextAddress,
             BundleKeys.KEY_ADDRESS_RRA to binding.editTextRra

@@ -16,11 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CheckingInfoFragment : BaseFragment<FragmentCheckingInfoBinding>(FragmentCheckingInfoBinding::inflate) {
-
-    companion object{
-        fun newInstance()= CheckingInfoFragment()
-    }
-
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -28,30 +23,35 @@ class CheckingInfoFragment : BaseFragment<FragmentCheckingInfoBinding>(FragmentC
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCheckingInfoBinding.inflate(layoutInflater)
-        initComponent()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        with(viewModel.petInfo.build()) {
-            binding.textViewName.text = petName
-            binding.textViewBirth.text = petBirthDate
-            binding.textViewGender.text =
-                listOf(genderCharToString(petSex!!),
-                    String.format(getString(R.string.neutering), booleanCharToSign(petNeuteredYn!!)))
-                    .joinToString(", ")
-            binding.textViewBreed.text = appearance!!.breed
-            binding.textViewAppearance.text =
-                listOf(appearance!!.hairColor, appearance!!.hairLength).joinToString(", ")
-            binding.textViewWeight.text =
-                String.format(getString(R.string.to_kg),appearance!!.weight)
-        }
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+        )
+        initComponent()
     }
 
     fun initComponent() {
-        binding.buttonNext.setOnClickListener{
-            findNavController().navigate(R.id.action_checkingInfoFragment_to_signatureFragment)
+        with(binding) {
+            buttonNext.setOnClickListener{
+                findNavController().navigate(R.id.action_checkingInfoFragment_to_signatureFragment)
+            }
+            viewModel.petInfo.build().also {
+                textViewName.text = it.petName
+                textViewBirth.text = it.petBirthDate
+                textViewGender.text =
+                    listOf(genderCharToString(it.petSex!!),
+                        String.format(getString(R.string.neutering), booleanCharToSign(it.petNeuteredYn!!)))
+                        .joinToString(", ")
+                textViewBreed.text = it.appearance!!.breed
+                textViewAppearance.text =
+                    listOf(it.appearance!!.hairColor, it.appearance!!.hairLength).joinToString(", ")
+                textViewWeight.text =
+                    String.format(getString(R.string.to_kg),it.appearance!!.weight)
+            }
         }
     }
 }
