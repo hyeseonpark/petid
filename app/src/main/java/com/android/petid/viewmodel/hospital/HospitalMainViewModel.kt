@@ -1,11 +1,18 @@
 package com.android.petid.viewmodel.hospital
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Criteria
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
+import android.location.LocationRequest
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,6 +23,11 @@ import com.android.domain.repository.HospitalMainRepository
 import com.android.domain.util.ApiResult
 import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.ui.state.CommonApiState
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -263,44 +275,69 @@ class HospitalMainViewModel @Inject constructor(
     /**
      * 현재 위치 가져오기
      */
+    @SuppressLint("MissingPermission")
     fun getSingleLocation(){
         viewModelScope.launch {
-            val locationManager = getGlobalContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(getGlobalContext())
 
-            // 위치 제공자 확인 (GPS, Network)
-            val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-
-            val provider = when {
-                isGpsEnabled -> LocationManager.GPS_PROVIDER
-                isNetworkEnabled -> LocationManager.NETWORK_PROVIDER
-                else -> {
-                    getSidoList()
-                    return@launch
-                }
-            }
-
-            val lastKnownLocation = locationManager.getLastKnownLocation(provider)
-            if (lastKnownLocation != null) {
-                currentLat = lastKnownLocation.latitude
-                currentLon = lastKnownLocation.longitude
-                getSidoList()
-            } else {
-                suspendCoroutine<Location> { _ ->
-                    locationManager.getCurrentLocation(
-                        provider,
-                        null, // 기본 executor
-                        ContextCompat.getMainExecutor(getGlobalContext()) // 메인 스레드에서 실행
-                    ) { location ->
-                        if (location != null) {
-                            currentLat = location.latitude
-                            currentLon = location.longitude
-                        }
-                        getSidoList()
-                    }
+            fusedLocationClient.lastLocation.addOnSuccessListener { lastLocation ->
+                if (lastLocation != null) {
+                    updateLocation(lastLocation.latitude, lastLocation.longitude)
+                } else {
+                    fetchCurrentLocation(fusedLocationClient)
                 }
             }
         }
     }
 
+    /**
+     * 위치정보 업데이트
+     */
+    private fun updateLocation(latitude: Double, longitude: Double) {
+        currentLat = latitude
+        currentLon = longitude
+        getSidoList()
+    }
+
+    /**
+     * FusedLocationProviderClient 을 이용한 위치 정보 가져오기
+     */
+    @SuppressLint("MissingPermission")
+    private fun fetchCurrentLocation(fusedLocationClient: FusedLocationProviderClient) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11(API 30) 이상
+            fusedLocationClient.getCurrentLocation(
+                LocationRequest.QUALITY_HIGH_ACCURACY,
+                CancellationTokenSource().token
+            ).addOnSuccessListener { location ->
+                if (location != null) {
+                    updateLocation(location.latitude, location.longitude)
+                } else {
+                    fetchLocationUsingManager()
+                }
+            }
+        } else {
+            // Android 10 이하
+            fetchLocationUsingManager()
+        }
+    }
+
+    /**
+     * locationManager 을 이용한 위치 정보 가져오기
+     */
+    @SuppressLint("MissingPermission")
+    private fun fetchLocationUsingManager() {
+        val locationManager = getGlobalContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val provider = locationManager.getBestProvider(Criteria(), true)
+
+        if (provider != null) {
+            val location = locationManager.getLastKnownLocation(provider)
+            if (location != null) {
+                updateLocation(location.latitude, location.longitude)
+            } else {
+                // 위치 정보를 가져올 수 없는 경우
+                getSidoList()
+            }
+        }
+    }
 }
