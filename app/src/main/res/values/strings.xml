@@ -124,6 +124,8 @@
 
     <string name="address_confirm">주소를 확인해 주세요</string>
 
+    <!-- notification -->
+    <string name="notification_title">알림</string>
 
     <!--  pet id generate progress  -->
     <!--  pet id generate progress : step 1  -->
