@@ -115,9 +115,10 @@ dependencies {
 
     // Google Play services
     implementation("com.google.gms:google-services:4.4.2")
+    implementation("com.google.android.gms:play-services-location:21.3.0") // 위치
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-auth:23.1.0")
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
     // Firebase dependencies without version
     implementation("com.google.firebase:firebase-analytics")
