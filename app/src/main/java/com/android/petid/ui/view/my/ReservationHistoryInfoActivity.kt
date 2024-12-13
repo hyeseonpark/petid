@@ -1,7 +1,9 @@
 package com.android.petid.ui.view.my
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
@@ -36,14 +38,22 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReservationHistoryInfoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
 
+    override fun onStart() {
+        super.onStart()
+
+        setupToolbar(
+            toolbar = findViewById(R.id.toolbar),
+            showBackButton = true,
+            title = resources.getString(R.string.reservation_history_title)
+        )
         initComponent()
 
         observeReservationHospitalListState()
         observeCancelHospitalReservation()
         viewModel.getHospitalReservationHistoryListApiState()
-
-        setContentView(binding.root)
     }
 
     private fun initComponent() {

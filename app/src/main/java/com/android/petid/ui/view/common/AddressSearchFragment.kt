@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.android.petid.R
 import com.android.petid.databinding.FragmentAddressSearchBinding
 
 
@@ -29,18 +30,17 @@ class AddressSearchFragment : BaseFragment<FragmentAddressSearchBinding>(Fragmen
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddressSearchBinding.inflate(layoutInflater)
-        initComponent()
-
         return binding.root
     }
 
-    fun initComponent() {
-        with(binding) {
-            initWebView()
-            buttonBack.setOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(
+            toolbar = view.findViewById(R.id.toolbar),
+            showBackButton = true,
+        )
+        initWebView()
     }
 
     @SuppressLint("SetJavaScriptEnabled")

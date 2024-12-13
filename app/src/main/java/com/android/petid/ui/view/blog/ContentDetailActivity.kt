@@ -43,14 +43,22 @@ class ContentDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContentDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        setupToolbar(
+            toolbar = findViewById(R.id.toolbar),
+            showBackButton = true,
+        )
 
         observeDoLikeState()
         observeGetContentDetailState()
         observeCurrentContentListState()
 
         initComponent()
-
-        setContentView(binding.root)
     }
 
     private fun initComponent() {
