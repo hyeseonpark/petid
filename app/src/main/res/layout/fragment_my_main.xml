@@ -1,139 +1,289 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:layout="@layout/fragment_my_main">
+    tools:layout="@layout/fragment_my_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingBottom="92dp">
 
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white"
-        android:paddingBottom="92dp">
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="@string/main_my_title"
+        android:textColor="@color/petid_title"
+        android:textSize="16sp"
+        android:textFontWeight="400"
+        android:layout_gravity="center_horizontal"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textView_title"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center"
-            android:text="@string/main_my_title"
-            android:textColor="@color/petid_title"
-            android:textSize="16sp"
-            android:textFontWeight="400"
-            android:layout_gravity="center_horizontal"/>
+    <!-- 내 정보 -->
+    <LinearLayout
+        android:id="@+id/layout_myinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
 
-        <!-- 내 정보 -->
-        <LinearLayout
-            android:id="@+id/layout_myinfo"
-            android:layout_width="match_parent"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView_profile"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingStart="24dp"
-            android:paddingEnd="33dp"
-            android:background="@color/white">
+            android:src="@drawable/ic_mypage_icon"
+            android:scaleType="fitXY"
+            android:layout_marginTop="21dp"
+            android:layout_marginBottom="28dp"
+            android:layout_marginRight="18dp"
+            app:shapeAppearanceOverlay="@style/CircleImageView" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imageView_profile"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingTop="29dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textView_user_name"
+                android:text="랜덤이름"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_mypage_icon"
-                android:scaleType="fitXY"
-                android:layout_marginTop="21dp"
-                android:layout_marginBottom="28dp"
-                android:layout_marginRight="18dp"
-                app:shapeAppearanceOverlay="@style/CircleImageView" />
+                android:textSize="18sp"
+                android:textFontWeight="500"/>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingTop="29dp">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/textView_user_name"
-                    android:text="랜덤이름"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textFontWeight="500"/>
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:text="@string/update_my_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textFontWeight="400"
-                    android:textColor="@color/petid_subtitle"/>
-
-            </LinearLayout>
-
-            <ImageView
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="@string/update_my_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_right_arrow_2"/>
+                android:textSize="16sp"
+                android:textFontWeight="400"
+                android:textColor="@color/petid_subtitle"/>
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="#F5F5F5"/>
-
-        <include
-            android:id="@+id/layout_pet_info"
-            layout="@layout/my_main_list_item_common"
-            app:title="@{@string/pet_info_title}" />
-
-        <include
-            android:id="@+id/layout_reservation_history"
-            layout="@layout/my_main_list_item_common"
-            app:title="@{@string/reservation_history_title}" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="#F5F5F5"/>
-
-        <include
-            android:id="@+id/layout_terms_agree_info"
-            layout="@layout/my_main_list_item_common"
-            app:title="@{@string/terms_agree_info_title}" />
-
-        <include
-            android:id="@+id/layout_personal_service_info"
-            layout="@layout/my_main_list_item_common"
-            app:title="@{@string/personal_service_info_title}" />
-
-        <include
-            android:id="@+id/layout_notice"
-            layout="@layout/my_main_list_item_common"
-            app:title="@{@string/notice_title}" />
-
-        <include
-            android:id="@+id/layout_qna"
-            layout="@layout/my_main_list_item_common"
-            app:title="@{@string/qna_title}" />
-
-        <include
-            android:id="@+id/layout_withdraw"
-            layout="@layout/my_main_list_item_common"
-            app:title="@{@string/withdraw_title}" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textView_app_version"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="@string/app_version"
-            android:textSize="14sp"
-            android:textFontWeight="500"
-            android:textColor="@color/petid_subtitle"/>
+            android:src="@drawable/ic_right_arrow_2"/>
 
     </LinearLayout>
 
-</layout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="#F5F5F5"/>
+
+    <LinearLayout
+        android:id="@+id/layout_pet_info"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/pet_info_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow_2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_reservation_history"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/reservation_history_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow_2"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="#F5F5F5"/>
+
+    <LinearLayout
+        android:id="@+id/layout_terms_agree_info"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/terms_agree_info_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow_2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_personal_service_info"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/personal_service_info_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow_2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_notice"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/notice_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow_2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_qna"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/qna_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow_2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_withdraw"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="33dp"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:text="@string/withdraw_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textFontWeight="500"
+            android:textColor="@color/petid_title"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow_2"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_app_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="@string/app_version"
+        android:textSize="14sp"
+        android:textFontWeight="500"
+        android:textColor="@color/petid_subtitle"/>
+
+</LinearLayout>

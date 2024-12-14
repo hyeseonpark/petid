@@ -30,37 +30,39 @@ class TermsActivity : BaseActivity() {
     }
 
     private fun initComponent() {
-        binding.textViewTitle.text =
-            setStyleSpan(applicationContext, binding.textViewTitle.text.toString(),
-                resources.getString(R.string.terms_activity_title_span), R.color.petid_clear_blue)
+        with(binding) {
+            textViewTitle.text =
+                setStyleSpan(applicationContext, textViewTitle.text.toString(),
+                    resources.getString(R.string.terms_activity_title_span), R.color.petid_clear_blue)
 
-        binding.checkBoxAll.setOnClickListener {
-            if (binding.checkBoxAll.isChecked) {
-                binding.checkboxTermsAgree.isChecked = true
-                binding.checkBoxPersonalInfoAgree.isChecked = true
-                binding.checkboxAdsAgree.isChecked = true
-            } else {
-                binding.checkboxTermsAgree.isChecked = false
-                binding.checkBoxPersonalInfoAgree.isChecked = false
-                binding.checkboxAdsAgree.isChecked = false
+            checkBoxAll.setOnClickListener {
+                if (checkBoxAll.isChecked) {
+                    checkboxTermsAgree.isChecked = true
+                    checkBoxPersonalInfoAgree.isChecked = true
+                    checkboxAdsAgree.isChecked = true
+                } else {
+                    checkboxTermsAgree.isChecked = false
+                    checkBoxPersonalInfoAgree.isChecked = false
+                    checkboxAdsAgree.isChecked = false
 
+                }
             }
-        }
 
-        binding.checkboxTermsAgree.setOnCheckedChangeListener{ _ , isChecked ->
-            allChecked()
-            buttonEnable()
-        }
-        binding.checkBoxPersonalInfoAgree.setOnCheckedChangeListener{ _ , isChecked ->
-            allChecked()
-            buttonEnable()
-        }
-        binding.checkboxAdsAgree.setOnCheckedChangeListener{ _ , isChecked ->
-            allChecked()
-        }
+            checkboxTermsAgree.setOnCheckedChangeListener{ _ , isChecked ->
+                allChecked()
+                buttonEnable()
+            }
+            checkBoxPersonalInfoAgree.setOnCheckedChangeListener{ _ , isChecked ->
+                allChecked()
+                buttonEnable()
+            }
+            checkboxAdsAgree.setOnCheckedChangeListener{ _ , isChecked ->
+                allChecked()
+            }
 
-        binding.buttonNext.button.setOnClickListener{
-            doJoin()
+            buttonNext.setOnClickListener{
+                doJoin()
+            }
         }
     }
 
@@ -68,12 +70,10 @@ class TermsActivity : BaseActivity() {
      * 모두 동의 체크 박스
      */
     private fun allChecked() {
-        if (binding.checkboxTermsAgree.isChecked &&
-            binding.checkBoxPersonalInfoAgree.isChecked  &&
-            binding.checkboxAdsAgree.isChecked ) {
-            binding.checkBoxAll.isChecked = true
-        } else {
-            binding.checkBoxAll.isChecked = false
+        with(binding) {
+            checkBoxAll.isChecked = checkboxTermsAgree.isChecked &&
+                    checkBoxPersonalInfoAgree.isChecked &&
+                    checkboxAdsAgree.isChecked
         }
     }
 
@@ -81,11 +81,9 @@ class TermsActivity : BaseActivity() {
      * 개인약관 동의에 따른 버튼 활성화
      */
     private fun buttonEnable() {
-        if (binding.checkboxTermsAgree.isChecked &&
-            binding.checkBoxPersonalInfoAgree.isChecked) {
-            binding.buttonNext.disable = false
-        } else {
-            binding.buttonNext.disable = true
+        with(binding) {
+            buttonNext.isEnabled = checkboxTermsAgree.isChecked &&
+                    checkBoxPersonalInfoAgree.isChecked
         }
     }
 

@@ -62,7 +62,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
             }
 
             // 반려동물 정보
-            layoutPetInfo.layout.setOnClickListener {
+            layoutPetInfo.setOnClickListener {
                 when(petIdValue) {
                     -1 -> petidNullDialog.show(childFragmentManager, null)
                     else -> {
@@ -73,33 +73,33 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
             }
 
             // 예약 내역
-            layoutReservationHistory.layout.setOnClickListener {
+            layoutReservationHistory.setOnClickListener {
                 val intent = Intent(activity, ReservationHistoryInfoActivity::class.java)
                 startActivity(intent)
             }
 
             // 약관 및 개인정보 처리 동의
-            layoutTermsAgreeInfo.layout.setOnClickListener {
+            layoutTermsAgreeInfo.setOnClickListener {
                 //
             }
 
             // 개인정보 처리방침
-            layoutPersonalServiceInfo.layout.setOnClickListener {
+            layoutPersonalServiceInfo.setOnClickListener {
                 //
             }
 
             // 공지사항
-            layoutNotice.layout.setOnClickListener {
+            layoutNotice.setOnClickListener {
                 //
             }
 
             // 자주하는 질문
-            layoutQna.layout.setOnClickListener {
+            layoutQna.setOnClickListener {
                 //
             }
 
             // 탈퇴하기
-            layoutWithdraw.layout.setOnClickListener {
+            layoutWithdraw.setOnClickListener {
                 //
             }
         }
