@@ -65,9 +65,6 @@ android {
         viewBinding = true
         buildConfig = true
     }
-    dataBinding {
-        enable = true
-    }
     packaging {
         resources {
             excludes += "/META-INF/gradle/incremental.annotation.processors"

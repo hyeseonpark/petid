@@ -2,6 +2,7 @@ package com.android.petid.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.ActivitySignupCompleteBinding
 import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.ui.view.main.MainActivity
@@ -17,16 +18,18 @@ class SignupCompleteActivity : BaseActivity() {
     }
 
     private fun initComponent() {
-        binding.buttonConfirm.button.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+        with(binding) {
+            buttonConfirm.setOnClickListener{
+                val target = Intent(getGlobalContext(), MainActivity::class.java)
+                startActivity(target)
+                finish()
+            }
 
-        binding.imageButtonClose.setOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            imageButtonClose.setOnClickListener{
+                val target = Intent(getGlobalContext(), MainActivity::class.java)
+                startActivity(target)
+                finish()
+            }
         }
     }
 }
