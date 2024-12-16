@@ -1,5 +1,5 @@
 [versions]
-agp = "8.6.1"
+agp = "8.7.2"
 awsAndroidSdkMobileClient = "2.13.5"
 coreKtx = "1.15.0"
 corbind = "1.11.0"
