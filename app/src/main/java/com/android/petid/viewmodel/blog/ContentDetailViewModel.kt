@@ -34,7 +34,6 @@ class ContentDetailViewModel @Inject constructor(
     )
     val contentDetailApiState = _contentDetailApiState.asStateFlow()
 
-
     // get all content list api 결과값
     private val _allContentListApiState = MutableStateFlow<CommonApiState<List<ContentEntity>>>(
         CommonApiState.Init
@@ -50,6 +49,7 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun getContentDetail() {
         viewModelScope.launch {
+            _contentDetailApiState.emit(CommonApiState.Loading)
             val state = when (val result = contentDetailRepository.getContentDetail(contentId)) {
                 is ApiResult.Success -> {
                     val contentDetail = result.data
@@ -74,17 +74,19 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun doContentLike() {
         viewModelScope.launch {
-            when (val result = blogMainRepository.doContentLike(contentId)) {
+            _doLikeApiResult.emit(CommonApiState.Loading)
+            val state = when (val result = blogMainRepository.doContentLike(contentId)) {
                 is ApiResult.Success -> {
-                    _doLikeApiResult.emit(CommonApiState.Success(result.data))
+                    CommonApiState.Success(result.data)
                 }
                 is ApiResult.HttpError -> {
-                    _doLikeApiResult.emit(CommonApiState.Error(result.error.error))
+                    CommonApiState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    _doLikeApiResult.emit(CommonApiState.Error(result.errorMessage))
+                    CommonApiState.Error(result.errorMessage)
                 }
             }
+            _doLikeApiResult.emit(state)
         }
     }
 
@@ -93,17 +95,19 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun cancelContentLike() {
         viewModelScope.launch {
-            when (val result = blogMainRepository.cancelContentLike(contentId)) {
+            _doLikeApiResult.emit(CommonApiState.Loading)
+            val state = when (val result = blogMainRepository.cancelContentLike(contentId)) {
                 is ApiResult.Success -> {
-                    _doLikeApiResult.emit(CommonApiState.Success(result.data))
+                    CommonApiState.Success(result.data)
                 }
                 is ApiResult.HttpError -> {
-                    _doLikeApiResult.emit(CommonApiState.Error(result.error.error))
+                    CommonApiState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    _doLikeApiResult.emit(CommonApiState.Error(result.errorMessage))
+                    CommonApiState.Error(result.errorMessage)
                 }
             }
+            _doLikeApiResult.emit(state)
         }
     }
 
@@ -113,7 +117,8 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun getAllContentList() {
         viewModelScope.launch {
-            when (val result = blogMainRepository.getContentList(ContentCategoryType.ALL.name)) {
+            _allContentListApiState.emit(CommonApiState.Loading)
+            val state = when (val result = blogMainRepository.getContentList(ContentCategoryType.ALL.name)) {
                 is ApiResult.Success -> {
                     var contentList = result.data
 
@@ -125,15 +130,16 @@ class ContentDetailViewModel @Inject constructor(
                         item.copy(imageUrl = updatedImageUrl)
                     }
 
-                    _allContentListApiState.emit(CommonApiState.Success(contentList))
+                    CommonApiState.Success(contentList)
                 }
                 is ApiResult.HttpError -> {
-                    _allContentListApiState.emit(CommonApiState.Error(result.error.error))
+                    CommonApiState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    _allContentListApiState.emit(CommonApiState.Error(result.errorMessage))
+                    CommonApiState.Error(result.errorMessage)
                 }
             }
+            _allContentListApiState.emit(state)
         }
     }
 

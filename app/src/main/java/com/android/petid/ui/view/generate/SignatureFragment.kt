@@ -70,6 +70,9 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
     private fun observeUploadS3ResultState() {
         lifecycleScope.launch {
             viewModel.registerPetResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when(result) {
                     is CommonApiState.Success -> {
                         Log.d("SignatureFragment", "success...")
@@ -78,12 +81,8 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
                     is CommonApiState.Error -> {
                         Log.d("SignatureFragment", "error...: ${result.message}")
                     }
-                    CommonApiState.Init -> {
-                        Log.d("SignatureFragment", "init...")
-                    }
-                    CommonApiState.Loading -> {
-                        Log.d("SignatureFragment", "loading...")
-                    }
+                    CommonApiState.Init -> {}
+                    CommonApiState.Loading -> showLoading()
                 }
             }
         }

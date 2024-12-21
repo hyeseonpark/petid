@@ -250,6 +250,9 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     private fun observeCurrentHospitalListState() {
         lifecycleScope.launch {
             viewModel.hospitalApiState.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         currentHospitalList = result.data
@@ -265,10 +268,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                         // 오류 처리
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        // 로딩 상태 처리
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }

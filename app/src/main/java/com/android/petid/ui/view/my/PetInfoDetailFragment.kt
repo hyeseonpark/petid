@@ -139,6 +139,9 @@ class PetInfoDetailFragment
     private fun observeGetPetInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         with(result.data) {
@@ -168,9 +171,7 @@ class PetInfoDetailFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -184,6 +185,9 @@ class PetInfoDetailFragment
     private fun observeGetPetImageState() {
         lifecycleScope.launch {
             viewModel.getPetImageUrlResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         R.color.d9.let {
@@ -197,9 +201,7 @@ class PetInfoDetailFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }

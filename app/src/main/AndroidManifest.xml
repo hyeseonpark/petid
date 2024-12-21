@@ -76,9 +76,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <meta-data
-            android:name="petid.PetidGlideModule"
-            android:value="GlideModule"/>
+<!--        <meta-data-->
+<!--            android:name="petid.PetidGlideModule"-->
+<!--            android:value="GlideModule"/>-->
 
         <activity
             android:name=".ui.view.auth.SplashActivity"

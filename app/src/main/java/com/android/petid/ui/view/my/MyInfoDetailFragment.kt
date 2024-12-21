@@ -36,11 +36,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MyInfoDetailFragment
     : BaseFragment<FragmentMyInfoDetailBinding>(FragmentMyInfoDetailBinding::inflate) {
-
-    companion object{
-        fun newInstance()= MyInfoDetailFragment()
-    }
-
     private val viewModel: MyInfoViewModel by activityViewModels()
 
     private val TAG = "MyInfoDetailFragment"
@@ -50,12 +45,6 @@ class MyInfoDetailFragment
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyInfoDetailBinding.inflate(inflater)
-        initComponent()
-        viewModel.getMemberInfo()
-        observeGetMemberInfoState()
-        observeGetMemberImage()
-        observeUploadS3ResultState()
-        observeUpdateMemberPhotoResultState()
         return binding.root
     }
 
@@ -72,7 +61,14 @@ class MyInfoDetailFragment
             },
             title = getString(R.string.my_info_title),
         )
+        observeGetMemberInfoState()
+        observeGetMemberImage()
+        observeUploadS3ResultState()
+        observeUpdateMemberPhotoResultState()
+
         initComponent()
+
+        viewModel.getMemberInfo()
     }
 
     private fun initComponent() {
@@ -142,6 +138,9 @@ class MyInfoDetailFragment
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberInfoResult.collectLatest { result ->
+                    if (result !is CommonApiState.Loading)
+                        hideLoading()
+
                     when (result) {
                         is CommonApiState.Success -> {
                             with(result.data) {
@@ -158,9 +157,7 @@ class MyInfoDetailFragment
                         is CommonApiState.Error -> {
                             Log.e(TAG, "${result.message}")
                         }
-                        is CommonApiState.Loading -> {
-                            Log.d(TAG, "Loading....................")
-                        }
+                        is CommonApiState.Loading -> showLoading()
                         is CommonApiState.Init -> {}
                     }
                 }
@@ -174,6 +171,9 @@ class MyInfoDetailFragment
     private fun observeGetMemberImage() {
         lifecycleScope.launch {
             viewModel.getMemberImageResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         result.data.let {
@@ -183,9 +183,7 @@ class MyInfoDetailFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -198,6 +196,9 @@ class MyInfoDetailFragment
     private fun observeUploadS3ResultState() {
         lifecycleScope.launch {
             viewModel.uploadS3Result.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when {
                     result.isSuccess -> {
                         viewModel.updateMemberPhoto(viewModel.memberImageFileName!!)
@@ -217,6 +218,9 @@ class MyInfoDetailFragment
     private fun observeUpdateMemberPhotoResultState() {
         lifecycleScope.launch {
             viewModel.updateMemberPhotoResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         viewModel.getMemberInfo()
@@ -224,9 +228,7 @@ class MyInfoDetailFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }

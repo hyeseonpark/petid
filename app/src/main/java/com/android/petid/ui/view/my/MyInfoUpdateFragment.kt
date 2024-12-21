@@ -76,6 +76,9 @@ class MyInfoUpdateFragment
     private fun observeGetMemberInfoState() {
         lifecycleScope.launch {
             viewModel.getMemberInfoResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         with(result.data) {
@@ -88,9 +91,7 @@ class MyInfoUpdateFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -120,6 +121,9 @@ class MyInfoUpdateFragment
     private fun observeUpdateMemberInfoState() {
         lifecycleScope.launch {
             viewModel.updateMemberInfoResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -127,9 +131,7 @@ class MyInfoUpdateFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }

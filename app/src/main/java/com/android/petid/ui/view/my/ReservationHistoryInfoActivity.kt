@@ -85,6 +85,9 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     private fun observeReservationHospitalListState() {
         lifecycleScope.launch {
             viewModel.hospitalReservationHistoryListApiState.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         val reservationList = result.data
@@ -102,7 +105,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
                         isDataAvailable(false)
                     }
                     is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
+                        showLoading()
                         isDataAvailable(false)
                     }
                     is CommonApiState.Init -> {}
@@ -137,6 +140,9 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     private fun observeCancelHospitalReservation() {
         lifecycleScope.launch {
             viewModel.cancelHospitalReservationApiState.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         viewModel.getHospitalReservationHistoryListApiState()
@@ -145,9 +151,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
