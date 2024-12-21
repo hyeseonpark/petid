@@ -9,8 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentCheckingInfoBinding
-import com.android.petid.util.Utils.booleanCharToSign
-import com.android.petid.util.Utils.genderCharToString
+import com.android.petid.util.booleanCharToSign
+import com.android.petid.util.genderCharToString
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

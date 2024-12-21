@@ -34,7 +34,7 @@ import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.ui.view.common.flowTextWatcher
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
-import com.android.petid.util.Utils.hideKeyboardAndClearFocus
+import com.android.petid.util.hideKeyboardAndClearFocus
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

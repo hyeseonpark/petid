@@ -17,7 +17,7 @@ import com.android.petid.common.GlobalApplication.Companion.getPreferencesContro
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentSignatureBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.util.Utils.bitmapToFile
+import com.android.petid.util.bitmapToFile
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
