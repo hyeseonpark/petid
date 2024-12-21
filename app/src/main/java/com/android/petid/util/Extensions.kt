@@ -4,10 +4,18 @@ import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 
+/**
+ * get tag
+ */
+val Any.TAG: String
+    get() = this.javaClass.simpleName
 
 /**
  * 전화번호 하이픈 추가
@@ -66,15 +74,31 @@ fun Activity.hideKeyboardAndClearFocus() {
 }
 
 /**
- * dialog
+ * show dialog dialog
  */
 fun View.showLoadingDialog(context: Context) {
     ProgressDialogUtil.show(context)
 }
 
 /**
- *
+ * hide loading dialog
  */
 fun View.hideLoadingDialog() {
     ProgressDialogUtil.cancel()
+}
+
+/**
+ * Activity: show error message
+ */
+fun Context.showErrorMessage(text: String) {
+    Log.e(this.TAG, text)
+    Toast.makeText(this, "Error Message: $text", Toast.LENGTH_LONG).show()
+}
+
+/**
+ * Fragment: show error message
+ */
+fun Fragment.showErrorMessage(text: String) {
+    Log.e(this.TAG, text)
+    Toast.makeText(requireContext(), "Error Message: $text", Toast.LENGTH_LONG).show()
 }

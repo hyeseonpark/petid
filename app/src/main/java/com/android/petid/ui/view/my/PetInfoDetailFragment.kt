@@ -22,7 +22,9 @@ import com.android.petid.databinding.FragmentPetInfoDetailBinding
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.util.TAG
 import com.android.petid.util.bitmapToFile
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.my.PetInfoViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,8 +35,6 @@ import kotlinx.coroutines.launch
 class PetInfoDetailFragment
     : BaseFragment<FragmentPetInfoDetailBinding>(FragmentPetInfoDetailBinding::inflate) {
     private val viewModel: PetInfoViewModel by activityViewModels()
-
-    private val TAG = "PetInfoDetailFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -168,9 +168,7 @@ class PetInfoDetailFragment
                             }
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
@@ -198,9 +196,7 @@ class PetInfoDetailFragment
                                 .into(binding.imageViewProfile)
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

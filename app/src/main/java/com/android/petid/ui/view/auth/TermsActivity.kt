@@ -9,8 +9,8 @@ import com.android.petid.databinding.ActivityTermsBinding
 import com.android.petid.util.setStyleSpan
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.state.LoginResult
 import com.android.petid.ui.view.common.BaseActivity
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.auth.TermsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -92,20 +92,17 @@ class TermsActivity : BaseActivity() {
      */
     private fun setupJoinObservers() {
         lifecycleScope.launch {
-            viewModel.apiState.collect { state ->
-                if (state !is CommonApiState.Loading)
+            viewModel.apiState.collect { result ->
+                if (result !is CommonApiState.Loading)
                     hideLoading()
 
-                when (state) {
+                when (result) {
                     is CommonApiState.Success -> {
                         val target = Intent(this@TermsActivity, SignupCompleteActivity::class.java)
                         startActivity(target)
                         finish()
                     }
-                    is CommonApiState.Error -> {
-                        // 오류 처리
-//                        Toast.makeText(this@TermsActivity, "오류 발생: ${state.message}", Toast.LENGTH_SHORT).show()
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

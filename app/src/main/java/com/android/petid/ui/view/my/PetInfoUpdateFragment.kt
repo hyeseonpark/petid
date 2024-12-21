@@ -1,7 +1,6 @@
 package com.android.petid.ui.view.my
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.util.showDatePicker
+import com.android.petid.util.showErrorMessage
 import com.android.petid.util.throttleFirst
 import com.android.petid.viewmodel.my.PetInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,8 +27,6 @@ class PetInfoUpdateFragment
     : BaseFragment<FragmentPetInfoUpdateBinding>(FragmentPetInfoUpdateBinding::inflate) {
 
     private val viewModel: PetInfoViewModel by activityViewModels()
-
-    private val TAG = "PetInfoUpdateFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,9 +126,7 @@ class PetInfoUpdateFragment
 
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
@@ -151,9 +147,7 @@ class PetInfoUpdateFragment
                     is CommonApiState.Success -> {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -23,7 +22,9 @@ import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentMyInfoDetailBinding
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.util.TAG
 import com.android.petid.util.bitmapToFile
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,8 +38,6 @@ import kotlinx.coroutines.launch
 class MyInfoDetailFragment
     : BaseFragment<FragmentMyInfoDetailBinding>(FragmentMyInfoDetailBinding::inflate) {
     private val viewModel: MyInfoViewModel by activityViewModels()
-
-    private val TAG = "MyInfoDetailFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -154,9 +153,7 @@ class MyInfoDetailFragment
                                 }
                             }
                         }
-                        is CommonApiState.Error -> {
-                            Log.e(TAG, "${result.message}")
-                        }
+                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
                         is CommonApiState.Loading -> showLoading()
                         is CommonApiState.Init -> {}
                     }
@@ -180,9 +177,7 @@ class MyInfoDetailFragment
                             Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
@@ -225,9 +220,7 @@ class MyInfoDetailFragment
                     is CommonApiState.Success -> {
                         viewModel.getMemberInfo()
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

@@ -2,7 +2,6 @@ package com.android.petid.ui.view.blog
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import com.android.petid.databinding.FragmentBlogMainBinding
 import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.blog.adapter.ContentListAdapter
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.blog.BlogMainViewModel
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,8 +27,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainBinding::inflate) {
     private val viewModel: BlogMainViewModel by activityViewModels()
-
-    private val TAG = "BlogMainFragment"
 
     private lateinit var contentList : List<ContentEntity>
     private lateinit var contentListAdapter : ContentListAdapter
@@ -119,7 +117,7 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                         }
                     }
                     is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
+                        showErrorMessage(result.message.toString())
                         visibleLayoutDataAvailable(false)
                     }
                     is CommonApiState.Loading -> {
@@ -180,9 +178,7 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                         }
 
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

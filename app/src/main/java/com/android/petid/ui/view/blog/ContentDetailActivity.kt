@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Html
 import android.util.Base64
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +18,7 @@ import com.android.petid.enum.ContentCategoryType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.android.petid.ui.view.common.BaseActivity
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.blog.ContentDetailViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,8 +35,6 @@ import java.util.Locale
 class ContentDetailActivity : BaseActivity() {
     private lateinit var binding: ActivityContentDetailBinding
     private val viewModel: ContentDetailViewModel by viewModels()
-
-    private val TAG = "ContentDetailActivity"
 
     private lateinit var moreContentListAdapter : MoreContentListAdapter
 
@@ -153,9 +151,7 @@ class ContentDetailActivity : BaseActivity() {
                             }
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
@@ -181,9 +177,7 @@ class ContentDetailActivity : BaseActivity() {
                             String.format(getString(R.string.content_like_desc), resultData.likeCount)
 
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
@@ -226,9 +220,7 @@ class ContentDetailActivity : BaseActivity() {
                             moreContentListAdapter.submitList(filteredContentList)
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

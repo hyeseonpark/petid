@@ -3,13 +3,13 @@ package com.android.petid.common
 import android.os.Bundle
 import android.util.Log
 import com.android.petid.ui.view.common.BaseActivity
+import com.android.petid.util.TAG
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 
 class AuthCodeHandlerActivity : BaseActivity() {
-    private val TAG = "AuthCodeHandlerActivity"
 
     private val mCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {

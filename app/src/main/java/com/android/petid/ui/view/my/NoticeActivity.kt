@@ -7,7 +7,6 @@ import com.android.petid.ui.view.common.BaseActivity
 
 class NoticeActivity : BaseActivity() {
     private lateinit var binding: ActivityNoticeBinding
-    private val TAG = "NoticeActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
