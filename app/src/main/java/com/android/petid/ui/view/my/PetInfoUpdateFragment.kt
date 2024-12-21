@@ -8,15 +8,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
-import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoUpdateBinding
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.ui.view.deleted.CustomDialogPetInfoNa
+import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.util.showDatePicker
+import com.android.petid.util.throttleFirst
 import com.android.petid.viewmodel.my.PetInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 @AndroidEntryPoint
 class PetInfoUpdateFragment
@@ -42,12 +46,22 @@ class PetInfoUpdateFragment
             showBackButton = true,
             title = getString(R.string.pet_info_update_title),
         )
-        initComponent()
         observeGetMemberInfoState()
+        observeUpdatePetInfoState()
+
+        initComponent()
     }
 
     fun initComponent() {
         with(binding) {
+            editTextNeuteringDate
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    showDatePicker(editTextNeuteringDate, requireContext())
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
             buttonNoRegister.setOnClickListener {
                 CustomDialogCommon(
                     title = getString(R.string.pet_info_dialog_chip_na_desc),
@@ -56,9 +70,36 @@ class PetInfoUpdateFragment
                     singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
                 ).show(childFragmentManager, null)
             }
+
+            buttonComplete
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    completeDialog()
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 
+    /**
+     * pet info update dialog
+     */
+    private fun completeDialog() {
+        val dialog = CustomDialogCommon(
+            getString(R.string.update_complete_dialog), {
+                with(binding) {
+                    val neuteredDate = editTextNeuteringDate.text.toString()
+                    val weight = editTextWeight.text.toString().toIntOrNull() ?: 0
+                    viewModel.updatePetInfo(neuteredDate, weight)
+                }
+            })
+
+        dialog.show(this.childFragmentManager, "CustomDialogCommon")
+    }
+
+    /**
+     * viewModel.getPetDetailsResult 결과값 view 반영
+     */
     private fun observeGetMemberInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
@@ -68,22 +109,43 @@ class PetInfoUpdateFragment
                             binding.editTextName.setText(petName)
                             binding.editTextBirth.setText(petBirthDate)
                             when(petNeuteredYn) {
-                                "Y" -> {
-                                    binding.editNeuteringDate.isEnabled = false
-                                    binding.editNeuteringDate.setText(petNeuteredDate)
+                                getString(R.string.Y) -> {
+                                    binding.editTextNeuteringDate.isEnabled = false
+                                    binding.editTextNeuteringDate.setText(petNeuteredDate)
                                 }
-                                "N" -> {
-                                    binding.editNeuteringDate.isEnabled = true
+                                getString(R.string.N) -> {
+                                    binding.editTextNeuteringDate.isEnabled = true
                                 }
                             }
-                            binding.editTextWeight.setText(
-                                String.format(getString(R.string.to_kg), appearance.weight))
+                            binding.editTextWeight.setText("${appearance.weight}")
 
                             binding.editTextFeature.setText(
                                 listOf(appearance.hairColor, appearance.hairLength)
                                     .joinToString(", "))
 
                         }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                    is CommonApiState.Init -> {}
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.updatePetPhotoResult: 업데이트 완료시 뒤로가기
+     */
+    private fun observeUpdatePetInfoState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.updatePetPhotoResult.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")

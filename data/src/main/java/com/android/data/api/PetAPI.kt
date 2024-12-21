@@ -2,6 +2,7 @@ package com.android.data.api
 
 import com.android.data.dto.response.PetDetailsResponse
 import com.android.domain.entity.PetRequestEntity
+import com.android.domain.entity.PetUpdateEntity
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -31,10 +32,11 @@ interface PetAPI {
     /**
      * 2.3 애완동물 수정 API
      */
-    @PUT("/v1/pet")
-    suspend fun updatePet(
-       // @Body pet: UpdatePetRequest
-    )//: Response<PetDetailsResponse>
+    @PUT("/v1/pet/{petId}")
+    suspend fun updatePetInfo(
+        @Path("petId") petId: Long,
+        @Body updatePetInfo: PetUpdateEntity
+    )
 
     /**
      * 2.4 애완동물 삭제 API
