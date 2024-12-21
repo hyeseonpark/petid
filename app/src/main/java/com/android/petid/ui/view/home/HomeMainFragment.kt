@@ -26,8 +26,8 @@ import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
-import com.android.petid.util.Utils.booleanCharToSign
-import com.android.petid.util.Utils.genderCharToString
+import com.android.petid.util.booleanCharToSign
+import com.android.petid.util.genderCharToString
 import com.android.petid.util.calculateAge
 import com.android.petid.util.throttleFirst
 import com.android.petid.viewmodel.home.HomeMainVIewModel

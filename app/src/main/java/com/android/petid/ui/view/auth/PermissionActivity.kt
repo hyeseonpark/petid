@@ -8,7 +8,7 @@ import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.ActivityPermissionBinding
 import com.android.petid.ui.view.common.BaseActivity
-import com.android.petid.util.Utils.setStyleSpan
+import com.android.petid.util.setStyleSpan
 
 class PermissionActivity : BaseActivity() {
     private lateinit var binding: ActivityPermissionBinding

@@ -30,7 +30,7 @@ import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentPetPhotoBinding
 import com.android.petid.image_classifier.ImageClassifierHelper
 import com.android.petid.ui.component.CustomDialogCommon
-import com.android.petid.util.Utils.bitmapToFile
+import com.android.petid.util.bitmapToFile
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
 import dagger.hilt.android.AndroidEntryPoint

@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
 import com.android.petid.databinding.ActivityTermsBinding
-import com.android.petid.util.Utils.setStyleSpan
+import com.android.petid.util.setStyleSpan
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseActivity
@@ -94,13 +94,13 @@ class TermsActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.apiState.collect { state ->
                 when (state) {
-                    is CommonApiState.Loading -> {
-                        // 로딩 중 UI 표시
-                    }
                     is CommonApiState.Success -> {
                         val intent = Intent(this@TermsActivity, SignupCompleteActivity::class.java)
                         startActivity(intent)
                         finish()
+                    }
+                    is CommonApiState.Loading -> {
+                        // 로딩 중 UI 표시
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리

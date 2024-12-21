@@ -6,7 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.android.petid.R
 import com.android.petid.databinding.ActivityGeneratePetidMainBinding
 import com.android.petid.ui.view.common.BaseActivity
-import com.android.petid.util.Utils.hideKeyboardAndClearFocus
+import com.android.petid.util.hideKeyboardAndClearFocus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
