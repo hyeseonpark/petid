@@ -53,8 +53,8 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
         observeDoLikeState()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         // 마지막으로 접속한 탭의 화면 업데이트
         viewModel.getContentList(currentCategory)
     }
@@ -133,17 +133,19 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
      * 데이터 유무에 따른 화면 전환
      */
     private fun visibleLayoutDataAvailable(boolean: Boolean) {
-        when(boolean) {
-            true -> {
-                if (binding.layoutDataAvailable.visibility != View.VISIBLE) {
-                    binding.layoutDataAvailable.visibility = View.VISIBLE
-                    binding.layoutNoData.visibility = View.GONE
+        with(binding) {
+            when(boolean) {
+                true -> {
+                    if (layoutDataAvailable.visibility != View.VISIBLE) {
+                        layoutDataAvailable.visibility = View.VISIBLE
+                        layoutNoData.visibility = View.GONE
+                    }
                 }
-            }
-            false -> {
-                if (binding.layoutNoData.visibility != View.VISIBLE) {
-                    binding.layoutNoData.visibility = View.VISIBLE
-                    binding.layoutDataAvailable.visibility = View.GONE
+                false -> {
+                    if (layoutNoData.visibility != View.VISIBLE) {
+                        layoutNoData.visibility = View.VISIBLE
+                        layoutDataAvailable.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -162,7 +164,6 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                         val index = contentList.indexOfFirst { it.contentId == result.contentId }
 
                         if (index != -1) {
-
                             val newList = contentList.toMutableList()
                             newList[index] = newList[index].copy(
                                 isLiked = !newList[index].isLiked,

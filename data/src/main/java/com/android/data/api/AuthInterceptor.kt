@@ -27,7 +27,7 @@ class AuthInterceptor(
             .addHeader(AUTHORIZATION, "Bearer $token").build()
 
         val response = chain.proceed(request)
-        if (response.code == HTTP_OK) {
+        if (response.code in HTTP_OK..299) {
             val newAccessToken: String = response.header(AUTHORIZATION, null) ?: return response
             Logger.d("new Access Token = $newAccessToken")
 

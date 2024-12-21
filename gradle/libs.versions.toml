@@ -1,32 +1,40 @@
 [versions]
-agp = "8.7.2"
+agp = "8.7.3"
 awsAndroidSdkMobileClient = "2.13.5"
 coreKtx = "1.15.0"
 corbind = "1.11.0"
 easyflipview = "3.0.3"
-glide = "4.14.2"
-hiltAndroidGradlePlugin = "2.51.1"
+fragmentKtx = "1.8.5"
+glide = "4.16.0"
+hiltAndroidGradlePlugin = "2.52"
 hiltNavigationCompose = "1.2.0"
-kotlin = "2.0.0"
+kotlin = "2.0.21"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
+kotlinxCoroutinesAndroid = "1.9.0"
 logger = "2.2.0"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
 legacySupportV4 = "1.0.0"
-jetbrainsKotlinJvm = "1.9.0"
+jetbrainsKotlinJvm = "2.0.21"
 materialCalendarview = "2.0.1"
-navVersion = "2.8.4"
+navVersion = "2.8.5"
 oauthJdk8 = "5.10.0"
+preferenceKtx = "1.2.1"
+tasksVision = "latest.release"
+threetenabp = "1.2.0"
 toolsCore = "1.0.0-alpha10"
-cameraCore = "1.4.0"
-v2All = "2.20.0"
+cameraCore = "1.4.1"
+kakaoUser = "2.20.6"
 
 [libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
 corbind = { module = "ru.ldralighieri.corbind:corbind", version.ref = "corbind" }
 corbind-material = { module = "ru.ldralighieri.corbind:corbind-material", version.ref = "corbind" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -48,6 +56,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 logger = { module = "com.orhanobut:logger", version.ref = "logger" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -57,8 +66,9 @@ androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-c
 androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
 material-calendarview = { module = "com.github.prolificinteractive:material-calendarview", version.ref = "materialCalendarview" }
 oauth-jdk8 = { module = "com.navercorp.nid:oauth-jdk8", version.ref = "oauthJdk8" }
-v2-all = { module = "com.kakao.sdk:v2-all", version.ref = "v2All" }
-v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "v2All" }
+tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "tasksVision" }
+threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
+v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -18,10 +18,9 @@ import javax.inject.Inject
 @HiltViewModel
 class TermsViewModel @Inject constructor(
     private val termsRepository: TermsRepository,
-//    private val savedStateHandle: SavedStateHandle,
     ): ViewModel() {
 
-    private val _apiState = MutableSharedFlow<CommonApiState<Unit>>()  // Unit을 사용한 이유는 join 결과를 별도로 받을 필요가 없기 때문입니다.
+    private val _apiState = MutableSharedFlow<CommonApiState<Unit>>()
     val apiState: SharedFlow<CommonApiState<Unit>> = _apiState
 
         fun join(platform: PlatformType, sub: String, fcmToken: String, ad: Boolean) {
