@@ -36,6 +36,7 @@ class HomeMainVIewModel @Inject constructor(
      */
     fun getBannerList(type: String) {
         viewModelScope.launch {
+            _bannerApiState.emit(CommonApiState.Loading)
             when (val result = homeMainRepository.getBannerList(type)) {
                 is ApiResult.Success -> {
                     val bannerList = result.data
@@ -56,6 +57,7 @@ class HomeMainVIewModel @Inject constructor(
             }
         }
     }
+
     /**
      * banner 이미지 api
      */
@@ -105,9 +107,8 @@ class HomeMainVIewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = petInfoRepository.getPetDetails(petId)) {
                 is ApiResult.Success -> {
-                    val petDetails = result.data
-                    //memberInfo.image = memberInfo.image?.let{getMemberImage(it)}
-
+                    var petDetails = result.data
+                    getPetImageUrl(petDetails.petImages.first().imagePath)
                     _getPetDetailsResult.emit(CommonApiState.Success(petDetails))
                 }
                 is ApiResult.HttpError -> {
@@ -115,6 +116,31 @@ class HomeMainVIewModel @Inject constructor(
                 }
                 is ApiResult.Error -> {
                     _getPetDetailsResult.emit(CommonApiState.Error(result.errorMessage))
+                }
+            }
+        }
+    }
+
+    /* 펫 이미지 가져오기 결과*/
+    private val _getPetImageUrlResult = MutableStateFlow<CommonApiState<String>>(
+        CommonApiState.Init
+    )
+    val getPetImageUrlResult = _getPetImageUrlResult.asStateFlow()
+
+    /**
+     * 펫 이미지 S3 주소 가져오기
+     */
+    private fun getPetImageUrl(filePath: String) {
+        viewModelScope.launch {
+            when (val result = petInfoRepository.getPetImageUrl(filePath)) {
+                is ApiResult.Success -> {
+                    _getPetImageUrlResult.emit(CommonApiState.Success(result.data))
+                }
+                is ApiResult.HttpError -> {
+                    _getPetImageUrlResult.emit(CommonApiState.Error(result.error.error))
+                }
+                is ApiResult.Error -> {
+                    _getPetImageUrlResult.emit(CommonApiState.Error(result.errorMessage))
                 }
             }
         }

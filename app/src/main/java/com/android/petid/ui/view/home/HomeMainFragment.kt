@@ -7,12 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IntDef
-import androidx.annotation.NonNull
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -30,10 +28,19 @@ import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
 import com.android.petid.util.Utils.booleanCharToSign
 import com.android.petid.util.Utils.genderCharToString
+import com.android.petid.util.calculateAge
+import com.android.petid.util.throttleFirst
 import com.android.petid.viewmodel.home.HomeMainVIewModel
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -55,7 +62,6 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeMainBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -65,8 +71,13 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         setupBannerObservers()
         observeGetMemberInfoState()
         observeGetPetInfoState()
+        observeGetPetImageUrlState()
 
         viewModel.getBannerList(BANNER_TYPE_MAIN)
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getMemberInfo()
     }
 
@@ -87,14 +98,33 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
             }
 
             buttonCreateStart.setOnClickListener{
-                val intent = Intent(activity, GeneratePetidMainActivity::class.java)
-                startActivity(intent)
+                val target = Intent(activity, GeneratePetidMainActivity::class.java)
+                startActivity(target)
             }
 
-            layoutRegister.setOnClickListener {
-                val intent = Intent(activity, GeneratePetidMainActivity::class.java)
-                startActivity(intent)
+            // 내장칩 미 등록자 > '지금 반려동물을 등록하세요' 버튼
+            listOf(layoutRegister, layoutRegisterBack).forEach {
+                it
+                    .clicks()
+                    .throttleFirst()
+                    .onEach {
+                        val target = Intent(activity, GeneratePetidMainActivity::class.java)
+                        startActivity(target)
+                    }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
             }
+
+            textViewFlip
+                .clicks()
+                .throttleFirst(800L)
+                .onEach {
+                    viewPetidCard.flipTheView()
+                    textViewFlip.text =  when(viewPetidCard.isFrontSide) {
+                        true -> getString(R.string.flip_card_back_side)
+                        false -> getString(R.string.flip_card_front_side)
+                    }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             bannerAdapter = HomeBannerAdapter(requireContext())
 
@@ -121,16 +151,54 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
             recyclerviewBannerList.addOnScrollListener(snapPagerScrollListener)
             observeBannerPosition()
 
-            // Debug 상태에선 로고 클릭시 카드 타입 변경 가능
+            // Debug Mode: 로고 클릭시 카드 변경
             if(BuildConfig.DEBUG) {
                 imageViewLogo.setOnClickListener {
                     when(binding.viewNoPetidCard.visibility) {
                         View.VISIBLE -> setPetidCardType(CHIP_TYPE[1])
-                        View.GONE -> setPetidCardType(CHIP_TYPE[0])
+                        View.GONE -> setPetidCardType(null)
                     }
                 }
             }
         }
+    }
+
+    /**
+     * @param type CHIP_TYPE 에 따른 펫아이디 카드
+     */
+    private fun setPetidCardType(type: String?) {
+        with(binding) {
+            when(type) {
+                CHIP_TYPE[0], CHIP_TYPE[1] -> {
+                    viewNoPetidCard.visibility = View.GONE
+                    viewPetidCard.visibility = View.VISIBLE
+                    layoutRegister.visibility = View.VISIBLE
+                }
+                CHIP_TYPE[2] -> {
+                    viewNoPetidCard.visibility = View.GONE
+                    viewPetidCard.visibility = View.VISIBLE
+                    layoutRegister.visibility = View.GONE
+                }
+                null -> {
+                    viewNoPetidCard.visibility = View.VISIBLE
+                    viewPetidCard.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    /**
+     * 배너 초기화
+     */
+    private fun initBanner(bannerList: List<BannerEntity>) {
+        bannerAdapter.submitList(bannerList)
+
+        // bannerList의 총 개수를 binding.textViewTotalPage.text에 설정
+        val total = bannerList.size
+        binding.textViewTotalPage.text = "$total"
+
+        // 자동 스크롤 시작
+        viewModel.startAutoScroll()
     }
 
     /**
@@ -148,90 +216,6 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     }
 
     /**
-     * 배너 초기화
-     */
-    private fun initBanner(bannerList: List<BannerEntity>) {
-        bannerAdapter.submitList(bannerList)
-
-        // bannerList의 총 개수를 binding.textViewTotalPage.text에 설정
-        val total = bannerList.size
-        binding.textViewTotalPage.text = total.toString()
-
-        // 자동 스크롤 시작
-        viewModel.startAutoScroll()
-    }
-
-    /**
-     *
-     */
-    class SnapPagerScrollListener(// Properties
-        private val snapHelper: PagerSnapHelper,
-        @Type private val type: Int,
-        private val notifyOnInit: Boolean,
-        private val listener: OnChangeListener
-    ) :
-        RecyclerView.OnScrollListener() {
-        @IntDef(*[ON_SCROLL, ON_SETTLED])
-        annotation class Type
-
-        interface OnChangeListener {
-            fun onSnapped(position: Int)
-        }
-
-        private var snapPosition: Int
-
-        // Constructor
-        init {
-            this.snapPosition = RecyclerView.NO_POSITION
-        }
-
-        // Methods
-        override fun onScrolled(@NonNull recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-            if ((type == ON_SCROLL) || !hasItemPosition()) {
-                notifyListenerIfNeeded(getSnapPosition(recyclerView))
-            }
-        }
-
-        override fun onScrollStateChanged(@NonNull recyclerView: RecyclerView, newState: Int) {
-            super.onScrollStateChanged(recyclerView, newState)
-            if (type == ON_SETTLED && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                notifyListenerIfNeeded(getSnapPosition(recyclerView))
-            }
-        }
-
-        private fun getSnapPosition(recyclerView: RecyclerView): Int {
-            val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION
-
-            val snapView = snapHelper.findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
-
-            return layoutManager.getPosition(snapView)
-        }
-
-        private fun notifyListenerIfNeeded(newSnapPosition: Int) {
-            if (snapPosition != newSnapPosition) {
-                if (notifyOnInit && !hasItemPosition()) {
-                    listener.onSnapped(newSnapPosition)
-                } else if (hasItemPosition()) {
-                    listener.onSnapped(newSnapPosition)
-                }
-
-                snapPosition = newSnapPosition
-            }
-        }
-
-        private fun hasItemPosition(): Boolean {
-            return snapPosition != RecyclerView.NO_POSITION
-        }
-
-        companion object {
-            // Constants
-            const val ON_SCROLL: Int = 0
-            const val ON_SETTLED: Int = 1
-        }
-    }
-
-    /**
      * banner api observer
      */
     private fun setupBannerObservers() {
@@ -242,14 +226,17 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                         is CommonApiState.Success -> {
                             val bannerList = result.data
                             initBanner(bannerList)
+                            hideLoading()
                         }
 
                         is CommonApiState.Error -> {
                             Log.e(TAG, "${result.message}")
+                            hideLoading()
                         }
 
                         is CommonApiState.Loading -> {
                             Log.d(TAG, "Loading....................")
+                            showLoading()
                         }
 
                         is CommonApiState.Init -> {}
@@ -268,16 +255,22 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                 when (result) {
                     is CommonApiState.Success -> {
                         val memberResult = result.data
+
+                        getPreferencesControl().saveIntValue(Constants.SHARED_MEMBER_ID_VALUE, memberResult.memberId)
                         when(memberResult.petId) {
                             null -> {
                                 binding.textViewMemberName.text = getString(R.string.home_no_petid)
-                                setPetidCardType(CHIP_TYPE[0])
+                                setPetidCardType(null)
                             }
                             else -> {
                                 memberResult.name.let {
                                     binding.textViewMemberName.text = it
                                     binding.textViewOwnerName.text = String.format(getString(R.string.to_owner), it)
                                 }
+
+                                binding.textViewAddress.text =
+                                    listOf(memberResult.address, memberResult.addressDetails)
+                                        .joinToString(", ")
 
                                 memberResult.petId!!.toLong().let { petId ->
                                     viewModel.getPetDetails(petId)
@@ -300,30 +293,6 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     }
 
     /**
-     * @param type CHIP_TYPE 에 따른 펫아이디 카드
-     */
-    private fun setPetidCardType(type: String) {
-        with(binding) {
-            when(type) {
-                CHIP_TYPE[0] -> {
-                    viewNoPetidCard.visibility = View.VISIBLE
-                    viewPetidCard.visibility = View.GONE
-                }
-                CHIP_TYPE[1] -> {
-                    viewNoPetidCard.visibility = View.GONE
-                    viewPetidCard.visibility = View.VISIBLE
-                    layoutRegister.visibility = View.VISIBLE
-                }
-                CHIP_TYPE[2] -> {
-                    viewNoPetidCard.visibility = View.GONE
-                    viewPetidCard.visibility = View.VISIBLE
-                    layoutRegister.visibility = View.GONE
-                }
-            }
-        }
-    }
-
-    /**
      * viewModel.getPetDetails 결과값 view 반영
      */
     private fun observeGetPetInfoState() {
@@ -333,26 +302,50 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     is CommonApiState.Success -> {
                         with(result.data) {
                             setPetidCardType(chipType)
-                            /*petImages?.takeIf { it.isNotBlank() }?.let {
-                                com.bumptech.glide.Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
-                            }*/
                             binding.apply {
                                 textViewPetNameBack.text = petName
                                 textViewPetNameFront.text = petName
                                 textViewType.text = appearance.breed
 
-                                textViewAge.text = String.format(getString(R.string.to_age), petBirthDate)
+                                textViewAge.text = String.format(getString(R.string.to_age), calculateAge(petBirthDate))
                                 textViewBirth.text = petBirthDate
                                 textViewGender.text =
-                                    listOf(genderCharToString(petSex[0]), // TODO API 수정되면 수정
+                                    listOf(genderCharToString(petSex.first()),
                                         String.format(getString(R.string.neutering),
                                             booleanCharToSign(petNeuteredYn[0])))
                                         .joinToString(", ")
-                                textViewWeight.text =
-                                    String.format(getString(R.string.to_kg), appearance.weight)
                                 textViewFeature.text =
                                     listOf(appearance.hairColor, appearance.hairLength).joinToString(", ")
+                                textViewWeight.text =
+                                    String.format(getString(R.string.to_kg), appearance.weight)
                             }
+                        }
+                    }
+                    is CommonApiState.Error -> {
+                        Log.e(TAG, "${result.message}")
+                    }
+                    is CommonApiState.Loading -> {
+                        Log.d(TAG, "Loading....................")
+                    }
+                    is CommonApiState.Init -> {}
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.getPetImageUrl 결과값 view 반영
+     */
+    private fun observeGetPetImageUrlState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getPetImageUrlResult.collectLatest { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        R.color.d9.let {
+                            Glide.with(requireContext())
+                                .load(result.data)
+                                .error(it)
+                                .into(binding.imageViewCardPetPhoto)
                         }
                     }
                     is CommonApiState.Error -> {
