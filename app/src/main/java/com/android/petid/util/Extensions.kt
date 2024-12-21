@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 
@@ -62,4 +63,18 @@ fun Activity.hideKeyboardAndClearFocus() {
     if (currentFocus is EditText) {
         currentFocus?.clearFocus()
     }
+}
+
+/**
+ * dialog
+ */
+fun View.showLoadingDialog(context: Context) {
+    ProgressDialogUtil.show(context)
+}
+
+/**
+ *
+ */
+fun View.hideLoadingDialog() {
+    ProgressDialogUtil.cancel()
 }
