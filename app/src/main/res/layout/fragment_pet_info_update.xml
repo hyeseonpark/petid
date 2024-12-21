@@ -84,7 +84,7 @@
                 android:layout_marginBottom="8dp"/>
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/edit_neutering_date"
+                android:id="@+id/edit_text_neutering_date"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
@@ -136,13 +136,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
-                android:focusable="false"
                 android:singleLine="true"
                 android:textSize="14sp"
                 android:textFontWeight="400"
                 android:textColor="@color/petid_title"
-                android:textColorHint="@color/b4"
-                android:paddingEnd="18dp"/>
+                android:textColorHint="@color/b4"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"

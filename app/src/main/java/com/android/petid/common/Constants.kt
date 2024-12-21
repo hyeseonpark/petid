@@ -37,7 +37,8 @@ object Constants {
     // 사진 저장 경로
     private const val MEMBER = "member/profile/" // 멤버 프로필 이미지
     private const val SIGN = "member/sign/" // 사인 이미지
-    val PHOTO_PATHS = arrayOf(MEMBER, SIGN)
+    private const val PET = "pet/profile/" // 애완동물 프로필 이미지
+    val PHOTO_PATHS = arrayOf(MEMBER, SIGN, PET)
 
     // TODO enum -> constants
     // content category type
