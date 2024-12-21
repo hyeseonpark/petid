@@ -15,6 +15,7 @@ import com.android.petid.databinding.FragmentMyInfoUpdateBinding
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BundleKeys
+import com.android.petid.util.addPhoneNumberFormatting
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -65,6 +66,7 @@ class MyInfoUpdateFragment
             editTextAddress.setOnClickListener {
                 findNavController().navigate(R.id.action_myInfoUpdateFragment_to_addressSearchFragment)
             }
+            editTextPhone.addPhoneNumberFormatting()
         }
     }
 

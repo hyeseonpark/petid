@@ -28,7 +28,7 @@ android {
         minSdk = 24
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -70,6 +70,16 @@ android {
             excludes += "/META-INF/gradle/incremental.annotation.processors"
         }
     }
+    flavorDimensions += listOf("version")
+    productFlavors {
+        create("devlop") {
+            dimension = "version"
+            versionNameSuffix = "-dev"
+        }
+        create("operation") {
+            dimension = "version"
+        }
+    }
 }
 
 configurations.configureEach {
@@ -77,6 +87,9 @@ configurations.configureEach {
 }
 
 dependencies {
+    implementation(project(":data"))
+    implementation(project(":domain"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -84,23 +97,28 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(project(":data"))
-    implementation(project(":domain"))
-
-    implementation("androidx.preference:preference-ktx:1.2.1")
-
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.corbind)
     implementation(libs.corbind.material)
+
+    implementation(libs.threetenabp)
 
     // material calendarView
     implementation(libs.material.calendarview)
 
+    // Easy flip view
+    implementation(libs.easyflipview)
+
     // kakao Login
-    implementation(libs.v2.all)
     implementation(libs.v2.user)
 
     // naver
@@ -120,9 +138,6 @@ dependencies {
     // Firebase dependencies without version
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging-ktx") // FCM-push
-
-    // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
     // Logger
     implementation(libs.logger)
@@ -152,15 +167,6 @@ dependencies {
 
     implementation("androidx.multidex:multidex:2.0.1")
 
-    implementation("androidx.activity:activity-ktx:1.9.3")
-    implementation("androidx.fragment:fragment-ktx:1.8.2")
-
-    // 시간
-    implementation("com.jakewharton.threetenabp:threetenabp:1.2.0")
-
-    // 휴대폰번호 포맷
-    implementation("com.googlecode.libphonenumber:libphonenumber:8.12.6")
-
     // Jetpack Compose Integration
     implementation(libs.androidx.navigation.compose)
 
@@ -174,11 +180,8 @@ dependencies {
     // Testing Navigation
     androidTestImplementation(libs.androidx.navigation.testing)
 
-    // Easy flip view
-    implementation(libs.easyflipview)
-
     // mediapipe
-    implementation("com.google.mediapipe:tasks-vision:latest.release")
+    implementation(libs.tasks.vision)
 
     // AWS
     implementation(libs.aws.android.sdk.mobile.client)

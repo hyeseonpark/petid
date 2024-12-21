@@ -37,19 +37,9 @@
         android:roundIcon="@mipmap/ic_app_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PetId"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.view.auth.SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.view.hospital.HospitalActivity"
-            android:exported="false" /> <!-- FileProvider 선언 -->
+        <!-- FileProvider 선언 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -59,36 +49,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
-
-        <activity
-            android:name=".ui.view.generate.GeneratePetidMainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.home.NotificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.blog.ContentDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.my.NoticeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.my.ReservationHistoryInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.my.PetInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.my.MyInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.hospital.CompleteReservationActivity"
-            android:exported="false" />
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="${kakao_native_app_key}" /> <!-- 카카오 로그인, 인가코드를 받기 위한 액티비티 -->
@@ -113,29 +76,83 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="petid.PetidGlideModule"
+            android:value="GlideModule"/>
 
         <activity
-            android:name=".ui.view.auth.PermissionActivity"
+            android:name=".ui.view.auth.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.view.hospital.HospitalActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.generate.GeneratePetidMainActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.home.NotificationActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.blog.ContentDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.view.my.NoticeActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.my.ReservationHistoryInfoActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.my.PetInfoActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.my.MyInfoActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.hospital.CompleteReservationActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.view.auth.PermissionActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.view.deleted.GenerateCompleteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.view.auth.SignupCompleteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.view.auth.TermsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.view.auth.SocialAuthActivity"
-            android:exported="false">
+            android:exported="false"
+            android:launchMode="singleTop">
         </activity>
         <activity
             android:name=".ui.view.main.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
-            android:name=".ui.view.deleted.IntroActivity"
-            android:exported="false" />
+            android:name=".ui.view.auth.IntroActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>
