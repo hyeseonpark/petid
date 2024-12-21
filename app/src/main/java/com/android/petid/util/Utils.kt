@@ -25,6 +25,7 @@ import com.android.petid.util.Utils.getCurrentDate
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -130,6 +131,9 @@ fun showDatePicker(editText: EditText, context: Context) {
     }
 }
 
+/**
+ * progress Dialog init
+ */
 object ProgressDialogUtil {
     private var progressDialog: Dialog? = null
 
@@ -194,4 +198,25 @@ fun EditText.addPhoneNumberFormatting() {
             }
         }
     })
+}
+
+
+/**
+ * 생년월일을 기준으로 현재 나이 계산
+ */
+fun calculateAge(birthDateString: String): Int {
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val birthDate = sdf.parse(birthDateString) ?: return -1 // 파싱 실패 시 -1 반환
+
+    // 현재 날짜
+    val today = Calendar.getInstance()
+
+    // 생일 날짜
+    val birthCalendar = Calendar.getInstance().apply {
+        time = birthDate
+    }
+
+    var age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR) + 1
+
+    return age
 }
