@@ -1,6 +1,7 @@
 package com.android.petid.util
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.res.ColorStateList
@@ -8,24 +9,24 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ProgressBar
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.android.petid.R
 import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.android.petid.util.Utils.getCurrentDate
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 object Utils {
     val genderCharToString: (char: Char) -> String = {char -> if(char == 'M') "남" else "여" }
@@ -99,6 +100,36 @@ object Utils {
     }
 }
 
+
+
+/**
+ * 달력 표시
+ */
+fun showDatePicker(editText: EditText, context: Context) {
+    val currentDate = editText.text.toString().ifEmpty { getCurrentDate() }
+    val dateParts = currentDate.split("-")
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        R.style.DatePickerDialogTheme,
+        { _, year, monthOfYear, dayOfMonth ->
+            editText.setText(
+                String.format(Locale.KOREA, "%d-%02d-%02d", year, monthOfYear + 1, dayOfMonth)
+            )
+        },
+        dateParts[0].toInt(),
+        dateParts[1].toInt() - 1,
+        dateParts[2].toInt()
+    )
+    datePickerDialog.apply {
+        show()
+        getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
+            context.resources.getColor(R.color.petid_clear_blue, null))
+        getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
+            context.resources.getColor(R.color.petid_subtitle, null))
+    }
+}
+
 object ProgressDialogUtil {
     private var progressDialog: Dialog? = null
 
@@ -122,4 +153,45 @@ object ProgressDialogUtil {
         progressDialog?.dismiss()
         progressDialog = null
     }
+}
+
+/**
+ * 전화번호 하이픈 추가
+ */
+fun EditText.addPhoneNumberFormatting() {
+    this.addTextChangedListener(object : TextWatcher {
+        private var isFormatting: Boolean = false
+        private var previousText: String = ""
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            if (!isFormatting) {
+                previousText = s.toString()
+            }
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Nothing to do here
+        }
+
+        override fun afterTextChanged(s: Editable?) {
+            if (isFormatting) return
+
+            isFormatting = true
+            val formatted = formatPhoneNumber(s.toString())
+            s?.replace(0, s.length, formatted)
+            isFormatting = false
+        }
+
+        private fun formatPhoneNumber(input: String): String {
+            // 숫자만 추출
+            val digits = input.replace(Regex("[^\\d]"), "")
+
+            // 포맷 적용
+            return when {
+                digits.length <= 3 -> digits
+                digits.length <= 7 -> "${digits.substring(0, 3)}-${digits.substring(3)}"
+                else -> "${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7)}"
+            }
+        }
+    })
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="type_dog_breeds">
+        <item>비글</item>
+        <item>비숑프리제</item>
+        <item>불독</item>
+        <item>치와와 단모</item>
+        <item>치와와 장모</item>
+        <item>코커스패니엘</item>
+        <item>달마시안</item>
+        <item>닥스훈트 장모</item>
+        <item>닥스훈트 단모</item>
+        <item>도베르만 핀셔</item>
+        <item>기타</item>
+        <item>저먼셰퍼드</item>
+        <item>골든리트리버</item>
+        <item>그레이트피레니즈</item>
+        <item>하운드</item>
+        <item>허스키</item>
+        <item>진도</item>
+        <item>래브라도리트리버</item>
+        <item>말티즈</item>
+        <item>믹스 장모</item>
+        <item>믹스 단모</item>
+        <item>말라뮤트</item>
+        <item>포메라니안</item>
+        <item>푸들</item>
+        <item>슈나우저</item>
+        <item>쉽독</item>
+        <item>테리어</item>
+        <item>웰시코기</item>
+        <item>이탈리안그레이하운드</item>
+        <item>시바견</item>
+        <item>보더 콜리</item>
+        <item>시추</item>
+        <item>퍼그</item>
+        <item>꼬똥드 툴레아</item>
+        <item>사모예드</item>
+        <item>파피용</item>
+        <item>프렌치불독</item>
+        <item>스피츠</item>
+        <item>도베르만</item>
+        <item>버니즈마운틴</item>
+    </string-array>
+
+    <string-array name="type_dog_colors">
+        <item>갈색</item>
+        <item>검정</item>
+        <item>갈검</item>
+        <item>연갈</item>
+        <item>흰색</item>
+        <item>흰갈</item>
+        <item>흰검</item>
+        <item>황갈색</item>
+        <item>흑갈색</item>
+    </string-array>
+
+    <string-array name="type_dog_hair_length">
+        <item>단모</item>
+        <item>장모</item>
+    </string-array>
+</resources>

@@ -13,14 +13,10 @@ import com.android.petid.R
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentUserInfoInputBinding
 import com.android.petid.ui.view.common.BundleKeys
+import com.android.petid.util.addPhoneNumberFormatting
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 
 class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(FragmentUserInfoInputBinding::inflate) {
-
-    companion object{
-        fun newInstance()= UserInfoInputFragment()
-    }
-
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -66,6 +62,8 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
                     buttonNext.isEnabled = isPossibleToNextStep()
                 }
             }
+
+            editTextPhone.addPhoneNumberFormatting()
 
             editTextAddress.setOnClickListener {
                 findNavController().navigate(R.id.action_userInfoInputFragment_to_addressSearchFragment)
