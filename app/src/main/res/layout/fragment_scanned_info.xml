@@ -19,7 +19,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
-                android:layout_marginLeft="1dp"
+                android:layout_marginStart="1dp"
                 android:text="5/7"
                 android:textSize="18sp"
                 android:textColor="@color/petid_clear_blue"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/petid_generate_step_5_title"
                 android:layout_marginTop="10dp"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textFontWeight="500"
                 android:textColor="@color/petid_title"/>
 
@@ -64,67 +64,94 @@
                 android:layout_height="wrap_content"
                 android:text="@string/type"
                 android:textColor="@color/petid_gray"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textFontWeight="500"
                 android:layout_marginBottom="1dp"
-                android:layout_marginLeft="2dp"/>
+                android:layout_marginStart="2dp"/>
 
-            <include
-                layout="@layout/edittext_underline"
-                android:id="@+id/editTextType"
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/autoCompleteTextView_breed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp" />
+                android:layout_marginBottom="25dp"
+                android:inputType="text"
+                android:textSize="16sp"
+                android:paddingBottom="15dp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_title"
+                android:backgroundTint="@color/d9"
+                android:completionThreshold="0"
+                android:drawableRight="@drawable/ic_text_delete" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hair_color"
                 android:textColor="@color/petid_gray"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textFontWeight="500"
                 android:layout_marginBottom="1dp"
-                android:layout_marginLeft="2dp"/>
+                android:layout_marginStart="2dp"/>
 
-            <include
-                layout="@layout/edittext_underline"
-                android:id="@+id/editTextHairColor"
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/autoCompleteTextView_color"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp" />
+                android:layout_marginBottom="25dp"
+                android:inputType="text"
+                android:textSize="16sp"
+                android:paddingBottom="15dp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_title"
+                android:backgroundTint="@color/d9"
+                android:completionThreshold="0"
+                android:drawableRight="@drawable/ic_text_delete" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/hair_feature"
+                android:text="@string/feature"
                 android:textColor="@color/petid_gray"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textFontWeight="500"
                 android:layout_marginBottom="1dp"
-                android:layout_marginLeft="2dp"/>
+                android:layout_marginStart="2dp"/>
 
-            <include
-                layout="@layout/edittext_underline"
-                android:id="@+id/editTextHairFeature"
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/autoCompleteTextView_feature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp" />
+                android:layout_marginBottom="25dp"
+                android:inputType="text"
+                android:textSize="16sp"
+                android:paddingBottom="15dp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_title"
+                android:backgroundTint="@color/d9"
+                android:completionThreshold="0"
+                android:drawableRight="@drawable/ic_text_delete"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/weight"
                 android:textColor="@color/petid_gray"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textFontWeight="500"
                 android:layout_marginBottom="1dp"
-                android:layout_marginLeft="2dp"/>
+                android:layout_marginStart="2dp"/>
 
-            <include
-                layout="@layout/edittext_underline"
-                android:id="@+id/editTextWeight"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/editText_weight"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textSize="16sp"
+                android:paddingBottom="15dp"
+                android:textFontWeight="500"
+                android:textColor="@color/petid_title"
+                android:backgroundTint="@color/d9"
+                android:drawableRight="@drawable/ic_text_delete"/>
 
         </LinearLayout>
 
@@ -139,4 +166,5 @@
         android:textFontWeight="500"
         android:textColor="@color/button_text_color_common"
         style="@style/GenerateCommonButtonStyle"/>
+
 </LinearLayout>

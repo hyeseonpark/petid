@@ -19,7 +19,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
-            android:layout_marginLeft="1dp"
+            android:layout_marginStart="1dp"
             android:text="6/7"
             android:textSize="18sp"
             android:textColor="@color/petid_clear_blue"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:text="@string/petid_generate_step_6_title"
             android:layout_marginTop="10dp"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:textFontWeight="500"
             android:textColor="@color/petid_title"/>
 
@@ -56,7 +56,7 @@
             android:layout_marginTop="12dp"
             android:text="@string/petid_generate_step_6_subtitle"
             android:textFontWeight="400"
-            android:textColor="#B2B2B2"/>
+            android:textColor="@color/petid_subtitle"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView_detail_title"
@@ -65,8 +65,8 @@
             android:layout_marginTop="43dp"
             android:layout_marginLeft="8dp"
             android:text="@string/petid_info"
-            android:textFontWeight="500"
-            android:textColor="#6E6E6E"
+            android:textFontWeight="400"
+            android:textColor="@color/petid_gray"
             android:textSize="13sp" />
 
         <LinearLayout
@@ -89,7 +89,6 @@
                     android:id="@+id/textView_name_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
                     android:text="@string/name"
                     android:textColor="@color/ab"
                     android:textSize="14sp"
@@ -97,10 +96,9 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="덕구"
                     android:textColor="@color/petid_title"
@@ -119,7 +117,6 @@
                     android:id="@+id/textView_birth_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
                     android:text="@string/birth"
                     android:textColor="@color/ab"
                     android:textSize="14sp"
@@ -127,10 +124,9 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_birth"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="2022.03.02"
                     android:textColor="@color/petid_title"
@@ -149,7 +145,6 @@
                     android:id="@+id/textView_gender_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
                     android:text="@string/gender"
                     android:textColor="@color/ab"
                     android:textSize="14sp"
@@ -157,10 +152,9 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_gender"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="남, 중성화X"
                     android:textColor="@color/petid_title"
@@ -179,7 +173,6 @@
                     android:id="@+id/textView_breed_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
                     android:text="@string/type"
                     android:textColor="@color/ab"
                     android:textSize="14sp"
@@ -187,10 +180,9 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_breed"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="믹스 푸들"
                     android:textColor="@color/petid_title"
@@ -209,7 +201,6 @@
                     android:id="@+id/textView_appearance_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
                     android:text="@string/feature"
                     android:textColor="@color/ab"
                     android:textSize="14sp"
@@ -217,10 +208,9 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textView_appearance"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="갈색, 곱슬, 장모"
                     android:textColor="@color/petid_title"
@@ -238,7 +228,6 @@
                     android:id="@+id/textView_weight_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FAFAFA"
                     android:text="@string/weight"
                     android:textColor="@color/ab"
                     android:textSize="14sp"
@@ -249,7 +238,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="#FAFAFA"
                     android:gravity="end"
                     android:text="4kg"
                     android:textColor="@color/petid_title"

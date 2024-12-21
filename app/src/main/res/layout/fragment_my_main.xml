@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_mypage_icon"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:layout_marginTop="21dp"
             android:layout_marginBottom="28dp"
             android:layout_marginRight="18dp"
@@ -94,7 +94,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/pet_info_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textFontWeight="500"
@@ -121,7 +121,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/reservation_history_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textFontWeight="500"
@@ -153,7 +153,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/terms_agree_info_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textFontWeight="500"
@@ -180,7 +180,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/personal_service_info_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textFontWeight="500"
@@ -207,7 +207,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/notice_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textFontWeight="500"
@@ -234,7 +234,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/qna_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textFontWeight="500"
@@ -261,7 +261,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:text="@string/withdraw_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textFontWeight="500"
