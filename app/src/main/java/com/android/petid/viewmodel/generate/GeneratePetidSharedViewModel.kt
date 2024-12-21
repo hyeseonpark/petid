@@ -39,9 +39,6 @@ class GeneratePetidSharedViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = petInfoRepository.registerPet(petInfo.build().toDomain())) {
                 is ApiResult.Success -> {
-                    //val petDetails = result.data
-                    //memberInfo.image = memberInfo.image?.let{getMemberImage(it)}
-
                     _registerPetResult.emit(CommonApiState.Success(true))
                 }
                 is ApiResult.HttpError -> {
@@ -60,6 +57,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
     fun uploadImageFiles() {
         viewModelScope.launch {
             try {
+                _registerPetResult.emit(CommonApiState.Loading)
                 if (!handleUploadResult(getGlobalContext(), petImage!!, petInfo.getPetImageName()))
                     return@launch
                 if (!handleUploadResult(getGlobalContext(), signImage!!, petInfo.getSignImageName()))

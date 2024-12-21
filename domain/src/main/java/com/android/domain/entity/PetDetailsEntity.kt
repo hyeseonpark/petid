@@ -7,14 +7,13 @@ import kotlinx.parcelize.Parcelize
 class PetDetailsEntity(
     val petId: Int,
     val ownerId: String,
-    val petRegNo: String,
+    val petRegNo: String?,
     val petName: String,
     val petBirthDate: String,
     val petSex: String,
     val petNeuteredYn: String,
-    val petNeuteredDate: String,
-    val petAddr: String,
-    val chipType: String,
+    val petNeuteredDate: String?,
     val appearance: PetAppearanceEntity,
-    val petImages: List<PetImageEntity>,
+    val chipType: String,
+    var petImages: List<PetImageEntity>,
 ) : Parcelable

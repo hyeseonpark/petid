@@ -3,6 +3,7 @@ package com.android.petid.ui.view.generate
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,6 +63,7 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
             }
         }
     }
+
     /**
      * viewModel.uploadFile 결과값 반영
      */
@@ -70,11 +72,18 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
             viewModel.registerPetResult.collectLatest { result ->
                 when(result) {
                     is CommonApiState.Success -> {
+                        Log.d("SignatureFragment", "success...")
                         findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
                     }
-                    is CommonApiState.Error -> {}
-                    CommonApiState.Init -> {}
-                    CommonApiState.Loading -> {}
+                    is CommonApiState.Error -> {
+                        Log.d("SignatureFragment", "error...: ${result.message}")
+                    }
+                    CommonApiState.Init -> {
+                        Log.d("SignatureFragment", "init...")
+                    }
+                    CommonApiState.Loading -> {
+                        Log.d("SignatureFragment", "loading...")
+                    }
                 }
             }
         }

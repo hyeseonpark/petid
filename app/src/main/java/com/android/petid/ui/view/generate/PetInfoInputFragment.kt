@@ -1,24 +1,19 @@
 package com.android.petid.ui.view.generate
 
-import android.app.DatePickerDialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.BuildConfig
 import com.android.petid.R
-import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentPetInfoInputBinding
-import com.android.petid.util.Utils.getCurrentDate
+import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.util.showDatePicker
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -55,12 +50,12 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
 
             // 생일 달력
             editTextBirth.setOnClickListener {
-                showDatePicker(editTextBirth)
+                showDatePicker(editTextBirth, requireContext())
             }
 
             // 중성화 날짜 달력
             editNeuteringDate.setOnClickListener {
-                showDatePicker(editNeuteringDate)
+                showDatePicker(editNeuteringDate, requireContext())
             }
 
             listOf(editTextName, editTextBirth, editNeuteringDate).forEach { editText ->
@@ -76,13 +71,31 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
                 buttonNext.isEnabled = isPossibleToNextStep()
             }
 
+            // 선택된 성별
+            val checkedGender = when(radioButtonMale.isChecked) {
+                true -> getString(R.string.male_initial)
+                false -> getString(R.string.female_initial)
+            }.first()
+
+            // 중성화 여부
+            val checkedNeutering = when(checkboxIsNeutering.isChecked) {
+                true -> getString(R.string.N)
+                false -> getString(R.string.Y)
+            }.first()
+
+            // 중성화 날짜, 중성화가 N 일 경우 null 을 반환
+            val neuteringDate = when(editNeuteringDate.text.toString().isEmpty()) {
+                true -> null
+                false -> editNeuteringDate.text.toString()
+            }
+
             buttonNext.setOnClickListener{
                 viewModel.petInfo.setPetInfo(
                     editTextName.text.toString(),
                     editTextBirth.text.toString(),
-                    if(radioButtonMale.isChecked) 'M' else 'W',
-                    if(checkboxIsNeutering.isChecked) 'N' else 'Y',
-                    editNeuteringDate.text.toString()
+                    checkedGender,
+                    checkedNeutering,
+                    neuteringDate
                 )
                 findNavController().navigate(R.id.action_petInfoInputFragment_to_petPhotoFragment)
             }
@@ -99,33 +112,4 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
                     checkboxIsNeutering.isChecked == editNeuteringDate.text.isNullOrEmpty()
         }
     }
-
-    /**
-     * 달력 표시
-     */
-    private fun showDatePicker(editText: EditText) {
-        val currentDate = editText.text.toString().ifEmpty { getCurrentDate() }
-        val dateParts = currentDate.split("-")
-
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            R.style.DatePickerDialogTheme,
-            { _, year, monthOfYear, dayOfMonth ->
-                editText.setText(
-                    String.format(Locale.KOREA, "%d-%02d-%02d", year, monthOfYear + 1, dayOfMonth)
-                )
-            },
-            dateParts[0].toInt(),
-            dateParts[1].toInt() - 1,
-            dateParts[2].toInt()
-        )
-        datePickerDialog.apply {
-            show()
-            getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(
-                resources.getColor(R.color.petid_clear_blue, null))
-            getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(
-                resources.getColor(R.color.petid_subtitle, null))
-        }
-    }
-
 }

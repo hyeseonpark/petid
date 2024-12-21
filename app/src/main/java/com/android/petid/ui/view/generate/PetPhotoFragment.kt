@@ -23,11 +23,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.BuildConfig
 import com.android.petid.R
+import com.android.petid.common.Constants
+import com.android.petid.common.Constants.PHOTO_PATHS
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentPetPhotoBinding
 import com.android.petid.image_classifier.ImageClassifierHelper
+import com.android.petid.ui.component.CustomDialogCommon
+import com.android.petid.util.Utils.bitmapToFile
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
-import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -71,8 +75,6 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
             showBackButton = true,
         )
         initComponent()
-
-        return binding.root
     }
 
     fun initComponent() {
@@ -89,6 +91,12 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
                     takePictureFullSize()
                 }
             }
+
+            if (BuildConfig.DEBUG) {
+                textViewCurrentStep.setOnClickListener{
+                    findNavController().navigate(R.id.action_petPhotoFragment_to_scannedInfoFragment)
+                }
+            }
         }
     }
 
@@ -96,12 +104,29 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
      * 모델 추론 후 결과값 처리
      */
     private fun handleResult(result: ImageClassifierResult) {
-        // TODO 결과값 수정
-        viewModel.petInfo.setAppearance(
-            "말티즈", "흰색", 5, "장모, 곱슬"
-        )
+        val classifierResult = result.classificationResult().classifications()
+        try {
+            if (classifierResult.isNotEmpty()) {
+                val breed = classifierResult[0].categories()[0]?.categoryName() ?: ""
+                val hairLength = classifierResult[1].categories()[0]?.categoryName() ?: ""
+                val weight = try {
+                    classifierResult[2].categories()[0]?.categoryName()!!.toInt()
+                } catch (_: Exception) {
+                    0
+                }
+                val hairColor = classifierResult[3].categories()[0].categoryName() ?: ""
 
-        findNavController().navigate(R.id.action_petPhotoFragment_to_scannedInfoFragment)
+                viewModel.petInfo.setAppearance(breed, hairColor, weight, hairLength)
+
+                findNavController().navigate(R.id.action_petPhotoFragment_to_scannedInfoFragment)
+            }
+        } catch (e: Exception) {
+            CustomDialogCommon(
+                title = getString(R.string.pet_photo_activity_dialog_retry_title),
+                isSingleButton = true,
+                singleButtonText = getString(R.string.confirm)
+            ).show(childFragmentManager, null)
+        }
     }
 
     // 촬영한 사진 저장 uri
@@ -193,9 +218,8 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
 
     // Load and display the image.
     private fun runClassificationOnImage(uri: Uri) {
-        //setUiEnabled(false)
         backgroundExecutor = Executors.newSingleThreadScheduledExecutor()
-        //updateDisplayView(MediaType.IMAGE)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val source = ImageDecoder.createSource(
                 requireActivity().contentResolver, uri
@@ -206,28 +230,30 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
                 requireActivity().contentResolver, uri
             )
         }.copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
-            //fragmentGalleryBinding.imageResult.setImageBitmap(bitmap)
+            val memberId =
+                getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
+
+            with(viewModel) {
+                // S3 서버에 올릴 파일 세팅
+                petImage = bitmapToFile(requireContext(), bitmap, "pet_image.jpg")
+                petInfo.setPetImage("${PHOTO_PATHS[2]}${memberId}.jpg")
+            }
 
             // Run image classification on the input image
             backgroundExecutor.execute {
                 imageClassifierHelper = ImageClassifierHelper(
                     context = requireContext(),
-                    runningMode = RunningMode.IMAGE,
-                    currentDelegate = ImageClassifierHelper.DELEGATE_CPU, // CPU, GPU
-                    maxResults = ImageClassifierHelper.MAX_RESULTS_DEFAULT, // 1
-                    threshold = ImageClassifierHelper.THRESHOLD_DEFAULT,
                     imageClassifierListener = this
                 )
-                imageClassifierHelper.classifyImage(bitmap)
-                    ?.let { resultBundle ->
-                        Log.d(TAG, resultBundle.results.toString())
-                        activity?.runOnUiThread {
-                            val result = resultBundle.results.first() // 결과값
-                            Log.d(TAG, result.toString())
+                imageClassifierHelper.classifyImage(bitmap)?.let { resultBundle ->
+                    Log.d(TAG, resultBundle.results.toString())
+                    activity?.runOnUiThread {
+                        val result = resultBundle.results.first() // 결과값
+                        Log.d(TAG, result.toString())
 
-                            handleResult(result)
-                        }
-                    } ?: run {
+                        handleResult(result)
+                    }
+                } ?: run {
                     Log.e(TAG, "Error running image classification.")
                 }
 

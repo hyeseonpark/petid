@@ -2,18 +2,22 @@ package com.android.petid.ui.view.generate
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
-import com.android.petid.ui.view.common.BaseFragment
+import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.FragmentScannedInfoBinding
 import com.android.petid.ui.component.CustomDialogCommon
+import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,8 +59,9 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
     fun initComponent() {
         // 우측 아이콘 클릭 이벤트
         with(binding) {
-            listOf(editTextType, editTextHairColor, editTextHairFeature, editTextWeight).forEach { editText ->
-                with(editText.editTextText) {
+            listOf(autoCompleteTextViewBreed, autoCompleteTextViewColor,
+                autoCompleteTextViewFeature, editTextWeight).forEach { editText ->
+                with(editText) {
                     setOnTouchListener { v, event ->
                         if (event.action == MotionEvent.ACTION_UP) {
                             // 오른쪽 drawable
@@ -66,31 +71,37 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
 
                                 // 터치 위치가 오른쪽 drawable 영역 내에 있을 경우 true
                                 if (event.x >= clickAreaStartX) {
-                                    text.clear()
+                                    text?.clear()
                                     clearFocus()
                                     return@setOnTouchListener true
                                 }
                             }
+                        } else {
+                            (editText as? AutoCompleteTextView)?.showDropDown()
                         }
                         false
                     }
                 }
             }
 
+            setAutoCompleteAdapter(autoCompleteTextViewBreed, R.array.type_dog_breeds)
+            setAutoCompleteAdapter(autoCompleteTextViewColor, R.array.type_dog_colors)
+            setAutoCompleteAdapter(autoCompleteTextViewFeature, R.array.type_dog_hair_length)
+
             val appearance = viewModel.petInfo.getAppearance()
             appearance?.also {
-                editTextType.editTextText.setText(it.breed)
-                editTextHairColor.editTextText.setText(it.hairColor)
-                editTextHairFeature.editTextText.setText(it.hairLength)
-                editTextWeight.editTextText.setText(it.weight.toString())
+                autoCompleteTextViewBreed.setText(it.breed)
+                autoCompleteTextViewColor.setText(it.hairColor)
+                autoCompleteTextViewFeature.setText(it.hairLength)
+                editTextWeight.setText("${it.weight}")
             }
 
             buttonNext.setOnClickListener{
                 viewModel.petInfo.setAppearance(
-                    editTextType.editTextText.text.toString(),
-                    editTextHairColor.editTextText.text.toString(),
-                    editTextWeight.editTextText.text.toString().toInt(),
-                    editTextHairFeature.editTextText.text.toString(),
+                    autoCompleteTextViewBreed.text.toString(),
+                    autoCompleteTextViewColor.text.toString(),
+                    editTextWeight.text.toString().toIntOrNull() ?: 0,
+                    autoCompleteTextViewFeature.text.toString(),
                 )
                 findNavController().navigate(R.id.action_scannedInfoFragment_to_checkingInfoFragment)
             }
@@ -100,5 +111,27 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
                     findNavController().popBackStack()
                 })
         }
+    }
+
+    /**
+     *  set adapter for AutoCompleteTextView
+     */
+    fun setAutoCompleteAdapter(autoCompleteTextView: AutoCompleteTextView, arrayResId: Int) {
+        val adapter = object : ArrayAdapter<String>(
+            getGlobalContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            resources.getStringArray(arrayResId)
+        ) {
+            override fun getView(
+                position: Int,
+                convertView: View?,
+                parent: ViewGroup
+            ): View {
+                val view = super.getView(position, convertView, parent)
+                view.setBackgroundColor(Color.WHITE)
+                return view
+            }
+        }
+        autoCompleteTextView.setAdapter(adapter)
     }
 }
