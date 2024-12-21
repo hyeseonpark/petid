@@ -5,11 +5,11 @@ import android.app.NotificationManager
 import android.os.Build
 import android.util.Log
 import com.android.petid.R
+import com.android.petid.util.TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class MyFirebaseMessageService : FirebaseMessagingService() {
-    private val TAG = "MyFirebaseMessageService"
 
     /**
      * 새로운 토큰이 생성될 때 마다 해당 콜백 호출

@@ -8,11 +8,11 @@ import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.ActivityPermissionBinding
 import com.android.petid.ui.view.common.BaseActivity
-import com.android.petid.util.Utils.setStyleSpan
+import com.android.petid.util.setStyleSpan
 
 class PermissionActivity : BaseActivity() {
     private lateinit var binding: ActivityPermissionBinding
-    private val TAG = "PermissionActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPermissionBinding.inflate(layoutInflater)

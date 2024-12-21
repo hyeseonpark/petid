@@ -8,6 +8,7 @@ object Constants {
 
     const val SHARED_PET_ID_VALUE = "petIdValue"
     const val SHARED_MEMBER_ID_VALUE = "memberIdValue"
+    const val SHARED_PET_CHIP_TYPE = "petChipTypeValue"
 
     // location type
     const val LOCATION_SIDO_TYPE = 0

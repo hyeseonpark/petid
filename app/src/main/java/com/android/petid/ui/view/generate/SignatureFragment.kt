@@ -17,7 +17,8 @@ import com.android.petid.common.GlobalApplication.Companion.getPreferencesContro
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentSignatureBinding
 import com.android.petid.ui.state.CommonApiState
-import com.android.petid.util.Utils.bitmapToFile
+import com.android.petid.util.bitmapToFile
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -70,20 +71,17 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
     private fun observeUploadS3ResultState() {
         lifecycleScope.launch {
             viewModel.registerPetResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when(result) {
                     is CommonApiState.Success -> {
                         Log.d("SignatureFragment", "success...")
                         findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
                     }
-                    is CommonApiState.Error -> {
-                        Log.d("SignatureFragment", "error...: ${result.message}")
-                    }
-                    CommonApiState.Init -> {
-                        Log.d("SignatureFragment", "init...")
-                    }
-                    CommonApiState.Loading -> {
-                        Log.d("SignatureFragment", "loading...")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    CommonApiState.Init -> {}
+                    CommonApiState.Loading -> showLoading()
                 }
             }
         }

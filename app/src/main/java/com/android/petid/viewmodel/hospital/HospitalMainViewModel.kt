@@ -105,23 +105,21 @@ class HospitalMainViewModel @Inject constructor(
      */
     fun getSidoList() {
         viewModelScope.launch {
-            when (val result = hospitalMainRepository.getSido()) {
+            val state = when (val result = hospitalMainRepository.getSido()) {
                 is ApiResult.Success -> {
-                    _sidoApiState.emit(CommonApiState.Success(result.data))
                     currentSidoList = result.data
                     // 첫 번째 항목을 자동으로 선택
                     result.data.firstOrNull()?.let { firstSido ->
                          _currentSidoState.emit(firstSido)
                         getSigunguList()
                     }
+
+                    CommonApiState.Success(result.data)
                 }
-                is ApiResult.HttpError -> {
-                    _sidoApiState.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _sidoApiState.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _sidoApiState.emit(state)
         }
     }
 
@@ -130,23 +128,21 @@ class HospitalMainViewModel @Inject constructor(
      */
     private fun getSigunguList() {
         viewModelScope.launch {
-            when (val result = hospitalMainRepository.getSigunguList(currentSidoState.value!!.id)) {
+            val state = when (val result = hospitalMainRepository.getSigunguList(currentSidoState.value!!.id)) {
                 is ApiResult.Success -> {
-                    _sigunguApiState.emit(CommonApiState.Success(result.data))
                     currentSigunguList = result.data
 
                     result.data.firstOrNull()?.let { firstSigungu ->
                         _currentSigunguState.emit(firstSigungu)
                         getEupmundongList()
                     }
+
+                    CommonApiState.Success(result.data)
                 }
-                is ApiResult.HttpError -> {
-                    _sigunguApiState.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _sigunguApiState.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _sigunguApiState.emit(state)
         }
     }
 
@@ -155,9 +151,8 @@ class HospitalMainViewModel @Inject constructor(
      */
     private fun getEupmundongList() {
         viewModelScope.launch {
-            when (val result = hospitalMainRepository.getEupmundongList(currentSigunguState.value!!.id)) {
+            val state = when (val result = hospitalMainRepository.getEupmundongList(currentSigunguState.value!!.id)) {
                 is ApiResult.Success -> {
-                    _sigunguApiState.emit(CommonApiState.Success(result.data))
                     currentEupmundongList = result.data
 
                     result.data.firstOrNull()?.let { firstEupmundong ->
@@ -168,14 +163,13 @@ class HospitalMainViewModel @Inject constructor(
                             false -> getHospitalListByLocation()
                         }
                     }
+
+                    CommonApiState.Success(result.data)
                 }
-                is ApiResult.HttpError -> {
-                    _eupmundongApiState.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _eupmundongApiState.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _eupmundongApiState.emit(state)
         }
     }
 
@@ -204,7 +198,8 @@ class HospitalMainViewModel @Inject constructor(
      */
     private fun getHospitalList() {
         viewModelScope.launch {
-            when (val result = hospitalMainRepository.getHospitalList(
+            _hospitalApiState.emit(CommonApiState.Loading)
+            val state = when (val result = hospitalMainRepository.getHospitalList(
                 currentSidoState.value!!.id,
                 currentSigunguState.value!!.id,
                 currentEupmundongState.value!!.id)) {
@@ -219,15 +214,12 @@ class HospitalMainViewModel @Inject constructor(
                         item.copy(imageUrl = listOf(hospitalImageUrl))
                     }
 
-                    _hospitalApiState.emit(CommonApiState.Success(hospitalList))
+                    CommonApiState.Success(hospitalList)
                 }
-                is ApiResult.HttpError -> {
-                    _hospitalApiState.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _hospitalApiState.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _hospitalApiState.emit(state)
         }
     }
 
@@ -236,7 +228,8 @@ class HospitalMainViewModel @Inject constructor(
      */
     private fun getHospitalListByLocation() {
         viewModelScope.launch {
-            when (val result = hospitalMainRepository.getHospitalListLoc(
+            _hospitalApiState.emit(CommonApiState.Loading)
+            val state = when (val result = hospitalMainRepository.getHospitalListLoc(
                 currentSidoState.value!!.id,
                 currentSigunguState.value!!.id,
                 currentEupmundongState.value!!.id,
@@ -252,15 +245,12 @@ class HospitalMainViewModel @Inject constructor(
                         item.copy(imageUrl = listOf(hospitalImageUrl))
                     }
 
-                    _hospitalApiState.emit(CommonApiState.Success(hospitalList))
+                    CommonApiState.Success(hospitalList)
                 }
-                is ApiResult.HttpError -> {
-                    _hospitalApiState.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _hospitalApiState.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _hospitalApiState.emit(state)
         }
     }
 

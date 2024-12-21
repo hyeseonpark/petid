@@ -14,6 +14,8 @@ import androidx.viewbinding.ViewBinding
 import com.android.petid.R
 import com.android.petid.common.FragmentInflate
 import com.android.petid.util.ProgressDialogUtil
+import com.android.petid.util.hideLoadingDialog
+import com.android.petid.util.showLoadingDialog
 
 abstract class BaseFragment<VB: ViewBinding>(
     private val inflate: FragmentInflate<VB>
@@ -69,13 +71,17 @@ abstract class BaseFragment<VB: ViewBinding>(
         }
     }
 
-
-    // TODo  View 확장자 파일 하나 만들어서 확장함수 만들기
+    /**
+     * show loading dialog
+     */
     fun showLoading() {
-        _binding?.also { ProgressDialogUtil.show(requireContext()) }
+        _binding?.root?.showLoadingDialog(requireContext())
     }
 
+    /**
+     * hide loading dialog
+     */
     fun hideLoading() {
-        ProgressDialogUtil.cancel()
+        _binding?.root?.hideLoadingDialog()
     }
 }

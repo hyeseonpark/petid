@@ -34,35 +34,26 @@ class ReservationHistoryInfoViewModel @Inject constructor(
      */
     fun getHospitalReservationHistoryListApiState() {
         viewModelScope.launch {
-            when(val result = reservationHistoryInfoRepository
+            _hospitalReservationHistoryListApiState.emit(CommonApiState.Loading)
+            val state = when(val result = reservationHistoryInfoRepository
                 .getHospitalReservationHistoryList("ALL")) {
-                is ApiResult.Success -> {
-                    _hospitalReservationHistoryListApiState.emit(CommonApiState.Success(result.data))
-
-                }
-                is ApiResult.HttpError -> {
-                    _hospitalReservationHistoryListApiState.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _hospitalReservationHistoryListApiState.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.Success -> CommonApiState.Success(result.data)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _hospitalReservationHistoryListApiState.emit(state)
         }
     }
 
     fun cancelHospitalReservationApiState(orderId: Int) {
         viewModelScope.launch {
-            when (val result = reservationHistoryInfoRepository.cancelHospitalReservation(orderId)) {
-                is ApiResult.Success -> {
-                    _cancelHospitalReservationApiState.emit(CommonApiState.Success(Unit))
-                }
-                is ApiResult.HttpError -> {
-                    _cancelHospitalReservationApiState.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _cancelHospitalReservationApiState.emit(CommonApiState.Error(result.errorMessage))
-                }
+            _cancelHospitalReservationApiState.emit(CommonApiState.Loading)
+            val state = when (val result = reservationHistoryInfoRepository.cancelHospitalReservation(orderId)) {
+                is ApiResult.Success -> CommonApiState.Success(Unit)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _cancelHospitalReservationApiState.emit(state)
         }
     }
 }

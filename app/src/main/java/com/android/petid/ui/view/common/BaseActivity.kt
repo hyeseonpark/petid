@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewbinding.ViewBinding
 import com.android.petid.R
+import com.android.petid.util.hideLoadingDialog
+import com.android.petid.util.showLoadingDialog
 
 open class BaseActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
@@ -53,6 +55,19 @@ open class BaseActivity : AppCompatActivity() {
             visibility = if (showUpdateButton) View.VISIBLE else View.GONE
             setOnClickListener { onUpdateClick?.invoke() }
         }
+    }
 
+    /**
+     * show loading dialog
+     */
+    fun showLoading() {
+        window.decorView.rootView.showLoadingDialog(this)
+    }
+
+    /**
+     * hide loading dialog
+     */
+    fun hideLoading() {
+        window.decorView.rootView.hideLoadingDialog()
     }
 }

@@ -29,7 +29,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
     /* S3 upload helper 초기화 */
     private val s3UploadHelper = S3UploadHelper()
 
-    private val _registerPetResult = MutableStateFlow<CommonApiState<Boolean>>(CommonApiState.Init)
+    private val _registerPetResult = MutableStateFlow<CommonApiState<Unit>>(CommonApiState.Init)
     val registerPetResult = _registerPetResult.asStateFlow()
 
     /**
@@ -37,17 +37,19 @@ class GeneratePetidSharedViewModel @Inject constructor(
      */
     private fun generatePetid() {
         viewModelScope.launch {
-            when (val result = petInfoRepository.registerPet(petInfo.build().toDomain())) {
+            _registerPetResult.emit(CommonApiState.Loading)
+            val state = when (val result = petInfoRepository.registerPet(petInfo.build().toDomain())) {
                 is ApiResult.Success -> {
-                    _registerPetResult.emit(CommonApiState.Success(true))
+                    CommonApiState.Success(Unit)
                 }
                 is ApiResult.HttpError -> {
-                    _registerPetResult.emit(CommonApiState.Error(result.error.error))
+                    CommonApiState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    _registerPetResult.emit(CommonApiState.Error(result.errorMessage))
+                    CommonApiState.Error(result.errorMessage)
                 }
             }
+            _registerPetResult.emit(state)
         }
     }
 

@@ -36,26 +36,27 @@ class SocialAuthViewModel @Inject constructor(
         viewModelScope.launch {
             _loginResult.emit(LoginResult.Loading)  // 로딩 상태 전송
 
-            when (val result = socialAuthRepository.doLogin(sub, fcmToken)) {
+            val state = when (val result = socialAuthRepository.doLogin(sub, fcmToken)) {
                 is ApiResult.Success -> {
                     val result = result.data
                     getPreferencesControl().apply {
                         saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
                         saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
                     }
-                    _loginResult.emit(LoginResult.Success(result))  // 성공 시 데이터 전송
+                    LoginResult.Success(result)  // 성공 시 데이터 전송
                 }
                 is ApiResult.HttpError -> {
                     if (result.error.status == 400 && result.error.error.contains("Member UID")) {
-                        _loginResult.emit(LoginResult.NeedToSignUp)  // 회원가입 필요 시 전송
+                        LoginResult.NeedToSignUp // 회원가입 필요 시 전송
                     } else {
-                        _loginResult.emit(LoginResult.Error(result.error.error))  // 오류 시 메시지 전송
+                       LoginResult.Error(result.error.error)  // 오류 시 메시지 전송
                     }
                 }
                 is ApiResult.Error -> {
-                    _loginResult.emit(LoginResult.Error(result.errorMessage))
+                    LoginResult.Error(result.errorMessage)
                 }
             }
+            _loginResult.emit(state)
         }
     }
 }

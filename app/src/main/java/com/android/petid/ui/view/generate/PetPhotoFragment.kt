@@ -30,7 +30,8 @@ import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentPetPhotoBinding
 import com.android.petid.image_classifier.ImageClassifierHelper
 import com.android.petid.ui.component.CustomDialogCommon
-import com.android.petid.util.Utils.bitmapToFile
+import com.android.petid.util.TAG
+import com.android.petid.util.bitmapToFile
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,8 +48,6 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
     ImageClassifierHelper.ClassifierListener {
 
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
-
-    private val TAG = this.javaClass.simpleName
 
     // 카메라 권한 요청 결과값 처리
     private val cameraPermissionResult =

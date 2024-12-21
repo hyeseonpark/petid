@@ -1,23 +1,17 @@
 package com.android.petid.ui.view.hospital
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -34,7 +28,9 @@ import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.ui.view.common.flowTextWatcher
 import com.android.petid.ui.view.hospital.adapter.HospitalListAdapter
-import com.android.petid.util.Utils.hideKeyboardAndClearFocus
+import com.android.petid.util.TAG
+import com.android.petid.util.hideKeyboardAndClearFocus
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -57,8 +53,6 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     }
 
     private val viewModel: HospitalMainViewModel by activityViewModels()
-
-    private val TAG = "HospitalMainFragment"
 
     private lateinit var hospitalListAdapter : HospitalListAdapter
 
@@ -250,6 +244,9 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     private fun observeCurrentHospitalListState() {
         lifecycleScope.launch {
             viewModel.hospitalApiState.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         currentHospitalList = result.data
@@ -261,14 +258,8 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                                 false -> R.string.filter_by_location
                             })
                     }
-                    is CommonApiState.Error -> {
-                        // 오류 처리
-                        Log.e(TAG, "${result.message}")
-                    }
-                    is CommonApiState.Loading -> {
-                        // 로딩 상태 처리
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
