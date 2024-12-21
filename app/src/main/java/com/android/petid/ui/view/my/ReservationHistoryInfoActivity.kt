@@ -1,10 +1,7 @@
 package com.android.petid.ui.view.my
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.viewModels
@@ -19,6 +16,7 @@ import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.ui.view.hospital.HospitalActivity
 import com.android.petid.ui.view.my.adapter.HospitalReservationListAdapter
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.hospital.ReservationHistoryInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,8 +26,6 @@ import kotlinx.coroutines.launch
 class ReservationHistoryInfoActivity : BaseActivity() {
     private lateinit var binding: ActivityReservationHistoryInfoBinding
     private val viewModel: ReservationHistoryInfoViewModel by viewModels()
-
-    private val TAG = "ReservationHistoryInfoActivity"
 
     private lateinit var cancelDialog : CustomDialogCommon
 
@@ -101,7 +97,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
                         }
                     }
                     is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
+                        showErrorMessage(result.message.toString())
                         isDataAvailable(false)
                     }
                     is CommonApiState.Loading -> {
@@ -148,9 +144,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
                         viewModel.getHospitalReservationHistoryListApiState()
                         cancelDialog.dismiss()
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

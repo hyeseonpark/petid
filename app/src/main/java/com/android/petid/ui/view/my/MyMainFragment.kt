@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,7 @@ import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.util.PreferencesControl
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.collectLatest
@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
  */
 class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding::inflate) {
     private val viewModel: MyInfoViewModel by activityViewModels()
-    private val TAG = "MyMainFragment"
 
     private val petIdValue =
         PreferencesControl(getGlobalContext()).getIntValue(Constants.SHARED_PET_ID_VALUE)
@@ -140,9 +139,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                                 }
                             }
                         }
-                        is CommonApiState.Error -> {
-                            Log.e(TAG, "${result.message}")
-                        }
+                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
                         is CommonApiState.Loading -> showLoading()
                         is CommonApiState.Init -> {}
                     }
@@ -168,9 +165,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                                     .into(binding.imageViewProfile)
                             }
                         }
-                        is CommonApiState.Error -> {
-                            Log.e(TAG, "${result.message}")
-                        }
+                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
                         is CommonApiState.Loading -> showLoading()
                         is CommonApiState.Init -> {}
                     }

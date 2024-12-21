@@ -18,6 +18,7 @@ import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.databinding.FragmentSignatureBinding
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.util.bitmapToFile
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -78,9 +79,7 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
                         Log.d("SignatureFragment", "success...")
                         findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
                     }
-                    is CommonApiState.Error -> {
-                        Log.d("SignatureFragment", "error...: ${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     CommonApiState.Init -> {}
                     CommonApiState.Loading -> showLoading()
                 }

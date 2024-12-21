@@ -19,8 +19,6 @@ import com.bumptech.glide.Glide
 class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(FragmentHospitalDetailBinding::inflate) {
     private val viewModel: HospitalViewModel by activityViewModels()
 
-    private val TAG = "HospitalDetailFragment"
-
     private lateinit var infoDialog : CustomDialogCommon
     private lateinit var petidNullDialog : CustomDialogCommon
 

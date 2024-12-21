@@ -1,7 +1,6 @@
 package com.android.petid.ui.view.my
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BundleKeys
 import com.android.petid.util.addPhoneNumberFormatting
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,7 +29,6 @@ class MyInfoUpdateFragment
     : BaseFragment<FragmentMyInfoUpdateBinding>(FragmentMyInfoUpdateBinding::inflate) {
 
     private val viewModel: MyInfoViewModel by activityViewModels()
-    private val TAG = "MyInfoUpdateFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,9 +87,7 @@ class MyInfoUpdateFragment
                             binding.editTextAddressDetail.setText(addressDetails)
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
@@ -128,9 +125,7 @@ class MyInfoUpdateFragment
                     is CommonApiState.Success -> {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }

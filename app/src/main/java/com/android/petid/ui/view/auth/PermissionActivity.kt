@@ -12,7 +12,7 @@ import com.android.petid.util.setStyleSpan
 
 class PermissionActivity : BaseActivity() {
     private lateinit var binding: ActivityPermissionBinding
-    private val TAG = "PermissionActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPermissionBinding.inflate(layoutInflater)
