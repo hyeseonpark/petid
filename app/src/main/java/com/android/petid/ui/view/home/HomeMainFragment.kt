@@ -290,6 +290,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     is CommonApiState.Success -> {
                         with(result.data) {
                             setPetidCardType(chipType)
+                            getPreferencesControl().saveStringValue(Constants.SHARED_PET_CHIP_TYPE, chipType)
+
                             binding.apply {
                                 textViewPetNameBack.text = petName
                                 textViewPetNameFront.text = petName

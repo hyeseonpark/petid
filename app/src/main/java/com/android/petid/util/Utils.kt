@@ -12,6 +12,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
@@ -137,7 +138,11 @@ object ProgressDialogUtil {
         if (progressDialog?.isShowing == true) return
 
         progressDialog = Dialog(context).apply {
-            window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            window?.apply {
+                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            }
+
             setContentView(
                 ProgressBar(context).apply {
                     progressTintList = ColorStateList.valueOf(
