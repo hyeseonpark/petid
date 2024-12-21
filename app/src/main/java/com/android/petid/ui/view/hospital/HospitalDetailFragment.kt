@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.petid.R
 import com.android.petid.common.Constants
+import com.android.petid.common.Constants.CHIP_TYPE
 import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.FragmentHospitalDetailBinding
 import com.android.petid.ui.component.CustomDialogCommon
@@ -19,8 +20,6 @@ import com.bumptech.glide.Glide
 class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(FragmentHospitalDetailBinding::inflate) {
     private val viewModel: HospitalViewModel by activityViewModels()
 
-    private val TAG = "HospitalDetailFragment"
-
     private lateinit var infoDialog : CustomDialogCommon
     private lateinit var petidNullDialog : CustomDialogCommon
 
@@ -30,7 +29,6 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
     ): View {
         _binding = FragmentHospitalDetailBinding.inflate(layoutInflater)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,7 +46,7 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
     private fun initComponent() {
         with(binding) {
             infoDialog = CustomDialogCommon(
-                title = getString(R.string.hospital_make_reservation_dialog_info_button),
+                title = getString(R.string.hospital_make_reservation_dialog_info),
                 yesButtonClick = {
                     findNavController().navigate(
                         R.id.action_hospitalDetailFragment_to_reservationCalendarFragment) },
@@ -81,9 +79,11 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
             }
 
             buttonReserve.setOnClickListener{
-                when(getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE)) {
-                    -1 -> petidNullDialog.show(childFragmentManager, "petidNullDialog")
-                    else -> infoDialog.show(childFragmentManager, "infoDialog")
+                when(getPreferencesControl().getStringValue(Constants.SHARED_PET_CHIP_TYPE)) {
+                    null -> petidNullDialog.show(childFragmentManager, "petidNullDialog")
+                    CHIP_TYPE[1] -> infoDialog.show(childFragmentManager, "infoDialog")
+                    else -> findNavController().navigate(
+                        R.id.action_hospitalDetailFragment_to_reservationCalendarFragment)
                 }
             }
         }

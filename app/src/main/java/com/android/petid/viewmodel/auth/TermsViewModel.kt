@@ -26,23 +26,23 @@ class TermsViewModel @Inject constructor(
         fun join(platform: PlatformType, sub: String, fcmToken: String, ad: Boolean) {
             viewModelScope.launch {
                 _apiState.emit(CommonApiState.Loading)  // 로딩 상태 전송
-                when (val result = termsRepository.doJoin(platform.toString(), sub, fcmToken, ad)) {
+                val state = when (val result = termsRepository.doJoin(platform.toString(), sub, fcmToken, ad)) {
                     is ApiResult.Success -> {
                         val result = result.data
                         getPreferencesControl().apply {
                             saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
                             saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
                         }
-                         _apiState.emit(CommonApiState.Success(Unit))  // 성공 시 UI 상태 전송
-
+                         CommonApiState.Success(Unit)
                     }
                     is ApiResult.HttpError -> {
-                        _apiState.emit(CommonApiState.Error(result.error.error))  // 오류 시 메시지 전송
+                        CommonApiState.Error(result.error.error)
                     }
                     is ApiResult.Error -> {
-                        _apiState.emit(CommonApiState.Error(result.errorMessage))
+                        CommonApiState.Error(result.errorMessage)
                     }
                 }
+                _apiState.emit(state)
             }
         }
 }

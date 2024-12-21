@@ -2,18 +2,15 @@ package com.android.petid.ui.view.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IntDef
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.android.domain.entity.BannerEntity
 import com.android.petid.BuildConfig
 import com.android.petid.R
@@ -26,9 +23,10 @@ import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.ui.view.generate.GeneratePetidMainActivity
 import com.android.petid.ui.view.home.adapter.HomeBannerAdapter
-import com.android.petid.util.Utils.booleanCharToSign
-import com.android.petid.util.Utils.genderCharToString
+import com.android.petid.util.booleanCharToSign
+import com.android.petid.util.genderCharToString
 import com.android.petid.util.calculateAge
+import com.android.petid.util.showErrorMessage
 import com.android.petid.util.throttleFirst
 import com.android.petid.viewmodel.home.HomeMainVIewModel
 import com.bumptech.glide.Glide
@@ -38,17 +36,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 
 @AndroidEntryPoint
 class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainBinding::inflate) {
 
     private val viewModel: HomeMainVIewModel by activityViewModels()
-
-    private val TAG = "HomeMainFragment"
 
     // banner adapter
     private lateinit var bannerAdapter : HomeBannerAdapter
@@ -222,23 +215,16 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.bannerApiState.collectLatest { result ->
+                    if (result !is CommonApiState.Loading)
+                        hideLoading()
+
                     when (result) {
                         is CommonApiState.Success -> {
                             val bannerList = result.data
                             initBanner(bannerList)
-                            hideLoading()
                         }
-
-                        is CommonApiState.Error -> {
-                            Log.e(TAG, "${result.message}")
-                            hideLoading()
-                        }
-
-                        is CommonApiState.Loading -> {
-                            Log.d(TAG, "Loading....................")
-                            showLoading()
-                        }
-
+                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                        is CommonApiState.Loading -> showLoading()
                         is CommonApiState.Init -> {}
                     }
                 }
@@ -252,6 +238,9 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun observeGetMemberInfoState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getMemberInfoResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         val memberResult = result.data
@@ -280,12 +269,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                             }
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -298,10 +283,15 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun observeGetPetInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         with(result.data) {
                             setPetidCardType(chipType)
+                            getPreferencesControl().saveStringValue(Constants.SHARED_PET_CHIP_TYPE, chipType)
+
                             binding.apply {
                                 textViewPetNameBack.text = petName
                                 textViewPetNameFront.text = petName
@@ -321,12 +311,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                             }
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -339,6 +325,9 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun observeGetPetImageUrlState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getPetImageUrlResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         R.color.d9.let {
@@ -348,12 +337,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                                 .into(binding.imageViewCardPetPhoto)
                         }
                     }
-                    is CommonApiState.Error -> {
-                        Log.e(TAG, "${result.message}")
-                    }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }

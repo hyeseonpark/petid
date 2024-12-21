@@ -29,8 +29,6 @@ class LocationBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var locationListAdapter : LocationListAdapter
 
     companion object {
-        const val TAG = "LocationBottomSheetFragment"
-
         fun newInstance(locationType: Int, locationList: List<LocationEntity>): LocationBottomSheetFragment {
             val fragment = LocationBottomSheetFragment()
             val args = Bundle().apply {

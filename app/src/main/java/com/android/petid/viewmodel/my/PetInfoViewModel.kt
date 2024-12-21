@@ -60,8 +60,9 @@ class PetInfoViewModel @Inject constructor(
      */
     fun getPetDetails() {
         viewModelScope.launch {
+            _getPetDetailsResult.emit(CommonApiState.Loading)
             val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
-            when (val result = petInfoRepository.getPetDetails(petId)) {
+            val state = when (val result = petInfoRepository.getPetDetails(petId)) {
                 is ApiResult.Success -> {
                     val petDetails = result.data
 
@@ -71,15 +72,12 @@ class PetInfoViewModel @Inject constructor(
 
                     getPetImageUrl(petDetails.petImages.first().imagePath)
 
-                    _getPetDetailsResult.emit(CommonApiState.Success(petDetails))
+                    CommonApiState.Success(petDetails)
                 }
-                is ApiResult.HttpError -> {
-                    _getPetDetailsResult.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _getPetDetailsResult.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _getPetDetailsResult.emit(state)
         }
     }
 
@@ -88,17 +86,13 @@ class PetInfoViewModel @Inject constructor(
      */
     private fun getPetImageUrl(filePath: String) {
         viewModelScope.launch {
-            when (val result = petInfoRepository.getPetImageUrl(filePath)) {
-                is ApiResult.Success -> {
-                    _getPetImageUrlResult.emit(CommonApiState.Success(result.data))
-                }
-                is ApiResult.HttpError -> {
-                    _getPetImageUrlResult.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _getPetImageUrlResult.emit(CommonApiState.Error(result.errorMessage))
-                }
+            _getPetImageUrlResult.emit(CommonApiState.Loading)
+            val state = when (val result = petInfoRepository.getPetImageUrl(filePath)) {
+                is ApiResult.Success -> CommonApiState.Success(result.data)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _getPetImageUrlResult.emit(state)
         }
     }
 
@@ -129,7 +123,7 @@ class PetInfoViewModel @Inject constructor(
      * 서버에 펫 프로필 사진 주소 업데이트
      */
     fun updateMemberPhoto(filePath: String) {
-        viewModelScope.launch {
+        val state = viewModelScope.launch {
             _updatePetPhotoResult.emit(CommonApiState.Loading)
         }
     }
@@ -138,23 +132,19 @@ class PetInfoViewModel @Inject constructor(
      * 펫 정보 업데이트
      */
     fun updatePetInfo(petNeuteredDate: String, weight: Int) {
-        val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
         viewModelScope.launch {
+            _updatePetPhotoResult.emit(CommonApiState.Loading)
+            val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
             val updateData = PetUpdateEntity(
                 petNeuteredDate,
                 UpdateAppearanceEntity(weight)
             )
-            when (val result = petInfoRepository.updatePetInfo(petId, updateData)) {
-                is ApiResult.Success -> {
-                    _updatePetPhotoResult.emit(CommonApiState.Success(Unit))
-                }
-                is ApiResult.HttpError -> {
-                    _updatePetPhotoResult.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _updatePetPhotoResult.emit(CommonApiState.Error(result.errorMessage))
-                }
+            val state = when (val result = petInfoRepository.updatePetInfo(petId, updateData)) {
+                is ApiResult.Success -> CommonApiState.Success(Unit)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _updatePetPhotoResult.emit(state)
         }
     }
 }

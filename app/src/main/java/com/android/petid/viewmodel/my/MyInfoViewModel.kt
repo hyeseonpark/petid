@@ -33,7 +33,7 @@ class MyInfoViewModel @Inject constructor(
     val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
 
     /* Member info update result */
-    private val _updateMemberInfoResult = MutableSharedFlow<CommonApiState<Boolean>>()
+    private val _updateMemberInfoResult = MutableSharedFlow<CommonApiState<Unit>>()
     val updateMemberInfoResult = _updateMemberInfoResult.asSharedFlow()
 
 
@@ -55,7 +55,8 @@ class MyInfoViewModel @Inject constructor(
     fun getMemberInfo() {
         // TODO 1. moshi, 2.viewModel에서 repository 바로 연결시키기 (useCase 필요없), 3.stateIn()
         viewModelScope.launch {
-            when (val result = myInfoRepository.getMemberInfo()) {
+            _getMemberInfoResult.emit(CommonApiState.Loading)
+            val state = when (val result = myInfoRepository.getMemberInfo()) {
                 is ApiResult.Success -> {
                     val memberInfo = result.data
 
@@ -64,34 +65,27 @@ class MyInfoViewModel @Inject constructor(
                         getMemberImage(it)
                     }
 
-                    _getMemberInfoResult.emit(CommonApiState.Success(memberInfo))
+                    CommonApiState.Success(memberInfo)
                 }
-                is ApiResult.HttpError -> {
-                    _getMemberInfoResult.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _getMemberInfoResult.emit(CommonApiState.Error(result.errorMessage))
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _getMemberInfoResult.emit(state)
         }
     }
 
     /**
      * 프로필 사진 가져오기 (S3 주소)
      */
-    private suspend fun getMemberImage(imageUrl: String) {
+    private fun getMemberImage(imageUrl: String) {
         viewModelScope.launch {
-            when (val result = myInfoRepository.getProfileImageUrl(imageUrl)) {
-                is ApiResult.Success -> {
-                    _getMemberImageResult.emit(CommonApiState.Success(result.data))
-                }
-                is ApiResult.HttpError -> {
-                    _getMemberImageResult.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _getMemberImageResult.emit(CommonApiState.Error(result.errorMessage))
-                }
+            _getMemberImageResult.emit(CommonApiState.Loading)
+            val state = when (val result = myInfoRepository.getProfileImageUrl(imageUrl)) {
+                is ApiResult.Success -> CommonApiState.Success(result.data)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _getMemberImageResult.emit(state)
         }
     }
 
@@ -124,17 +118,13 @@ class MyInfoViewModel @Inject constructor(
      */
     fun updateMemberPhoto(filePath: String) {
         viewModelScope.launch {
-            when (val result = myInfoRepository.updateMemberPhoto(filePath)) {
-                is ApiResult.Success -> {
-                    _updateMemberPhotoResult.emit(CommonApiState.Success(result.data))
-                }
-                is ApiResult.HttpError -> {
-                    _updateMemberPhotoResult.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _updateMemberPhotoResult.emit(CommonApiState.Error(result.errorMessage))
-                }
+            _updateMemberPhotoResult.emit(CommonApiState.Loading)
+            val state = when (val result = myInfoRepository.updateMemberPhoto(filePath)) {
+                is ApiResult.Success -> CommonApiState.Success(result.data)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _updateMemberPhotoResult.emit(state)
         }
     }
 
@@ -143,17 +133,13 @@ class MyInfoViewModel @Inject constructor(
      */
     fun updateMemberInfo(address: String, addressDetails: String, phone: String) {
         viewModelScope.launch {
-            when (val result = myInfoRepository.updateMemberInfo(address, addressDetails, phone)) {
-                is ApiResult.Success -> {
-                    _updateMemberInfoResult.emit(CommonApiState.Success(true))
-                }
-                is ApiResult.HttpError -> {
-                    _updateMemberInfoResult.emit(CommonApiState.Error(result.error.error))
-                }
-                is ApiResult.Error -> {
-                    _updateMemberInfoResult.emit(CommonApiState.Error(result.errorMessage))
-                }
+            _updateMemberInfoResult.emit(CommonApiState.Loading)
+            val state = when (val result = myInfoRepository.updateMemberInfo(address, addressDetails, phone)) {
+                is ApiResult.Success -> CommonApiState.Success(Unit)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
+            _updateMemberInfoResult.emit(state)
         }
     }
 }

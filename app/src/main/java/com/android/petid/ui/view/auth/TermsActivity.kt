@@ -6,10 +6,11 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.R
 import com.android.petid.databinding.ActivityTermsBinding
-import com.android.petid.util.Utils.setStyleSpan
+import com.android.petid.util.setStyleSpan
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.view.common.BaseActivity
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.auth.TermsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -23,7 +24,6 @@ class TermsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTermsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         initComponent()
         setupJoinObservers()
@@ -92,20 +92,18 @@ class TermsActivity : BaseActivity() {
      */
     private fun setupJoinObservers() {
         lifecycleScope.launch {
-            viewModel.apiState.collect { state ->
-                when (state) {
-                    is CommonApiState.Loading -> {
-                        // 로딩 중 UI 표시
-                    }
+            viewModel.apiState.collect { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
+                when (result) {
                     is CommonApiState.Success -> {
-                        val intent = Intent(this@TermsActivity, SignupCompleteActivity::class.java)
-                        startActivity(intent)
+                        val target = Intent(this@TermsActivity, SignupCompleteActivity::class.java)
+                        startActivity(target)
                         finish()
                     }
-                    is CommonApiState.Error -> {
-                        // 오류 처리
-//                        Toast.makeText(this@TermsActivity, "오류 발생: ${state.message}", Toast.LENGTH_SHORT).show()
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
