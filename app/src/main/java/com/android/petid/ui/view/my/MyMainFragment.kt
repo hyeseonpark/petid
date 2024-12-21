@@ -129,6 +129,9 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberInfoResult.collectLatest { result ->
+                    if (result !is CommonApiState.Loading)
+                        hideLoading()
+
                     when (result) {
                         is CommonApiState.Success -> {
                             with(result.data) {
@@ -140,13 +143,10 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                         is CommonApiState.Error -> {
                             Log.e(TAG, "${result.message}")
                         }
-                        is CommonApiState.Loading -> {
-                            Log.d(TAG, "Loading....................")
-                        }
+                        is CommonApiState.Loading -> showLoading()
                         is CommonApiState.Init -> {}
                     }
                 }
-
             }
         }
     }
@@ -154,6 +154,9 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberImageResult.collectLatest { result ->
+                    if (result !is CommonApiState.Loading)
+                        hideLoading()
+
                     when (result) {
                         is CommonApiState.Success -> {
                             R.drawable.ic_mypage_icon.let {
@@ -168,9 +171,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                         is CommonApiState.Error -> {
                             Log.e(TAG, "${result.message}")
                         }
-                        is CommonApiState.Loading -> {
-                            Log.d(TAG, "Loading....................")
-                        }
+                        is CommonApiState.Loading -> showLoading()
                         is CommonApiState.Init -> {}
                     }
                 }

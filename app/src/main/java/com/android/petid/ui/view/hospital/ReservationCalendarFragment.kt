@@ -176,6 +176,9 @@ class ReservationCalendarFragment:
     private fun observeHospitalOrderTimeList() {
         lifecycleScope.launch {
             viewModel.hospitalOrderTimeApiState.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when(result) {
                     is CommonApiState.Success -> {
                         val orderTimeList = result.data
@@ -196,10 +199,7 @@ class ReservationCalendarFragment:
                         // 오류 처리
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        // 로딩 상태 처리
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -212,18 +212,19 @@ class ReservationCalendarFragment:
     private fun observeCreateHospitalOrder() {
         lifecycleScope.launch {
             viewModel.createHospitalOrderApiState.collect { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when(result) {
                     is CommonApiState.Success -> {
-                        hideLoading()
                         findNavController().navigate(
                             R.id.action_reservationCalendarFragment_to_reservationProcessFinishFragment)
                     }
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
-                        hideLoading()
                     }
                     is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> hideLoading()
+                    is CommonApiState.Init -> {}
                 }
             }
         }

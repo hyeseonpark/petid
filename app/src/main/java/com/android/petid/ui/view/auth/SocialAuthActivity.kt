@@ -293,25 +293,24 @@ class SocialAuthActivity : BaseActivity() {
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.loginResult.collectLatest { result ->
+                if (result !is LoginResult.Loading)
+                    hideLoading()
+
                 when (result) {
                     is LoginResult.Success -> {
-                        val loginEntity = result.data
                         goMainActivity()
-                        Log.d(TAG, "Login successful: ${loginEntity}")
+                        Log.d(TAG, "Login successful: ${result.data}")
                     }
                     is LoginResult.NeedToSignUp -> {
+                        goTermsActivity()
                         // 회원가입 화면으로 이동
                         Log.d(TAG, "goTermsActivity...")
-                        goTermsActivity()
                     }
                     is LoginResult.Error -> {
-                            // 오류 처리
+                        // 오류 처리
                         Log.e(TAG, "Login error: ${result.message}")
                     }
-                    is LoginResult.Loading -> {
-                        // 로딩 상태 처리
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is LoginResult.Loading -> showLoading()
                 }
             }
         }
@@ -325,13 +324,13 @@ class SocialAuthActivity : BaseActivity() {
         val sub = viewModel.subValue
         val fcmToken = viewModel.fcmToken
 
-        if (platform != null && sub != null && fcmToken != null) {
-            val intent = Intent(this, TermsActivity::class.java).apply {
+        if (platform.isNotEmpty() && sub != null && fcmToken != null) {
+            val target = Intent(this, TermsActivity::class.java).apply {
                 putExtra("platform", platform)
                 putExtra("sub", socialAccessToken)
                 putExtra("fcmToken", fcmToken)
             }
-            startActivity(intent)
+            startActivity(target)
         } else {
             // 데이터가 null일 경우의 처리
             // TODO 오류 팝업
@@ -339,8 +338,8 @@ class SocialAuthActivity : BaseActivity() {
     }
 
     private fun goMainActivity() {
-        val intent = Intent(getGlobalContext(), MainActivity::class.java)
-        startActivity(intent)
+        val target = Intent(getGlobalContext(), MainActivity::class.java)
+        startActivity(target)
         finish()
     }
 

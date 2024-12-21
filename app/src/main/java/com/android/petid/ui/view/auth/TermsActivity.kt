@@ -9,6 +9,7 @@ import com.android.petid.databinding.ActivityTermsBinding
 import com.android.petid.util.setStyleSpan
 import com.android.petid.enum.PlatformType
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.state.LoginResult
 import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.viewmodel.auth.TermsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +24,6 @@ class TermsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTermsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         initComponent()
         setupJoinObservers()
@@ -93,19 +93,20 @@ class TermsActivity : BaseActivity() {
     private fun setupJoinObservers() {
         lifecycleScope.launch {
             viewModel.apiState.collect { state ->
+                if (state !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (state) {
                     is CommonApiState.Success -> {
-                        val intent = Intent(this@TermsActivity, SignupCompleteActivity::class.java)
-                        startActivity(intent)
+                        val target = Intent(this@TermsActivity, SignupCompleteActivity::class.java)
+                        startActivity(target)
                         finish()
-                    }
-                    is CommonApiState.Loading -> {
-                        // 로딩 중 UI 표시
                     }
                     is CommonApiState.Error -> {
                         // 오류 처리
 //                        Toast.makeText(this@TermsActivity, "오류 발생: ${state.message}", Toast.LENGTH_SHORT).show()
                     }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }

@@ -91,6 +91,9 @@ class ContentDetailActivity : BaseActivity() {
     private fun observeGetContentDetailState() {
         lifecycleScope.launch {
             viewModel.contentDetailApiState.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         val result = result.data
@@ -153,9 +156,7 @@ class ContentDetailActivity : BaseActivity() {
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -168,10 +169,13 @@ class ContentDetailActivity : BaseActivity() {
     private fun observeDoLikeState() {
         lifecycleScope.launch {
             viewModel.doLikeApiResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         val resultData = result.data
-                        // TODO api result 값 수정 되면 화면 반영
+
                         binding.buttonContentLike.isSelected = !binding.buttonContentLike.isSelected
                         binding.textViewLike.text =
                             String.format(getString(R.string.content_like_desc), resultData.likeCount)
@@ -180,9 +184,7 @@ class ContentDetailActivity : BaseActivity() {
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -208,6 +210,9 @@ class ContentDetailActivity : BaseActivity() {
     private fun observeCurrentContentListState() {
         lifecycleScope.launch {
             viewModel.allContentListApiState.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         val allContentList = result.data
@@ -224,9 +229,7 @@ class ContentDetailActivity : BaseActivity() {
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }

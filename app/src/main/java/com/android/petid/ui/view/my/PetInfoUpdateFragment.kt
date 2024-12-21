@@ -103,6 +103,9 @@ class PetInfoUpdateFragment
     private fun observeGetMemberInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         with(result.data) {
@@ -128,9 +131,7 @@ class PetInfoUpdateFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
@@ -143,6 +144,9 @@ class PetInfoUpdateFragment
     private fun observeUpdatePetInfoState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.updatePetPhotoResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
                 when (result) {
                     is CommonApiState.Success -> {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -150,9 +154,7 @@ class PetInfoUpdateFragment
                     is CommonApiState.Error -> {
                         Log.e(TAG, "${result.message}")
                     }
-                    is CommonApiState.Loading -> {
-                        Log.d(TAG, "Loading....................")
-                    }
+                    is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
             }
