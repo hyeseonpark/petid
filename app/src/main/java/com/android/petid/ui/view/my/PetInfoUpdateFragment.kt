@@ -86,8 +86,8 @@ class PetInfoUpdateFragment
         val dialog = CustomDialogCommon(
             getString(R.string.update_complete_dialog), {
                 with(binding) {
-                    val neuteredDate = editTextNeuteringDate.text.toString()
-                    val weight = editTextWeight.text.toString().toIntOrNull() ?: 0
+                    val neuteredDate = editTextNeuteringDate.text.toString().takeIf { it.isNotBlank() }
+                    val weight = editTextWeight.text.toString().toIntOrNull()
                     viewModel.updatePetInfo(neuteredDate, weight)
                 }
             })

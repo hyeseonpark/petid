@@ -12,4 +12,5 @@ interface PreferencesHelper {
     fun saveIntValue(key: String, value: Int)
     fun saveStringValue(key: String, value: String)
     fun saveLongValue(key: String, value: Long)
+    fun clear()
 }

@@ -48,4 +48,16 @@ class PetInfoRepositoryImpl @Inject constructor(
             is ApiResult.Error -> result
         }
     }
+
+    override suspend fun updatePetPhoto(
+        petId: Long,
+        petImageId: Long,
+        filePath: String
+    ): ApiResult<Unit> {
+        return when (val result = petInfoDataSource.updatePetPhoto(petId, petImageId, filePath)) {
+            is ApiResult.Success -> result
+            is ApiResult.HttpError -> result
+            is ApiResult.Error -> result
+        }
+    }
 }
