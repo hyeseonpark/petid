@@ -56,4 +56,12 @@ class MyInfoRepositoryImpl @Inject constructor(
             is ApiResult.Error -> result
         }
     }
+
+    override suspend fun doWithdraw(): ApiResult<Unit> {
+        return when (val result = myInfoRemoteDataSource.doWithdraw()) {
+            is ApiResult.Success -> result
+            is ApiResult.HttpError -> result
+            is ApiResult.Error -> result
+        }
+    }
 }
