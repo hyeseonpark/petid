@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.android.petid.BuildConfig
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 /**
  * get tag
@@ -88,12 +89,15 @@ fun View.hideLoadingDialog() {
     ProgressDialogUtil.cancel()
 }
 
+
 /**
  * Activity: show error message
  */
 fun Context.showErrorMessage(text: String) {
+    FirebaseCrashlytics.getInstance().log("Error: $text") // Crashlytics 로그 기록
+
     Log.e(this.TAG, text)
-    if (BuildConfig.DEBUG)
+    if (BuildConfig.IS_DEVELOP)
         Toast.makeText(this, "Error Message: $text", Toast.LENGTH_LONG).show()
 }
 
@@ -101,7 +105,9 @@ fun Context.showErrorMessage(text: String) {
  * Fragment: show error message
  */
 fun Fragment.showErrorMessage(text: String) {
+    FirebaseCrashlytics.getInstance().log("Error: $text") // Crashlytics 로그 기록
+
     Log.e(this.TAG, text)
-    if (BuildConfig.DEBUG)
+    if (BuildConfig.IS_DEVELOP)
         Toast.makeText(requireContext(), "Error Message: $text", Toast.LENGTH_LONG).show()
 }

@@ -71,15 +71,18 @@ android {
             excludes += "/META-INF/gradle/incremental.annotation.processors"
         }
     }
+
     flavorDimensions += listOf("version")
     productFlavors {
-        create("devlop") {
+        create("develop") {
             dimension = "version"
             versionNameSuffix = "-dev"
             resValue("string", "app_name", "펫아이디 Dev")
+            buildConfigField("boolean", "IS_DEVELOP", "true")
         }
         create("operation") {
             dimension = "version"
+            buildConfigField("boolean", "IS_DEVELOP", "false")
         }
     }
     firebaseCrashlytics {
