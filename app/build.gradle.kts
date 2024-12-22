@@ -15,6 +15,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+    id("com.google.firebase.crashlytics")
 
     id("androidx.navigation.safeargs.kotlin")
 }
@@ -43,7 +44,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -80,6 +81,9 @@ android {
         create("operation") {
             dimension = "version"
         }
+    }
+    firebaseCrashlytics {
+        mappingFileUploadEnabled = true
     }
 }
 
@@ -131,12 +135,12 @@ dependencies {
 
     // Google Play services
     implementation("com.google.gms:google-services:4.4.2")
-    implementation("com.google.android.gms:play-services-location:21.3.0") // 위치
+    implementation(libs.play.services.location) // 위치
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-auth:23.1.0")
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.5")
-    implementation("com.google.firebase:firebase-analytics-ktx:22.1.2")
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.crashlytics.ktx) // 비정상 종료 추적
+    implementation(libs.firebase.analytics.ktx)
 
     // Firebase dependencies without version
     implementation("com.google.firebase:firebase-analytics")
