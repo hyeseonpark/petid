@@ -13,68 +13,45 @@ import javax.inject.Inject
 class PreferencesControl @Inject constructor(
     private val context: Context
 ): PreferencesHelper {
-    private var TAG = "PreferencesControl"
+    private val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
 
     /**
      * 저장된 boolean value return
-     * @param context
-     * @param title
-     * @param flag
-     * @return
      */
     override fun getBooleanValue(key: String, flag: Boolean): Boolean {
-        val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
         return pref.getBoolean(key, flag)
     }
 
     /**
      * 저장된 Int value return
-     * @param context
-     * @param title
-     * @return long value
      */
     override fun getIntValue(key: String): Int {
-        val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
         return pref.getInt(key, -1)
     }
 
     /**
-     * 저장된 Int value return
-     * @param context
-     * @param title
-     * @return long value
+     * 저장된 Int value return: defaultValue 설정
      */
     override fun getIntValue(key: String, defaultValue: Int): Int {
-        val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
         return pref.getInt(key, defaultValue)
-    }
-    /**
-     * 저장된 Int value return
-     * @param context
-     * @param title
-     * @return long value
-     */
-    override fun getLongValue(Key: String): Long {
-        val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
-        return pref.getLong(Key, 0)
     }
 
     /**
-     * 저장된 Int value return
-     * @param context
-     * @param title
-     * @return long value
+     * 저장된 Long value return
      */
-    override fun getLongValue(Key: String, defaultValue: Long): Long {
-        val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
-        return pref.getLong(Key, defaultValue)
+    override fun getLongValue(key: String): Long {
+        return pref.getLong(key, 0)
+    }
+
+    /**
+     * 저장된 Long value return: defaultValue 설정
+     */
+    override fun getLongValue(key: String, defaultValue: Long): Long {
+        return pref.getLong(key, defaultValue)
     }
 
     /**
      * 저장된 String value return
-     * @param context
-     * @param title
-     * @return
      */
     override fun getStringValue(key: String): String? {
         try {
@@ -88,13 +65,9 @@ class PreferencesControl @Inject constructor(
     }
 
     /**
-     * 저장된 String value return
-     * @param context
-     * @param title
-     * @return
+     * 저장된 String value return: defaultValue 설정
      */
     override fun getStringValue(key: String, defaultValue: String): String? {
-        val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
         var result = pref.getString(key, defaultValue)
 
         if (TextUtils.isEmpty(result)) {
@@ -105,14 +78,10 @@ class PreferencesControl @Inject constructor(
     }
 
     /**
-     * boolean value 저장하기
-     * @param context
-     * @param title
-     * @param flag
+     * boolean value 저장
      */
     override fun saveBooleanValue(key: String, flag: Boolean) {
         try {
-            val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putBoolean(key, flag)
             editor.apply()
@@ -122,14 +91,10 @@ class PreferencesControl @Inject constructor(
     }
 
     /**
-     * Int value 저장하기
-     * @param context
-     * @param title
-     * @param value
+     * Int value 저장
      */
     override fun saveIntValue(key: String, value: Int) {
         try {
-            val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putInt(key, value)
             editor.apply()
@@ -139,13 +104,10 @@ class PreferencesControl @Inject constructor(
     }
 
     /**
-     * String value 저장하기
-     * @param context
-     * @param title
+     * String value 저장
      */
     override fun saveStringValue(key: String, value: String) {
         try {
-            val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putString(key, value)
             editor.apply()
@@ -155,15 +117,22 @@ class PreferencesControl @Inject constructor(
     }
 
     /**
-     * String value 저장하기
-     * @param context
-     * @param title
+     * Long value 저장
      */
     override fun saveLongValue(key: String, value: Long) {
         try {
-            val pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE)
             val editor = pref.edit()
             editor.putLong(key, value)
+            editor.apply()
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception: " + e.localizedMessage)
+        }
+    }
+
+    override fun clear() {
+        try {
+            val editor = pref.edit()
+            editor.clear()
             editor.apply()
         } catch (e: Exception) {
             Log.e(TAG, "Exception: " + e.localizedMessage)

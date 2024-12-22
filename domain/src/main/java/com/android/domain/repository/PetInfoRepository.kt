@@ -10,4 +10,5 @@ interface PetInfoRepository {
     suspend fun getPetDetails(petId: Long): ApiResult<PetDetailsEntity>
     suspend fun getPetImageUrl(filePath: String): ApiResult<String>
     suspend fun updatePetInfo(petId: Long, updatePetInfo: PetUpdateEntity): ApiResult<Unit>
+    suspend fun updatePetPhoto(petId: Long, petImageId: Long, filePath: String): ApiResult<Unit>
 }

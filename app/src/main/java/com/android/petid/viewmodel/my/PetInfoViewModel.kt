@@ -14,6 +14,8 @@ import com.android.petid.common.Constants.PHOTO_PATHS
 import com.android.petid.common.Constants.SHARED_MEMBER_ID_VALUE
 import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.state.CommonApiState.*
+import com.android.petid.ui.state.CommonApiState.Error
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,31 +30,34 @@ class PetInfoViewModel @Inject constructor(
     private val petInfoRepository: PetInfoRepository,
 ): ViewModel(){
 
+    /* petId */
+    private val petId: Long
+        get() = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
+
+    /* petImageId */
+    private var petImageId: Long = -1
+
     /* 서버에서 받은 파일명, nullable */
     var petImageFileName: String? = null
 
     /* 펫 정보 가져오기 결과*/
     private val _getPetDetailsResult = MutableStateFlow<CommonApiState<PetDetailsEntity>>(
-        CommonApiState.Init
+        Init
     )
     val getPetDetailsResult = _getPetDetailsResult.asStateFlow()
 
     /* 펫 이미지 가져오기 결과*/
     private val _getPetImageUrlResult = MutableStateFlow<CommonApiState<String>>(
-        CommonApiState.Init
+        Init
     )
     val getPetImageUrlResult = _getPetImageUrlResult.asStateFlow()
 
-    /* S3 사진 upload result */
-    private val _uploadS3Result = MutableSharedFlow<Result<Boolean>>()
-    val uploadS3Result = _uploadS3Result.asSharedFlow()
-
     /* 서버 사진 update result */
-    private val _updatePetPhotoResult = MutableStateFlow<CommonApiState<Unit>>(CommonApiState.Init)
+    private val _updatePetPhotoResult = MutableStateFlow<CommonApiState<Unit>>(Init)
     val updatePetPhotoResult = _updatePetPhotoResult.asStateFlow()
 
     /* Pet info update result */
-    private val _updatePetInfoResult = MutableSharedFlow<CommonApiState<Boolean>>()
+    private val _updatePetInfoResult = MutableSharedFlow<CommonApiState<Unit>>()
     val updatePetInfoResult = _updatePetInfoResult.asSharedFlow()
 
     /**
@@ -60,22 +65,19 @@ class PetInfoViewModel @Inject constructor(
      */
     fun getPetDetails() {
         viewModelScope.launch {
-            _getPetDetailsResult.emit(CommonApiState.Loading)
-            val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
+            _getPetDetailsResult.emit(Loading)
             val state = when (val result = petInfoRepository.getPetDetails(petId)) {
                 is ApiResult.Success -> {
                     val petDetails = result.data
 
-                    val memberId = getPreferencesControl().getStringValue(SHARED_MEMBER_ID_VALUE)
-
-                    petImageFileName = "${PHOTO_PATHS[2]}$memberId.jpg"
-
                     getPetImageUrl(petDetails.petImages.first().imagePath)
+                    petImageId = petDetails.petImages.first().petImageId.toLong()
+                    petImageFileName = "${PHOTO_PATHS[2]}$petImageId.jpg"
 
-                    CommonApiState.Success(petDetails)
+                    Success(petDetails)
                 }
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.HttpError -> Error(result.error.error)
+                is ApiResult.Error -> Error(result.errorMessage)
             }
             _getPetDetailsResult.emit(state)
         }
@@ -86,11 +88,11 @@ class PetInfoViewModel @Inject constructor(
      */
     private fun getPetImageUrl(filePath: String) {
         viewModelScope.launch {
-            _getPetImageUrlResult.emit(CommonApiState.Loading)
+            _getPetImageUrlResult.emit(Loading)
             val state = when (val result = petInfoRepository.getPetImageUrl(filePath)) {
-                is ApiResult.Success -> CommonApiState.Success(result.data)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.Success -> Success(result.data)
+                is ApiResult.HttpError -> Error(result.error.error)
+                is ApiResult.Error -> Error(result.errorMessage)
             }
             _getPetImageUrlResult.emit(state)
         }
@@ -101,6 +103,7 @@ class PetInfoViewModel @Inject constructor(
      */
     fun uploadFile(context: Context, file: File, fileName: String) {
         viewModelScope.launch {
+            _updatePetPhotoResult.emit(Loading)
             val s3UploadHelper = S3UploadHelper()
             val result = s3UploadHelper.uploadWithTransferUtility(
                 context = context,
@@ -110,10 +113,10 @@ class PetInfoViewModel @Inject constructor(
             )
             result.fold(
                 onSuccess = {
-                    _uploadS3Result.emit(result)
+                    updatePetPhoto()
                 },
                 onFailure = { exception ->
-                    _uploadS3Result.emit(Result.failure(exception))
+                    _updatePetPhotoResult.emit(Error(exception.message))
                 }
             )
         }
@@ -122,29 +125,34 @@ class PetInfoViewModel @Inject constructor(
     /**
      * 서버에 펫 프로필 사진 주소 업데이트
      */
-    fun updateMemberPhoto(filePath: String) {
-        val state = viewModelScope.launch {
-            _updatePetPhotoResult.emit(CommonApiState.Loading)
+    fun updatePetPhoto() {
+        viewModelScope.launch {
+            val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
+            val state = when (val result = petInfoRepository.updatePetPhoto(petId, petImageId, petImageFileName!!)) {
+                is ApiResult.Success -> Success(result.data)
+                is ApiResult.HttpError -> Error(result.error.error)
+                is ApiResult.Error -> Error(result.errorMessage)
+            }
+            _updatePetPhotoResult.emit(state)
         }
     }
 
     /**
      * 펫 정보 업데이트
      */
-    fun updatePetInfo(petNeuteredDate: String, weight: Int) {
+    fun updatePetInfo(petNeuteredDate: String?, weight: Int?) {
         viewModelScope.launch {
-            _updatePetPhotoResult.emit(CommonApiState.Loading)
-            val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
+            _updatePetInfoResult.emit(Loading)
             val updateData = PetUpdateEntity(
                 petNeuteredDate,
                 UpdateAppearanceEntity(weight)
             )
             val state = when (val result = petInfoRepository.updatePetInfo(petId, updateData)) {
-                is ApiResult.Success -> CommonApiState.Success(Unit)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.Success -> Success(Unit)
+                is ApiResult.HttpError -> Error(result.error.error)
+                is ApiResult.Error -> Error(result.errorMessage)
             }
-            _updatePetPhotoResult.emit(state)
+            _updatePetInfoResult.emit(state)
         }
     }
 }

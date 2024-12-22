@@ -14,4 +14,5 @@ interface MyInfoRepository {
         phone: String
     ): ApiResult<UpdateMemberInfoEntity>
     suspend fun updateMemberPhoto(filePath: String): ApiResult<String>
+    suspend fun doWithdraw(): ApiResult<Unit>
 }

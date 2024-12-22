@@ -1,16 +1,11 @@
 package com.android.data.repository
 
 import com.android.data.api.MemberAPI
-import com.android.data.dto.request.UpdateMemberInfoRequest
-import com.android.data.dto.response.ErrorResponse
-import com.android.data.dto.response.toDomain
 import com.android.data.source.remote.MyInfoRemoteDataSource
 import com.android.domain.entity.MemberInfoEntity
 import com.android.domain.entity.UpdateMemberInfoEntity
 import com.android.domain.repository.MyInfoRepository
 import com.android.domain.util.ApiResult
-import com.google.gson.Gson
-import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,6 +51,14 @@ class MyInfoRepositoryImpl @Inject constructor(
 
     override suspend fun updateMemberPhoto(filePath: String): ApiResult<String> {
         return when (val result = myInfoRemoteDataSource.updateMemberPhoto(filePath)) {
+            is ApiResult.Success -> result
+            is ApiResult.HttpError -> result
+            is ApiResult.Error -> result
+        }
+    }
+
+    override suspend fun doWithdraw(): ApiResult<Unit> {
+        return when (val result = myInfoRemoteDataSource.doWithdraw()) {
             is ApiResult.Success -> result
             is ApiResult.HttpError -> result
             is ApiResult.Error -> result

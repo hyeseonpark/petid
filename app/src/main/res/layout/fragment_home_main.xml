@@ -507,12 +507,12 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/img_pet_photo_sample" />
+                            app:srcCompat="@color/d9" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginStart="20dp"
                             android:layout_marginTop="20dp"
                             android:lineHeight="23.2dp"
                             android:shadowColor="#40000000"
@@ -521,7 +521,7 @@
                             android:text="@string/info_create_petid_desc"
                             android:textColor="@color/white"
                             android:textFontWeight="700"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -538,7 +538,7 @@
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textFontWeight="700"
-                            android:textSize="24dp"
+                            android:textSize="24sp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -588,8 +588,8 @@
                                 android:textFontWeight="500"
                                 android:text="@string/do_register_petid"
                                 android:textAlignment="center"
-                                android:layout_marginLeft="4dp"
-                                android:layout_marginRight="8dp"/>
+                                android:layout_marginStart="4dp"
+                                android:layout_marginEnd="8dp"/>
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="wrap_content"

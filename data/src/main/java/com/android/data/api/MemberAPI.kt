@@ -64,4 +64,16 @@ interface MemberAPI {
     suspend fun getProfileImageUrl(
         @Query("filePath") imagePath: String
     ): String
+
+    /**
+     * 1-1.8 회원 탈퇴 요청 API
+     */
+    @POST("/v1/member/withdraw")
+    suspend fun doWithdraw()
+
+    /**
+     * 1-1.9 회원 복구 요청 API
+     */
+    @POST("/v1/member/restore")
+    suspend fun doRestore()
 }

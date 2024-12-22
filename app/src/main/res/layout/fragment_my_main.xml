@@ -248,32 +248,29 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_withdraw"
-        android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="33dp"
-        android:background="@color/white">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginStart="19dp"
+        android:padding="5dp"
+        android:text="@string/logout_title"
+        android:textSize="14sp"
+        android:textFontWeight="500"
+        android:textColor="@color/petid_subtitle"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:text="@string/withdraw_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textFontWeight="500"
-            android:textColor="@color/petid_title"
-            android:layout_weight="1"/>
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_right_arrow_2"/>
-
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textView_withdraw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:text="@string/withdraw_title"
+        android:textSize="14sp"
+        android:textFontWeight="500"
+        android:textColor="@color/petid_subtitle"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView_app_version"

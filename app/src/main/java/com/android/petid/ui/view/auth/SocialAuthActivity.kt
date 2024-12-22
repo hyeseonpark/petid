@@ -3,25 +3,34 @@ package com.android.petid.ui.view.auth
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.lifecycleScope
 import com.android.petid.BuildConfig
 import com.android.petid.R
 import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.ActivitySocialAuthBinding
 import com.android.petid.enum.PlatformType
+import com.android.petid.ui.component.CustomDialogCommon
+import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.state.LoginResult
 import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.ui.view.main.MainActivity
 import com.android.petid.util.TAG
+import com.android.petid.util.showErrorMessage
 import com.android.petid.viewmodel.auth.SocialAuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.messaging.FirebaseMessaging
@@ -40,11 +49,8 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SocialAuthActivity : BaseActivity() {
-    // saa: single activity
     private lateinit var binding: ActivitySocialAuthBinding
     private val viewModel: SocialAuthViewModel by viewModels()
-
-//    private lateinit var splashScreen: SplashScreen
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
@@ -62,14 +68,15 @@ class SocialAuthActivity : BaseActivity() {
                 loginWithSocialToken(account.id.toString())
             } catch (e: ApiException) {
                 // Google 로그인 실패
+                showErrorMessage("KaKaoLoginError: ${e.message}")
             }
 
         }
 
-    // kakao Login
-    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+    /* kakao Login callback*/
+    val kakaoLoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
-            Log.e(TAG, "카카오계정으로 로그인 실패", error)
+            showErrorMessage("KaKaoLoginError: ${error.message}")
         } else if (token != null) {
             requestKakaoUserInfo()
             socialAccessToken = token.accessToken
@@ -81,45 +88,70 @@ class SocialAuthActivity : BaseActivity() {
         }
     }
 
-    /**
-     *
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySocialAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         initGoogle()
         initFcm()
-        setupObservers()
+        observesLoginResultState()
+        observesDoRestoreResultState()
         initLoginComponent()
-
-
-        /*checkProcessing()
-        // setContentView하기 전에 installSplashScreen() 필수
-        splashScreen = installSplashScreen()
-        startSplash()
-
-        val intentIntro = Intent(this, IntroActivity::class.java)
-        startActivity(intentIntro)*/
-
     }
 
     /*
      * initializing login component
      */
     private fun initLoginComponent() {
-        binding.buttonKakaoAuth.setOnClickListener {
-            viewModel.platform = PlatformType.kakao
-            handleKakaoLogin()
-        }
-        binding.buttonNaverAuth.setOnClickListener {
-            viewModel.platform = PlatformType.naver
-            handleNaverLogin()
-        }
-        binding.buttonGoogleAuth.setOnClickListener {
-            viewModel.platform = PlatformType.google
-            handleGoogleLogin()
+        with(binding) {
+            buttonKakaoAuth.setOnClickListener {
+                viewModel.platform = PlatformType.kakao
+                handleKakaoLogin()
+            }
+            buttonNaverAuth.setOnClickListener {
+                viewModel.platform = PlatformType.naver
+                handleNaverLogin()
+            }
+            buttonGoogleAuth.setOnClickListener {
+                viewModel.platform = PlatformType.google
+
+                // TODO 구글로그인 형식 변경
+                lifecycleScope.launch {
+                    val credentialManager = CredentialManager.create(getGlobalContext())
+
+                    val googleIdOption = GetGoogleIdOption.Builder()
+                        .setFilterByAuthorizedAccounts(false)
+                        .setServerClientId(resources.getString(R.string.default_web_client_id))
+                        .build()
+                    val credentialRequest = GetCredentialRequest.Builder()
+                        .addCredentialOption(googleIdOption)
+                        .build()
+                    try {
+                        val googleSignInRequest = credentialManager.getCredential(
+                            request = credentialRequest,
+                            context = this@SocialAuthActivity
+                        )
+                        val credential = googleSignInRequest.credential
+                        if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                            Log.d(TAG, "구글 로그인 성공")
+                            val googleIdTokenCredential =
+                                GoogleIdTokenCredential.createFrom(credential.data)
+                            socialAccessToken = googleIdTokenCredential.idToken
+                            firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
+                        }
+                    } catch (ex: GetCredentialCancellationException) {
+                        Log.e(TAG, "Error getting credentials", ex)
+
+                        showErrorMessage("GoogleLoginError: ${ex.message}")
+                    }
+                }
+                //handleGoogleLogin()
+            }
         }
     }
 
@@ -132,17 +164,18 @@ class SocialAuthActivity : BaseActivity() {
                 if (error != null) {
                     // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        showErrorMessage("KaKaoLoginError: ${error.message}")
                         return@loginWithKakaoTalk
                     }
                     // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
-                    UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
+                    UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = kakaoLoginCallback)
                 }/*else if (token != null) {
                     loginWithSocialToken(token.accessToken)
                 }*/
 
             }
         } else {
-            UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = callback)
+            UserApiClient.instance.loginWithKakaoAccount(applicationContext, callback = kakaoLoginCallback)
         }
     }
 
@@ -150,7 +183,7 @@ class SocialAuthActivity : BaseActivity() {
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 // 사용자 정보 요청 실패 처리
-                Log.e(TAG, "사용자 정보 요청 실패: ${error.message}")
+                showErrorMessage("KaKaoLoginError: ${error.message}")
             } else if (user != null) {
                 val userId = user.id
                 loginWithSocialToken(userId.toString())
@@ -171,23 +204,22 @@ class SocialAuthActivity : BaseActivity() {
     }
 
 
-    val oauthNaverLoginCallback = object : OAuthLoginCallback {
+    private val oauthNaverLoginCallback = object : OAuthLoginCallback {
         override fun onSuccess() {
             socialAccessToken = NaverIdLoginSDK.getAccessToken()
 
             NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
                 override fun onError(errorCode: Int, message: String) {
-                    Log.d(TAG, "NaverLoginError: $message")
+                    showErrorMessage("NaverLoginError: $message")
                 }
 
                 override fun onFailure(httpStatus: Int, message: String) {
-                    Log.d(TAG, "$httpStatus\n" + message)
+                    showErrorMessage("NaverLoginError: $httpStatus\n$message")
                 }
 
                 override fun onSuccess(result: NidProfileResponse) {
                     val id = result.profile?.id.toString()
                     loginWithSocialToken(id)
-
                 }
             })
         }
@@ -195,11 +227,13 @@ class SocialAuthActivity : BaseActivity() {
         override fun onFailure(httpStatus: Int, message: String) {
             val errorCode = NaverIdLoginSDK.getLastErrorCode().code
             val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
-            Log.e("test", "$errorCode $errorDescription")
+
+            showErrorMessage("$message\n$errorCode $errorDescription")
         }
 
         override fun onError(errorCode: Int, message: String) {
             onFailure(errorCode, message)
+            showErrorMessage(message)
         }
     }
 
@@ -260,17 +294,18 @@ class SocialAuthActivity : BaseActivity() {
      * init Google Login
      */
     private fun firebaseAuthWithGoogle(idToken: String) {
-        Log.d("LOGIN--3", idToken)
+        Log.d(TAG, idToken)
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // 로그인 성공
                     val user = firebaseAuth.currentUser
+                    loginWithSocialToken(user?.uid.toString())
 //                    Toast.makeText(this, "환영합니다, ${user?.displayName}!", Toast.LENGTH_SHORT).show()
                     // 여기서 로그인 후 화면 전환 등의 작업을 수행할 수 있습니다.
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+                    //startActivity(Intent(this, MainActivity::class.java))
+                    //finish()
                 } else {
                     // 로그인 실패
 //                    Toast.makeText(this, "Firebase 인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
@@ -289,7 +324,7 @@ class SocialAuthActivity : BaseActivity() {
     /**
      * login 결과 값에 따른
      */
-    private fun setupObservers() {
+    private fun observesLoginResultState() {
         lifecycleScope.launch {
             viewModel.loginResult.collectLatest { result ->
                 if (result !is LoginResult.Loading)
@@ -300,16 +335,33 @@ class SocialAuthActivity : BaseActivity() {
                         goMainActivity()
                         Log.d(TAG, "Login successful: ${result.data}")
                     }
-                    is LoginResult.NeedToSignUp -> {
-                        goTermsActivity()
-                        // 회원가입 화면으로 이동
-                        Log.d(TAG, "goTermsActivity...")
-                    }
-                    is LoginResult.Error -> {
-                        // 오류 처리
-                        Log.e(TAG, "Login error: ${result.message}")
-                    }
+                    is LoginResult.NeedToSignUp -> goTermsActivity()
+                    is LoginResult.TryToRestore -> showRestoreDialog()
+                    is LoginResult.Error -> showErrorMessage(result.message.toString())
                     is LoginResult.Loading -> showLoading()
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.doRestore()
+     */
+    private fun observesDoRestoreResultState() {
+        lifecycleScope.launch {
+            viewModel.restoreResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
+                when (result) {
+                    is CommonApiState.Success -> {
+                        Toast.makeText(
+                            getGlobalContext(),
+                            getString(R.string.success_restore), Toast.LENGTH_LONG).show()
+                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -331,9 +383,22 @@ class SocialAuthActivity : BaseActivity() {
             }
             startActivity(target)
         } else {
-            // 데이터가 null일 경우의 처리
-            // TODO 오류 팝업
+            showErrorMessage("platform, sub, fcmToken null error")
         }
+    }
+
+    /**
+     * show 계정 복구 dialog
+     */
+    private fun showRestoreDialog() {
+        CustomDialogCommon(
+            boldTitle = getString(R.string.restore_dialog_title),
+            title = getString(R.string.restore_dialog_desc),
+            singleButtonText = getString(R.string.restore_dialog_yes),
+            yesButtonClick = {
+                viewModel.doRestore()
+            }
+        ).show(this.supportFragmentManager, null)
     }
 
     private fun goMainActivity() {
@@ -341,124 +406,5 @@ class SocialAuthActivity : BaseActivity() {
         startActivity(target)
         finish()
     }
-
-    /*
-     * splash의 애니메이션 설정
-     */
-//    private fun startSplash() {
-//        splashScreen.setOnExitAnimationListener { splashScreenView ->
-//            val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 5f, 1f)
-//            val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 5f, 1f)
-//
-//            ObjectAnimator.ofPropertyValuesHolder(splashScreenView.iconView, scaleX, scaleY).run {
-//                interpolator = AnticipateInterpolator()
-//                duration = 1000L
-//                doOnEnd {
-//                    splashScreenView.remove()
-//                }
-//                start()
-//            }
-//        }
-//    }
-
-    /**
-     *
-     * 최초 실행 시 권한 안내 페이지 이동
-     *
-     */
-//    private fun checkProcessing() {
-//        val isFirst: Boolean =
-//            PreferencesControl.getBooleanValue(
-//                applicationContext, Constants.SHARED_VALUE_IS_FIRST, true
-//            )
-//
-//        Log.d(TAG, "[checkProcessing] isFirst: $isFirst")
-//
-//        if (isFirst) {
-//            val intent = Intent(this, PermissionActivity::class.java)
-//            startActivity(intent)
-//        } else {
-//            checkPermission(REQUEST_STORAGE_PERMISSION)
-//        }
-//    }
-
-
-    private fun checkPermission(type: Int) {
-//        Log.d(TAG, "checkPermission type: $type")
-        // goActivity()
-
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Log.d(TAG, "SDK_INT >= R");
-            if (!Environment.isExternalStorageManager()) {
-                try {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri));
-
-                } catch (Exception e) {
-                    startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
-                }
-
-            } else {
-                Log.d(TAG, "저장공간 접근 권한 허용됨!!!!");
-                goActivity();
-            }
-
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Log.d(TAG, "SDK_INT >= M");
-            if (type == REQUEST_STORAGE_PERMISSION) {
-                if ((checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) ||
-                (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED)) {
-                    requestPermissions(new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    }, REQUEST_STORAGE_PERMISSION);
-                    Log.d(TAG, "REQUEST_STORAGE_PERMISSION...");
-                } else {
-                    Log.d(TAG, "저장공간 접근 권한 허용됨!!!!");
-                    goActivity();
-                }
-            }
-        } else {
-            goActivity();
-        }
-
-         */
-    }
-
-
-    /**
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-//    fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String?>?,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions!!, grantResults)
-//
-//        when (requestCode) {
-//            REQUEST_STORAGE_PERMISSION -> {
-//                if ((grantResults.size == 2) &&
-//                    (grantResults[0] == PackageManager.PERMISSION_GRANTED) &&
-//                    (grantResults[1] == PackageManager.PERMISSION_GRANTED)
-//                ) {
-//                    Log.d(TAG, "저장공간 접근 권한 허용됨!!!!")
-////                    goActivity()
-//                } else {
-//                    Log.d(TAG, "저장공간 접근 권한 필요!!!!")
-//
-////                    permissionAlert()
-//                }
-//
-//                return
-//            }
-//        }
-//    }
 
 }

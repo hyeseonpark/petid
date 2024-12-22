@@ -49,11 +49,15 @@ class MyInfoViewModel @Inject constructor(
     private val _updateMemberPhotoResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Init)
     val updateMemberPhotoResult = _updateMemberPhotoResult.asStateFlow()
 
+    /* 회원 탈퇴 */
+    private val _doWithdrawResult = MutableSharedFlow<CommonApiState<Unit>>()
+    val doWithdrawResult = _doWithdrawResult.asSharedFlow()
+
     /**
      * member 정보 가져오기
      */
     fun getMemberInfo() {
-        // TODO 1. moshi, 2.viewModel에서 repository 바로 연결시키기 (useCase 필요없), 3.stateIn()
+        // TODO 1. moshi, 2.stateIn()
         viewModelScope.launch {
             _getMemberInfoResult.emit(CommonApiState.Loading)
             val state = when (val result = myInfoRepository.getMemberInfo()) {
@@ -140,6 +144,21 @@ class MyInfoViewModel @Inject constructor(
                 is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
             _updateMemberInfoResult.emit(state)
+        }
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    fun doWithdraw() {
+        viewModelScope.launch{
+            _doWithdrawResult.emit(CommonApiState.Loading)
+            val state = when(val result = myInfoRepository.doWithdraw()) {
+                is ApiResult.Success -> CommonApiState.Success(Unit)
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+            }
+            _doWithdrawResult.emit(state)
         }
     }
 }

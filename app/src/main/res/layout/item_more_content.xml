@@ -17,7 +17,7 @@
         android:layout_marginVertical="12dp"
         android:layout_marginLeft="13dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_pet_photo_sample"
+        android:src="@color/white"
         app:shapeAppearanceOverlay="@style/Radius6ImageView" />
 
     <androidx.appcompat.widget.AppCompatTextView

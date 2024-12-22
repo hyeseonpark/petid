@@ -9,26 +9,36 @@ import com.android.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.android.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
 import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.enum.PlatformType
+import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.state.CommonApiState.*
 import com.android.petid.ui.state.LoginResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SocialAuthViewModel @Inject constructor(
     private val socialAuthRepository : SocialAuthRepository,
-    private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
-
-    private val _loginResult = MutableSharedFlow<LoginResult>()
-    val loginResult: SharedFlow<LoginResult> = _loginResult
 
     var platform: PlatformType? = null
     var subValue: String? = null
     var fcmToken: String? = null
 
+    /* login result state*/
+    private val _loginResult = MutableSharedFlow<LoginResult>()
+    val loginResult = _loginResult.asSharedFlow()
+
+    /* restore result state*/
+    private val _restoreResult = MutableSharedFlow<CommonApiState<Unit>>()
+    val restoreResult = _restoreResult.asSharedFlow()
+
+    /**
+     * 로그인
+     */
     fun login() {
         val sub = subValue ?: return  // subValue가 없으면 로그인 시도 안함
         val fcmToken = fcmToken ?: return  // FCM 토큰이 없으면 로그인 시도 안함
@@ -46,10 +56,10 @@ class SocialAuthViewModel @Inject constructor(
                     LoginResult.Success(result)  // 성공 시 데이터 전송
                 }
                 is ApiResult.HttpError -> {
-                    if (result.error.status == 400 && result.error.error.contains("Member UID")) {
-                        LoginResult.NeedToSignUp // 회원가입 필요 시 전송
-                    } else {
-                       LoginResult.Error(result.error.error)  // 오류 시 메시지 전송
+                    when(result.error.status) {
+                        400 -> LoginResult.NeedToSignUp // 회원가입 필요 시 전송
+                        401 -> LoginResult.TryToRestore // 재가입 시도
+                        else -> LoginResult.Error(result.error.error)
                     }
                 }
                 is ApiResult.Error -> {
@@ -57,6 +67,21 @@ class SocialAuthViewModel @Inject constructor(
                 }
             }
             _loginResult.emit(state)
+        }
+    }
+
+    /**
+     * 계정 복구
+     */
+    fun doRestore() {
+        viewModelScope.launch {
+            _restoreResult.emit(Loading)
+            val state = when (val result = socialAuthRepository.doRestore()) {
+                is ApiResult.Success -> Success(Unit)
+                is ApiResult.HttpError -> Error(result.error.error)
+                is ApiResult.Error -> Error(result.errorMessage)
+            }
+            _restoreResult.emit(state)
         }
     }
 }
