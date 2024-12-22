@@ -5,4 +5,5 @@ import com.android.domain.util.ApiResult
 
 interface SocialAuthRemoteDataSource {
         suspend fun getLogin(sub: String, fcmToken: String): ApiResult<AuthEntity>
+        suspend fun doRestore(): ApiResult<Unit>
 }

@@ -33,8 +33,8 @@ class GlobalApplication : MultiDexApplication() {
 
     companion object {
         private lateinit var appInstance: GlobalApplication
-        private lateinit var preferencesControl : PreferencesControl
         fun getGlobalContext() = appInstance
+        private lateinit var preferencesControl : PreferencesControl
         fun getPreferencesControl() = preferencesControl
     }
 

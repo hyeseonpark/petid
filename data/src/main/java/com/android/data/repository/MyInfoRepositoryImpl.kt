@@ -1,16 +1,11 @@
 package com.android.data.repository
 
 import com.android.data.api.MemberAPI
-import com.android.data.dto.request.UpdateMemberInfoRequest
-import com.android.data.dto.response.ErrorResponse
-import com.android.data.dto.response.toDomain
 import com.android.data.source.remote.MyInfoRemoteDataSource
 import com.android.domain.entity.MemberInfoEntity
 import com.android.domain.entity.UpdateMemberInfoEntity
 import com.android.domain.repository.MyInfoRepository
 import com.android.domain.util.ApiResult
-import com.google.gson.Gson
-import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 

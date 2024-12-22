@@ -106,6 +106,10 @@
     <string name="social_auth_google">Google로 계속하기</string>
     <string name="social_auth_apple">Apple로 계속하기</string>
     <string name="problem_social_auth">로그인에 문제가 있나요?</string>
+    <string name="restore_dialog_title">다시돌아오셨군요!\n계정을 복구할 준비가 되었습니다</string>
+    <string name="restore_dialog_desc">30일 이내 재가입 하여 계정 복구가 가능합니다</string>
+    <string name="restore_dialog_yes">복구하기</string>
+    <string name="success_restore">계정이 복구되었습니다.\n다시 로그인해주세요.</string>
 
     <!-- home fragment -->
     <string name="home_no_petid">펫 아이디를 만들어보세요.</string>
@@ -227,7 +231,8 @@
     <string name="personal_service_info_title">개인정보 처리방침</string>
     <string name="notice_title">공지사항</string>
     <string name="qna_title">자주하는 질문</string>
-    <string name="withdraw_title">탈퇴하기</string>
+    <string name="withdraw_title"><u>탈퇴하기</u></string>
+    <string name="logout_title"><u>로그아웃</u></string>
 
     <string name="app_version">앱 버전 </string>
 
@@ -249,12 +254,6 @@
     <string name="pet_info_dialog_chip_na_button">예약하러 가기</string>
     <string name="search_hospital">병원 알아보기</string>
 
-    <!-- deleted -->
-    <string name="pet_info_dialog_chip_na_title">반려 동물 등록은 왜 해야할까?</string>
-    <string name="pet_info_dialog_chip_na_desc1_1">혹시 알고 계셨나요?</string>
-    <string name="pet_info_dialog_chip_na_desc1_2">한국에는 매년 11만 마리 이상의\n반려동물이 길을 잃거나 버려지고 있어요.</string>
-    <string name="pet_info_dialog_chip_na_desc2_1">내 반려동물을 안전하게 지키는 가장\n쉬운 방법은 바로 반려동물 등록이에요.</string>
-
     <!-- reservation history activity -->
     <string name="no_history">예약 내역이 없습니다</string>
     <string name="write_review">리뷰 쓰기</string>
@@ -262,6 +261,10 @@
     <string name="re_reservation">다시 예약</string>
     <string name="cancel_reservation_dialog">예약을 취소 하시겠습니까?</string>
 
+    <!-- withdraw -->
+    <string name="withdraw_dialog_title">정말 탈퇴하시겠습니까?</string>
+    <string name="withdraw_dialog_desc">30일 이내 재가입 시 회원님의 계정이 복구됩니다</string>
+    <string name="success_withdraw">계정이 삭제되었습니다.</string>
 
     <!-- blog main fragment -->
     <string name="main_blog_title">펫blog</string>
@@ -277,4 +280,10 @@
     <string name="content_like_desc">%d명이 좋아했어요</string>
     <string name="content_detail_more_content_desc">알아두면 행복해지는 반려생활!\n이런 글은 어떤가요?</string>
 
+
+    <!-- deleted -->
+    <string name="pet_info_dialog_chip_na_title">반려 동물 등록은 왜 해야할까?</string>
+    <string name="pet_info_dialog_chip_na_desc1_1">혹시 알고 계셨나요?</string>
+    <string name="pet_info_dialog_chip_na_desc1_2">한국에는 매년 11만 마리 이상의\n반려동물이 길을 잃거나 버려지고 있어요.</string>
+    <string name="pet_info_dialog_chip_na_desc2_1">내 반려동물을 안전하게 지키는 가장\n쉬운 방법은 바로 반려동물 등록이에요.</string>
 </resources>
