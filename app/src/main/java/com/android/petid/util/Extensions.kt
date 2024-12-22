@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.android.petid.BuildConfig
 
 /**
  * get tag
@@ -92,7 +93,8 @@ fun View.hideLoadingDialog() {
  */
 fun Context.showErrorMessage(text: String) {
     Log.e(this.TAG, text)
-    Toast.makeText(this, "Error Message: $text", Toast.LENGTH_LONG).show()
+    if (BuildConfig.DEBUG)
+        Toast.makeText(this, "Error Message: $text", Toast.LENGTH_LONG).show()
 }
 
 /**
@@ -100,5 +102,6 @@ fun Context.showErrorMessage(text: String) {
  */
 fun Fragment.showErrorMessage(text: String) {
     Log.e(this.TAG, text)
-    Toast.makeText(requireContext(), "Error Message: $text", Toast.LENGTH_LONG).show()
+    if (BuildConfig.DEBUG)
+        Toast.makeText(requireContext(), "Error Message: $text", Toast.LENGTH_LONG).show()
 }

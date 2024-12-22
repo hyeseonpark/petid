@@ -75,6 +75,7 @@ android {
         create("devlop") {
             dimension = "version"
             versionNameSuffix = "-dev"
+            resValue("string", "app_name", "펫아이디 Dev")
         }
         create("operation") {
             dimension = "version"
@@ -133,7 +134,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0") // 위치
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-auth:23.1.0")
-    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.3.5")
+    implementation("com.google.firebase:firebase-analytics-ktx:22.1.2")
 
     // Firebase dependencies without version
     implementation("com.google.firebase:firebase-analytics")
