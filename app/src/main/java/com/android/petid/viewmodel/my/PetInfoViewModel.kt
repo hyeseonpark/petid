@@ -15,6 +15,7 @@ import com.android.petid.common.Constants.SHARED_MEMBER_ID_VALUE
 import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.state.CommonApiState.*
+import com.android.petid.ui.state.CommonApiState.Error
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -51,16 +52,12 @@ class PetInfoViewModel @Inject constructor(
     )
     val getPetImageUrlResult = _getPetImageUrlResult.asStateFlow()
 
-    /* S3 사진 upload result */
-    private val _uploadS3Result = MutableSharedFlow<Result<Boolean>>()
-    val uploadS3Result = _uploadS3Result.asSharedFlow()
-
     /* 서버 사진 update result */
     private val _updatePetPhotoResult = MutableStateFlow<CommonApiState<Unit>>(Init)
     val updatePetPhotoResult = _updatePetPhotoResult.asStateFlow()
 
     /* Pet info update result */
-    private val _updatePetInfoResult = MutableSharedFlow<CommonApiState<Boolean>>()
+    private val _updatePetInfoResult = MutableSharedFlow<CommonApiState<Unit>>()
     val updatePetInfoResult = _updatePetInfoResult.asSharedFlow()
 
     /**
@@ -106,6 +103,7 @@ class PetInfoViewModel @Inject constructor(
      */
     fun uploadFile(context: Context, file: File, fileName: String) {
         viewModelScope.launch {
+            _updatePetPhotoResult.emit(Loading)
             val s3UploadHelper = S3UploadHelper()
             val result = s3UploadHelper.uploadWithTransferUtility(
                 context = context,
@@ -115,10 +113,10 @@ class PetInfoViewModel @Inject constructor(
             )
             result.fold(
                 onSuccess = {
-                    _uploadS3Result.emit(result)
+                    updatePetPhoto()
                 },
                 onFailure = { exception ->
-                    _uploadS3Result.emit(Result.failure(exception))
+                    _updatePetPhotoResult.emit(Error(exception.message))
                 }
             )
         }
@@ -127,11 +125,10 @@ class PetInfoViewModel @Inject constructor(
     /**
      * 서버에 펫 프로필 사진 주소 업데이트
      */
-    fun updatePetPhoto(filePath: String) {
+    fun updatePetPhoto() {
         viewModelScope.launch {
-            _updatePetPhotoResult.emit(Loading)
             val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
-            val state = when (val result = petInfoRepository.updatePetPhoto(petId, petImageId, filePath)) {
+            val state = when (val result = petInfoRepository.updatePetPhoto(petId, petImageId, petImageFileName!!)) {
                 is ApiResult.Success -> Success(result.data)
                 is ApiResult.HttpError -> Error(result.error.error)
                 is ApiResult.Error -> Error(result.errorMessage)
@@ -143,9 +140,9 @@ class PetInfoViewModel @Inject constructor(
     /**
      * 펫 정보 업데이트
      */
-    fun updatePetInfo(petNeuteredDate: String, weight: Int) {
+    fun updatePetInfo(petNeuteredDate: String?, weight: Int?) {
         viewModelScope.launch {
-            _updatePetPhotoResult.emit(Loading)
+            _updatePetInfoResult.emit(Loading)
             val updateData = PetUpdateEntity(
                 petNeuteredDate,
                 UpdateAppearanceEntity(weight)
@@ -155,7 +152,7 @@ class PetInfoViewModel @Inject constructor(
                 is ApiResult.HttpError -> Error(result.error.error)
                 is ApiResult.Error -> Error(result.errorMessage)
             }
-            _updatePetPhotoResult.emit(state)
+            _updatePetInfoResult.emit(state)
         }
     }
 }
