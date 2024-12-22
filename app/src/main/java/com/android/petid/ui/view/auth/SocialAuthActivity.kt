@@ -200,7 +200,7 @@ class SocialAuthActivity : BaseActivity() {
             BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.social_login_info_naver_client_name))
 
-        NaverIdLoginSDK.reagreeAuthenticate(this, oauthNaverLoginCallback)
+        NaverIdLoginSDK.authenticate(this, oauthNaverLoginCallback)
     }
 
 
@@ -214,8 +214,7 @@ class SocialAuthActivity : BaseActivity() {
                 }
 
                 override fun onFailure(httpStatus: Int, message: String) {
-                    Log.d(TAG, "$httpStatus\n" + message)
-                    showErrorMessage("NaverLoginError: $message")
+                    showErrorMessage("NaverLoginError: $httpStatus\n$message")
                 }
 
                 override fun onSuccess(result: NidProfileResponse) {
