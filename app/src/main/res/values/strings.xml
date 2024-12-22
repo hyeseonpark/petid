@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">petId</string>
+    <string name="app_name">펫아이디</string>
 
     <!-- FCM -->
     <string name="notification_channel_id">PetIdChannelId</string>
