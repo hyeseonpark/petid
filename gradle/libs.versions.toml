@@ -4,8 +4,12 @@ awsAndroidSdkMobileClient = "2.13.5"
 coreKtx = "1.15.0"
 corbind = "1.11.0"
 easyflipview = "3.0.3"
+firebaseAnalyticsKtx = "22.1.2"
+firebaseBom = "33.7.0"
+firebaseCrashlyticsKtx = "19.3.0"
 fragmentKtx = "1.8.5"
 glide = "4.16.0"
+googleServices = "4.4.2"
 hiltAndroidGradlePlugin = "2.52"
 hiltNavigationCompose = "1.2.0"
 kotlin = "2.0.21"
@@ -23,6 +27,7 @@ jetbrainsKotlinJvm = "2.0.21"
 materialCalendarview = "2.0.1"
 navVersion = "2.8.5"
 oauthJdk8 = "5.10.0"
+playServicesLocation = "21.3.0"
 preferenceKtx = "1.2.1"
 tasksVision = "latest.release"
 threetenabp = "1.2.0"
@@ -34,6 +39,7 @@ kakaoUser = "2.20.6"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navVersion" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
 corbind = { module = "ru.ldralighieri.corbind:corbind", version.ref = "corbind" }
 corbind-material = { module = "ru.ldralighieri.corbind:corbind-material", version.ref = "corbind" }
@@ -47,8 +53,12 @@ aws-android-sdk-cognito = { module = "com.amazonaws:aws-android-sdk-cognito", ve
 aws-android-sdk-mobile-client = { module = "com.amazonaws:aws-android-sdk-mobile-client", version.ref = "awsAndroidSdkMobileClient" }
 aws-android-sdk-s3 = { module = "com.amazonaws:aws-android-sdk-s3", version.ref = "awsAndroidSdkMobileClient" }
 easyflipview = { module = "com.wajahatkarim:EasyFlipView", version.ref = "easyflipview" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
+google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidGradlePlugin" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidGradlePlugin" }
 hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
@@ -66,6 +76,7 @@ androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-c
 androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
 material-calendarview = { module = "com.github.prolificinteractive:material-calendarview", version.ref = "materialCalendarview" }
 oauth-jdk8 = { module = "com.navercorp.nid:oauth-jdk8", version.ref = "oauthJdk8" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "tasksVision" }
 threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
 v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "kakaoUser" }
