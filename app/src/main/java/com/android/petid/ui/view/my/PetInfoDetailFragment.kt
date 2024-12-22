@@ -61,6 +61,7 @@ class PetInfoDetailFragment
         viewModel.getPetDetails()
         observeGetPetInfoState()
         observeGetPetImageState()
+        observeUpdatePetPhotoState()
     }
 
     private fun initComponent() {
@@ -196,6 +197,25 @@ class PetInfoDetailFragment
                                 .into(binding.imageViewProfile)
                         }
                     }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
+                    is CommonApiState.Init -> {}
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.getPetImageUrl 결과값 view 반영
+     */
+    private fun observeUpdatePetPhotoState() {
+        lifecycleScope.launch {
+            viewModel.updatePetPhotoResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
+                when (result) {
+                    is CommonApiState.Success -> viewModel.getPetDetails()
                     is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}

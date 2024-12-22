@@ -6,6 +6,7 @@ import com.android.domain.entity.PetUpdateEntity
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -44,7 +45,7 @@ interface PetAPI {
     @DELETE("/v1/pet/{petId}")
     suspend fun deletePet(
         @Path("petId") petId: Long
-    )//: Response<Void>
+    )
 
     /**
      * 2.5 애완동물 외형 정보 수정 API
@@ -65,7 +66,17 @@ interface PetAPI {
     )//: Response<PetImageResponse>
 
     /**
-     * 2.7 애완동물 이미지 등록 (S3) API
+     * 2.7 애완동물 이미지 업데이트
+     */
+    @PATCH("/v1/pet/{petId}/images/{petImageId}")
+    suspend fun updatePetPhoto(
+        @Path("petId") petId: Long,
+        @Path("petImageId") petImageId: Long,
+        @Query("filePath") filePath: String
+    )
+
+    /**
+     * 2.8 애완동물 이미지 등록 (S3) API
      */
     @POST("/v1/pet/{petId}/images/presigned-url")
     suspend fun getPresignedUrlForImageUpload(
@@ -74,7 +85,7 @@ interface PetAPI {
     )//: Response<String>
 
     /**
-     * 2.8 애완동물 이미지 조회 (S3) API
+     * 2.9 애완동물 이미지 조회 (S3) API
      */
     @GET("/v1/pet/3/images/presigned-url")
     suspend fun getPetImageUrl(
@@ -82,7 +93,7 @@ interface PetAPI {
     ): String
 
     /**
-     * 2.9 애완동물 목록 조회 API
+     * 2.11 애완동물 목록 조회 API
      */
     @GET("/v1/pet")
     suspend fun getPetList()//: Response<List<PetSummaryResponse>>
