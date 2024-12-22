@@ -81,4 +81,24 @@ class PetInfoDataSourceImpl @Inject constructor(
             ApiResult.Error(e.message)
         }
     }
+
+    override suspend fun updatePetPhoto(
+        petId: Long,
+        petImageId: Long,
+        filePath: String
+    ): ApiResult<Unit> {
+        return try {
+            val response = petAPI.updatePetPhoto(petId, petImageId, filePath)
+            ApiResult.Success(response)
+        } catch (e: HttpException) {
+            val gson = Gson()
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+
+            ApiResult.HttpError(errorResponse.toDomain())
+
+        } catch (e: Exception) {
+            ApiResult.Error(e.message)
+        }
+    }
 }
