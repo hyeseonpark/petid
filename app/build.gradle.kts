@@ -138,13 +138,10 @@ dependencies {
     implementation(libs.play.services.location) // 위치
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-auth:23.1.0")
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics.ktx) // 비정상 종료 추적
     implementation(libs.firebase.analytics.ktx)
-
-    // Firebase dependencies without version
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-messaging-ktx") // FCM-push
+    implementation(libs.firebase.messaging.ktx) // FCM-push
 
     // Logger
     implementation(libs.logger)
