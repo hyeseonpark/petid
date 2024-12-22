@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,16 +16,22 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.android.petid.R
 import com.android.petid.common.Constants
 import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.android.petid.common.GlobalApplication.Companion.getPreferencesControl
 import com.android.petid.databinding.FragmentMyMainBinding
 import com.android.petid.ui.component.CustomDialogCommon
 import com.android.petid.ui.state.CommonApiState
+import com.android.petid.ui.view.auth.SocialAuthActivity
 import com.android.petid.ui.view.common.BaseFragment
 import com.android.petid.util.PreferencesControl
 import com.android.petid.util.showErrorMessage
+import com.android.petid.util.throttleFirst
 import com.android.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 /**
  * 마이페이지 메인
@@ -40,11 +47,17 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMyMainBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initComponent()
         viewModel.getMemberInfo()
         observeGetMemberInfoState()
         observeGetMemberImageState()
-        return binding.root
+        observeDoWithdrawState()
     }
 
     private fun initComponent() {
@@ -56,8 +69,8 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 when(petIdValue) {
                     -1 -> petidNullDialog.show(childFragmentManager, null)
                     else -> {
-                        val intent = Intent(activity, MyInfoActivity::class.java)
-                        startActivity(intent)
+                        val target = Intent(activity, MyInfoActivity::class.java)
+                        startActivity(target)
                     }
                 }
             }
@@ -67,16 +80,16 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 when(petIdValue) {
                     -1 -> petidNullDialog.show(childFragmentManager, null)
                     else -> {
-                        val intent = Intent(activity, PetInfoActivity::class.java)
-                        startActivity(intent)
+                        val target = Intent(activity, PetInfoActivity::class.java)
+                        startActivity(target)
                     }
                 }
             }
 
             // 예약 내역
             layoutReservationHistory.setOnClickListener {
-                val intent = Intent(activity, ReservationHistoryInfoActivity::class.java)
-                startActivity(intent)
+                val target = Intent(activity, ReservationHistoryInfoActivity::class.java)
+                startActivity(target)
             }
 
             // 약관 및 개인정보 처리 동의
@@ -100,9 +113,22 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
             }
 
             // 탈퇴하기
-            layoutWithdraw.setOnClickListener {
-                //
-            }
+            textViewWithdraw
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    showWithdrawDialog()
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            // 로그아웃
+            textViewLogout
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    doLogout()
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 앱 버전
             val packageInfo: PackageInfo =
@@ -116,10 +142,38 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                         getGlobalContext().packageName, PackageManager.GET_SIGNATURES)
                 }
 
-            textViewAppVersion.text = getString(R.string.app_version) + packageInfo.versionName
+            textViewAppVersion.text = "${getString(R.string.app_version)}${packageInfo.versionName}"
         }
     }
 
+    /**
+     * 회원 탈퇴 dialog
+     */
+    private fun showWithdrawDialog() {
+        val withdrawDialog = CustomDialogCommon(
+            boldTitle = getString(R.string.withdraw_dialog_title),
+            title = getString(R.string.withdraw_dialog_desc),
+            yesButtonClick = {
+                viewModel.doWithdraw()
+            })
+
+        withdrawDialog.show(this.childFragmentManager, "CustomDialogCommon")
+    }
+
+    /**
+     * 로그아웃
+     */
+    private fun doLogout() {
+        getPreferencesControl().apply {
+            clear()
+            saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
+        }
+        val target = Intent(activity, SocialAuthActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        startActivity(target)
+        activity?.finish()
+    }
 
     /**
      * viewModel.getMemberInfoResult 결과값 view 반영
@@ -147,6 +201,10 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
             }
         }
     }
+
+    /**
+     * viewModel.getMemberImage 결과값 view 반영
+     */
     private fun observeGetMemberImageState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -173,4 +231,31 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
             }
         }
     }
+
+    /**
+     * viewModel.doWithdraw 결과값 view 반영
+     */
+    private fun observeDoWithdrawState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.doWithdrawResult.collectLatest { result ->
+                    if (result !is CommonApiState.Loading)
+                        hideLoading()
+
+                    when (result) {
+                        is CommonApiState.Success -> {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.success_withdraw), Toast.LENGTH_LONG).show()
+                            doLogout()
+                        }
+                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                        is CommonApiState.Loading -> showLoading()
+                        is CommonApiState.Init -> {}
+                    }
+                }
+            }
+        }
+    }
+
 }

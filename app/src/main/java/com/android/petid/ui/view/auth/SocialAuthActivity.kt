@@ -3,6 +3,7 @@ package com.android.petid.ui.view.auth
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.credentials.CredentialManager
@@ -15,6 +16,8 @@ import com.android.petid.R
 import com.android.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.android.petid.databinding.ActivitySocialAuthBinding
 import com.android.petid.enum.PlatformType
+import com.android.petid.ui.component.CustomDialogCommon
+import com.android.petid.ui.state.CommonApiState
 import com.android.petid.ui.state.LoginResult
 import com.android.petid.ui.view.common.BaseActivity
 import com.android.petid.ui.view.main.MainActivity
@@ -96,7 +99,8 @@ class SocialAuthActivity : BaseActivity() {
 
         initGoogle()
         initFcm()
-        setupObservers()
+        observesLoginResultState()
+        observesDoRestoreResultState()
         initLoginComponent()
     }
 
@@ -321,7 +325,7 @@ class SocialAuthActivity : BaseActivity() {
     /**
      * login 결과 값에 따른
      */
-    private fun setupObservers() {
+    private fun observesLoginResultState() {
         lifecycleScope.launch {
             viewModel.loginResult.collectLatest { result ->
                 if (result !is LoginResult.Loading)
@@ -332,13 +336,33 @@ class SocialAuthActivity : BaseActivity() {
                         goMainActivity()
                         Log.d(TAG, "Login successful: ${result.data}")
                     }
-                    is LoginResult.NeedToSignUp -> {
-                        goTermsActivity()
-                        // 회원가입 화면으로 이동
-                        Log.d(TAG, "goTermsActivity...")
-                    }
+                    is LoginResult.NeedToSignUp -> goTermsActivity()
+                    is LoginResult.TryToRestore -> showRestoreDialog()
                     is LoginResult.Error -> showErrorMessage(result.message.toString())
                     is LoginResult.Loading -> showLoading()
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.doRestore()
+     */
+    private fun observesDoRestoreResultState() {
+        lifecycleScope.launch {
+            viewModel.restoreResult.collectLatest { result ->
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
+
+                when (result) {
+                    is CommonApiState.Success -> {
+                        Toast.makeText(
+                            getGlobalContext(),
+                            getString(R.string.success_restore), Toast.LENGTH_LONG).show()
+                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
+                    is CommonApiState.Init -> {}
                 }
             }
         }
@@ -362,6 +386,20 @@ class SocialAuthActivity : BaseActivity() {
         } else {
             showErrorMessage("platform, sub, fcmToken null error")
         }
+    }
+
+    /**
+     * show 계정 복구 dialog
+     */
+    private fun showRestoreDialog() {
+        CustomDialogCommon(
+            boldTitle = getString(R.string.restore_dialog_title),
+            title = getString(R.string.restore_dialog_desc),
+            singleButtonText = getString(R.string.restore_dialog_yes),
+            yesButtonClick = {
+                viewModel.doRestore()
+            }
+        ).show(this.supportFragmentManager, null)
     }
 
     private fun goMainActivity() {

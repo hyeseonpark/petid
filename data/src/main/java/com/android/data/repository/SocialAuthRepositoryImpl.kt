@@ -12,6 +12,7 @@ class SocialAuthRepositoryImpl @Inject constructor(
     private val remoteDataSource: SocialAuthRemoteDataSource,
 //    private val localDataSource: LoginLocalDataSource
 ) : SocialAuthRepository {
+
     override suspend fun doLogin(sub: String, fcmToken: String): ApiResult<AuthEntity> {
         return when (val result = remoteDataSource.getLogin(sub, fcmToken)) {
             is ApiResult.Success -> {
@@ -19,6 +20,14 @@ class SocialAuthRepositoryImpl @Inject constructor(
 //                localDataSource.saveLogin(result.data)
                 result
             }
+            is ApiResult.HttpError -> result
+            is ApiResult.Error -> result
+        }
+    }
+
+    override suspend fun doRestore(): ApiResult<Unit> {
+        return when (val result = remoteDataSource.doRestore()) {
+            is ApiResult.Success -> result
             is ApiResult.HttpError -> result
             is ApiResult.Error -> result
         }
