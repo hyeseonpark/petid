@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.domain"
+    namespace = "com.petid.domain"
     compileSdk = 35
 
     defaultConfig {

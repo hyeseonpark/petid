@@ -35,8 +35,8 @@
 -dontwarn javax.annotation.**
 # TODO 추후 수정
 
--keep class com.android.domain.entity.** {*;}
--keep class com.android.data.dto.** {*;}
+-keep class com.petid.domain.entity.** {*;}
+-keep class com.petid.data.dto.** {*;}
 
 #Firebase
 -keepattributes *Annotation*

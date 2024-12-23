@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/hospitalDetailFragment"
-        android:name="com.android.petid.ui.view.hospital.HospitalDetailFragment"
+        android:name=".ui.view.hospital.HospitalDetailFragment"
         android:label="fragment_hospital_detail"
         tools:layout="@layout/fragment_hospital_detail">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/reservationCalendarFragment"
-        android:name="com.android.petid.ui.view.hospital.ReservationCalendarFragment"
+        android:name=".ui.view.hospital.ReservationCalendarFragment"
         android:label="fragment_reservation_calendar"
         tools:layout="@layout/fragment_reservation_calendar">
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/reservationProcessFinishFragment"
-        android:name="com.android.petid.ui.view.hospital.ReservationProcessFinishFragment"
+        android:name=".ui.view.hospital.ReservationProcessFinishFragment"
         android:label="fragment_reservation_process_finish"
         tools:layout="@layout/fragment_reservation_process_finish" />
 

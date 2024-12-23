@@ -17,7 +17,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.data"
+    namespace = "com.petid.data"
     compileSdk = 35
 
     defaultConfig {

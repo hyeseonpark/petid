@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/petIdStartFragment"
-        android:name="com.android.petid.ui.view.generate.PetIdStartFragment"
+        android:name=".ui.view.generate.PetIdStartFragment"
         android:label="PetIdStartFragment"
         tools:layout="@layout/fragment_pet_id_start">
 
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/userInfoInputFragment"
-        android:name="com.android.petid.ui.view.generate.UserInfoInputFragment"
+        android:name=".ui.view.generate.UserInfoInputFragment"
         android:label="fragment_user_info_input"
         tools:layout="@layout/fragment_user_info_input" >
 
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/addressSearchFragment"
-        android:name="com.android.petid.ui.view.common.AddressSearchFragment"
+        android:name=".ui.view.common.AddressSearchFragment"
         android:label="fragment_address_search"
         tools:layout="@layout/fragment_address_search" >
         <argument
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/petInfoInputFragment"
-        android:name="com.android.petid.ui.view.generate.PetInfoInputFragment"
+        android:name=".ui.view.generate.PetInfoInputFragment"
         android:label="fragment_pet_info_input"
         tools:layout="@layout/fragment_pet_info_input" >
 
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/petPhotoFragment"
-        android:name="com.android.petid.ui.view.generate.PetPhotoFragment"
+        android:name=".ui.view.generate.PetPhotoFragment"
         android:label="fragment_pet_photo"
         tools:layout="@layout/fragment_pet_photo" >
 
@@ -72,7 +72,7 @@
 
     <fragment
         android:id="@+id/scannedInfoFragment"
-        android:name="com.android.petid.ui.view.generate.ScannedInfoFragment"
+        android:name=".ui.view.generate.ScannedInfoFragment"
         android:label="fragment_scanned_info"
         tools:layout="@layout/fragment_scanned_info" >
 
@@ -84,7 +84,7 @@
 
     <fragment
         android:id="@+id/checkingInfoFragment"
-        android:name="com.android.petid.ui.view.generate.CheckingInfoFragment"
+        android:name=".ui.view.generate.CheckingInfoFragment"
         android:label="fragment_checking_info"
         tools:layout="@layout/fragment_checking_info" >
 
@@ -96,7 +96,7 @@
 
     <fragment
         android:id="@+id/signatureFragment"
-        android:name="com.android.petid.ui.view.generate.SignatureFragment"
+        android:name=".ui.view.generate.SignatureFragment"
         android:label="fragment_signature"
         tools:layout="@layout/fragment_signature" >
 
@@ -108,7 +108,7 @@
 
     <fragment
         android:id="@+id/completeCardFragment"
-        android:name="com.android.petid.ui.view.generate.CompleteCardFragment"
+        android:name=".ui.view.generate.CompleteCardFragment"
         android:label="fragment_complete_card"
         tools:layout="@layout/fragment_complete_card" />
 
