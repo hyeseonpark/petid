@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "920376783702",
     "project_id": "pet-id-424110",
-    "storage_bucket": "pet-id-424110.appspot.com"
+    "storage_bucket": "pet-id-424110.firebasestorage.app"
   },
   "client": [
     {
@@ -18,6 +18,50 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.android.petid",
+            "certificate_hash": "5a0e91f60c55952915fa8983452e562b9d837df0"
+          }
+        },
+        {
+          "client_id": "920376783702-lqbm89i7kp8go8jihgop6ocatcotvtm5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQfqWBndEe1WQGE2akTZTNoTiwqq6bT_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920376783702-dtppu2k7976t6ebbbbuvbd06ar2pqvvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "920376783702-jf01pqsmnobqasn0mkrcog69gejtqlu9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pet-id-iOS"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920376783702:android:c83a4c41d01aa41746dcf7",
+        "android_client_info": {
+          "package_name": "com.petid.petid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920376783702-ommj8ds63q9juchknr6epou7ioi7uuvo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.petid.petid",
             "certificate_hash": "5a0e91f60c55952915fa8983452e562b9d837df0"
           }
         },

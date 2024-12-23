@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/myInfoDetailFragment"
-        android:name="com.android.petid.ui.view.my.MyInfoDetailFragment"
+        android:name=".ui.view.my.MyInfoDetailFragment"
         android:label="fragment_my_info_detail"
         tools:layout="@layout/fragment_my_info_detail" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/myInfoUpdateFragment"
-        android:name="com.android.petid.ui.view.my.MyInfoUpdateFragment"
+        android:name=".ui.view.my.MyInfoUpdateFragment"
         android:label="fragment_my_info_update"
         tools:layout="@layout/fragment_my_info_update" >
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/addressSearchFragment"
-        android:name="com.android.petid.ui.view.common.AddressSearchFragment"
+        android:name=".ui.view.common.AddressSearchFragment"
         android:label="fragment_address_search"
         tools:layout="@layout/fragment_address_search" />
 
