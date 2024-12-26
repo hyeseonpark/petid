@@ -28,7 +28,7 @@ import com.petid.petid.util.genderCharToString
 import com.petid.petid.util.calculateAge
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
-import com.petid.petid.viewmodel.home.HomeMainVIewModel
+import com.petid.petid.viewmodel.home.HomeMainViewModel
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,7 +41,7 @@ import ru.ldralighieri.corbind.view.clicks
 @AndroidEntryPoint
 class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainBinding::inflate) {
 
-    private val viewModel: HomeMainVIewModel by activityViewModels()
+    private val viewModel: HomeMainViewModel by activityViewModels()
 
     // banner adapter
     private lateinit var bannerAdapter : HomeBannerAdapter
@@ -159,7 +159,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     /**
      * @param type CHIP_TYPE 에 따른 펫아이디 카드
      */
-    private fun setPetidCardType(type: String?) {
+    fun setPetidCardType(type: String?) {
         with(binding) {
             when(type) {
                 CHIP_TYPE[0], CHIP_TYPE[1] -> {
