@@ -113,6 +113,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    testImplementation("io.mockk:mockk:1.13.14")
+    androidTestImplementation("io.mockk:mockk-android:1.13.14")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
+
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.corbind)
