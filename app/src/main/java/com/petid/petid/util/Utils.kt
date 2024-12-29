@@ -66,20 +66,6 @@ fun setBoldSpan(context: Context, content: String, word: String, color: Int) : S
 }
 
 /**
- *  Bitmap to File
- */
-fun bitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File {
-    // 임시 파일 경로
-    val file = File(context.cacheDir, fileName)
-    // 파일에 Bitmap을 저장
-    val fileOutputStream = FileOutputStream(file)
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
-    fileOutputStream.flush()
-    fileOutputStream.close()
-    return file
-}
-
-/**
  * 달력 표시
  */
 fun showDatePicker(editText: EditText, context: Context) {
