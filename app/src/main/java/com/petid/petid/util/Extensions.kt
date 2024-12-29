@@ -2,6 +2,12 @@ package com.petid.petid.util
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,6 +18,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.petid.petid.BuildConfig
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.io.File
+import java.io.FileOutputStream
 
 /**
  * get tag
@@ -110,4 +118,36 @@ fun Fragment.showErrorMessage(text: String) {
     Log.e(this.TAG, text)
     if (BuildConfig.IS_DEVELOP)
         Toast.makeText(requireContext(), "Error Message: $text", Toast.LENGTH_LONG).show()
+}
+
+/**
+ * uri to file
+ */
+fun Uri.toFile(context: Context): File? {
+    return try {
+        val bitmap = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(
+                ImageDecoder.createSource(context.contentResolver, this))
+        } else {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, this)
+        }
+        bitmap.toFile(context)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
+
+/**
+ *  Bitmap to File
+ */
+fun Bitmap.toFile(context: Context): File {
+    // 임시 파일 경로
+    val file = File(context.cacheDir, "temp_${System.currentTimeMillis()}.jpg")
+    // 파일에 Bitmap을 저장
+    val fileOutputStream = FileOutputStream(file)
+    this.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+    fileOutputStream.flush()
+    fileOutputStream.close()
+    return file
 }
