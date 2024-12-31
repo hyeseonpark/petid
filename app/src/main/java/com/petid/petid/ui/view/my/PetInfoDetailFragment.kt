@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,7 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,10 +26,10 @@ import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.TAG
-import com.petid.petid.util.bitmapToFile
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.my.PetInfoViewModel
 import com.bumptech.glide.Glide
+import com.petid.petid.util.toFile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -57,21 +60,27 @@ class PetInfoDetailFragment
             },
             title = getString(R.string.pet_info_title),
         )
-        initComponent()
-        viewModel.getPetDetails()
         observeGetPetInfoState()
         observeGetPetImageState()
         observeUpdatePetPhotoState()
+
+        initComponent()
+
+        viewModel.getPetDetails()
     }
 
     private fun initComponent() {
         with(binding) {
-            requestCameraPermission()
-
             imageViewProfile.setOnClickListener{
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.setType("image/*")
-                filterActivityLauncher.launch(intent)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                    with(Intent()) {
+                        action = Intent.ACTION_PICK
+                        type = MediaStore.Images.Media.CONTENT_TYPE
+                        actionPick.launch(this)
+                    }
+                } else {
+                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                }
             }
 
             // 미등록 상태, dialog 보여주기
@@ -87,51 +96,35 @@ class PetInfoDetailFragment
     }
 
     /**
-     * 갤러리 이미지 결과값 처리
+     * ( < TIRAMISU )
      */
-    private val filterActivityLauncher: ActivityResultLauncher<Intent> =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == RESULT_OK && it.data !=null) {
-                val currentImageUri = it.data?.data
-                try {
-                    currentImageUri?.let {
-                        val bitmap = if(Build.VERSION.SDK_INT < 28) {
-                            MediaStore.Images.Media.getBitmap(
-                                requireContext().contentResolver,
-                                currentImageUri
-                            )
-                        } else {
-                            val source = ImageDecoder.createSource(
-                                requireContext().contentResolver, currentImageUri)
-                            ImageDecoder.decodeBitmap(source)
-                        }
-                        // 파일 생성
-                        val file = bitmapToFile(requireContext(), bitmap, "profile_image.jpg")
-
-                        // s3 bucket 에 파일 업로드
-                        with(viewModel) {
-                            uploadFile(requireContext(), file, petImageFileName!!)
-                        }
-                    }
-
-                } catch(e:Exception) {
-                    e.printStackTrace()
-                }
-            } else if(it.resultCode == RESULT_CANCELED){
-                // Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
-            } else {
-                Log.d("ActivityResult","something wrong")
+    private val actionPick = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.data?.let { uri ->
+                processForUploadFile(uri)
             }
+        }else{
+            showErrorMessage("actionPick null")
         }
+    }
 
     /**
-     * camera permission
+     * photo picker ( >= TIRAMISU )
      */
-    private fun requestCameraPermission() {
-        val permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            Log.d(TAG, "camera permission: $it")
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
+        result?.let { uri ->
+            processForUploadFile(uri)
+        } ?: showErrorMessage("pickMedia null")
+    }
+
+    /**
+     * uri -> file 변환 및 uploadFile 진행
+     */
+    private fun processForUploadFile(uri: Uri) {
+        // s3 bucket 에 파일 업로드
+        with(viewModel) {
+            uploadFile(requireContext(), uri.toFile(requireActivity())!!, petImageFileName!!)
         }
-        permissionLauncher.launch(android.Manifest.permission.CAMERA)
     }
 
     /**
