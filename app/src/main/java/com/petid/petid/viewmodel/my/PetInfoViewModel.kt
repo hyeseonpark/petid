@@ -3,6 +3,7 @@ package com.petid.petid.viewmodel.my
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.petid.data.util.S3UploadHelper
 import com.petid.domain.entity.PetDetailsEntity
 import com.petid.domain.entity.PetUpdateEntity
@@ -104,6 +105,7 @@ class PetInfoViewModel @Inject constructor(
     fun uploadFile(context: Context, file: File, fileName: String) {
         viewModelScope.launch {
             _updatePetPhotoResult.emit(Loading)
+
             val s3UploadHelper = S3UploadHelper()
             val result = s3UploadHelper.uploadWithTransferUtility(
                 context = context,
@@ -113,10 +115,11 @@ class PetInfoViewModel @Inject constructor(
             )
             result.fold(
                 onSuccess = {
-                    updatePetPhoto()
+                    _updatePetPhotoResult.emit(Success(Unit))
                 },
-                onFailure = { exception ->
-                    _updatePetPhotoResult.emit(Error(exception.message))
+                onFailure = { e ->
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                    _updatePetPhotoResult.emit(Error(e.message))
                 }
             )
         }

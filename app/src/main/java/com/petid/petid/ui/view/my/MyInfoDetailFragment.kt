@@ -182,14 +182,13 @@ class MyInfoDetailFragment
                 if (result !is CommonApiState.Loading)
                     hideLoading()
 
-                when {
-                    result.isSuccess -> {
+                when (result) {
+                    is CommonApiState.Success -> {
                         viewModel.updateMemberPhoto(viewModel.memberImageFileName!!)
                     }
-                    result.isFailure -> {
-                        val exception = result.exceptionOrNull()
-                        Log.d(TAG, exception?.message.toString())
-                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> showLoading()
+                    is CommonApiState.Init -> {}
                 }
             }
         }
