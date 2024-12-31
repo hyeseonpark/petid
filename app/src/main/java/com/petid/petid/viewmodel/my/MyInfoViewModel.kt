@@ -3,6 +3,7 @@ package com.petid.petid.viewmodel.my
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.petid.data.util.S3UploadHelper
 import com.petid.domain.entity.MemberInfoEntity
 import com.petid.domain.repository.MyInfoRepository
@@ -42,7 +43,7 @@ class MyInfoViewModel @Inject constructor(
     val getMemberImageResult = _getMemberImageResult.asStateFlow()
 
     /* S3 사진 upload result */
-    private val _uploadS3Result = MutableSharedFlow<Result<Boolean>>()
+    private val _uploadS3Result = MutableSharedFlow<CommonApiState<Unit>>()
     val uploadS3Result = _uploadS3Result.asSharedFlow()
 
     /* 서버 사진 update result */
@@ -99,6 +100,8 @@ class MyInfoViewModel @Inject constructor(
      */
     fun uploadFile(context: Context, file: File, fileName: String) {
         viewModelScope.launch {
+            _uploadS3Result.emit(CommonApiState.Loading)
+            
             val s3UploadHelper = S3UploadHelper()
             val result = s3UploadHelper.uploadWithTransferUtility(
                 context = context,
@@ -108,10 +111,11 @@ class MyInfoViewModel @Inject constructor(
             )
             result.fold(
                 onSuccess = {
-                    _uploadS3Result.emit(result)
+                    _uploadS3Result.emit(CommonApiState.Success(Unit))
                 },
-                onFailure = { exception ->
-                    _uploadS3Result.emit(Result.failure(exception))
+                onFailure = { e ->
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                    _uploadS3Result.emit(CommonApiState.Error(e.message))
                 }
             )
         }

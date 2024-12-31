@@ -35,6 +35,8 @@ class HomeMainViewModel @Inject constructor(
      */
     fun getBannerList(type: String) {
         viewModelScope.launch {
+            if(_bannerApiState.value != CommonApiState.Init) return@launch
+
             _bannerApiState.emit(CommonApiState.Loading)
             val state = when (val result = homeMainRepository.getBannerList(type)) {
                 is ApiResult.Success -> {

@@ -4,12 +4,13 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.text.InputFilter
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.WindowManager
@@ -17,8 +18,6 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.petid.petid.R
-import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -143,5 +142,35 @@ object ProgressDialogUtil {
     fun cancel() {
         progressDialog?.dismiss()
         progressDialog = null
+    }
+}
+
+/**
+ * 소수점 제한
+ */
+class DecimalDigitsInputFilter(private val decimalDigits: Int) : InputFilter {
+    override fun filter(
+        source: CharSequence?,
+        start: Int,
+        end: Int,
+        dest: Spanned?,
+        dstart: Int,
+        dend: Int
+    ): CharSequence? {
+        source ?: return null
+        dest ?: return null
+
+        val destText = dest.toString()
+        val newText = destText.substring(0, dstart) + source + destText.substring(dend)
+
+        // 소수점 이후로 입력 가능한 자릿수 제한
+        if (newText.contains(".")) {
+            val parts = newText.split(".")
+            if (parts.size > 1 && parts[1].length > decimalDigits) {
+                return ""
+            }
+        }
+
+        return null
     }
 }
