@@ -39,7 +39,6 @@ import kotlin.coroutines.suspendCoroutine
 @HiltViewModel
 class HospitalMainViewModel @Inject constructor(
     private val hospitalMainRepository: HospitalMainRepository,
-    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     /* 현재 사용자의 lat, lon 값*/
