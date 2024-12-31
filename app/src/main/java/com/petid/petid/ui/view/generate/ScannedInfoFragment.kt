@@ -18,6 +18,7 @@ import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.FragmentScannedInfoBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseFragment
+import com.petid.petid.util.DecimalDigitsInputFilter
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -95,6 +96,8 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
                 autoCompleteTextViewFeature.setText(it.hairLength)
                 editTextWeight.setText("${it.weight}")
             }
+
+            editTextWeight.filters = arrayOf(DecimalDigitsInputFilter(1))
 
             buttonNext.setOnClickListener{
                 viewModel.petInfo.setAppearance(
