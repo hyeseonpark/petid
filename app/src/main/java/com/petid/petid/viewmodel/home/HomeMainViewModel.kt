@@ -20,11 +20,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeMainVIewModel @Inject constructor(
+class HomeMainViewModel @Inject constructor(
     private val homeMainRepository: HomeMainRepository,
     private val myInfoRepository: MyInfoRepository,
     private val petInfoRepository: PetInfoRepository,
-    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _bannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
         CommonApiState.Init

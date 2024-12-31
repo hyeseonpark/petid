@@ -90,4 +90,7 @@ dependencies {
     implementation("com.amazonaws:aws-android-sdk-mobile-client:2.13.5")
     implementation("com.amazonaws:aws-android-sdk-cognito:2.13.5")
     implementation("com.amazonaws:aws-android-sdk-s3:2.13.5")
+
+    // mediapipe
+    implementation(libs.tasks.vision)
 }
