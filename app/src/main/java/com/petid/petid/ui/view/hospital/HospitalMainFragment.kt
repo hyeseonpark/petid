@@ -48,10 +48,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentHospitalMainBinding::inflate) {
 
-    companion object{
-        fun newInstance() = HospitalMainFragment()
-    }
-
     private val viewModel: HospitalMainViewModel by activityViewModels()
 
     private lateinit var hospitalListAdapter : HospitalListAdapter
