@@ -19,7 +19,7 @@ class NotificationRepository @Inject constructor(
         }
     }
 
-    suspend fun updateNotification(notificationEntity: NotificationEntity): DBResult<Unit> {
+    suspend fun saveNotification(notificationEntity: NotificationEntity): DBResult<Unit> {
         return try {
             val result = notificationDao.insertNotification(notificationEntity)
             DBResult.Success(result)
