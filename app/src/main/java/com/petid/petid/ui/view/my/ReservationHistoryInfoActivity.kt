@@ -29,7 +29,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
 
     private lateinit var cancelDialog : CustomDialogCommon
 
-    private lateinit var hospitalReservationListAdapter : HospitalReservationListAdapter;
+    private lateinit var hospitalReservationListAdapter : HospitalReservationListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

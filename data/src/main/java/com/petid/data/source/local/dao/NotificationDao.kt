@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.petid.data.source.local.entity.NotificationEntity
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +19,10 @@ interface NotificationDao {
 
     @Query("UPDATE notifications SET isChecked = 1 WHERE id = :notificationId")
     suspend fun updateNotificationChecked(notificationId: Long)
+
+    @Transaction
+    suspend fun updateAndFetchNotifications(notificationId: Long): List<NotificationEntity> {
+        updateNotificationChecked(notificationId)
+        return getAllNotifications()
+    }
 }
