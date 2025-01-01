@@ -39,4 +39,19 @@ class NotificationViewModel @Inject constructor(
             _notificationListState.emit(state)
         }
     }
+
+    fun markAsChecked(id: Long) {
+        viewModelScope.launch {
+            val state = when(val result = notificationRepository.markAsChecked(id)) {
+                is DBResult.Success -> {
+                    val notiList = result.data
+                    CommonApiState.Success(notiList)
+                }
+                is DBResult.Error -> {
+                    CommonApiState.Error(result.exception.message)
+                }
+            }
+            _notificationListState.emit(state)
+        }
+    }
 }

@@ -28,8 +28,13 @@ class NotificationRepository @Inject constructor(
         }
     }
 
-    suspend fun markAsChecked(notificationId: Long) {
-        notificationDao.updateNotificationChecked(notificationId)
+    suspend fun markAsChecked(notificationId: Long): DBResult<List<NotificationEntity>> {
+        return try {
+            val result = notificationDao.updateAndFetchNotifications(notificationId)
+            DBResult.Success(result)
+        } catch (e: Exception) {
+            DBResult.Error(e)
+        }
     }
 }
 
