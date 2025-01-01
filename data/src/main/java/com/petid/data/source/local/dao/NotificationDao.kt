@@ -9,7 +9,7 @@ import com.petid.data.source.local.entity.NotificationEntity
 
 @Dao
 interface NotificationDao {
-    @Query("SELECT * FROM notifications")
+    @Query("SELECT * FROM notifications ORDER BY id DESC")
     suspend fun getAllNotifications(): List<NotificationEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
