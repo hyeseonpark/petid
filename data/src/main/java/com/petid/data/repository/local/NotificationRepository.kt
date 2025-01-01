@@ -36,6 +36,15 @@ class NotificationRepository @Inject constructor(
             DBResult.Error(e)
         }
     }
+
+    suspend fun hasUncheckedNotification(): DBResult<Boolean> {
+        return try {
+            val result = notificationDao.hasUncheckedNotification()
+            DBResult.Success(result)
+        } catch (e: Exception) {
+            DBResult.Error(e)
+        }
+    }
 }
 
 sealed class DBResult<out T> {
