@@ -65,6 +65,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         observeGetMemberInfoState()
         observeGetPetInfoState()
         observeGetPetImageUrlState()
+        observeHasUncheckedNotificationState()
 
         viewModel.getBannerList(BANNER_TYPE_MAIN)
     }
@@ -72,6 +73,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     override fun onResume() {
         super.onResume()
         viewModel.getMemberInfo()
+        viewModel.hasUncheckedNotification()
     }
 
     override fun onStop() {
@@ -339,6 +341,29 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     }
                     is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
+                    is CommonApiState.Init -> {}
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.getPetImageUrl 결과값 view 반영
+     */
+    private fun observeHasUncheckedNotificationState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.unchekedNotifcationState.collect { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        val image = when(result.data) {
+                            true -> R.drawable.ic_home_noti_alert
+                            false -> R.drawable.ic_home_noti_default
+                        }
+
+                        binding.imageViewNoti.setImageResource(image)
+                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> {}
                     is CommonApiState.Init -> {}
                 }
             }

@@ -5,9 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
 import com.petid.data.source.local.entity.NotificationEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NotificationDao {
@@ -25,4 +23,8 @@ interface NotificationDao {
         updateNotificationChecked(notificationId)
         return getAllNotifications()
     }
+
+
+    @Query("SELECT EXISTS(SELECT 1 FROM notifications WHERE isChecked = 0 LIMIT 1)")
+    suspend fun hasUncheckedNotification(): Boolean
 }
