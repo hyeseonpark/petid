@@ -208,6 +208,8 @@
     <string name="hospital_reservation_calendar_visit_date_time">방문일시</string>
     <string name="hospital_reservation_calendar_visit_date_time_desc">오늘을 제외한 7일 이내의 날짜만 선택 가능합니다.</string>
     <string name="hospital_reservation_calendar_available_time">예약가능시간</string>
+    <string name="hospital_reservation_calendar_default">예약가능 시간</string>
+    <string name="hospital_reservation_calendar_default_desc">날짜를 먼저 선택해주세요</string>
     <string name="hospital_reservation_calendar_day_off">동물병원 휴일</string>
     <string name="hospital_reservation_calendar_day_off_desc">휴일에는 서비스를 운영하지 않아요.\n다른 날짜를 확인해 주세요!</string>
     <string name="hospital_complete_reservation">예약 완료하기</string>
