@@ -29,6 +29,7 @@ navVersion = "2.8.5"
 oauthJdk8 = "5.10.0"
 playServicesLocation = "21.3.0"
 preferenceKtx = "1.2.1"
+roomDB = "2.6.1"
 tasksVision = "latest.release"
 threetenabp = "1.2.0"
 toolsCore = "1.0.0-alpha10"
@@ -41,6 +42,9 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navVersion" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomDB" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomDB" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomDB" }
 corbind = { module = "ru.ldralighieri.corbind:corbind", version.ref = "corbind" }
 corbind-material = { module = "ru.ldralighieri.corbind:corbind-material", version.ref = "corbind" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }

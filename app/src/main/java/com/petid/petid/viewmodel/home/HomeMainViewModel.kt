@@ -3,6 +3,8 @@ package com.petid.petid.viewmodel.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.petid.data.repository.local.DBResult
+import com.petid.data.repository.local.NotificationRepository
 import com.petid.domain.entity.BannerEntity
 import com.petid.domain.entity.MemberInfoEntity
 import com.petid.domain.entity.PetDetailsEntity
@@ -24,7 +26,33 @@ class HomeMainViewModel @Inject constructor(
     private val homeMainRepository: HomeMainRepository,
     private val myInfoRepository: MyInfoRepository,
     private val petInfoRepository: PetInfoRepository,
+    private val notificationRepository: NotificationRepository,
 ): ViewModel() {
+
+    /* 읽지 않은 notification 여부 상태값*/
+    private val _unchekedNotifcationState = MutableStateFlow<CommonApiState<Boolean>>(
+        CommonApiState.Init
+    )
+    val unchekedNotifcationState = _unchekedNotifcationState.asStateFlow()
+
+    /**
+     * 읽지 않은 notification 여부
+     */
+    fun hasUncheckedNotification() {
+        viewModelScope.launch {
+            val state = when (val result = notificationRepository.hasUncheckedNotification()) {
+                is DBResult.Success -> {
+                    CommonApiState.Success(result.data)
+                }
+                is DBResult.Error -> {
+                    CommonApiState.Error(result.exception.message)
+                }
+            }
+            _unchekedNotifcationState.emit(state)
+        }
+    }
+
+    /* banner 상태값 */
     private val _bannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
         CommonApiState.Init
     )
