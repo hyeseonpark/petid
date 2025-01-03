@@ -167,15 +167,18 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     viewNoPetidCard.visibility = View.GONE
                     viewPetidCard.visibility = View.VISIBLE
                     layoutRegister.visibility = View.VISIBLE
+                    textViewFlip.visibility = View.VISIBLE
                 }
                 CHIP_TYPE[2] -> {
                     viewNoPetidCard.visibility = View.GONE
                     viewPetidCard.visibility = View.VISIBLE
                     layoutRegister.visibility = View.GONE
+                    textViewFlip.visibility = View.VISIBLE
                 }
                 null -> {
                     viewNoPetidCard.visibility = View.VISIBLE
                     viewPetidCard.visibility = View.GONE
+                    textViewFlip.visibility = View.GONE
                 }
             }
         }
