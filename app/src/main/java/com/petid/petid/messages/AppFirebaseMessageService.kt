@@ -130,7 +130,7 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
             .getActivity(
                 getGlobalContext(),
                 notificationId,
-                createNotificationIntent(),
+                createNotificationIntent(messageData),
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
 
@@ -176,9 +176,13 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
     /**
      * notification intent
      */
-    private fun createNotificationIntent() =
+    private fun createNotificationIntent(messageData: NotificationEntity) =
         Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+            // TODO 알람 정의 후 수정
+            putExtra("notification_data", messageData)
+            //data = Uri.parse("myapp://notification/$messageData")
         }
 
     /**

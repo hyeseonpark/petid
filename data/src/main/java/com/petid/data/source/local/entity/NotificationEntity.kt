@@ -1,5 +1,7 @@
 package com.petid.data.source.local.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -12,6 +14,7 @@ import androidx.room.PrimaryKey
  * @param status 상태 (PENDING, CONFIRMED, CANCELED, COMPLETED)
  * @param isChecked 읽음 여부
  */
+@Parcelize
 @Entity(tableName = "notifications")
 data class NotificationEntity(
     val title: String,
@@ -19,7 +22,7 @@ data class NotificationEntity(
     val category: String,
     val status: String?,
     val isChecked: Boolean = false,
-) {
+) : Parcelable {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 }
