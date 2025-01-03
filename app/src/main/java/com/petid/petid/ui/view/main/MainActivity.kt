@@ -1,6 +1,5 @@
 package com.petid.petid.ui.view.main
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
@@ -8,14 +7,14 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.petid.petid.R
-import com.petid.petid.databinding.ActivityMainBinding
-import com.petid.petid.ui.view.common.BaseActivity
-import com.petid.petid.util.hideKeyboardAndClearFocus
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.petid.data.source.local.entity.NotificationEntity
+import com.petid.petid.R
+import com.petid.petid.databinding.ActivityMainBinding
 import com.petid.petid.ui.component.CustomDialogCommon
+import com.petid.petid.ui.view.common.BaseActivity
+import com.petid.petid.util.hideKeyboardAndClearFocus
 import dagger.hilt.android.AndroidEntryPoint
 
 
