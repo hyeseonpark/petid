@@ -78,17 +78,20 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             title = getString(R.string.main_hospital_title),
         )
 
-        // 위치 권한 확인
-        if (ContextCompat.checkSelfPermission(
-                getGlobalContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // 권한 부여 안되어 있음
-            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        } else {
-            // 이미 권한 부여되어있으면 바로 위치 정보 가져오기
-            viewModel.getSingleLocation()
+        // 기존에 불러온 데이터가 없는 경우만 초기 데이터 불러오기
+        if(viewModel.hospitalApiState.value == CommonApiState.Init) {
+            // 위치 권한 확인
+            if (ContextCompat.checkSelfPermission(
+                    getGlobalContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // 권한 부여 안되어 있음
+                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            } else {
+                // 이미 권한 부여되어있으면 바로 위치 정보 가져오기
+                viewModel.getSingleLocation()
+            }
         }
 
         initComponent()
