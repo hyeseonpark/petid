@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeMainFragment_to_blogMainFragment"
             app:destination="@id/blogMainFragment" />
+        <action
+            android:id="@+id/action_homeMainFragment_to_hospitalMainFragment"
+            app:destination="@id/hospitalMainFragment" />
     </fragment>
 
     <fragment
