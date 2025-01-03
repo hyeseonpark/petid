@@ -196,6 +196,7 @@
     <string name="eupmundong_title">읍/면/동</string>
     <string name="filter_by_location">가까운 순</string>
     <string name="filter_by_name">이름 순</string>
+    <string name="no_filter">전체</string>
 
     <!-- hospital detail -->
     <string name="hospital_make_reservation">방문 날짜/시간 예약하기</string>

@@ -227,8 +227,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
         lifecycleScope.launch {
             viewModel.currentEupmundongState.collect { eupmundong ->
                 eupmundong?.let {
-                    val name = it.name
-                    binding.buttonEupmundong.text = name
+                    binding.buttonEupmundong.text = it.name
                 }
             }
         }
@@ -240,9 +239,6 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     private fun observeCurrentHospitalListState() {
         lifecycleScope.launch {
             viewModel.hospitalApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
-                    hideLoading()
-
                 when (result) {
                     is CommonApiState.Success -> {
                         currentHospitalList = result.data
@@ -253,11 +249,15 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                                 true -> R.string.filter_by_name
                                 false -> R.string.filter_by_location
                             })
+                        binding.editTextSeacrh.text?.clear()
                     }
                     is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
+
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
             }
         }
     }
