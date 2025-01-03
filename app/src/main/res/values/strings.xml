@@ -131,6 +131,7 @@
 
     <!-- notification -->
     <string name="notification_title">알림</string>
+    <string name="notification_no_data">알림내역이 없습니다.</string>
 
     <!--  pet id generate progress  -->
     <!--  pet id generate progress : step 1  -->
