@@ -71,8 +71,8 @@
     <string name="permission_subtitle_3">사진 저장</string>
     <string name="permission_title_4">[선택] 알림</string>
     <string name="permission_subtitle_4">이벤트와 혜택 알림</string>
-    <string name="permission_title_5">[선택] 전화</string>
-    <string name="permission_subtitle_5">고객센터 등 연결을 위한 통화 기능</string>
+    <string name="permission_title_5">[선택] 위치</string>
+    <string name="permission_subtitle_5">동물 등록 이용 시 가까운 병원 찾기</string>
     <string name="permission_info_title">접근권한 변경 방법</string>
     <string name="permission_info_desc">설정 > 애플리케이션 관리자 > PETID</string>
     <string name="permission_info_desc2">선택적 접근권한은 동의하지 않아도 해당기능 외 앱 이용이 가능합니다.</string>
