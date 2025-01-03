@@ -45,7 +45,7 @@ class HospitalMainRepositoryImpl @Inject constructor(
     override suspend fun getHospitalList(
         sidoId: Int,
         sigunguId: Int,
-        eupmundongId: Int
+        eupmundongId: Int?
     ): ApiResult<List<HospitalEntity>> {
         return when (val result = remoteDataSource.getHospitalList(sidoId, sigunguId, eupmundongId)) {
             is ApiResult.Success -> result
@@ -57,7 +57,7 @@ class HospitalMainRepositoryImpl @Inject constructor(
     override suspend fun getHospitalListLoc(
         sidoId: Int,
         sigunguId: Int,
-        eupmundongId: Int,
+        eupmundongId: Int?,
         lat: Double,
         lon: Double
     ): ApiResult<List<HospitalEntity>> {
