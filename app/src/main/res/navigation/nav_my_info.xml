@@ -29,6 +29,11 @@
         android:id="@+id/addressSearchFragment"
         android:name=".ui.view.common.AddressSearchFragment"
         android:label="fragment_address_search"
-        tools:layout="@layout/fragment_address_search" />
+        tools:layout="@layout/fragment_address_search" >
+        <argument
+            android:name="Key"
+            app:argType="string"
+            android:defaultValue="addressData" />
+    </fragment>
 
 </navigation>
