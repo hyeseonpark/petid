@@ -134,8 +134,7 @@
                 android:shadowDy="3"
                 android:shadowRadius="5.0"
                 app:cardCornerRadius="20dp"
-                app:strokeWidth="0dp"
-                android:visibility="gone">
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:id="@+id/layout_no_petid"
@@ -153,8 +152,9 @@
                         android:text="@string/info_create_petid_sub_title"
                         android:textAlignment="center"
                         android:textColor="#929292"
+                        android:backgroundTint="@android:color/transparent"
                         android:textFontWeight="400"
-                        android:textSize="14dp" />
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:id="@+id/imageView_create_petid"
@@ -170,11 +170,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineHeight="25.5dp"
+                        android:backgroundTint="@android:color/transparent"
                         android:text="@string/info_create_petid_title"
                         android:textAlignment="center"
                         android:textColor="@color/petid_title"
                         android:textFontWeight="500"
-                        android:textSize="18dp" />
+                        android:textSize="18sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_create_start"
@@ -202,7 +203,8 @@
                 app:flipDuration="800"
                 app:flipFrom="right"
                 app:flipType="horizontal"
-                app:autoFlipBack="false">
+                app:autoFlipBack="false"
+                android:visibility="gone">
 
                 <!-- 뒷면 -->
                 <com.google.android.material.card.MaterialCardView
@@ -483,7 +485,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="35dp"
                     android:layout_marginBottom="13dp"
-                    android:backgroundTint="#F4F4F4"
+                    android:backgroundTint="@color/f5"
                     android:shadowColor="#1A000000"
                     android:shadowDx="1"
                     android:shadowDy="3"
@@ -615,7 +617,8 @@
                 android:textSize="14sp"
                 android:lineHeight="23.8dp"
                 android:layout_gravity="center"
-                android:padding="5dp"/>
+                android:padding="5dp"
+                android:visibility="gone"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textView_life_style_recommend_title"
