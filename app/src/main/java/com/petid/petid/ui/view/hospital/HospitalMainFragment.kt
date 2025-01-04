@@ -1,7 +1,6 @@
 package com.petid.petid.ui.view.hospital
 
 import android.Manifest
-import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -33,8 +33,6 @@ import com.petid.petid.util.hideKeyboardAndClearFocus
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -124,31 +122,10 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             // 검색 기능
             editTextSeacrh
                 .flowTextWatcher()
-                .debounce(300)
+                .debounce(500)
                 .onEach {
-
-                    val filteredList: List<HospitalEntity>? =
-                        when(val text = editTextSeacrh.text?.trim()) {
-                            "" -> currentHospitalList
-                            else -> {
-                                currentHospitalList?.filter{ hospital ->
-                                    hospital.name.contains(text!!, ignoreCase = true)
-                                }
-                            }
-                        }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        when(filteredList?.size) {
-                            0 -> {
-                                textNoResult.visibility = View.VISIBLE
-                                layoutData.visibility = View.GONE
-                            }
-                            else -> {
-                                textNoResult.visibility = View.GONE
-                                layoutData.visibility = View.VISIBLE
-                                hospitalListAdapter.submitList(filteredList)
-                            }
-                        }
-                    }
+                    val filteredList = getFilteredList(editTextSeacrh.text.toString())
+                    updateListUi(filteredList)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -185,6 +162,37 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                 viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
             }
 
+        }
+    }
+
+    /**
+     * get filtered list
+     */
+    private fun getFilteredList(text: String): List<HospitalEntity>? = when(text.trim().isEmpty()) {
+        true -> currentHospitalList
+        false -> {
+            currentHospitalList?.filter{ hospital ->
+                hospital.name.contains(text, ignoreCase = true)
+            }
+        }
+    }
+
+    /**
+     * update list ui
+     */
+    private fun updateListUi(filteredList: List<HospitalEntity>?) {
+        with(binding) {
+            when(filteredList?.size) {
+                0 -> {
+                    textNoResult.visibility = View.VISIBLE
+                    layoutData.visibility = View.GONE
+                }
+                else -> {
+                    textNoResult.visibility = View.GONE
+                    layoutData.visibility = View.VISIBLE
+                    hospitalListAdapter.submitList(filteredList)
+                }
+            }
         }
     }
 

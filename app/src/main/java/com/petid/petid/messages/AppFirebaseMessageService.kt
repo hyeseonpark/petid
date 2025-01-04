@@ -9,7 +9,6 @@ import android.util.Log
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.firebase.messaging.Constants.MessageNotificationKeys
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -20,15 +19,10 @@ import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.di.AppFirebaseMessageServiceEntryPoint
 import com.petid.petid.ui.view.main.MainActivity
 import com.petid.petid.util.TAG
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
 class AppFirebaseMessageService() : FirebaseMessagingService() {
 
@@ -182,7 +176,7 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
 
             // TODO 알람 정의 후 수정
             putExtra("notification_data", messageData)
-            //data = Uri.parse("myapp://notification/$messageData")
+            //data = Uri.parse("petid://notification/$messageData")
         }
 
     /**
