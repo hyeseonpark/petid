@@ -21,10 +21,10 @@
         android:maxSdkVersion="18" /> <!-- targetSDK 32 이하 -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" /> <!-- targetSDK 33 이상 -->
+        android:maxSdkVersion="32" /> <!-- targetSDK 32 이하 -->
     <uses-permission
         android:name="android.permission.READ_MEDIA_IMAGES"
-        android:minSdkVersion="33" /> <!-- targetSDK 34 이면서 Android OS 14 인 경우 -->
+        android:minSdkVersion="33" /> <!-- targetSDK 33 이상 이면서 Android OS 14 인 경우 -->
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <application
@@ -78,7 +78,7 @@
             android:resource="@color/petid_clear_blue" />
         <!-- FCM -->
         <service
-            android:name=".messages.MyFirebaseMessageService"
+            android:name=".messages.AppFirebaseMessageService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
