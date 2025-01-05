@@ -12,7 +12,7 @@ import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.LocationEntity
 import com.petid.domain.repository.HospitalMainRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.ui.state.CommonApiState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices

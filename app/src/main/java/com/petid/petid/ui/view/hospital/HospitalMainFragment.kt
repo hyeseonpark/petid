@@ -22,7 +22,7 @@ import com.petid.petid.R
 import com.petid.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.petid.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.petid.petid.common.Constants.LOCATION_SIGUNGU_TYPE
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.FragmentHospitalMainBinding
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseFragment

@@ -1,4 +1,4 @@
-package com.petid.petid.enum
+package com.petid.petid.type
 
 // PetIdConstant
 enum class ContentCategoryType {

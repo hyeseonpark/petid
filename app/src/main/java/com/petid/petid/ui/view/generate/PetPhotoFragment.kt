@@ -23,7 +23,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.mediapipe.tasks.components.containers.Classifications
 import com.petid.petid.BuildConfig
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.FragmentPetPhotoBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseFragment

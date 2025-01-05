@@ -15,8 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.petid.petid.R
 import com.petid.petid.common.Constants
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentMyMainBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonApiState
@@ -27,7 +27,6 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
-import com.petid.petid.ui.view.generate.GeneratePetidMainActivity
 import com.petid.petid.util.petidNullDialog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn

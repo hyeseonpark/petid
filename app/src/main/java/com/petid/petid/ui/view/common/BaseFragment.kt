@@ -12,8 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
 import com.petid.petid.R
-import com.petid.petid.common.FragmentInflate
-import com.petid.petid.util.ProgressDialogUtil
+import com.petid.petid.util.FragmentInflate
 import com.petid.petid.util.hideLoadingDialog
 import com.petid.petid.util.showLoadingDialog
 

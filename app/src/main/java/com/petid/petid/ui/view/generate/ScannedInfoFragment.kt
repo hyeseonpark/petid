@@ -14,7 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.FragmentScannedInfoBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseFragment

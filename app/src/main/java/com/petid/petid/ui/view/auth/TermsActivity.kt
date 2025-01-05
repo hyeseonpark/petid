@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.petid.petid.R
 import com.petid.petid.databinding.ActivityTermsBinding
 import com.petid.petid.util.setStyleSpan
-import com.petid.petid.enum.PlatformType
+import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.showErrorMessage

@@ -2,7 +2,7 @@ package com.petid.petid.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ActivitySignupCompleteBinding
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.main.MainActivity
