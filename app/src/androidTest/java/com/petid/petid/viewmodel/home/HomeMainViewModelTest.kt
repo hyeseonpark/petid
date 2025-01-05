@@ -1,5 +1,6 @@
 package com.petid.petid.viewmodel.home
 
+import com.petid.data.repository.local.NotificationRepository
 import com.petid.domain.entity.MemberInfoEntity
 import com.petid.domain.repository.HomeMainRepository
 import com.petid.domain.repository.MyInfoRepository
@@ -22,6 +23,7 @@ class HomeMainViewModelTest {
     private lateinit var homeMainRepository: HomeMainRepository
     private lateinit var myInfoRepository: MyInfoRepository
     private lateinit var petInfoRepository: PetInfoRepository
+    private lateinit var notificationRepository: NotificationRepository
 
     private lateinit var homeMainViewModel: HomeMainViewModel
 
@@ -34,7 +36,8 @@ class HomeMainViewModelTest {
         myInfoRepository = mockk()
         petInfoRepository = mockk()
 
-        homeMainViewModel = HomeMainViewModel(homeMainRepository, myInfoRepository, petInfoRepository)
+        homeMainViewModel = HomeMainViewModel(homeMainRepository, myInfoRepository,
+            petInfoRepository, notificationRepository)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

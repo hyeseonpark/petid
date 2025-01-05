@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,10 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentReservationProcessFinishBinding
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.util.TAG
 
 class ReservationProcessFinishFragment: BaseFragment<FragmentReservationProcessFinishBinding>(
     FragmentReservationProcessFinishBinding::inflate) {

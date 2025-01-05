@@ -14,6 +14,8 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -25,6 +27,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
+typealias FragmentInflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
 val genderCharToString: (char: Char) -> String = {char -> if(char == 'M') "남" else "여" }
 val booleanCharToSign: (char: Char) -> String = {char -> if(char == 'Y') "O" else "X"}

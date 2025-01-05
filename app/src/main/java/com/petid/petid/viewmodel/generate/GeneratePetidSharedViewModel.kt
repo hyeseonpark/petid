@@ -16,7 +16,7 @@ import com.petid.data.ml.ClassifierResult
 import com.petid.data.util.S3UploadHelper
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.data.ml.ImageClassifierHelper
 import com.petid.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel

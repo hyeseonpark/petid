@@ -15,7 +15,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.petid.data.repository.local.NotificationRepository
 import com.petid.data.source.local.entity.NotificationEntity
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.di.AppFirebaseMessageServiceEntryPoint
 import com.petid.petid.ui.view.main.MainActivity
 import com.petid.petid.util.TAG

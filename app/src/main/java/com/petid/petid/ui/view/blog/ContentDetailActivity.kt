@@ -12,9 +12,9 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ActivityContentDetailBinding
-import com.petid.petid.enum.ContentCategoryType
+import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.petid.petid.ui.view.common.BaseActivity

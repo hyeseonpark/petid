@@ -18,7 +18,7 @@ import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.BANNER_TYPE_MAIN
 import com.petid.petid.common.Constants.CHIP_TYPE
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentHomeMainBinding
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseFragment

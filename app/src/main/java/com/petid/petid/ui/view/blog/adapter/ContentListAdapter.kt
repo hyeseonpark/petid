@@ -2,7 +2,6 @@ package com.petid.petid.ui.view.blog.adapter
 
 import android.content.Context
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -12,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.petid.domain.entity.ContentEntity
 import com.petid.petid.R
 import com.petid.petid.databinding.ItemBlogContentBinding
-import com.petid.petid.enum.ContentCategoryType
+import com.petid.petid.type.ContentCategoryType
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
 
