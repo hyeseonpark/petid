@@ -1,11 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-// FCM
 buildscript {
     dependencies {
         classpath(libs.google.services)
         classpath(libs.hilt.android.gradle.plugin)
         classpath(libs.androidx.navigation.safe.args.gradle.plugin)
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
     }
 }
 
@@ -16,16 +14,15 @@ plugins {
     alias(libs.plugins.android.library) apply false
 
     // ksp
-    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+    alias(libs.plugins.com.google.devtools.ksp) apply false
 
     // Google services Gradle plugin
-    id("com.google.gms.google-services") version "4.4.2" apply false
-    id("com.google.dagger.hilt.android") version "2.52" apply false
-
-    id("com.google.firebase.crashlytics") version "3.0.2" apply false
+    alias(libs.plugins.com.google.gms.google.services) apply false
+    alias(libs.plugins.com.google.dagger.hilt.android) apply false
+    alias(libs.plugins.com.google.firebase.crashlytics) apply false
 
     // Navigation Safe Args
-    id("androidx.navigation.safeargs.kotlin") version "2.8.5" apply false
+    alias(libs.plugins.androidx.navigation.safeargs.kotlin) apply false
 }
 
 /*
