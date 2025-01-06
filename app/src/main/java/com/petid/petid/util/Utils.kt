@@ -3,6 +3,7 @@ package com.petid.petid.util
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
@@ -13,15 +14,21 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import com.petid.petid.R
+import com.petid.petid.ui.component.CustomDialogCommon
+import com.petid.petid.ui.view.generate.GeneratePetidMainActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
+typealias FragmentInflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
 val genderCharToString: (char: Char) -> String = {char -> if(char == 'M') "남" else "여" }
 val booleanCharToSign: (char: Char) -> String = {char -> if(char == 'Y') "O" else "X"}
@@ -174,3 +181,14 @@ class DecimalDigitsInputFilter(private val decimalDigits: Int) : InputFilter {
         return null
     }
 }
+
+
+/**
+ * 반려동물 등록 전 dialog
+ */
+fun petidNullDialog(context: Context) = CustomDialogCommon(
+    title = context.getString(R.string.common_dialog_petid_null),
+    yesButtonClick = {
+        val target = Intent(context, GeneratePetidMainActivity::class.java)
+        context.startActivity(target)
+    })

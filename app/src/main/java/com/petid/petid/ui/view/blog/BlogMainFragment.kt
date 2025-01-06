@@ -14,7 +14,7 @@ import com.petid.domain.entity.ContentEntity
 import com.petid.petid.R
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentBlogMainBinding
-import com.petid.petid.enum.ContentCategoryType
+import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.blog.adapter.ContentListAdapter
 import com.petid.petid.util.showErrorMessage

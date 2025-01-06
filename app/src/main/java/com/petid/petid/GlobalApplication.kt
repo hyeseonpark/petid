@@ -1,7 +1,6 @@
-package com.petid.petid.common
+package com.petid.petid
 
 import androidx.multidex.MultiDexApplication
-import com.petid.petid.BuildConfig
 import com.petid.petid.util.PreferencesControl
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.kakao.sdk.common.KakaoSdk

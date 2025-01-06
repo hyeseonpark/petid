@@ -12,8 +12,7 @@ import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
-import com.petid.petid.common.Constants.SHARED_MEMBER_ID_VALUE
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.state.CommonApiState.*
 import com.petid.petid.ui.state.CommonApiState.Error

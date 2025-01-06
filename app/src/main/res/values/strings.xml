@@ -71,8 +71,8 @@
     <string name="permission_subtitle_3">사진 저장</string>
     <string name="permission_title_4">[선택] 알림</string>
     <string name="permission_subtitle_4">이벤트와 혜택 알림</string>
-    <string name="permission_title_5">[선택] 전화</string>
-    <string name="permission_subtitle_5">고객센터 등 연결을 위한 통화 기능</string>
+    <string name="permission_title_5">[선택] 위치</string>
+    <string name="permission_subtitle_5">동물 등록 이용 시 가까운 병원 찾기</string>
     <string name="permission_info_title">접근권한 변경 방법</string>
     <string name="permission_info_desc">설정 > 애플리케이션 관리자 > PETID</string>
     <string name="permission_info_desc2">선택적 접근권한은 동의하지 않아도 해당기능 외 앱 이용이 가능합니다.</string>
@@ -196,6 +196,7 @@
     <string name="eupmundong_title">읍/면/동</string>
     <string name="filter_by_location">가까운 순</string>
     <string name="filter_by_name">이름 순</string>
+    <string name="no_filter">전체</string>
 
     <!-- hospital detail -->
     <string name="hospital_make_reservation">방문 날짜/시간 예약하기</string>
@@ -207,6 +208,8 @@
     <string name="hospital_reservation_calendar_visit_date_time">방문일시</string>
     <string name="hospital_reservation_calendar_visit_date_time_desc">오늘을 제외한 7일 이내의 날짜만 선택 가능합니다.</string>
     <string name="hospital_reservation_calendar_available_time">예약가능시간</string>
+    <string name="hospital_reservation_calendar_default">예약가능 시간</string>
+    <string name="hospital_reservation_calendar_default_desc">날짜를 먼저 선택해주세요</string>
     <string name="hospital_reservation_calendar_day_off">동물병원 휴일</string>
     <string name="hospital_reservation_calendar_day_off_desc">휴일에는 서비스를 운영하지 않아요.\n다른 날짜를 확인해 주세요!</string>
     <string name="hospital_complete_reservation">예약 완료하기</string>
@@ -214,6 +217,8 @@
     <!-- hospital process finish reservation -->
     <string name="hospital_process_finish_title">동물병원에서 예약을\n확인하고 있어요!</string>
     <string name="hospital_process_finish_subtitle">예약 확정은 알림으로 알려드려요</string>
+    <string name="hospital_process_finish_dialog_title">동물병원 예약 정보를 알려드려요</string>
+    <string name="hospital_process_finish_dialog_button">알림 설정하기</string>
 
     <!-- hospital complete reservation -->
     <string name="hospital_complete_reservation_title">예약 확정되었습니다!</string>

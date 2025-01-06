@@ -7,16 +7,14 @@ import com.petid.domain.entity.ContentLikeEntity
 import com.petid.domain.repository.BlogMainRepository
 import com.petid.domain.repository.ContentDetailRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.enum.ContentCategoryType
+import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.Locale.Category
 import javax.inject.Inject
 import kotlin.properties.Delegates
 

@@ -13,8 +13,8 @@ import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentSignatureBinding
 import com.petid.petid.ui.state.CommonApiState

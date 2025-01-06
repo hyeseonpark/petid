@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.petid.domain.entity.HospitalOrderDetailEntity
 import com.petid.petid.R
 import com.petid.petid.databinding.ItemHospitalReservationHistoryBinding
-import com.petid.petid.enum.ReservationStatus
+import com.petid.petid.type.ReservationStatus
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId

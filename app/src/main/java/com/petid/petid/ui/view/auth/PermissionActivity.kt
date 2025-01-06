@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.petid.petid.R
 import com.petid.petid.common.Constants
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.ActivityPermissionBinding
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.setStyleSpan
