@@ -11,9 +11,8 @@ if (localPropertiesFile.exists()) {
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.dagger.hilt.android")
-    // id("org.jetbrains.kotlin.plugin.serialization") version "1.5.0"
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.com.google.devtools.ksp)
     id("kotlin-parcelize")
 }
 
@@ -55,7 +54,13 @@ android {
     }
 }
 
+configurations.configureEach {
+    exclude(group = "com.google.protobuf", module = "protobuf-java")
+}
+
 dependencies {
+    implementation(project(":domain"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -64,39 +69,35 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(project(":domain")) // Domain Layer에 대한 의존성
-
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation("androidx.multidex:multidex:2.0.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    // implementation("androidx.multidex:multidex:2.0.1")
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Logger
-    implementation("com.orhanobut:logger:2.2.0")
+    implementation(libs.logger)
 
     // AWS
-    implementation("com.amazonaws:aws-android-sdk-mobile-client:2.13.5")
-    implementation("com.amazonaws:aws-android-sdk-cognito:2.13.5")
-    implementation("com.amazonaws:aws-android-sdk-s3:2.13.5")
+    implementation(libs.amazonaws.aws.android.sdk.mobile.client)
+    implementation(libs.amazonaws.aws.android.sdk.cognito)
+    implementation(libs.amazonaws.aws.android.sdk.s3)
 
     // mediapipe
     implementation(libs.tasks.vision)
 
     // Room
-    implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 }

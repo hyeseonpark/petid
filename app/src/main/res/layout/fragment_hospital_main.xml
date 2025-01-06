@@ -90,6 +90,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:background="@drawable/button_outline_ededed"
+            android:text="@string/no_filter"
             android:textSize="13sp"
             android:textFontWeight="500"
             android:textColor="@color/petid_title"

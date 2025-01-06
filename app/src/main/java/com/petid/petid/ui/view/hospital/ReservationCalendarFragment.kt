@@ -29,6 +29,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -97,12 +98,9 @@ class ReservationCalendarFragment:
 
             // 선택 가능한 날짜 범위: from
             val tomorrow = CalendarDay.from(LocalDate.now().plusDays(1))
-            currentDate = tomorrow
-            selectedDate = tomorrow
 
             val todayDecorator = TodayDecorator(context)
-            addDecorators(todayDecorator,
-                DayDecorator(context, tomorrow))
+            addDecorators(todayDecorator)
 
             // 좌우 화살표 사이 연, 월의 폰트 스타일 설정
             setHeaderTextAppearance(R.style.CalendarWidgetHeader)
@@ -121,8 +119,6 @@ class ReservationCalendarFragment:
                 val dayDecorator = DayDecorator(context, date)
                 addDecorators(todayDecorator, dayDecorator)
             }
-
-            triggerDateChangeListener(tomorrow)
 
             // 선택 가능한 날짜 범위: to
             val maxCalendar = Calendar.getInstance()
@@ -181,16 +177,20 @@ class ReservationCalendarFragment:
                     is CommonApiState.Success -> {
                         val orderTimeList = result.data
 
-                        if (orderTimeList.isNotEmpty()) {
-                            // 예약 가능 시간이 있을 때
-                            binding.availableTimeLayout.visibility = View.VISIBLE
-                            binding.dayOffLayout.visibility = View.GONE
-                            initChipGroup(orderTimeList)
-                        } else {
-                            // 예약 가능 시간이 없을 때
-                            binding.availableTimeLayout.visibility = View.GONE
-                            binding.dayOffLayout.visibility = View.VISIBLE
-                            binding.buttonConfirm.isEnabled = false
+                        with(binding) {
+                            if (orderTimeList.isNotEmpty()) {
+                                // 예약 가능 시간이 있을 때
+                                availableTimeLayout.visibility = View.VISIBLE
+                                defaultLayout.visibility = View.GONE
+                                initChipGroup(orderTimeList)
+                            } else {
+                                // 예약 가능 시간이 없을 때
+                                availableTimeLayout.visibility = View.GONE
+                                defaultLayout.visibility = View.VISIBLE
+                                textViewDefaultTitle.text = getString(R.string.hospital_reservation_calendar_day_off)
+                                textViewDefaultDesc.text = getString(R.string.hospital_reservation_calendar_day_off_desc)
+                                buttonConfirm.isEnabled = false
+                            }
                         }
                     }
                     is CommonApiState.Error -> showErrorMessage(result.message.toString())

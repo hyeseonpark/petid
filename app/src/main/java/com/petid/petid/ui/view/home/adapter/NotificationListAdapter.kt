@@ -1,6 +1,5 @@
 package com.petid.petid.ui.view.home.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.petid.data.source.local.entity.NotificationEntity
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ItemNotificationBinding
 
 class NotificationListAdapter(

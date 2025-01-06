@@ -1,4 +1,4 @@
-package com.petid.petid.common
+package com.petid.petid.oauth
 
 import android.os.Bundle
 import android.util.Log

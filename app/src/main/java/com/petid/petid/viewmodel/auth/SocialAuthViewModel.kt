@@ -1,20 +1,18 @@
 package com.petid.petid.viewmodel.auth
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.domain.repository.SocialAuthRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.petid.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
-import com.petid.petid.enum.PlatformType
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.state.CommonApiState.*
 import com.petid.petid.ui.state.LoginResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject

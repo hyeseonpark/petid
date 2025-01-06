@@ -10,18 +10,18 @@ import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.CHIP_TYPE
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentHospitalDetailBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.viewmodel.hospital.HospitalViewModel
 import com.bumptech.glide.Glide
+import com.petid.petid.util.petidNullDialog
 
 class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(FragmentHospitalDetailBinding::inflate) {
     private val viewModel: HospitalViewModel by activityViewModels()
 
     private lateinit var infoDialog : CustomDialogCommon
-    private lateinit var petidNullDialog : CustomDialogCommon
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,9 +53,6 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
                 isSingleButton = true,
                 singleButtonText = getString(R.string.hospital_make_reservation_dialog_info_button))
 
-            petidNullDialog = CustomDialogCommon(
-                getString(R.string.common_dialog_petid_null))
-
             // 이미지
             (R.drawable.img_hospital_list_empty).let {
                 val imgSource: Any? = when(viewModel.hospitalDetail.imageUrl[0]) {
@@ -80,10 +77,10 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
 
             buttonReserve.setOnClickListener{
                 when(getPreferencesControl().getStringValue(Constants.SHARED_PET_CHIP_TYPE)) {
-                    null -> petidNullDialog.show(childFragmentManager, "petidNullDialog")
                     CHIP_TYPE[1] -> infoDialog.show(childFragmentManager, "infoDialog")
-                    else -> findNavController().navigate(
+                    CHIP_TYPE[0], CHIP_TYPE[2] -> findNavController().navigate(
                         R.id.action_hospitalDetailFragment_to_reservationCalendarFragment)
+                    else -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
                 }
             }
         }

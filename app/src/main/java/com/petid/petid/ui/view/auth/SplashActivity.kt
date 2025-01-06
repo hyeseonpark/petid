@@ -7,8 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.petid.petid.common.Constants
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.ActivitySplashBinding
 import com.petid.petid.ui.view.main.MainActivity
 

@@ -71,10 +71,10 @@ class HospitalMainRemoteDataSourceImpl @Inject constructor(
     override suspend fun getHospitalList(
         sidoId: Int,
         sigunguId: Int,
-        eupmundongId: Int
+        eupmundongId: Int?
     ): ApiResult<List<HospitalEntity>> {
         return try {
-            val response = hosptialAPI.getHospitalList(sidoId, sigunguId, eupmundongId)
+            val response = hosptialAPI.getHospitalList(sidoId, sigunguId, nullToEmpty(eupmundongId))
             ApiResult.Success(response.toDomain())
 
         } catch (e: HttpException) {
@@ -92,13 +92,13 @@ class HospitalMainRemoteDataSourceImpl @Inject constructor(
     override suspend fun getHospitalListLoc(
         sidoId: Int,
         sigunguId: Int,
-        eupmundongId: Int,
+        eupmundongId: Int?,
         lat: Double,
         lon: Double
     ): ApiResult<List<HospitalEntity>> {
         return try {
             val response = hosptialAPI.getHospitalListByLocation(
-                sidoId, sigunguId, eupmundongId, lat, lon)
+                sidoId, sigunguId, nullToEmpty(eupmundongId), lat, lon)
             ApiResult.Success(response.toDomain())
 
         } catch (e: HttpException) {
@@ -113,4 +113,11 @@ class HospitalMainRemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    /**
+     * api 규격에 맞추기 위한 Int to String 변환
+     */
+    private fun nullToEmpty(value: Int?): String {
+        if(value == -1) return ""
+        return value?.toString() ?: ""
+    }
 }

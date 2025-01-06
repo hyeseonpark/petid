@@ -16,27 +16,22 @@
         <action
             android:id="@+id/action_homeMainFragment_to_hospitalMainFragment"
             app:destination="@id/hospitalMainFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/blogMainFragment"
-        android:name=".ui.view.blog.BlogMainFragment"
-        android:label="fragment_blog_main"
-        tools:layout="@layout/fragment_blog_main" >
         <action
-            android:id="@+id/action_blogMainFragment_to_hospitalMainFragment"
-            app:destination="@id/blogMainFragment" />
+            android:id="@+id/action_homeMainFragment_to_myMainFragment"
+            app:destination="@id/myMainFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/hospitalMainFragment"
         android:name=".ui.view.hospital.HospitalMainFragment"
         android:label="HospitalMainFragment"
-        tools:layout="@layout/fragment_hospital_main" >
-        <action
-            android:id="@+id/action_hospitalMainFragment_to_myMainFragment"
-            app:destination="@id/myMainFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_hospital_main" />
+
+    <fragment
+        android:id="@+id/blogMainFragment"
+        android:name=".ui.view.blog.BlogMainFragment"
+        android:label="fragment_blog_main"
+        tools:layout="@layout/fragment_blog_main" />
 
     <fragment
         android:id="@+id/myMainFragment"

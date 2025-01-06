@@ -13,9 +13,9 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.lifecycleScope
 import com.petid.petid.BuildConfig
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ActivitySocialAuthBinding
-import com.petid.petid.enum.PlatformType
+import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.state.LoginResult
@@ -200,7 +200,7 @@ class SocialAuthActivity : BaseActivity() {
             BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.social_login_info_naver_client_name))
 
-        NaverIdLoginSDK.authenticate(this, oauthNaverLoginCallback)
+        NaverIdLoginSDK.reagreeAuthenticate(this, oauthNaverLoginCallback)
     }
 
 
