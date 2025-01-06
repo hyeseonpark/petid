@@ -65,52 +65,80 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         with(binding) {
 
             // 내 정보
-            layoutMyinfo.setOnClickListener {
-                when(petIdValue) {
-                    -1 -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
-                    else -> {
-                        val target = Intent(activity, MyInfoActivity::class.java)
-                        startActivity(target)
+            layoutMyinfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    when(petIdValue) {
+                        -1 -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
+                        else -> {
+                            val target = Intent(activity, MyInfoActivity::class.java)
+                            startActivity(target)
+                        }
                     }
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 반려동물 정보
-            layoutPetInfo.setOnClickListener {
-                when(petIdValue) {
-                    -1 -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
-                    else -> {
-                        val target = Intent(activity, PetInfoActivity::class.java)
-                        startActivity(target)
+            layoutPetInfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    when(petIdValue) {
+                        -1 -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
+                        else -> {
+                            val target = Intent(activity, PetInfoActivity::class.java)
+                            startActivity(target)
+                        }
                     }
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 예약 내역
-            layoutReservationHistory.setOnClickListener {
-                val target = Intent(activity, ReservationHistoryInfoActivity::class.java)
-                startActivity(target)
-            }
+            layoutReservationHistory
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(activity, ReservationHistoryInfoActivity::class.java)
+                    startActivity(target)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 약관 및 개인정보 처리 동의
-            layoutTermsAgreeInfo.setOnClickListener {
-                //
-            }
+            layoutTermsAgreeInfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 개인정보 처리방침
-            layoutPersonalServiceInfo.setOnClickListener {
-                //
-            }
+            layoutPersonalServiceInfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 공지사항
-            layoutNotice.setOnClickListener {
-                //
-            }
+            layoutNotice
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 자주하는 질문
-            layoutQna.setOnClickListener {
-                //
-            }
+            layoutQna
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 탈퇴하기
             textViewWithdraw

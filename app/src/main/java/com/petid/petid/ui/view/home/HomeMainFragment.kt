@@ -86,15 +86,23 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun initComponent() {
         with(binding) {
-            imageViewNoti.setOnClickListener {
-                val target = Intent(activity, NotificationActivity::class.java)
-                startActivity(target)
-            }
+            imageViewNoti
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(activity, NotificationActivity::class.java)
+                    startActivity(target)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonCreateStart.setOnClickListener{
-                val target = Intent(activity, GeneratePetidMainActivity::class.java)
-                startActivity(target)
-            }
+            buttonCreateStart
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(activity, GeneratePetidMainActivity::class.java)
+                    startActivity(target)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 내장칩 미 등록자 > '지금 반려동물을 등록하세요' 버튼
             listOf(layoutRegister, layoutRegisterBack).forEach {
@@ -147,12 +155,17 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
 
             // Debug Mode: 로고 클릭시 카드 변경
             if(BuildConfig.DEBUG) {
-                imageViewLogo.setOnClickListener {
-                    when(binding.viewNoPetidCard.visibility) {
-                        View.VISIBLE -> setPetidCardType(CHIP_TYPE[1])
-                        View.GONE -> setPetidCardType(null)
+                imageViewLogo
+                    .clicks()
+                    .throttleFirst()
+                    .onEach {
+                        when(binding.viewNoPetidCard.visibility) {
+                            View.VISIBLE -> setPetidCardType(CHIP_TYPE[1])
+                            View.GONE -> setPetidCardType(null)
+                        }
                     }
-                }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
+
             }
         }
     }

@@ -25,6 +25,7 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.hospital.HospitalViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.petid.petid.util.throttleFirst
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
@@ -33,8 +34,11 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
+import ru.ldralighieri.corbind.view.clicks
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -77,10 +81,13 @@ class ReservationCalendarFragment:
             viewModel.hospitalId = viewModel.hospitalId
 
             // 예약 완료 버튼
-            buttonConfirm.setOnClickListener{
-                showLoading()
-                viewModel.createHospitalOrder()
-            }
+            buttonConfirm
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.createHospitalOrder()
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // chip group 줄 간격 설정
             morningChipGroup.chipSpacingVertical = 0
