@@ -11,9 +11,13 @@ import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.showErrorMessage
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.auth.TermsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 @AndroidEntryPoint
 class TermsActivity : BaseActivity() {
@@ -35,18 +39,21 @@ class TermsActivity : BaseActivity() {
                 setStyleSpan(applicationContext, textViewTitle.text.toString(),
                     resources.getString(R.string.terms_activity_title_span), R.color.petid_clear_blue)
 
-            checkBoxAll.setOnClickListener {
-                if (checkBoxAll.isChecked) {
-                    checkboxTermsAgree.isChecked = true
-                    checkBoxPersonalInfoAgree.isChecked = true
-                    checkboxAdsAgree.isChecked = true
-                } else {
-                    checkboxTermsAgree.isChecked = false
-                    checkBoxPersonalInfoAgree.isChecked = false
-                    checkboxAdsAgree.isChecked = false
-
+            checkBoxAll
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    if (checkBoxAll.isChecked) {
+                        checkboxTermsAgree.isChecked = true
+                        checkBoxPersonalInfoAgree.isChecked = true
+                        checkboxAdsAgree.isChecked = true
+                    } else {
+                        checkboxTermsAgree.isChecked = false
+                        checkBoxPersonalInfoAgree.isChecked = false
+                        checkboxAdsAgree.isChecked = false
+                    }
                 }
-            }
+                .launchIn(lifecycleScope)
 
             checkboxTermsAgree.setOnCheckedChangeListener{ _ , isChecked ->
                 allChecked()
@@ -60,9 +67,14 @@ class TermsActivity : BaseActivity() {
                 allChecked()
             }
 
-            buttonNext.setOnClickListener{
-                doJoin()
-            }
+            buttonNext
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    doJoin()
+                }
+                .launchIn(lifecycleScope)
+
         }
     }
 

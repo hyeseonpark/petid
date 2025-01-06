@@ -5,14 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentCheckingInfoBinding
 import com.petid.petid.util.booleanCharToSign
 import com.petid.petid.util.genderCharToString
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 @AndroidEntryPoint
 class CheckingInfoFragment : BaseFragment<FragmentCheckingInfoBinding>(FragmentCheckingInfoBinding::inflate) {
@@ -36,9 +41,14 @@ class CheckingInfoFragment : BaseFragment<FragmentCheckingInfoBinding>(FragmentC
 
     fun initComponent() {
         with(binding) {
-            buttonNext.setOnClickListener{
-                findNavController().navigate(R.id.action_checkingInfoFragment_to_signatureFragment)
-            }
+            buttonNext
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    findNavController().navigate(R.id.action_checkingInfoFragment_to_signatureFragment)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
             viewModel.petInfo.build().also {
                 textViewName.text = it.petName
                 textViewBirth.text = it.petBirthDate

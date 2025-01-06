@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.BuildConfig
 import com.petid.petid.R
@@ -14,7 +15,11 @@ import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentUserInfoInputBinding
 import com.petid.petid.ui.view.common.BundleKeys
 import com.petid.petid.util.addPhoneNumberFormatting
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(FragmentUserInfoInputBinding::inflate) {
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
@@ -65,15 +70,23 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
 
             editTextPhone.addPhoneNumberFormatting()
 
-            editTextAddress.setOnClickListener {
-                findNavController().navigate(R.id.action_userInfoInputFragment_to_addressSearchFragment)
-            }
+            editTextAddress
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    findNavController().navigate(R.id.action_userInfoInputFragment_to_addressSearchFragment)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            editTextRra.setOnClickListener{
-                val action = UserInfoInputFragmentDirections
-                    .actionUserInfoInputFragmentToAddressSearchFragment(BundleKeys.KEY_ADDRESS_RRA)
-                findNavController().navigate(action)
-            }
+            editTextRra
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val action = UserInfoInputFragmentDirections
+                        .actionUserInfoInputFragmentToAddressSearchFragment(BundleKeys.KEY_ADDRESS_RRA)
+                    findNavController().navigate(action)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             checkboxTermsAgree.setOnCheckedChangeListener { _, isChecked ->
                 buttonNext.isEnabled = isPossibleToNextStep()
@@ -83,18 +96,22 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
                 }
             }
 
-            buttonNext.setOnClickListener{
-                val name = editTextName.text.toString()
-                val address = editTextAddress.text.toString()
-                val addressDetail = editTextAddressDetail.text.toString()
-                val rra = editTextRra.text.toString()
-                val rraDetail = editTextRraDetail.text.toString()
-                val phone = editTextPhone.text.toString()
+            buttonNext
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val name = editTextName.text.toString()
+                    val address = editTextAddress.text.toString()
+                    val addressDetail = editTextAddressDetail.text.toString()
+                    val rra = editTextRra.text.toString()
+                    val rraDetail = editTextRraDetail.text.toString()
+                    val phone = editTextPhone.text.toString()
 
-                viewModel.petInfo.setProposer(name, address, addressDetail, rra, rraDetail, phone)
+                    viewModel.petInfo.setProposer(name, address, addressDetail, rra, rraDetail, phone)
 
-                findNavController().navigate(R.id.action_userInfoInputFragment_to_petInfoInputFragment)
-            }
+                    findNavController().navigate(R.id.action_userInfoInputFragment_to_petInfoInputFragment)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

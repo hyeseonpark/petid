@@ -29,10 +29,14 @@ import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.TAG
 import com.petid.petid.util.showErrorMessage
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.generate.AnalysisState
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -76,23 +80,31 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
 
     fun initComponent() {
         with(binding) {
-            buttonTakingPhoto.setOnClickListener{
-                val cameraPermissionCheck = ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.CAMERA
-                )
+            buttonTakingPhoto
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val cameraPermissionCheck = ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    )
 
-                if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 촬영 권한 없는 경우
-                    cameraPermissionResult.launch(Manifest.permission.CAMERA)
-                } else {
-                    takePictureFullSize()
+                    if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 촬영 권한 없는 경우
+                        cameraPermissionResult.launch(Manifest.permission.CAMERA)
+                    } else {
+                        takePictureFullSize()
+                    }
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             if (BuildConfig.DEBUG) {
-                textViewCurrentStep.setOnClickListener{
-                    findNavController().navigate(R.id.action_petPhotoFragment_to_scannedInfoFragment)
-                }
+                textViewCurrentStep
+                    .clicks()
+                    .throttleFirst()
+                    .onEach {
+                        findNavController().navigate(R.id.action_petPhotoFragment_to_scannedInfoFragment)
+                    }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
             }
         }
     }

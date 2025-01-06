@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
@@ -19,8 +20,12 @@ import com.petid.petid.databinding.FragmentScannedInfoBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.DecimalDigitsInputFilter
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 @AndroidEntryPoint
 class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentScannedInfoBinding::inflate) {
@@ -99,15 +104,19 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
 
             editTextWeight.filters = arrayOf(DecimalDigitsInputFilter(1))
 
-            buttonNext.setOnClickListener{
-                viewModel.petInfo.setAppearance(
-                    autoCompleteTextViewBreed.text.toString(),
-                    autoCompleteTextViewColor.text.toString(),
-                    editTextWeight.text.toString().toIntOrNull() ?: 0,
-                    autoCompleteTextViewFeature.text.toString(),
-                )
-                findNavController().navigate(R.id.action_scannedInfoFragment_to_checkingInfoFragment)
-            }
+            buttonNext
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.petInfo.setAppearance(
+                        autoCompleteTextViewBreed.text.toString(),
+                        autoCompleteTextViewColor.text.toString(),
+                        editTextWeight.text.toString().toIntOrNull() ?: 0,
+                        autoCompleteTextViewFeature.text.toString(),
+                    )
+                    findNavController().navigate(R.id.action_scannedInfoFragment_to_checkingInfoFragment)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             dialog = CustomDialogCommon(
                 getString(R.string.petid_generate_step_5_dialog), {
