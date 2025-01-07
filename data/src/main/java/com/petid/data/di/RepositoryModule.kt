@@ -1,4 +1,4 @@
-package com.petid.petid.di
+package com.petid.data.di
 
 import com.petid.data.repository.BlogMainRepositoryImpl
 import com.petid.data.repository.ContentDetailRepositoryImpl

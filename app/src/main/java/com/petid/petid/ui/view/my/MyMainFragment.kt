@@ -15,8 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.petid.petid.R
 import com.petid.petid.common.Constants
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentMyMainBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonApiState
@@ -27,6 +27,7 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
+import com.petid.petid.util.petidNullDialog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -62,55 +63,82 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
 
     private fun initComponent() {
         with(binding) {
-            val petidNullDialog = CustomDialogCommon(getString(R.string.common_dialog_petid_null))
 
             // 내 정보
-            layoutMyinfo.setOnClickListener {
-                when(petIdValue) {
-                    -1 -> petidNullDialog.show(childFragmentManager, null)
-                    else -> {
-                        val target = Intent(activity, MyInfoActivity::class.java)
-                        startActivity(target)
+            layoutMyinfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    when(petIdValue) {
+                        -1 -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
+                        else -> {
+                            val target = Intent(activity, MyInfoActivity::class.java)
+                            startActivity(target)
+                        }
                     }
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 반려동물 정보
-            layoutPetInfo.setOnClickListener {
-                when(petIdValue) {
-                    -1 -> petidNullDialog.show(childFragmentManager, null)
-                    else -> {
-                        val target = Intent(activity, PetInfoActivity::class.java)
-                        startActivity(target)
+            layoutPetInfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    when(petIdValue) {
+                        -1 -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
+                        else -> {
+                            val target = Intent(activity, PetInfoActivity::class.java)
+                            startActivity(target)
+                        }
                     }
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 예약 내역
-            layoutReservationHistory.setOnClickListener {
-                val target = Intent(activity, ReservationHistoryInfoActivity::class.java)
-                startActivity(target)
-            }
+            layoutReservationHistory
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(activity, ReservationHistoryInfoActivity::class.java)
+                    startActivity(target)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 약관 및 개인정보 처리 동의
-            layoutTermsAgreeInfo.setOnClickListener {
-                //
-            }
+            layoutTermsAgreeInfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 개인정보 처리방침
-            layoutPersonalServiceInfo.setOnClickListener {
-                //
-            }
+            layoutPersonalServiceInfo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 공지사항
-            layoutNotice.setOnClickListener {
-                //
-            }
+            layoutNotice
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 자주하는 질문
-            layoutQna.setOnClickListener {
-                //
-            }
+            layoutQna
+                .clicks()
+                .throttleFirst()
+                .onEach {
+
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 탈퇴하기
             textViewWithdraw

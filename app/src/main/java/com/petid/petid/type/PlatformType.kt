@@ -1,4 +1,4 @@
-package com.petid.petid.enum
+package com.petid.petid.type
 
 enum class PlatformType(val value: String) {
     naver("naver"),

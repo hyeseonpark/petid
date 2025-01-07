@@ -13,9 +13,9 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.lifecycleScope
 import com.petid.petid.BuildConfig
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ActivitySocialAuthBinding
-import com.petid.petid.enum.PlatformType
+import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.state.LoginResult
@@ -43,9 +43,13 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.petid.petid.util.throttleFirst
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 @AndroidEntryPoint
 class SocialAuthActivity : BaseActivity() {
@@ -109,19 +113,30 @@ class SocialAuthActivity : BaseActivity() {
      */
     private fun initLoginComponent() {
         with(binding) {
-            buttonKakaoAuth.setOnClickListener {
-                viewModel.platform = PlatformType.kakao
-                handleKakaoLogin()
-            }
-            buttonNaverAuth.setOnClickListener {
-                viewModel.platform = PlatformType.naver
-                handleNaverLogin()
-            }
-            buttonGoogleAuth.setOnClickListener {
-                viewModel.platform = PlatformType.google
+            buttonKakaoAuth
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.platform = PlatformType.kakao
+                    handleKakaoLogin()
+                }
+                .launchIn(lifecycleScope)
 
-                // TODO 구글로그인 형식 변경
-                lifecycleScope.launch {
+            buttonNaverAuth
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.platform = PlatformType.naver
+                    handleNaverLogin()
+                }
+                .launchIn(lifecycleScope)
+
+            buttonGoogleAuth
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.platform = PlatformType.google
+
                     val credentialManager = CredentialManager.create(getGlobalContext())
 
                     val googleIdOption = GetGoogleIdOption.Builder()
@@ -149,9 +164,9 @@ class SocialAuthActivity : BaseActivity() {
 
                         showErrorMessage("GoogleLoginError: ${ex.message}")
                     }
+                    //handleGoogleLogin()
                 }
-                //handleGoogleLogin()
-            }
+                .launchIn(lifecycleScope)
         }
     }
 
@@ -200,7 +215,7 @@ class SocialAuthActivity : BaseActivity() {
             BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.social_login_info_naver_client_name))
 
-        NaverIdLoginSDK.authenticate(this, oauthNaverLoginCallback)
+        NaverIdLoginSDK.reagreeAuthenticate(this, oauthNaverLoginCallback)
     }
 
 

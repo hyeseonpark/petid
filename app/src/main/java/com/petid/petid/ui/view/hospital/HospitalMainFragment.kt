@@ -1,7 +1,6 @@
 package com.petid.petid.ui.view.hospital
 
 import android.Manifest
-import androidx.core.content.ContextCompat
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,7 +22,7 @@ import com.petid.petid.R
 import com.petid.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.petid.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.petid.petid.common.Constants.LOCATION_SIGUNGU_TYPE
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.FragmentHospitalMainBinding
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseFragment
@@ -31,15 +31,16 @@ import com.petid.petid.ui.view.hospital.adapter.HospitalListAdapter
 import com.petid.petid.util.TAG
 import com.petid.petid.util.hideKeyboardAndClearFocus
 import com.petid.petid.util.showErrorMessage
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.editorActions
 
 
 /**
@@ -47,10 +48,6 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentHospitalMainBinding::inflate) {
-
-    companion object{
-        fun newInstance() = HospitalMainFragment()
-    }
 
     private val viewModel: HospitalMainViewModel by activityViewModels()
 
@@ -82,17 +79,20 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             title = getString(R.string.main_hospital_title),
         )
 
-        // 위치 권한 확인
-        if (ContextCompat.checkSelfPermission(
-                getGlobalContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // 권한 부여 안되어 있음
-            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        } else {
-            // 이미 권한 부여되어있으면 바로 위치 정보 가져오기
-            viewModel.getSingleLocation()
+        // 기존에 불러온 데이터가 없는 경우만 초기 데이터 불러오기
+        if(viewModel.hospitalApiState.value == CommonApiState.Init) {
+            // 위치 권한 확인
+            if (ContextCompat.checkSelfPermission(
+                    getGlobalContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // 권한 부여 안되어 있음
+                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            } else {
+                // 이미 권한 부여되어있으면 바로 위치 정보 가져오기
+                viewModel.getSingleLocation()
+            }
         }
 
         initComponent()
@@ -125,42 +125,24 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             // 검색 기능
             editTextSeacrh
                 .flowTextWatcher()
-                .debounce(300)
+                .debounce(500)
                 .onEach {
-
-                    val filteredList: List<HospitalEntity>? =
-                        when(val text = editTextSeacrh.text?.trim()) {
-                            "" -> currentHospitalList
-                            else -> {
-                                currentHospitalList?.filter{ hospital ->
-                                    hospital.name.contains(text!!, ignoreCase = true)
-                                }
-                            }
-                        }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        when(filteredList?.size) {
-                            0 -> {
-                                textNoResult.visibility = View.VISIBLE
-                                layoutData.visibility = View.GONE
-                            }
-                            else -> {
-                                textNoResult.visibility = View.GONE
-                                layoutData.visibility = View.VISIBLE
-                                hospitalListAdapter.submitList(filteredList)
-                            }
-                        }
-                    }
+                    val filteredList = getFilteredList(editTextSeacrh.text.toString())
+                    updateListUi(filteredList)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            editTextSeacrh.setOnEditorActionListener { _, actionId, _ ->
-                var check = false
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    requireActivity().hideKeyboardAndClearFocus()
-                    check = true
+            editTextSeacrh
+                .editorActions()
+                .onEach {
+                    var check = false
+                    if (it == EditorInfo.IME_ACTION_DONE) {
+                        requireActivity().hideKeyboardAndClearFocus()
+                        check = true
+                    }
+                    check
                 }
-                check
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             hospitalListAdapter = HospitalListAdapter(requireActivity()) { item ->
                 val intent = Intent(activity, HospitalActivity::class.java)
@@ -174,18 +156,61 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                 adapter = hospitalListAdapter
             }
 
-            buttonSido.setOnClickListener{
-                viewModel.currentSidoList?.let { data -> modalBottomSheet(LOCATION_SIDO_TYPE, data) }
-            }
+            buttonSido
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.currentSidoList?.let { data -> modalBottomSheet(LOCATION_SIDO_TYPE, data) }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonSigungu.setOnClickListener{
-                viewModel.currentSigunguList?.let { data -> modalBottomSheet(LOCATION_SIGUNGU_TYPE, data) }
-            }
+            buttonSigungu
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.currentSigunguList?.let { data -> modalBottomSheet(LOCATION_SIGUNGU_TYPE, data) }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonEupmundong.setOnClickListener{
-                viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
-            }
+            buttonEupmundong
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
+        }
+    }
+
+    /**
+     * get filtered list
+     */
+    private fun getFilteredList(text: String): List<HospitalEntity>? = when(text.trim().isEmpty()) {
+        true -> currentHospitalList
+        false -> {
+            currentHospitalList?.filter{ hospital ->
+                hospital.name.contains(text, ignoreCase = true)
+            }
+        }
+    }
+
+    /**
+     * update list ui
+     */
+    private fun updateListUi(filteredList: List<HospitalEntity>?) {
+        with(binding) {
+            when(filteredList?.size) {
+                0 -> {
+                    textNoResult.visibility = View.VISIBLE
+                    layoutData.visibility = View.GONE
+                }
+                else -> {
+                    textNoResult.visibility = View.GONE
+                    layoutData.visibility = View.VISIBLE
+                    hospitalListAdapter.submitList(filteredList)
+                }
+            }
         }
     }
 
@@ -231,8 +256,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
         lifecycleScope.launch {
             viewModel.currentEupmundongState.collect { eupmundong ->
                 eupmundong?.let {
-                    val name = it.name
-                    binding.buttonEupmundong.text = name
+                    binding.buttonEupmundong.text = it.name
                 }
             }
         }
@@ -244,9 +268,6 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
     private fun observeCurrentHospitalListState() {
         lifecycleScope.launch {
             viewModel.hospitalApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
-                    hideLoading()
-
                 when (result) {
                     is CommonApiState.Success -> {
                         currentHospitalList = result.data
@@ -257,11 +278,15 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                                 true -> R.string.filter_by_name
                                 false -> R.string.filter_by_location
                             })
+                        binding.editTextSeacrh.text?.clear()
                     }
                     is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
                     is CommonApiState.Init -> {}
                 }
+
+                if (result !is CommonApiState.Loading)
+                    hideLoading()
             }
         }
     }

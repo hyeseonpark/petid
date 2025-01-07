@@ -2,10 +2,15 @@ package com.petid.petid.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import androidx.lifecycle.lifecycleScope
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ActivitySignupCompleteBinding
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.main.MainActivity
+import com.petid.petid.util.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 class SignupCompleteActivity : BaseActivity() {
     private lateinit var binding: ActivitySignupCompleteBinding
@@ -19,17 +24,25 @@ class SignupCompleteActivity : BaseActivity() {
 
     private fun initComponent() {
         with(binding) {
-            buttonConfirm.setOnClickListener{
-                val target = Intent(getGlobalContext(), MainActivity::class.java)
-                startActivity(target)
-                finish()
-            }
+            buttonConfirm
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(getGlobalContext(), MainActivity::class.java)
+                    startActivity(target)
+                    finish()
+                }
+                .launchIn(lifecycleScope)
 
-            imageButtonClose.setOnClickListener{
-                val target = Intent(getGlobalContext(), MainActivity::class.java)
-                startActivity(target)
-                finish()
-            }
+            imageButtonClose
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(getGlobalContext(), MainActivity::class.java)
+                    startActivity(target)
+                    finish()
+                }
+                .launchIn(lifecycleScope)
         }
     }
 }

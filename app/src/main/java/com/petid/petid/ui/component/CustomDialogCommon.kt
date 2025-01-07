@@ -7,9 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.DialogCommonBinding
+import com.petid.petid.util.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 class CustomDialogCommon(
     private val title: String,
@@ -34,17 +39,25 @@ class CustomDialogCommon(
         with(binding) {
             textViewTitle.text = title
 
-            buttonNo.setOnClickListener {
-                noButtonClick?.invoke()
-                dismiss()
-            }
-
-            buttonYes.setOnClickListener {
-                when(yesButtonClick) {
-                    null -> dismiss()
-                    else -> yesButtonClick.invoke()
+            buttonNo
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    noButtonClick?.invoke()
+                    dismiss()
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            buttonYes
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    when(yesButtonClick) {
+                        null -> dismiss()
+                        else -> yesButtonClick.invoke()
+                    }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             if (boldTitle != null) {
                 textViewTitleBold.apply {

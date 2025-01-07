@@ -24,7 +24,7 @@ interface HosptialAPI {
     suspend fun getHospitalList(
         @Query("sido") sido: Int,
         @Query("sigungu") sigungu: Int,
-        @Query("eupmundong") eupmundong: Int,
+        @Query("eupmundong") eupmundong: String = "",
     ) : List<HospitalResponse>
 
     /**
@@ -34,7 +34,7 @@ interface HosptialAPI {
     suspend fun getHospitalListByLocation(
         @Query("sido") sido: Int,
         @Query("sigungu") sigungu: Int,
-        @Query("eupmundong") eupmundong: Int,
+        @Query("eupmundong") eupmundong: String = "",
         @Query("lat") lat: Double,
         @Query("lon") lon: Double
     ) : List<HospitalResponse>

@@ -11,27 +11,26 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.bumptech.glide.Glide
 import com.petid.domain.entity.BannerEntity
 import com.petid.petid.BuildConfig
 import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.BANNER_TYPE_MAIN
 import com.petid.petid.common.Constants.CHIP_TYPE
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentHomeMainBinding
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.ui.view.generate.GeneratePetidMainActivity
 import com.petid.petid.ui.view.home.adapter.HomeBannerAdapter
 import com.petid.petid.util.booleanCharToSign
-import com.petid.petid.util.genderCharToString
 import com.petid.petid.util.calculateAge
+import com.petid.petid.util.genderCharToString
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.home.HomeMainViewModel
-import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -65,6 +64,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         observeGetMemberInfoState()
         observeGetPetInfoState()
         observeGetPetImageUrlState()
+        observeHasUncheckedNotificationState()
 
         viewModel.getBannerList(BANNER_TYPE_MAIN)
     }
@@ -72,6 +72,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     override fun onResume() {
         super.onResume()
         viewModel.getMemberInfo()
+        viewModel.hasUncheckedNotification()
     }
 
     override fun onStop() {
@@ -85,15 +86,23 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun initComponent() {
         with(binding) {
-            imageViewNoti.setOnClickListener {
-                val target = Intent(activity, NotificationActivity::class.java)
-                startActivity(target)
-            }
+            imageViewNoti
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(activity, NotificationActivity::class.java)
+                    startActivity(target)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonCreateStart.setOnClickListener{
-                val target = Intent(activity, GeneratePetidMainActivity::class.java)
-                startActivity(target)
-            }
+            buttonCreateStart
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(activity, GeneratePetidMainActivity::class.java)
+                    startActivity(target)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 내장칩 미 등록자 > '지금 반려동물을 등록하세요' 버튼
             listOf(layoutRegister, layoutRegisterBack).forEach {
@@ -146,12 +155,17 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
 
             // Debug Mode: 로고 클릭시 카드 변경
             if(BuildConfig.DEBUG) {
-                imageViewLogo.setOnClickListener {
-                    when(binding.viewNoPetidCard.visibility) {
-                        View.VISIBLE -> setPetidCardType(CHIP_TYPE[1])
-                        View.GONE -> setPetidCardType(null)
+                imageViewLogo
+                    .clicks()
+                    .throttleFirst()
+                    .onEach {
+                        when(binding.viewNoPetidCard.visibility) {
+                            View.VISIBLE -> setPetidCardType(CHIP_TYPE[1])
+                            View.GONE -> setPetidCardType(null)
+                        }
                     }
-                }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
+
             }
         }
     }
@@ -166,15 +180,18 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     viewNoPetidCard.visibility = View.GONE
                     viewPetidCard.visibility = View.VISIBLE
                     layoutRegister.visibility = View.VISIBLE
+                    textViewFlip.visibility = View.VISIBLE
                 }
                 CHIP_TYPE[2] -> {
                     viewNoPetidCard.visibility = View.GONE
                     viewPetidCard.visibility = View.VISIBLE
                     layoutRegister.visibility = View.GONE
+                    textViewFlip.visibility = View.VISIBLE
                 }
                 null -> {
                     viewNoPetidCard.visibility = View.VISIBLE
                     viewPetidCard.visibility = View.GONE
+                    textViewFlip.visibility = View.GONE
                 }
             }
         }
@@ -200,7 +217,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun observeBannerPosition() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.bannerScrollPosition.collectLatest { position ->
+                viewModel.bannerScrollPosition.collect { position ->
                     binding.recyclerviewBannerList.smoothScrollToPosition(position)
                     binding.textViewCurrentPage.text = "${position % bannerAdapter.getListSize() + 1}"
                 }
@@ -214,7 +231,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun setupBannerObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.bannerApiState.collectLatest { result ->
+                viewModel.bannerApiState.collect { result ->
                     if (result !is CommonApiState.Loading)
                         hideLoading()
 
@@ -237,7 +254,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun observeGetMemberInfoState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getMemberInfoResult.collectLatest { result ->
+            viewModel.getMemberInfoResult.collect { result ->
                 if (result !is CommonApiState.Loading)
                     hideLoading()
 
@@ -282,7 +299,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun observeGetPetInfoState() {
         lifecycleScope.launch {
-            viewModel.getPetDetailsResult.collectLatest { result ->
+            viewModel.getPetDetailsResult.collect { result ->
                 if (result !is CommonApiState.Loading)
                     hideLoading()
 
@@ -324,21 +341,43 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun observeGetPetImageUrlState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getPetImageUrlResult.collectLatest { result ->
+            viewModel.getPetImageUrlResult.collect { result ->
                 if (result !is CommonApiState.Loading)
                     hideLoading()
 
                 when (result) {
                     is CommonApiState.Success -> {
-                        R.color.d9.let {
-                            Glide.with(requireContext())
-                                .load(result.data)
-                                .error(it)
-                                .into(binding.imageViewCardPetPhoto)
-                        }
+                        // TODO 강사님께 금요일날 확인받기
+                        Glide.with(requireContext())
+                            .load(result.data)
+                            .error(R.color.d9)
+                            .into(binding.imageViewCardPetPhoto)
                     }
                     is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()
+                    is CommonApiState.Init -> {}
+                }
+            }
+        }
+    }
+
+    /**
+     * viewModel.getPetImageUrl 결과값 view 반영
+     */
+    private fun observeHasUncheckedNotificationState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.unchekedNotifcationState.collect { result ->
+                when (result) {
+                    is CommonApiState.Success -> {
+                        val image = when(result.data) {
+                            true -> R.drawable.ic_home_noti_alert
+                            false -> R.drawable.ic_home_noti_default
+                        }
+
+                        binding.imageViewNoti.setImageResource(image)
+                    }
+                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                    is CommonApiState.Loading -> {}
                     is CommonApiState.Init -> {}
                 }
             }

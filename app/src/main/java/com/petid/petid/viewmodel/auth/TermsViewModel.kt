@@ -6,8 +6,8 @@ import com.petid.domain.repository.TermsRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.petid.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
-import com.petid.petid.enum.PlatformType
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

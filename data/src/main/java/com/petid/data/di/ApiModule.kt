@@ -1,4 +1,4 @@
-package com.petid.petid.di
+package com.petid.data.di
 
 import com.petid.data.api.AuthAPI
 import com.petid.data.api.AuthAuthenticator
@@ -12,9 +12,9 @@ import com.petid.data.api.NullOnEmptyConverterFactory
 import com.petid.data.api.PetAPI
 import com.petid.data.api.MemberAPI
 import com.petid.data.util.PreferencesHelper
-import com.petid.petid.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.petid.data.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

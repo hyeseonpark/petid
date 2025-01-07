@@ -9,12 +9,17 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ActivityIntroBinding
 import com.petid.petid.ui.view.common.BaseActivity
+import com.petid.petid.util.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 class IntroActivity : BaseActivity() {
     private lateinit var binding: ActivityIntroBinding
@@ -33,11 +38,15 @@ class IntroActivity : BaseActivity() {
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, lifecycle)
 
         with(binding) {
-            buttonStart.setOnClickListener{
-                val target = Intent(getGlobalContext(), SocialAuthActivity::class.java)
-                startActivity(target)
-                finish()
-            }
+            buttonStart
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val target = Intent(getGlobalContext(), SocialAuthActivity::class.java)
+                    startActivity(target)
+                    finish()
+                }
+                .launchIn(lifecycleScope)
 
             viewPager.apply {
                 setAdapter(mSectionsPagerAdapter)

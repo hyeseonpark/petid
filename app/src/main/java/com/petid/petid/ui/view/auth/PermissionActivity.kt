@@ -2,13 +2,18 @@ package com.petid.petid.ui.view.auth
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.petid.petid.R
 import com.petid.petid.common.Constants
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.ActivityPermissionBinding
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.setStyleSpan
+import com.petid.petid.util.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 class PermissionActivity : BaseActivity() {
     private lateinit var binding: ActivityPermissionBinding
@@ -32,16 +37,21 @@ class PermissionActivity : BaseActivity() {
                     getString(R.string.permission_title_1_span),
                     R.color.dark_red)
 
-            buttonConfirm.setOnClickListener{
-                // TODO 권한 요청하기
-                getPreferencesControl()
-                    .saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
-                val target = Intent(getGlobalContext(), IntroActivity::class.java).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            buttonConfirm
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    // TODO 권한 요청하기
+                    getPreferencesControl()
+                        .saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
+                    val target = Intent(getGlobalContext(), IntroActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    startActivity(target)
+                    finish()
                 }
-                startActivity(target)
-                finish()
-            }
+                .launchIn(lifecycleScope)
+
         }
     }
 

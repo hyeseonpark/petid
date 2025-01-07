@@ -18,6 +18,21 @@
         android:id="@+id/petInfoUpdateFragment"
         android:name=".ui.view.my.PetInfoUpdateFragment"
         android:label="fragment_pet_info_update"
-        tools:layout="@layout/fragment_pet_info_update" />
+        tools:layout="@layout/fragment_pet_info_update" >
+        <action
+            android:id="@+id/action_petInfoUpdateFragment_to_addressSearchFragment"
+            app:destination="@id/addressSearchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addressSearchFragment"
+        android:name=".ui.view.common.AddressSearchFragment"
+        android:label="fragment_address_search"
+        tools:layout="@layout/fragment_address_search" >
+        <argument
+            android:name="Key"
+            app:argType="string"
+            android:defaultValue="addressData" />
+    </fragment>
 
 </navigation>

@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.flow
 /**
  * Throttle first
  * @param intervalTime 입력된 시간동안 이벤트를 진입시키지 않음
- * @return
  */
 fun <T> Flow<T>.throttleFirst(
     intervalTime: Long = 300L

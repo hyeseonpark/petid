@@ -3,6 +3,7 @@ package com.petid.petid.viewmodel.my
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.petid.data.util.S3UploadHelper
 import com.petid.domain.entity.PetDetailsEntity
 import com.petid.domain.entity.PetUpdateEntity
@@ -11,8 +12,7 @@ import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
-import com.petid.petid.common.Constants.SHARED_MEMBER_ID_VALUE
-import com.petid.petid.common.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.state.CommonApiState.*
 import com.petid.petid.ui.state.CommonApiState.Error
@@ -104,6 +104,7 @@ class PetInfoViewModel @Inject constructor(
     fun uploadFile(context: Context, file: File, fileName: String) {
         viewModelScope.launch {
             _updatePetPhotoResult.emit(Loading)
+
             val s3UploadHelper = S3UploadHelper()
             val result = s3UploadHelper.uploadWithTransferUtility(
                 context = context,
@@ -113,10 +114,11 @@ class PetInfoViewModel @Inject constructor(
             )
             result.fold(
                 onSuccess = {
-                    updatePetPhoto()
+                    _updatePetPhotoResult.emit(Success(Unit))
                 },
-                onFailure = { exception ->
-                    _updatePetPhotoResult.emit(Error(exception.message))
+                onFailure = { e ->
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                    _updatePetPhotoResult.emit(Error(e.message))
                 }
             )
         }

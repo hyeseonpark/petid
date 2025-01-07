@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.petid.petid.R
 import com.petid.petid.databinding.ActivityReservationHistoryInfoBinding
-import com.petid.petid.enum.ReservationStatus
+import com.petid.petid.type.ReservationStatus
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BaseActivity
@@ -29,7 +29,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
 
     private lateinit var cancelDialog : CustomDialogCommon
 
-    private lateinit var hospitalReservationListAdapter : HospitalReservationListAdapter;
+    private lateinit var hospitalReservationListAdapter : HospitalReservationListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
