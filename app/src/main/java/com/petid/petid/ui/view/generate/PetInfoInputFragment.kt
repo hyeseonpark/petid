@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.checkedChanges
 
 
 @AndroidEntryPoint
@@ -78,11 +79,14 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
             }
 
             // 중성화 여부에 따른 editNeuteringDate 입력 여부 변경
-            checkboxIsNeutering.setOnCheckedChangeListener { button, _ ->
-                editNeuteringDate.isEnabled = !button.isChecked
-                if(button.isChecked) editNeuteringDate.text = null
-                buttonNext.isEnabled = isPossibleToNextStep()
-            }
+            checkboxIsNeutering
+                .checkedChanges()
+                .onEach {
+                    editNeuteringDate.isEnabled = !it
+                    if(it) editNeuteringDate.text = null
+                    buttonNext.isEnabled = isPossibleToNextStep()
+                }
+                .launchIn(lifecycleScope)
 
             // 선택된 성별
             val checkedGender = when(radioButtonMale.isChecked) {

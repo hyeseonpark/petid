@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.editorActions
 
 
 /**
@@ -131,14 +132,17 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            editTextSeacrh.setOnEditorActionListener { _, actionId, _ ->
-                var check = false
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    requireActivity().hideKeyboardAndClearFocus()
-                    check = true
+            editTextSeacrh
+                .editorActions()
+                .onEach {
+                    var check = false
+                    if (it == EditorInfo.IME_ACTION_DONE) {
+                        requireActivity().hideKeyboardAndClearFocus()
+                        check = true
+                    }
+                    check
                 }
-                check
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             hospitalListAdapter = HospitalListAdapter(requireActivity()) { item ->
                 val intent = Intent(activity, HospitalActivity::class.java)

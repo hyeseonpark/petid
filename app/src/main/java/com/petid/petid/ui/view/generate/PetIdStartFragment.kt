@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.checkedChanges
 
 /**
  *
@@ -49,16 +50,20 @@ class PetIdStartFragment: BaseFragment<FragmentPetIdStartBinding>(FragmentPetIdS
         val chipTypes = CHIP_TYPE
         with (binding) {
             var selectedChipIdx = -1
-            radioButtonGroup.setOnCheckedChangeListener { _, checkedId ->
-                buttonNext.isEnabled = checkedId != -1
+            radioButtonGroup
+                .checkedChanges()
+                .onEach {
+                    buttonNext.isEnabled = it != -1
 
-                selectedChipIdx = when(checkedId) {
-                    buttonNa.id -> 0
-                    buttonExternal.id -> 1
-                    buttonInternal.id -> 2
-                    else -> -1
+                    selectedChipIdx = when(it) {
+                        buttonNa.id -> 0
+                        buttonExternal.id -> 1
+                        buttonInternal.id -> 2
+                        else -> -1
+                    }
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
             buttonNext
                 .clicks()
                 .throttleFirst()

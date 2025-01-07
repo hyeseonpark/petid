@@ -84,12 +84,8 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
                 .clicks()
                 .throttleFirst()
                 .onEach {
-                    when(getPreferencesControl().getStringValue(Constants.SHARED_PET_CHIP_TYPE)) {
-                        CHIP_TYPE[1] -> infoDialog.show(childFragmentManager, "infoDialog")
-                        CHIP_TYPE[0], CHIP_TYPE[2] -> findNavController().navigate(
-                            R.id.action_hospitalDetailFragment_to_reservationCalendarFragment)
-                        else -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
-                    }
+                    findNavController().navigate(
+                        R.id.action_hospitalDetailFragment_to_reservationCalendarFragment)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         }
