@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.checkedChanges
 
 @AndroidEntryPoint
 class TermsActivity : BaseActivity() {
@@ -55,17 +56,28 @@ class TermsActivity : BaseActivity() {
                 }
                 .launchIn(lifecycleScope)
 
-            checkboxTermsAgree.setOnCheckedChangeListener{ _ , isChecked ->
-                allChecked()
-                buttonEnable()
-            }
-            checkBoxPersonalInfoAgree.setOnCheckedChangeListener{ _ , isChecked ->
-                allChecked()
-                buttonEnable()
-            }
-            checkboxAdsAgree.setOnCheckedChangeListener{ _ , isChecked ->
-                allChecked()
-            }
+            checkboxTermsAgree
+                .checkedChanges()
+                .onEach {
+                    allChecked()
+                    buttonEnable()
+                }
+                .launchIn(lifecycleScope)
+
+            checkBoxPersonalInfoAgree
+                .checkedChanges()
+                .onEach {
+                    allChecked()
+                    buttonEnable()
+                }
+                .launchIn(lifecycleScope)
+
+            checkboxAdsAgree
+                .checkedChanges()
+                .onEach {
+                    allChecked()
+                }
+                .launchIn(lifecycleScope)
 
             buttonNext
                 .clicks()

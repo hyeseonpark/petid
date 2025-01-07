@@ -20,6 +20,7 @@ import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.checkedChanges
 
 class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(FragmentUserInfoInputBinding::inflate) {
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
@@ -88,13 +89,16 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            checkboxTermsAgree.setOnCheckedChangeListener { _, isChecked ->
-                buttonNext.isEnabled = isPossibleToNextStep()
+            checkboxTermsAgree
+                .checkedChanges()
+                .onEach {
+                    buttonNext.isEnabled = isPossibleToNextStep()
 
-                listOf(editTextRra, editTextRraDetail).forEach { editText ->
-                    editText.visibility = if(isChecked) View.GONE else View.VISIBLE
+                    listOf(editTextRra, editTextRraDetail).forEach { editText ->
+                        editText.visibility = if(it) View.GONE else View.VISIBLE
+                    }
                 }
-            }
+                .launchIn(lifecycleScope)
 
             buttonNext
                 .clicks()
