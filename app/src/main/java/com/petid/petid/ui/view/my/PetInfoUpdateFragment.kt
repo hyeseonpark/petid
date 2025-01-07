@@ -45,7 +45,6 @@ class PetInfoUpdateFragment
             title = getString(R.string.pet_info_update_title),
         )
         observeGetMemberInfoState()
-        observeUpdatePetInfoState()
 
         initComponent()
     }
@@ -60,14 +59,18 @@ class PetInfoUpdateFragment
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonNoRegister.setOnClickListener {
-                CustomDialogCommon(
-                    title = getString(R.string.pet_info_dialog_chip_na_desc),
-                    boldTitle = getString(R.string.pet_info_dialog_chip_na_bold_title),
-                    isSingleButton = true,
-                    singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
-                ).show(childFragmentManager, null)
-            }
+            buttonNoRegister
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    CustomDialogCommon(
+                        title = getString(R.string.pet_info_dialog_chip_na_desc),
+                        boldTitle = getString(R.string.pet_info_dialog_chip_na_bold_title),
+                        isSingleButton = true,
+                        singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
+                    ).show(childFragmentManager, null)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             buttonComplete
                 .clicks()
@@ -125,27 +128,6 @@ class PetInfoUpdateFragment
                                     .joinToString(", "))
 
                         }
-                    }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
-                }
-            }
-        }
-    }
-
-    /**
-     * viewModel.updatePetPhotoResult: 업데이트 완료시 뒤로가기
-     */
-    private fun observeUpdatePetInfoState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.updatePetPhotoResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
-                    hideLoading()
-
-                when (result) {
-                    is CommonApiState.Success -> {
-                        requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
                     is CommonApiState.Error -> showErrorMessage(result.message.toString())
                     is CommonApiState.Loading -> showLoading()

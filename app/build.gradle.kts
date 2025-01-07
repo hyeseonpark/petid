@@ -11,13 +11,11 @@ if (localPropertiesFile.exists()) {
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-
-    id("com.google.devtools.ksp")
-    id("com.google.gms.google-services")
-    id("com.google.dagger.hilt.android")
-    id("com.google.firebase.crashlytics")
-
-    id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.com.google.gms.google.services)
+    alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.com.google.firebase.crashlytics)
+    alias(libs.plugins.androidx.navigation.safeargs.kotlin)
 }
 
 android {
@@ -28,8 +26,8 @@ android {
         applicationId = "com.petid.petid"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -44,7 +42,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -69,6 +67,11 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/gradle/incremental.annotation.processors"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
 
@@ -88,10 +91,6 @@ android {
     firebaseCrashlytics {
         mappingFileUploadEnabled = true
     }
-}
-
-configurations.configureEach {
-    exclude(group = "com.google.protobuf", module = "protobuf-java")
 }
 
 dependencies {
@@ -138,8 +137,8 @@ dependencies {
     implementation(libs.oauth.jdk8)
 
     // google one-tap login
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     // Google Play services
     implementation("com.google.gms:google-services:4.4.2")
@@ -159,25 +158,12 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
-
-    // okHttp
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
-
-    // GSON
-    implementation("com.google.code.gson:gson:2.11.0")
-
     // Glide
     implementation(libs.glide)
     ksp(libs.glide.ksp)
 
-    implementation("androidx.multidex:multidex:2.0.1")
+    // multidex
+    implementation(libs.androidx.multidex)
 
     // Jetpack Compose Integration
     implementation(libs.androidx.navigation.compose)
@@ -194,9 +180,4 @@ dependencies {
 
     // mediapipe
     implementation(libs.tasks.vision)
-
-    // AWS
-    implementation(libs.aws.android.sdk.mobile.client)
-    implementation(libs.aws.android.sdk.cognito)
-    implementation(libs.aws.android.sdk.s3)
 }

@@ -6,14 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.BuildConfig
 import com.petid.petid.R
 import com.petid.petid.databinding.FragmentPetInfoInputBinding
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.showDatePicker
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.checkedChanges
 
 
 @AndroidEntryPoint
@@ -49,14 +55,22 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
             }
 
             // 생일 달력
-            editTextBirth.setOnClickListener {
-                showDatePicker(editTextBirth, requireContext())
-            }
+            editTextBirth
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    showDatePicker(editTextBirth, requireContext())
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 중성화 날짜 달력
-            editNeuteringDate.setOnClickListener {
-                showDatePicker(editNeuteringDate, requireContext())
-            }
+            editNeuteringDate
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    showDatePicker(editNeuteringDate, requireContext())
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             listOf(editTextName, editTextBirth, editNeuteringDate).forEach { editText ->
                 editText.addTextChangedListener {
@@ -65,11 +79,14 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
             }
 
             // 중성화 여부에 따른 editNeuteringDate 입력 여부 변경
-            checkboxIsNeutering.setOnCheckedChangeListener { button, _ ->
-                editNeuteringDate.isEnabled = !button.isChecked
-                if(button.isChecked) editNeuteringDate.text = null
-                buttonNext.isEnabled = isPossibleToNextStep()
-            }
+            checkboxIsNeutering
+                .checkedChanges()
+                .onEach {
+                    editNeuteringDate.isEnabled = !it
+                    if(it) editNeuteringDate.text = null
+                    buttonNext.isEnabled = isPossibleToNextStep()
+                }
+                .launchIn(lifecycleScope)
 
             // 선택된 성별
             val checkedGender = when(radioButtonMale.isChecked) {
@@ -89,16 +106,21 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
                 false -> editNeuteringDate.text.toString()
             }
 
-            buttonNext.setOnClickListener{
-                viewModel.petInfo.setPetInfo(
-                    editTextName.text.toString(),
-                    editTextBirth.text.toString(),
-                    checkedGender,
-                    checkedNeutering,
-                    neuteringDate
-                )
-                findNavController().navigate(R.id.action_petInfoInputFragment_to_petPhotoFragment)
-            }
+            buttonNext
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.petInfo.setPetInfo(
+                        editTextName.text.toString(),
+                        editTextBirth.text.toString(),
+                        checkedGender,
+                        checkedNeutering,
+                        neuteringDate
+                    )
+                    findNavController().navigate(R.id.action_petInfoInputFragment_to_petPhotoFragment)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
         }
     }
 

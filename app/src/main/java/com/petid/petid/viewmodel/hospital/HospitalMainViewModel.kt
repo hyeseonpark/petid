@@ -1,50 +1,44 @@
 package com.petid.petid.viewmodel.hospital
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Criteria
-import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.location.LocationRequest
 import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.LocationEntity
 import com.petid.domain.repository.HospitalMainRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.ui.state.CommonApiState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.android.gms.tasks.OnTokenCanceledListener
+import com.petid.petid.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class HospitalMainViewModel @Inject constructor(
     private val hospitalMainRepository: HospitalMainRepository,
-    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     /* 현재 사용자의 lat, lon 값*/
     var currentLat: Double? = null
     var currentLon: Double? = null
+
+    /* filter: 전체 */
+    private val defaultLocationData = LocationEntity(
+        -1,
+        getGlobalContext().getString(R.string.no_filter)
+    )
 
     /**
      * 시,도 api 호출 결과
@@ -153,15 +147,11 @@ class HospitalMainViewModel @Inject constructor(
         viewModelScope.launch {
             val state = when (val result = hospitalMainRepository.getEupmundongList(currentSigunguState.value!!.id)) {
                 is ApiResult.Success -> {
-                    currentEupmundongList = result.data
+                    currentEupmundongList = listOf(defaultLocationData) + result.data
 
-                    result.data.firstOrNull()?.let { firstEupmundong ->
+                    currentEupmundongList?.firstOrNull()?.let { firstEupmundong ->
                         _currentEupmondongState.emit(firstEupmundong)
-
-                        when(currentLat == null && currentLon == null) {
-                            true -> getHospitalList()
-                            false -> getHospitalListByLocation()
-                        }
+                        fetchHospitalList()
                     }
 
                     CommonApiState.Success(result.data)
@@ -173,25 +163,40 @@ class HospitalMainViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 시,도 선택 변경 시
+     */
     fun updateCurrentSidoState(sido: LocationEntity) {
         _currentSidoState.value = sido
         getSigunguList()
     }
 
+    /**
+     * 시,군,구 선택 변경 시
+     */
     fun updateCurrentSigunguState(sigungu: LocationEntity) {
         _currentSigunguState.value = sigungu
-        getEupmundongList()
+        _currentEupmondongState.value = defaultLocationData
+
+        fetchHospitalList()
     }
 
+    /**
+     * 읍,면,동 선택 변경 시
+     */
     fun updateCurrentEupmundongState(eupmundong: LocationEntity) {
         _currentEupmondongState.value = eupmundong
+        fetchHospitalList()
+    }
 
-        // 분기처리
+    /**
+     * 조건에 따라 병원 목록 가져오기
+     */
+    private fun fetchHospitalList() =
         when(currentLat == null && currentLon == null) {
             true -> getHospitalList()
             false -> getHospitalListByLocation()
         }
-    }
 
     /**
      * 병원 목록 조회
@@ -232,7 +237,7 @@ class HospitalMainViewModel @Inject constructor(
             val state = when (val result = hospitalMainRepository.getHospitalListLoc(
                 currentSidoState.value!!.id,
                 currentSigunguState.value!!.id,
-                currentEupmundongState.value!!.id,
+                currentEupmundongState.value?.id,
                 currentLat!!, currentLon!!)) {
                 is ApiResult.Success -> {
                     var hospitalList = result.data
@@ -254,6 +259,9 @@ class HospitalMainViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 병원 이미지 가져오기
+     */
     private suspend fun getHospitalImage(filePath: String): String {
         return try {
             hospitalMainRepository.getHospitalImageUrl(filePath)

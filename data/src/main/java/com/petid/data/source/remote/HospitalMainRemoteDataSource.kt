@@ -9,7 +9,7 @@ interface HospitalMainRemoteDataSource {
     suspend fun getSigunguList(id: Int): ApiResult<List<LocationEntity>>
     suspend fun getEupmundongList(id: Int): ApiResult<List<LocationEntity>>
 
-    suspend fun getHospitalList(sidoId: Int, sigunguId: Int, eupmundongId: Int): ApiResult<List<HospitalEntity>>
-    suspend fun getHospitalListLoc(sidoId: Int, sigunguId: Int, eupmundongId: Int,
+    suspend fun getHospitalList(sidoId: Int, sigunguId: Int, eupmundongId: Int?): ApiResult<List<HospitalEntity>>
+    suspend fun getHospitalListLoc(sidoId: Int, sigunguId: Int, eupmundongId: Int?,
                                    lat: Double, lon: Double): ApiResult<List<HospitalEntity>>
 }

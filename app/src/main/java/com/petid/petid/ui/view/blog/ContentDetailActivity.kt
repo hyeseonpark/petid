@@ -12,22 +12,26 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.petid.petid.R
-import com.petid.petid.common.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.ActivityContentDetailBinding
-import com.petid.petid.enum.ContentCategoryType
+import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.blog.ContentDetailViewModel
 import com.bumptech.glide.Glide
+import com.petid.petid.util.throttleFirst
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import ru.ldralighieri.corbind.view.clicks
 import java.net.URL
 import java.util.Locale
 
@@ -65,12 +69,16 @@ class ContentDetailActivity : BaseActivity() {
         viewModel.getAllContentList()
 
         // 콘텐츠 좋아요
-        binding.buttonContentLike.setOnClickListener {
-            when(binding.buttonContentLike.isSelected) {
-                true -> viewModel.cancelContentLike()
-                false -> viewModel.doContentLike()
+        binding.buttonContentLike
+            .clicks()
+            .throttleFirst()
+            .onEach {
+                when(binding.buttonContentLike.isSelected) {
+                    true -> viewModel.cancelContentLike()
+                    false -> viewModel.doContentLike()
+                }
             }
-        }
+            .launchIn(lifecycleScope)
 
         moreContentListAdapter = MoreContentListAdapter(applicationContext) { item ->
             val intent = Intent(this, ContentDetailActivity::class.java)
