@@ -29,10 +29,14 @@ import com.petid.petid.util.TAG
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.my.PetInfoViewModel
 import com.bumptech.glide.Glide
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.util.toFile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 @AndroidEntryPoint
 class PetInfoDetailFragment
@@ -71,27 +75,35 @@ class PetInfoDetailFragment
 
     private fun initComponent() {
         with(binding) {
-            imageViewProfile.setOnClickListener{
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                    with(Intent()) {
-                        action = Intent.ACTION_PICK
-                        type = MediaStore.Images.Media.CONTENT_TYPE
-                        actionPick.launch(this)
+            imageViewProfile
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                        with(Intent()) {
+                            action = Intent.ACTION_PICK
+                            type = MediaStore.Images.Media.CONTENT_TYPE
+                            actionPick.launch(this)
+                        }
+                    } else {
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
-                } else {
-                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             // 미등록 상태, dialog 보여주기
-            textViewPetidStatusNull.setOnClickListener {
-                CustomDialogCommon(
-                    title = getString(R.string.pet_info_dialog_chip_na_desc),
-                    boldTitle = getString(R.string.pet_info_dialog_chip_na_bold_title),
-                    isSingleButton = true,
-                    singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
-                ).show(childFragmentManager, null)
-            }
+            textViewPetidStatusNull
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    CustomDialogCommon(
+                        title = getString(R.string.pet_info_dialog_chip_na_desc),
+                        boldTitle = getString(R.string.pet_info_dialog_chip_na_bold_title),
+                        isSingleButton = true,
+                        singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
+                    ).show(childFragmentManager, null)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

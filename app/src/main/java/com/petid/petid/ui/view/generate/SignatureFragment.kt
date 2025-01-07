@@ -19,10 +19,14 @@ import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentSignatureBinding
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.util.showErrorMessage
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.util.toFile
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatureBinding::inflate) {
     private val viewModel: GeneratePetidSharedViewModel by activityViewModels()
@@ -46,23 +50,32 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
 
     fun initComponent() {
         with(binding) {
-            buttonRefresh.setOnClickListener{
-                drawingViewSignature.clear()
-            }
-            buttonNext.setOnClickListener{
-                val bitmap = getBitmapFromView(binding.drawingViewSignature)
-
-                val memberId =
-                    getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
-
-                with(viewModel) {
-                    // S3 서버에 올릴 파일 세팅
-                    signImage = bitmap.toFile(getGlobalContext())
-                    petInfo.setSign("${PHOTO_PATHS[1]}${memberId}.jpg")
+            buttonRefresh
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    drawingViewSignature.clear()
                 }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-                viewModel.uploadImageFiles()
-            }
+            buttonNext
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    val bitmap = getBitmapFromView(binding.drawingViewSignature)
+
+                    val memberId =
+                        getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
+
+                    with(viewModel) {
+                        // S3 서버에 올릴 파일 세팅
+                        signImage = bitmap.toFile(getGlobalContext())
+                        petInfo.setSign("${PHOTO_PATHS[1]}${memberId}.jpg")
+                    }
+
+                    viewModel.uploadImageFiles()
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 

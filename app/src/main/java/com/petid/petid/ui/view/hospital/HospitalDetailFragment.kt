@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
 import com.petid.petid.common.Constants
@@ -17,6 +18,10 @@ import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.viewmodel.hospital.HospitalViewModel
 import com.bumptech.glide.Glide
 import com.petid.petid.util.petidNullDialog
+import com.petid.petid.util.throttleFirst
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import ru.ldralighieri.corbind.view.clicks
 
 class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(FragmentHospitalDetailBinding::inflate) {
     private val viewModel: HospitalViewModel by activityViewModels()
@@ -75,14 +80,14 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
                 textViewTel.text = tel
             }
 
-            buttonReserve.setOnClickListener{
-                when(getPreferencesControl().getStringValue(Constants.SHARED_PET_CHIP_TYPE)) {
-                    CHIP_TYPE[1] -> infoDialog.show(childFragmentManager, "infoDialog")
-                    CHIP_TYPE[0], CHIP_TYPE[2] -> findNavController().navigate(
+            buttonReserve
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    findNavController().navigate(
                         R.id.action_hospitalDetailFragment_to_reservationCalendarFragment)
-                    else -> petidNullDialog(requireContext()).show(childFragmentManager, "petidNullDialog")
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 }

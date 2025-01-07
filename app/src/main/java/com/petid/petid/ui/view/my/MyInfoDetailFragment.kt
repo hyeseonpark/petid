@@ -26,10 +26,14 @@ import com.petid.petid.util.TAG
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.util.toFile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 /**
  * 마이페이지 메인 > 내 정보
@@ -72,17 +76,21 @@ class MyInfoDetailFragment
 
     private fun initComponent() {
         with(binding) {
-            imageViewProfile.setOnClickListener{
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                    with(Intent()) {
-                        action = Intent.ACTION_PICK
-                        type = MediaStore.Images.Media.CONTENT_TYPE
-                        actionPick.launch(this)
+            imageViewProfile
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                        with(Intent()) {
+                            action = Intent.ACTION_PICK
+                            type = MediaStore.Images.Media.CONTENT_TYPE
+                            actionPick.launch(this)
+                        }
+                    } else {
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
-                } else {
-                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 }
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
 
