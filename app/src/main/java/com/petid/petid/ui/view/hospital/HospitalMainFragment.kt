@@ -31,6 +31,7 @@ import com.petid.petid.ui.view.hospital.adapter.HospitalListAdapter
 import com.petid.petid.util.TAG
 import com.petid.petid.util.hideKeyboardAndClearFocus
 import com.petid.petid.util.showErrorMessage
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.hospital.HospitalMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -38,6 +39,8 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
+import ru.ldralighieri.corbind.widget.editorActions
 
 
 /**
@@ -129,14 +132,17 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            editTextSeacrh.setOnEditorActionListener { _, actionId, _ ->
-                var check = false
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    requireActivity().hideKeyboardAndClearFocus()
-                    check = true
+            editTextSeacrh
+                .editorActions()
+                .onEach {
+                    var check = false
+                    if (it == EditorInfo.IME_ACTION_DONE) {
+                        requireActivity().hideKeyboardAndClearFocus()
+                        check = true
+                    }
+                    check
                 }
-                check
-            }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             hospitalListAdapter = HospitalListAdapter(requireActivity()) { item ->
                 val intent = Intent(activity, HospitalActivity::class.java)
@@ -150,17 +156,29 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                 adapter = hospitalListAdapter
             }
 
-            buttonSido.setOnClickListener{
-                viewModel.currentSidoList?.let { data -> modalBottomSheet(LOCATION_SIDO_TYPE, data) }
-            }
+            buttonSido
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.currentSidoList?.let { data -> modalBottomSheet(LOCATION_SIDO_TYPE, data) }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonSigungu.setOnClickListener{
-                viewModel.currentSigunguList?.let { data -> modalBottomSheet(LOCATION_SIGUNGU_TYPE, data) }
-            }
+            buttonSigungu
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.currentSigunguList?.let { data -> modalBottomSheet(LOCATION_SIGUNGU_TYPE, data) }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonEupmundong.setOnClickListener{
-                viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
-            }
+            buttonEupmundong
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    viewModel.currentEupmundongList?.let { data -> modalBottomSheet(LOCATION_EUPMUNDONG_TYPE, data) }
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         }
     }

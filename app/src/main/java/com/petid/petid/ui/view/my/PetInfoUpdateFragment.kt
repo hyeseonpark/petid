@@ -59,14 +59,18 @@ class PetInfoUpdateFragment
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            buttonNoRegister.setOnClickListener {
-                CustomDialogCommon(
-                    title = getString(R.string.pet_info_dialog_chip_na_desc),
-                    boldTitle = getString(R.string.pet_info_dialog_chip_na_bold_title),
-                    isSingleButton = true,
-                    singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
-                ).show(childFragmentManager, null)
-            }
+            buttonNoRegister
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    CustomDialogCommon(
+                        title = getString(R.string.pet_info_dialog_chip_na_desc),
+                        boldTitle = getString(R.string.pet_info_dialog_chip_na_bold_title),
+                        isSingleButton = true,
+                        singleButtonText = getString(R.string.pet_info_dialog_chip_na_button)
+                    ).show(childFragmentManager, null)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
             buttonComplete
                 .clicks()

@@ -16,10 +16,14 @@ import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.common.BundleKeys
 import com.petid.petid.util.addPhoneNumberFormatting
 import com.petid.petid.util.showErrorMessage
+import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 
 /**
  * 마이페이지 메인 > 내 정보 > 내 정보 수정
@@ -59,12 +63,22 @@ class MyInfoUpdateFragment
 
     private fun initComponent() {
         with(binding) {
-            buttonComplete.setOnClickListener {
-                completeDialog()
-            }
-            editTextAddress.setOnClickListener {
-                findNavController().navigate(R.id.action_myInfoUpdateFragment_to_addressSearchFragment)
-            }
+            buttonComplete
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    completeDialog()
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            editTextAddress
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    findNavController().navigate(R.id.action_myInfoUpdateFragment_to_addressSearchFragment)
+                }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
             editTextPhone.addPhoneNumberFormatting()
         }
     }
