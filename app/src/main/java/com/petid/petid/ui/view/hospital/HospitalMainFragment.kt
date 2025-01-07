@@ -55,6 +55,8 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
 
     private var currentHospitalList : List<HospitalEntity>? = null
 
+    private val SEARCH_DEBOUNCE_DELAY_MS = 500L
+
     private val locationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             when(isGranted) {
@@ -125,7 +127,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
             // 검색 기능
             editTextSeacrh
                 .flowTextWatcher()
-                .debounce(500)
+                .debounce(SEARCH_DEBOUNCE_DELAY_MS)
                 .onEach {
                     val filteredList = getFilteredList(editTextSeacrh.text.toString())
                     updateListUi(filteredList)
