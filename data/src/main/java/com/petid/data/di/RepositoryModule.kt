@@ -1,15 +1,15 @@
 package com.petid.data.di
 
-import com.petid.data.repository.BlogMainRepositoryImpl
-import com.petid.data.repository.ContentDetailRepositoryImpl
-import com.petid.data.repository.HomeMainRepositoryImpl
-import com.petid.data.repository.HospitalMainRepositoryImpl
-import com.petid.data.repository.MyInfoRepositoryImpl
-import com.petid.data.repository.PetInfoRepositoryImpl
-import com.petid.data.repository.ReservationCalendarRepositoryImpl
-import com.petid.data.repository.ReservationHistoryInfoRepositoryImpl
-import com.petid.data.repository.SocialAuthRepositoryImpl
-import com.petid.data.repository.TermsRepositoryImpl
+import com.petid.data.repository.remote.BlogMainRepositoryImpl
+import com.petid.data.repository.remote.ContentDetailRepositoryImpl
+import com.petid.data.repository.remote.HomeMainRepositoryImpl
+import com.petid.data.repository.remote.HospitalMainRepositoryImpl
+import com.petid.data.repository.remote.MyInfoRepositoryImpl
+import com.petid.data.repository.remote.PetInfoRepositoryImpl
+import com.petid.data.repository.remote.ReservationCalendarRepositoryImpl
+import com.petid.data.repository.remote.ReservationHistoryInfoRepositoryImpl
+import com.petid.data.repository.remote.SocialAuthRepositoryImpl
+import com.petid.data.repository.remote.TermsRepositoryImpl
 import com.petid.domain.repository.BlogMainRepository
 import com.petid.domain.repository.ContentDetailRepository
 import com.petid.domain.repository.HomeMainRepository

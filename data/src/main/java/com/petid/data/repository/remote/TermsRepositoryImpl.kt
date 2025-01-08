@@ -1,4 +1,4 @@
-package com.petid.data.repository
+package com.petid.data.repository.remote
 
 import com.petid.data.source.remote.TermsRemoteDataSource
 import com.petid.domain.entity.AuthEntity
