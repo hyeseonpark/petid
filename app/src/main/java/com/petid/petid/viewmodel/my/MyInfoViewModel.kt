@@ -22,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MyInfoViewModel @Inject constructor(
     private val myInfoRepository: MyInfoRepository,
+    private val s3UploadHelper: S3UploadHelper,
 ): ViewModel() {
 
     /* 서버에서 받은 파일명, nullable */
@@ -101,12 +102,9 @@ class MyInfoViewModel @Inject constructor(
     fun uploadFile(context: Context, file: File, fileName: String) {
         viewModelScope.launch {
             _uploadS3Result.emit(CommonApiState.Loading)
-            
-            val s3UploadHelper = S3UploadHelper()
+
             val result = s3UploadHelper.uploadWithTransferUtility(
-                context = context,
                 file = file,
-                scope = this,
                 keyName = fileName
             )
             result.fold(
