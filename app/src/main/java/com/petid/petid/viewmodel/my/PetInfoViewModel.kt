@@ -28,6 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PetInfoViewModel @Inject constructor(
     private val petInfoRepository: PetInfoRepository,
+    private val s3UploadHelper: S3UploadHelper,
 ): ViewModel(){
 
     /* petId */
@@ -105,11 +106,8 @@ class PetInfoViewModel @Inject constructor(
         viewModelScope.launch {
             _updatePetPhotoResult.emit(Loading)
 
-            val s3UploadHelper = S3UploadHelper()
             val result = s3UploadHelper.uploadWithTransferUtility(
-                context = context,
                 file = file,
-                scope = this,
                 keyName = fileName
             )
             result.fold(

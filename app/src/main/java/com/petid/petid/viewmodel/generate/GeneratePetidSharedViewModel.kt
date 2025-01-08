@@ -31,14 +31,12 @@ import javax.inject.Inject
 @HiltViewModel
 class GeneratePetidSharedViewModel @Inject constructor(
     private val petInfoRepository: PetInfoRepository,
-    private val imageAnalyzer: ClassifierImageAnalyzer
+    private val imageAnalyzer: ClassifierImageAnalyzer,
+    private val s3UploadHelper: S3UploadHelper,
 ): ViewModel() {
     var petInfo = PetRequest.Builder()
     var petImage : File? = null
     var signImage : File? = null
-
-    /* S3 upload helper 초기화 */
-    private val s3UploadHelper = S3UploadHelper()
 
     private val _registerPetResult = MutableStateFlow<CommonApiState<Unit>>(CommonApiState.Init)
     val registerPetResult = _registerPetResult.asStateFlow()
@@ -93,9 +91,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
         keyName: String
     ): Boolean {
         return s3UploadHelper.uploadWithTransferUtility(
-            context = context,
             file = file,
-            scope = viewModelScope,
             keyName = keyName
         ).fold(
             onSuccess = {

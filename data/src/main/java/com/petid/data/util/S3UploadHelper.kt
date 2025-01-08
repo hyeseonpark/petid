@@ -2,53 +2,36 @@ package com.petid.data.util
 
 import android.content.Context
 import android.util.Log
-import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferNetworkLossHandler
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
-import com.amazonaws.regions.Region
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.s3.AmazonS3Client
-import com.petid.data.BuildConfig
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 
-class S3UploadHelper {
+@Singleton
+class S3UploadHelper @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val transferUtility: TransferUtility,
+) {
     suspend fun uploadWithTransferUtility(
-        context: Context,
         file: File,
-        scope: CoroutineScope,
         bucketName: String = "petid-bucket",
         keyName: String,
     ): Result<Boolean> {
         return suspendCancellableCoroutine { continuation ->
             try {
-                val awsCredentials = BasicAWSCredentials(
-                    BuildConfig.AWS_ACCESS_KEY,
-                    BuildConfig.AWS_SECRET_KEY
-                )
-
-                val s3Client = AmazonS3Client(
-                    awsCredentials,
-                    Region.getRegion(Regions.AP_NORTHEAST_2)
-                )
-
-                val transferUtility = TransferUtility.builder()
-                    .s3Client(s3Client)
-                    .context(context)
-                    .build()
-
                 TransferNetworkLossHandler.getInstance(context)
 
                 val uploadObserver = transferUtility.upload(bucketName, keyName, file)
 
                 uploadObserver.setTransferListener(object : TransferListener {
                     override fun onStateChanged(id: Int, state: TransferState?) {
-                        scope.launch {
+                        if(continuation.isActive) {
                             if (state == TransferState.COMPLETED) {
                                 continuation.resume(Result.success(true))
                             } else if (state == TransferState.FAILED) {
