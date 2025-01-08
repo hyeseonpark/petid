@@ -1,7 +1,5 @@
-package com.petid.data.repository
+package com.petid.data.repository.remote
 
-import com.petid.data.api.HosptialAPI
-import com.petid.data.dto.request.DeleteHospitalOrderRequest
 import com.petid.data.source.remote.ReservationHistoryInfoRemoteDataSource
 import com.petid.domain.entity.HospitalOrderDetailEntity
 import com.petid.domain.repository.ReservationHistoryInfoRepository

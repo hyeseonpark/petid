@@ -1,15 +1,11 @@
-package com.petid.data.repository
+package com.petid.data.repository.remote
 
 import com.petid.data.api.HosptialAPI
-import com.petid.data.dto.response.ErrorResponse
-import com.petid.data.dto.response.toDomain
 import com.petid.data.source.remote.HospitalMainRemoteDataSource
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.LocationEntity
 import com.petid.domain.repository.HospitalMainRepository
 import com.petid.domain.util.ApiResult
-import com.google.gson.Gson
-import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 

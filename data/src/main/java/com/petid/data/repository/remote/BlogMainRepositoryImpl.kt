@@ -1,13 +1,7 @@
-package com.petid.data.repository
+package com.petid.data.repository.remote
 
-import android.os.Build
-import androidx.annotation.RequiresExtension
-import com.google.gson.Gson
 import com.petid.data.api.ContentAPI
-import com.petid.data.dto.response.ErrorResponse
-import com.petid.data.dto.response.toDomain
 import com.petid.data.source.remote.BlogMainRemoteDataSource
-import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.ContentEntity
 import com.petid.domain.entity.ContentLikeEntity
 import com.petid.domain.repository.BlogMainRepository
