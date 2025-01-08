@@ -2,70 +2,35 @@ package com.petid.data.source.remote
 
 import com.petid.data.api.HosptialAPI
 import com.petid.data.api.LocationAPI
-import com.petid.data.dto.response.ErrorResponse
 import com.petid.data.dto.response.toDomain
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.LocationEntity
 import com.petid.domain.util.ApiResult
-import com.google.gson.Gson
-import retrofit2.HttpException
+import com.petid.data.util.mapApiResult
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class HospitalMainRemoteDataSourceImpl @Inject constructor(
     private val locationAPI: LocationAPI,
-    private val hosptialAPI: HosptialAPI
+    private val hospitalAPI: HosptialAPI
 ) : HospitalMainRemoteDataSource {
     override suspend fun getSido(): ApiResult<List<LocationEntity>> {
-        return try {
-            val response = locationAPI.getSidoList()
-            ApiResult.Success(response.toDomain())
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
+        return runCatching {
+            locationAPI.getSidoList().toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
     }
 
     override suspend fun getSigunguList(id: Int): ApiResult<List<LocationEntity>> {
-        return try {
-            val response = locationAPI.getSigunguList(id)
-            ApiResult.Success(response.toDomain())
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
+        return runCatching {
+            locationAPI.getSigunguList(id).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
     }
 
     override suspend fun getEupmundongList(id: Int): ApiResult<List<LocationEntity>> {
-        return try {
-            val response = locationAPI.getEupmyeondongList(id)
-            ApiResult.Success(response.toDomain())
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
+        return runCatching {
+            locationAPI.getEupmyeondongList(id).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
     }
 
     override suspend fun getHospitalList(
@@ -73,20 +38,9 @@ class HospitalMainRemoteDataSourceImpl @Inject constructor(
         sigunguId: Int,
         eupmundongId: Int?
     ): ApiResult<List<HospitalEntity>> {
-        return try {
-            val response = hosptialAPI.getHospitalList(sidoId, sigunguId, nullToEmpty(eupmundongId))
-            ApiResult.Success(response.toDomain())
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
+        return runCatching {
+            hospitalAPI.getHospitalList(sidoId, sigunguId, nullToEmpty(eupmundongId)).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
     }
 
     override suspend fun getHospitalListLoc(
@@ -96,21 +50,10 @@ class HospitalMainRemoteDataSourceImpl @Inject constructor(
         lat: Double,
         lon: Double
     ): ApiResult<List<HospitalEntity>> {
-        return try {
-            val response = hosptialAPI.getHospitalListByLocation(
-                sidoId, sigunguId, nullToEmpty(eupmundongId), lat, lon)
-            ApiResult.Success(response.toDomain())
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
+        return runCatching {
+            hospitalAPI.getHospitalListByLocation(
+                sidoId, sigunguId, nullToEmpty(eupmundongId), lat, lon).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
     }
 
     /**

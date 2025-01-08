@@ -13,19 +13,11 @@ import javax.inject.Singleton
 class ReservationHistoryInfoRepositoryImpl @Inject constructor(
     private val remoteDataSource: ReservationHistoryInfoRemoteDataSource,
 ): ReservationHistoryInfoRepository {
-    override suspend fun getHospitalReservationHistoryList(status: String): ApiResult<List<HospitalOrderDetailEntity>> {
-        return when (val result = remoteDataSource.getHospitalReservationHistoryList(status)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getHospitalReservationHistoryList(
+        status: String,
+    ): ApiResult<List<HospitalOrderDetailEntity>> =
+        remoteDataSource.getHospitalReservationHistoryList(status)
 
-    override suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int> {
-        return when (val result = remoteDataSource.cancelHospitalReservation(orderId)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int> =
+        remoteDataSource.cancelHospitalReservation(orderId)
 }
