@@ -13,51 +13,25 @@ import javax.inject.Singleton
 class PetInfoRepositoryImpl @Inject constructor(
     private val petInfoDataSource: PetInfoDataSource,
 ): PetInfoRepository {
+    override suspend fun registerPet(pet: PetRequestEntity): ApiResult<PetDetailsEntity> =
+        petInfoDataSource.registerPet(pet)
 
-    override suspend fun registerPet(pet: PetRequestEntity): ApiResult<PetDetailsEntity> {
-        return when (val result = petInfoDataSource.registerPet(pet)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getPetDetails(petId: Long): ApiResult<PetDetailsEntity> =
+        petInfoDataSource.getPetDetails(petId)
 
-    override suspend fun getPetDetails(petId: Long): ApiResult<PetDetailsEntity> {
-        return when (val result = petInfoDataSource.getPetDetails(petId)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
-
-    override suspend fun getPetImageUrl(filePath: String): ApiResult<String> {
-        return when (val result = petInfoDataSource.getPetImageUrl(filePath)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getPetImageUrl(filePath: String): ApiResult<String> =
+        petInfoDataSource.getPetImageUrl(filePath)
 
     override suspend fun updatePetInfo(
         petId: Long,
         updatePetInfo: PetUpdateEntity
-    ): ApiResult<Unit> {
-        return when (val result = petInfoDataSource.updatePetInfo(petId, updatePetInfo)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    ): ApiResult<Unit> =
+        petInfoDataSource.updatePetInfo(petId, updatePetInfo)
 
     override suspend fun updatePetPhoto(
         petId: Long,
         petImageId: Long,
         filePath: String
-    ): ApiResult<Unit> {
-        return when (val result = petInfoDataSource.updatePetPhoto(petId, petImageId, filePath)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    ): ApiResult<Unit> =
+        petInfoDataSource.updatePetPhoto(petId, petImageId, filePath)
 }
