@@ -11,11 +11,6 @@ import javax.inject.Singleton
 class ContentDetailRepositoryImpl @Inject constructor(
     private val remoteDataSource: ContentDetailRemoteDataSource,
 ): ContentDetailRepository {
-    override suspend fun getContentDetail(contentId: Int): ApiResult<ContentEntity> {
-        return when (val result = remoteDataSource.getContentDetail(contentId)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getContentDetail(contentId: Int): ApiResult<ContentEntity> =
+        remoteDataSource.getContentDetail(contentId)
 }

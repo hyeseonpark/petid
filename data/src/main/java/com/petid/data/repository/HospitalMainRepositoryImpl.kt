@@ -18,41 +18,21 @@ class HospitalMainRepositoryImpl @Inject constructor(
     private val remoteDataSource: HospitalMainRemoteDataSource,
     private val hospitalAPI: HosptialAPI
 ) : HospitalMainRepository{
-    override suspend fun getSido(): ApiResult<List<LocationEntity>> {
-        return when (val result = remoteDataSource.getSido()) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getSido(): ApiResult<List<LocationEntity>> =
+        remoteDataSource.getSido()
 
-    override suspend fun getSigunguList(id: Int): ApiResult<List<LocationEntity>> {
-        return when (val result = remoteDataSource.getSigunguList(id)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getSigunguList(id: Int): ApiResult<List<LocationEntity>> =
+        remoteDataSource.getSigunguList(id)
 
-    override suspend fun getEupmundongList(id: Int): ApiResult<List<LocationEntity>> {
-        return when (val result = remoteDataSource.getEupmundongList(id)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getEupmundongList(id: Int): ApiResult<List<LocationEntity>> =
+        remoteDataSource.getEupmundongList(id)
 
     override suspend fun getHospitalList(
         sidoId: Int,
         sigunguId: Int,
         eupmundongId: Int?
-    ): ApiResult<List<HospitalEntity>> {
-        return when (val result = remoteDataSource.getHospitalList(sidoId, sigunguId, eupmundongId)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    ): ApiResult<List<HospitalEntity>> =
+        remoteDataSource.getHospitalList(sidoId, sigunguId, eupmundongId)
 
     override suspend fun getHospitalListLoc(
         sidoId: Int,
@@ -60,14 +40,8 @@ class HospitalMainRepositoryImpl @Inject constructor(
         eupmundongId: Int?,
         lat: Double,
         lon: Double
-    ): ApiResult<List<HospitalEntity>> {
-        return when (val result = remoteDataSource.getHospitalListLoc(
-            sidoId, sigunguId, eupmundongId, lat, lon)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    ): ApiResult<List<HospitalEntity>> =
+        remoteDataSource.getHospitalListLoc(sidoId, sigunguId, eupmundongId, lat, lon)
 
     override suspend fun getHospitalImageUrl(filePath: String): String {
         return try {

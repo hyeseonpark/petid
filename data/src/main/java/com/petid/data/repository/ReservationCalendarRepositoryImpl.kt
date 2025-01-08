@@ -17,22 +17,12 @@ class ReservationCalendarRepositoryImpl @Inject constructor(
         hospitalId: Int,
         day: String,
         date: String
-    ): ApiResult<List<String>> {
-        return when (val result = remoteDataSource.getHospitalOrderTimeList(hospitalId, day, date)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    ): ApiResult<List<String>> =
+        remoteDataSource.getHospitalOrderTimeList(hospitalId, day, date)
 
     override suspend fun createHospitalOrder(
         hospitalId: Int,
         date: String
-    ): ApiResult<HospitalOrderEntity> {
-        return when (val result = remoteDataSource.createHospitalOrder(hospitalId, date)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    ): ApiResult<HospitalOrderEntity> =
+        remoteDataSource.createHospitalOrder(hospitalId, date)
 }

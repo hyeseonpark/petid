@@ -12,14 +12,6 @@ class TermsRepositoryImpl @Inject constructor(
     private val remoteDataSource: TermsRemoteDataSource
 ) : TermsRepository{
     override suspend fun doJoin(platform: String, sub: String, fcmToken: String, ad: Boolean
-    ): ApiResult<AuthEntity> {
-        return when (val result = remoteDataSource.doJoin(platform, sub, fcmToken, ad)) {
-            is ApiResult.Success -> {
-                result
-            }
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-
-    }
+    ): ApiResult<AuthEntity> =
+        remoteDataSource.doJoin(platform, sub, fcmToken, ad)
 }
