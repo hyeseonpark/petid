@@ -50,10 +50,6 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
 
     fun initComponent() {
         with(binding) {
-            if (BuildConfig.DEBUG) {
-                buttonNext.isEnabled = true
-            }
-
             // 생일 달력
             editTextBirth
                 .clicks()
@@ -120,6 +116,10 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
                     findNavController().navigate(R.id.action_petInfoInputFragment_to_petPhotoFragment)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            if (BuildConfig.DEBUG) {
+                buttonNext.isEnabled = true
+            }
 
         }
     }
