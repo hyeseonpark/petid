@@ -1,21 +1,23 @@
 package com.petid.petid.viewmodel.my
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.petid.data.util.S3UploadHelper
+import com.petid.data.util.sendCrashlytics
+import com.petid.domain.entity.FilePath
 import com.petid.domain.entity.PetDetailsEntity
 import com.petid.domain.entity.PetUpdateEntity
 import com.petid.domain.entity.UpdateAppearanceEntity
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
-import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.ui.state.CommonApiState.*
 import com.petid.petid.ui.state.CommonApiState.Error
+import com.petid.petid.ui.state.CommonApiState.Init
+import com.petid.petid.ui.state.CommonApiState.Loading
+import com.petid.petid.ui.state.CommonApiState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -102,33 +104,29 @@ class PetInfoViewModel @Inject constructor(
     /**
      * S3 bucket upload
      */
-    fun uploadFile(context: Context, file: File, fileName: String) {
+    fun uploadFile(file: File, fileName: String) {
         viewModelScope.launch {
             _updatePetPhotoResult.emit(Loading)
 
-            val result = s3UploadHelper.uploadWithTransferUtility(
-                file = file,
-                keyName = fileName
-            )
-            result.fold(
-                onSuccess = {
-                    _updatePetPhotoResult.emit(Success(Unit))
-                },
-                onFailure = { e ->
-                    FirebaseCrashlytics.getInstance().recordException(e)
-                    _updatePetPhotoResult.emit(Error(e.message))
-                }
-            )
+            runCatching {
+                s3UploadHelper.uploadWithTransferUtility(file = file, keyName = fileName)
+            }.onSuccess {
+                updatePetPhoto()
+            }.onFailure { e ->
+                e.sendCrashlytics()
+                _updatePetPhotoResult.emit(Error(e.message))
+            }
         }
     }
 
     /**
      * 서버에 펫 프로필 사진 주소 업데이트
      */
-    fun updatePetPhoto() {
+    private fun updatePetPhoto() {
         viewModelScope.launch {
             val petId = getPreferencesControl().getIntValue(Constants.SHARED_PET_ID_VALUE).toLong()
-            val state = when (val result = petInfoRepository.updatePetPhoto(petId, petImageId, petImageFileName!!)) {
+            val filePath = FilePath(petImageFileName!!)
+            val state = when (val result = petInfoRepository.updatePetPhoto(petId, petImageId, filePath)) {
                 is ApiResult.Success -> Success(result.data)
                 is ApiResult.HttpError -> Error(result.error.error)
                 is ApiResult.Error -> Error(result.errorMessage)

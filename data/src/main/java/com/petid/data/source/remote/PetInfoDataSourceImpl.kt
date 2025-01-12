@@ -1,15 +1,13 @@
 package com.petid.data.source.remote
 
 import com.petid.data.api.PetAPI
-import com.petid.data.dto.response.ErrorResponse
+import com.petid.data.dto.request.FilePathRequest
 import com.petid.data.dto.response.toDomain
+import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.PetDetailsEntity
 import com.petid.domain.entity.PetRequestEntity
 import com.petid.domain.entity.PetUpdateEntity
 import com.petid.domain.util.ApiResult
-import com.google.gson.Gson
-import com.petid.data.util.mapApiResult
-import retrofit2.HttpException
 import javax.inject.Inject
 
 class PetInfoDataSourceImpl @Inject constructor(
@@ -42,9 +40,9 @@ class PetInfoDataSourceImpl @Inject constructor(
     override suspend fun updatePetPhoto(
         petId: Long,
         petImageId: Long,
-        filePath: String
+        filePathRequest: FilePathRequest
     ): ApiResult<Unit> =
         runCatching {
-            petAPI.updatePetPhoto(petId, petImageId, filePath)
+            petAPI.updatePetPhoto(petId, petImageId, filePathRequest)
         }.mapApiResult { ApiResult.Success(it) }
 }

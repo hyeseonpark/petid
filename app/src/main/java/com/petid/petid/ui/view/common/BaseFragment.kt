@@ -74,7 +74,7 @@ abstract class BaseFragment<VB: ViewBinding>(
      * show loading dialog
      */
     fun showLoading() {
-        _binding?.root?.showLoadingDialog(requireContext())
+        _binding?.root?.showLoadingDialog(requireActivity())
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.petid.data.repository.remote
 
+import com.petid.data.dto.request.toDto
 import com.petid.data.source.remote.PetInfoDataSource
+import com.petid.domain.entity.FilePath
 import com.petid.domain.entity.PetDetailsEntity
 import com.petid.domain.entity.PetRequestEntity
 import com.petid.domain.entity.PetUpdateEntity
@@ -31,7 +33,7 @@ class PetInfoRepositoryImpl @Inject constructor(
     override suspend fun updatePetPhoto(
         petId: Long,
         petImageId: Long,
-        filePath: String
+        filePath: FilePath
     ): ApiResult<Unit> =
-        petInfoDataSource.updatePetPhoto(petId, petImageId, filePath)
+        petInfoDataSource.updatePetPhoto(petId, petImageId, filePath.toDto())
 }
