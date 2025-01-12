@@ -1,10 +1,9 @@
 package com.petid.petid.viewmodel.my
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.petid.data.util.S3UploadHelper
+import com.petid.data.util.sendCrashlytics
 import com.petid.domain.entity.MemberInfoEntity
 import com.petid.domain.repository.MyInfoRepository
 import com.petid.domain.util.ApiResult
@@ -99,23 +98,18 @@ class MyInfoViewModel @Inject constructor(
     /**
      * S3 bucket upload
      */
-    fun uploadFile(context: Context, file: File, fileName: String) {
+    fun uploadFile(file: File, fileName: String) {
         viewModelScope.launch {
             _uploadS3Result.emit(CommonApiState.Loading)
 
-            val result = s3UploadHelper.uploadWithTransferUtility(
-                file = file,
-                keyName = fileName
-            )
-            result.fold(
-                onSuccess = {
-                    _uploadS3Result.emit(CommonApiState.Success(Unit))
-                },
-                onFailure = { e ->
-                    FirebaseCrashlytics.getInstance().recordException(e)
-                    _uploadS3Result.emit(CommonApiState.Error(e.message))
-                }
-            )
+            runCatching {
+                s3UploadHelper.uploadWithTransferUtility(file = file, keyName = fileName)
+            }.onSuccess {
+                _uploadS3Result.emit(CommonApiState.Success(Unit))
+            }.onFailure { e ->
+                e.sendCrashlytics()
+                _uploadS3Result.emit(CommonApiState.Error(e.message))
+            }
         }
     }
 
