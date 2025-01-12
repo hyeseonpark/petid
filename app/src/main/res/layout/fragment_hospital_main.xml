@@ -8,8 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
-    android:paddingBottom="92dp">
+    android:background="@color/white">
 
     <include
         android:id="@+id/toolbar"
@@ -140,7 +139,8 @@
                 android:id="@+id/recyclerview_hospital_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="24dp"/>
+                android:layout_marginHorizontal="24dp"
+                android:paddingBottom="92dp"/>
 
         </LinearLayout>
 
