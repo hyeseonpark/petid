@@ -16,6 +16,7 @@ import com.petid.data.repository.local.NotificationRepository
 import com.petid.data.source.local.entity.NotificationEntity
 import com.petid.petid.R
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.common.Constants.NOTIFICATION_DATA
 import com.petid.petid.di.AppFirebaseMessageServiceEntryPoint
 import com.petid.petid.ui.view.main.MainActivity
 import com.petid.petid.util.TAG
@@ -175,7 +176,7 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 
             // TODO 알람 정의 후 수정
-            putExtra("notification_data", messageData)
+            putExtra(NOTIFICATION_DATA, messageData)
             //data = Uri.parse("petid://notification/$messageData")
         }
 
