@@ -20,14 +20,13 @@ class S3UploadHelper @Inject constructor(
 ) {
     suspend fun uploadWithTransferUtility(
         file: File,
-        bucketName: String = "petid-bucket",
         keyName: String,
     ): Result<Boolean> {
         return suspendCancellableCoroutine { continuation ->
             try {
                 TransferNetworkLossHandler.getInstance(context)
 
-                val uploadObserver = transferUtility.upload(bucketName, keyName, file)
+                val uploadObserver = transferUtility.upload("petid-bucket", keyName, file)
 
                 uploadObserver.setTransferListener(object : TransferListener {
                     override fun onStateChanged(id: Int, state: TransferState?) {

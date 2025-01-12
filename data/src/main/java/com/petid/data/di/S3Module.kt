@@ -22,8 +22,14 @@ class S3Module {
     fun provideTransferUtility(
         @ApplicationContext context: Context,
     ): TransferUtility {
-        val awsCredentials = BasicAWSCredentials(BuildConfig.AWS_ACCESS_KEY, BuildConfig.AWS_SECRET_KEY)
-        val s3Client = AmazonS3Client(awsCredentials, Region.getRegion(Regions.AP_NORTHEAST_2))
+        val awsCredentials = BasicAWSCredentials(
+            BuildConfig.AWS_ACCESS_KEY,
+            BuildConfig.AWS_SECRET_KEY
+        )
+        val s3Client = AmazonS3Client(
+            awsCredentials,
+            Region.getRegion(Regions.AP_NORTHEAST_2)
+        )
         return TransferUtility.builder()
             .s3Client(s3Client)
             .context(context)
