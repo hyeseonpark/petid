@@ -9,8 +9,6 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.petid.data.dto.request.PetRequest
-import com.petid.data.dto.request.toDomain
 import com.petid.data.ml.ClassifierImageAnalyzer
 import com.petid.data.ml.ClassifierResult
 import com.petid.data.util.S3UploadHelper
@@ -18,6 +16,7 @@ import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.data.ml.ImageClassifierHelper
+import com.petid.domain.entity.Pet
 import com.petid.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -34,7 +33,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
     private val imageAnalyzer: ClassifierImageAnalyzer,
     private val s3UploadHelper: S3UploadHelper,
 ): ViewModel() {
-    var petInfo = PetRequest.Builder()
+    var petInfo = Pet.Builder()
     var petImage : File? = null
     var signImage : File? = null
 
@@ -47,7 +46,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
     private fun generatePetid() {
         viewModelScope.launch {
             _registerPetResult.emit(CommonApiState.Loading)
-            val state = when (val result = petInfoRepository.registerPet(petInfo.build().toDomain())) {
+            val state = when (val result = petInfoRepository.registerPet(petInfo.build())) {
                 is ApiResult.Success -> {
                     CommonApiState.Success(Unit)
                 }

@@ -2,10 +2,10 @@ package com.petid.data.source.remote
 
 import com.petid.data.api.PetAPI
 import com.petid.data.dto.request.FilePathRequest
+import com.petid.data.dto.request.PetRequest
 import com.petid.data.dto.response.toDomain
 import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.PetDetailsEntity
-import com.petid.domain.entity.PetRequestEntity
 import com.petid.domain.entity.PetUpdateEntity
 import com.petid.domain.util.ApiResult
 import javax.inject.Inject
@@ -14,9 +14,9 @@ class PetInfoDataSourceImpl @Inject constructor(
     private val petAPI: PetAPI
 ): PetInfoDataSource {
 
-    override suspend fun registerPet(pet: PetRequestEntity): ApiResult<PetDetailsEntity> =
+    override suspend fun registerPet(petRequest: PetRequest): ApiResult<PetDetailsEntity> =
         runCatching {
-            petAPI.registerPet(pet).toDomain()
+            petAPI.registerPet(petRequest).toDomain()
         }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun getPetDetails(petId: Long): ApiResult<PetDetailsEntity> =
