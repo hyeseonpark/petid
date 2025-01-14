@@ -1,8 +1,8 @@
 package com.petid.data.api
 
 import com.petid.data.dto.request.FilePathRequest
+import com.petid.data.dto.request.PetRequest
 import com.petid.data.dto.response.PetDetailsResponse
-import com.petid.domain.entity.PetRequestEntity
 import com.petid.domain.entity.PetUpdateEntity
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -28,7 +28,7 @@ interface PetAPI {
      */
     @POST("/v1/pet")
     suspend fun registerPet(
-        @Body pet: PetRequestEntity // TODO data, domain
+        @Body petRequest: PetRequest
     ): PetDetailsResponse
 
     /**

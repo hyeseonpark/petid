@@ -4,7 +4,7 @@ import com.petid.data.dto.request.toDto
 import com.petid.data.source.remote.PetInfoDataSource
 import com.petid.domain.entity.FilePath
 import com.petid.domain.entity.PetDetailsEntity
-import com.petid.domain.entity.PetRequestEntity
+import com.petid.domain.entity.Pet
 import com.petid.domain.entity.PetUpdateEntity
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
@@ -15,8 +15,8 @@ import javax.inject.Singleton
 class PetInfoRepositoryImpl @Inject constructor(
     private val petInfoDataSource: PetInfoDataSource,
 ): PetInfoRepository {
-    override suspend fun registerPet(pet: PetRequestEntity): ApiResult<PetDetailsEntity> =
-        petInfoDataSource.registerPet(pet)
+    override suspend fun registerPet(pet: Pet): ApiResult<PetDetailsEntity> =
+        petInfoDataSource.registerPet(pet.toDto())
 
     override suspend fun getPetDetails(petId: Long): ApiResult<PetDetailsEntity> =
         petInfoDataSource.getPetDetails(petId)

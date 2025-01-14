@@ -1,5 +1,5 @@
 package com.petid.domain.entity
 
-data class PetImageRequestEntity(
+data class PetImage(
     val imagePath: String,
 )
