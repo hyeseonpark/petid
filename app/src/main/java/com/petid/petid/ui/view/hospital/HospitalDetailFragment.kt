@@ -43,7 +43,7 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
             toolbar = view.findViewById(R.id.toolbar),
             title = viewModel.hospitalDetail.name,
             showBackButton = true,
-            onBackClick = { activity?.finish() },
+            onBackClick = { requireActivity().finish() },
         )
         initComponent()
     }

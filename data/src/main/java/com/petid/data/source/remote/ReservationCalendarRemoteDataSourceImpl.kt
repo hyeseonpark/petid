@@ -7,6 +7,7 @@ import com.petid.data.dto.response.toDomain
 import com.petid.domain.entity.HospitalOrderEntity
 import com.petid.domain.util.ApiResult
 import com.google.gson.Gson
+import com.petid.data.util.mapApiResult
 import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,42 +20,18 @@ class ReservationCalendarRemoteDataSourceImpl @Inject constructor(
         hospitalId: Int,
         day: String,
         date: String
-    ): ApiResult<List<String>> {
-        return try {
-            val response = hosptialAPI.getHospitalOrderTimeList(hospitalId, day, date)
-            ApiResult.Success(response)
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
-    }
+    ): ApiResult<List<String>> =
+        runCatching {
+            hosptialAPI.getHospitalOrderTimeList(hospitalId, day, date)
+        }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun createHospitalOrder(
         hospitalId: Int,
         date: String
-    ): ApiResult<HospitalOrderEntity> {
-        return try {
-            val response = hosptialAPI.createHospitalOrder(
+    ): ApiResult<HospitalOrderEntity> =
+        runCatching {
+            hosptialAPI.createHospitalOrder(
                 HospitalOrderRequest(hospitalId, date)
-            )
-            ApiResult.Success(response.toDomain())
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
-    }
+            ).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 }

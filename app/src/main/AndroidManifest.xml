@@ -86,10 +86,10 @@
         </service>
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="true" />
-<!--        <meta-data-->
-<!--            android:name="petid.PetidGlideModule"-->
-<!--            android:value="GlideModule"/>-->
+            android:value="${enableCrashReporting}" />
+        <meta-data
+            android:name="petid.PetidGlideModule"
+            android:value="GlideModule"/>
 
         <activity
             android:name=".ui.view.auth.SplashActivity"

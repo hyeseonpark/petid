@@ -61,7 +61,7 @@ class AddressSearchFragment : BaseFragment<FragmentAddressSearchBinding>(Fragmen
         @JavascriptInterface
         @Suppress("unused")
         fun processDATA(data: String?) {
-            activity?.runOnUiThread {
+            requireActivity().runOnUiThread {
                 setFragmentResult(args.Key, bundleOf(args.Key to data))
                 findNavController().popBackStack()
             }

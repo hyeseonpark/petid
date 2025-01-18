@@ -1,4 +1,4 @@
-package com.petid.petid.di
+package com.petid.data.di
 
 import android.content.Context
 import com.petid.data.ml.ClassifierImageAnalyzer

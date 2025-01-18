@@ -6,6 +6,7 @@ import com.petid.data.dto.response.toDomain
 import com.petid.domain.entity.HospitalOrderDetailEntity
 import com.petid.domain.util.ApiResult
 import com.google.gson.Gson
+import com.petid.data.util.mapApiResult
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -14,37 +15,13 @@ class ReservationHistoryInfoRemoteDataSourceImpl @Inject constructor(
 ): ReservationHistoryInfoRemoteDataSource {
     override suspend fun getHospitalReservationHistoryList(
         status: String
-    ): ApiResult<List<HospitalOrderDetailEntity>> {
-        return try {
-            val response = hosptialAPI.getHospitalOrderList(status)
-            ApiResult.Success(response.toDomain())
+    ): ApiResult<List<HospitalOrderDetailEntity>> =
+        runCatching {
+            hosptialAPI.getHospitalOrderList(status).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
-    }
-
-    override suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int> {
-        return try {
-            val response = hosptialAPI.deleteHospitalOrder(orderId)
-            ApiResult.Success(response)
-
-        } catch (e: HttpException) {
-            val gson = Gson()
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-
-            ApiResult.HttpError(errorResponse.toDomain())
-
-        } catch (e: Exception) {
-            ApiResult.Error(e.message)
-        }
-    }
+    override suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int> =
+        runCatching {
+            hosptialAPI.deleteHospitalOrder(orderId)
+        }.mapApiResult { ApiResult.Success(it) }
 }

@@ -11,8 +11,8 @@ if (localPropertiesFile.exists()) {
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.com.google.dagger.hilt.android)
     alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.com.google.dagger.hilt.android)
     id("kotlin-parcelize")
 }
 
@@ -68,6 +68,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.firebase.crashlytics.ktx) // 비정상 종료 추적
+    implementation(libs.firebase.analytics.ktx)
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

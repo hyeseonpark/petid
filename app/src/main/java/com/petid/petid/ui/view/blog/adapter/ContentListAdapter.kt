@@ -24,11 +24,12 @@ class ContentListAdapter(
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<ContentEntity>() {
+            override fun areItemsTheSame(oldItem: ContentEntity, newItem: ContentEntity) =
+                oldItem.contentId == newItem.contentId
+
             override fun areContentsTheSame(oldItem: ContentEntity,newItem: ContentEntity) =
                 oldItem == newItem
 
-            override fun areItemsTheSame(oldItem: ContentEntity, newItem: ContentEntity) =
-                oldItem.contentId == newItem.contentId
         }
     }
 

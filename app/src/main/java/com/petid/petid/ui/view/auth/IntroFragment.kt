@@ -32,17 +32,17 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
     companion object{
         fun newInstance(position: Int): IntroFragment {
             val fragment = IntroFragment()
-            val mBundle = Bundle()
-            mBundle.putInt("index", position)
-            fragment.arguments = mBundle
+            with(Bundle()){
+                putInt("index", position)
+                fragment.arguments = this
+            }
             return fragment
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        mIndex = arguments?.getInt("index") ?: 0
+        mIndex = requireArguments().getInt("index")
     }
 
     override fun onCreateView(
@@ -59,7 +59,7 @@ class IntroFragment : BaseFragment<FragmentIntroBinding>(FragmentIntroBinding::i
             textViewTitle.text = getString(guideTitleIds[mIndex])
             textViewDesc.text = getString(guideDescIds[mIndex])
             when(mIndex) {
-                2 -> {
+                2 -> { // Design Issue
                     imageViewIntro.visibility = View.GONE
                     imageViewIntro3.visibility = View.VISIBLE
                 }
