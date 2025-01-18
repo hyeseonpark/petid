@@ -11,6 +11,8 @@ import com.bumptech.glide.load.engine.cache.MemorySizeCalculator
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 
+const val IMAGE_CACHE_MEMORY_SIZE = 1024 * 1024 * 45
+const val IMAGE_FILE_CACHE_SIZE = 1024 * 1024 * 100
 @GlideModule
 class PetidGlideModule: AppGlideModule() {
     override fun applyOptions(
@@ -21,10 +23,10 @@ class PetidGlideModule: AppGlideModule() {
         val calculator = MemorySizeCalculator.Builder(context).setMemoryCacheScreens(3F).build()
         builder.setMemoryCache(LruResourceCache(calculator.memoryCacheSize.toLong()))
 
-        val bitmapPoolSizeBytes = 1024 * 1024 * 45 // 30mb
+        val bitmapPoolSizeBytes = IMAGE_CACHE_MEMORY_SIZE
         builder.setBitmapPool(LruBitmapPool(bitmapPoolSizeBytes.toLong()))
 
-        val diskCacheSizeBytes = 1024 * 1024 * 100; // 100 MB
+        val diskCacheSizeBytes = IMAGE_FILE_CACHE_SIZE
         builder.setDiskCache(InternalCacheDiskCacheFactory(context, "petidCache", diskCacheSizeBytes.toLong()))
         builder.setDefaultRequestOptions(RequestOptions().format(DecodeFormat.PREFER_RGB_565).disallowHardwareConfig())
     }

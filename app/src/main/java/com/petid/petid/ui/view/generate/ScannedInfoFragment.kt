@@ -61,7 +61,7 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
         initComponent()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    //@SuppressLint("ClickableViewAccessibility")
     fun initComponent() {
         // 우측 아이콘 클릭 이벤트
         with(binding) {

@@ -1,8 +1,10 @@
 package com.petid.petid.ui.view.main
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -89,6 +91,8 @@ class MainActivity : BaseActivity() {
     /**
      * tooltip 제거
      */
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("RestrictedApi")
     private fun disableBottomNavigationViewTooltips(bottomNavigationView: BottomNavigationView) {
         val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
         for (i in 0 until menuView.childCount) {

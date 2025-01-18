@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
-import com.petid.petid.R
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.R
 import com.petid.petid.databinding.DialogCommonBinding
 import com.petid.petid.util.throttleFirst
 import kotlinx.coroutines.flow.launchIn
@@ -52,7 +52,7 @@ class CustomDialogCommon(
                 .clicks()
                 .throttleFirst()
                 .onEach {
-                    when(yesButtonClick) {
+                    when (yesButtonClick) {
                         null -> dismiss()
                         else -> yesButtonClick.invoke()
                     }
@@ -85,12 +85,10 @@ class CustomDialogCommon(
             title: String,
             yesButtonClick: () -> Unit,
             noButtonClick: (() -> Unit)? = null
-        ): CustomDialogCommon {
-            return CustomDialogCommon(
-                title = title,
-                yesButtonClick = yesButtonClick,
-                noButtonClick = noButtonClick
-            )
-        }
+        ) = CustomDialogCommon(
+            title = title,
+            yesButtonClick = yesButtonClick,
+            noButtonClick = noButtonClick
+        )
     }
 }
