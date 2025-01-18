@@ -31,6 +31,7 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.home.HomeMainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -71,8 +72,10 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
 
     override fun onResume() {
         super.onResume()
-        viewModel.getMemberInfo()
-        viewModel.hasUncheckedNotification()
+        with(viewModel){
+            getMemberInfo()
+            hasUncheckedNotification()
+        }
     }
 
     override fun onStop() {
@@ -254,7 +257,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      */
     private fun observeGetMemberInfoState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getMemberInfoResult.collect { result ->
+            viewModel.getMemberInfoResult.collectLatest { result ->
                 if (result !is CommonApiState.Loading)
                     hideLoading()
 
@@ -347,7 +350,6 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
 
                 when (result) {
                     is CommonApiState.Success -> {
-                        // TODO 강사님께 금요일날 확인받기
                         Glide.with(requireContext())
                             .load(result.data)
                             .error(R.color.d9)

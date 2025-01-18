@@ -25,6 +25,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * Push Service를 받아 Room DB에 동기화를 시키고 사용자에게 알림을 통지하는 서비스.
+ * 알림 동기화 목적 : Notification을 DB History화 하여 사용자가 중요 알림을 다시 확인하기 위함
+ *
+ * Author : 혜선
+ */
 class AppFirebaseMessageService() : FirebaseMessagingService() {
 
     private val notificationRepository: NotificationRepository by lazy {

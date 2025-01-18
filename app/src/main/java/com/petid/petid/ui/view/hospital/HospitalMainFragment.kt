@@ -256,7 +256,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
      */
     private fun observeCurrentEupmundongState() {
         lifecycleScope.launch {
-            viewModel.currentEupmundongState.collect { eupmundong ->
+            viewModel.currentEupmundongState.collectLatest { eupmundong ->
                 eupmundong?.let {
                     binding.buttonEupmundong.text = it.name
                 }
