@@ -12,8 +12,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.petid.petid.R
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.R
 import com.petid.petid.databinding.ActivityIntroBinding
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.throttleFirst
@@ -30,20 +30,21 @@ class IntroActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityIntroBinding.inflate(layoutInflater)
-        initComponent()
         setContentView(binding.root)
+        initComponent()
     }
 
     private fun initComponent() {
-        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, lifecycle)
+        if (!::mSectionsPagerAdapter.isInitialized) {
+            mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager, lifecycle)
+        }
 
         with(binding) {
             buttonStart
                 .clicks()
                 .throttleFirst()
                 .onEach {
-                    val target = Intent(getGlobalContext(), SocialAuthActivity::class.java)
-                    startActivity(target)
+                    startActivity(Intent(getGlobalContext(), SocialAuthActivity::class.java))
                     finish()
                 }
                 .launchIn(lifecycleScope)
@@ -98,7 +99,7 @@ class IntroActivity : BaseActivity() {
 
         dots[index]?.setImageResource(R.drawable.ic_indicator_on)
 
-        binding.buttonStart.visibility = when(index) {
+        binding.buttonStart.visibility = when (index) {
             dotsCount - 1 -> View.VISIBLE
             else -> View.GONE
         }
@@ -108,14 +109,10 @@ class IntroActivity : BaseActivity() {
      *
      */
     class SectionsPagerAdapter(fm: FragmentManager, lc: Lifecycle) : FragmentStateAdapter(fm, lc) {
-        private val pagerCount = 3
 
-        override fun getItemCount(): Int {
-            return pagerCount
-        }
+        override fun getItemCount() = 3
 
-        override fun createFragment(position: Int): Fragment {
-            return IntroFragment.newInstance(position)
-        }
+        override fun createFragment(position: Int) = IntroFragment.newInstance(position)
+
     }
 }

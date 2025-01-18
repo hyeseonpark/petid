@@ -1,4 +1,4 @@
-package com.petid.data.repository
+package com.petid.data.repository.remote
 
 import com.petid.data.api.BannerAPI
 import com.petid.data.source.remote.HomeMainRemoteDataSource
@@ -13,21 +13,9 @@ class HomeMainRepositoryImpl @Inject constructor(
     private val remoteDataSource: HomeMainRemoteDataSource,
     private val bannerAPI: BannerAPI,
 ) : HomeMainRepository{
-    override suspend fun getBannerList(type: String): ApiResult<List<BannerEntity>> {
-        return when (val result = remoteDataSource.getBannerList(type)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }
+    override suspend fun getBannerList(type: String): ApiResult<List<BannerEntity>> =
+        remoteDataSource.getBannerList(type)
 
-    /*override suspend fun getBannerImage(imagePath: String): ApiResult<String> {
-        return when (val result = remoteDataSource.getBannerImage(imagePath)) {
-            is ApiResult.Success -> result
-            is ApiResult.HttpError -> result
-            is ApiResult.Error -> result
-        }
-    }*/
     override suspend fun getBannerImage(imagePath: String): String {
 //        return try {
 //            val response = bannerAPI.getBannerImage(imagePath)

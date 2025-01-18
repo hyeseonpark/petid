@@ -40,7 +40,7 @@ class CompleteCardFragment: BaseFragment<FragmentCompleteCardBinding>(FragmentCo
         setupToolbar(
             toolbar = view.findViewById(R.id.toolbar),
             showBackButton = true,
-            onBackClick = { activity?.finish() }
+            onBackClick = { requireActivity().finish() }
         )
         initComponent()
     }

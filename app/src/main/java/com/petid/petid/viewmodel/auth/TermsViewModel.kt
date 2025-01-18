@@ -2,10 +2,10 @@ package com.petid.petid.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.petid.data.util.Constants.SHARED_VALUE_ACCESS_TOKEN
+import com.petid.data.util.Constants.SHARED_VALUE_REFRESH_TOKEN
 import com.petid.domain.repository.TermsRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.common.Constants.SHARED_VALUE_ACCESS_TOKEN
-import com.petid.petid.common.Constants.SHARED_VALUE_REFRESH_TOKEN
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState

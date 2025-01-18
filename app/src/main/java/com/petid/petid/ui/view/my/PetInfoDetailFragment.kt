@@ -135,7 +135,7 @@ class PetInfoDetailFragment
     private fun processForUploadFile(uri: Uri) {
         // s3 bucket 에 파일 업로드
         with(viewModel) {
-            uploadFile(requireContext(), uri.toFile(requireActivity())!!, petImageFileName!!)
+            uploadFile(uri.toFile(requireActivity())!!, petImageFileName!!)
         }
     }
 
