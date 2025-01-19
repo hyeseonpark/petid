@@ -57,14 +57,36 @@
 <br> 
 
 ## Preview
-![003](https://github.com/user-attachments/assets/1be119e3-7e12-4ae5-81d4-476c3cbc7a6e)
-![004](https://github.com/user-attachments/assets/c0a7aafe-a84a-4d52-a24f-17e5e07eec6a)
-![005](https://github.com/user-attachments/assets/bcce70aa-afde-4861-9567-ce894209e9dc)
-![006](https://github.com/user-attachments/assets/a4d2dbfe-3e82-4161-a398-726138c3ca65)
-![007](https://github.com/user-attachments/assets/84e5429b-f72a-452f-9203-585a9515300c)
-![008](https://github.com/user-attachments/assets/bc299cbf-1df6-4eb7-b98b-90ee106c3769)
-![009](https://github.com/user-attachments/assets/742ffdf5-2c8d-4f5d-9c3d-d3d8068a4125)
-![010](https://github.com/user-attachments/assets/34c7f37c-a3c2-4363-a76b-1856520cf00c)
-![011](https://github.com/user-attachments/assets/eec0f11e-d87c-44f0-a6b1-6ae91ef0f986)
-![012](https://github.com/user-attachments/assets/82bf9892-c3be-4f9f-abdb-74c529c12d1e)
+| 인트로&로그인 | 펫아이디 생성 1 | 펫아이디 생성 2 |
+| --- | --- | --- |
+| ![petid_intro](https://github.com/user-attachments/assets/31a51b9e-9fd1-46db-9e4f-5f972fe09b26)| ![petid_generate_petid_1](https://github.com/user-attachments/assets/00234142-0dae-4d6c-91e7-08496ddf8ef4) | ![petid_generate_petid_2](https://github.com/user-attachments/assets/53ec3500-b8f9-4444-b261-7e2989879a4c) |
+
+| 펫아이디 카드 | 병원 목록 및 예약 | 병원 예약 목록 및 취소 |
+| --- | --- | --- |
+| ![petid_card](https://github.com/user-attachments/assets/23def8ad-d7ba-4a11-b577-a52e67a675d6) | ![petid_hospital](https://github.com/user-attachments/assets/eeb3033a-c0a6-4804-bb99-d2323a7ba2b3) | ![petid_my](https://github.com/user-attachments/assets/68b90f20-acdc-4982-9d9b-556a31f32765)|
+
+| 컨텐츠 | 알람 | 프로필 사진 업데이트 |
+| --- | --- | --- |
+| ![petid_blog](https://github.com/user-attachments/assets/b725311f-eb31-4289-936e-a04299d6c383) | ![petid_noti](https://github.com/user-attachments/assets/a8ba1ac6-46b9-4ca7-ac57-a109dc1484e8) | ![petid_update_profile_img](https://github.com/user-attachments/assets/7c45d91b-f241-4ae5-af34-d681b34fe656) |
+
+
+<br> 
+
+## 각 화면 상세설명
+
+<details>
+<summary>
+화면 상세설명 펼치기
+</summary>
+<img src="https://github.com/user-attachments/assets/2e3a2bba-9b08-4fcd-8351-086b65ffd142" alt="021" />
+<img src="https://github.com/user-attachments/assets/00620b9e-a8ab-47b8-9a97-fd123c0ae97c" alt="020" />
+<img src="https://github.com/user-attachments/assets/82a1982d-cc36-4033-8e1e-d5c8a32d9408" alt="019" />
+<img src="https://github.com/user-attachments/assets/ef50283c-ac45-41c9-87b4-898b75996df2" alt="018" />
+<img src="https://github.com/user-attachments/assets/28b9b704-0de2-4b84-b38c-c195da17ed58" alt="017" />
+<img src="https://github.com/user-attachments/assets/d50f83c9-d0b6-47ad-991f-682d263fc240" alt="016" />
+<img src="https://github.com/user-attachments/assets/0d3648c2-7c93-4ce5-89da-fdf6e8a13a37" alt="015" />
+</details>
+
+
+
 
