@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -25,6 +26,13 @@ import java.io.FileOutputStream
  */
 val Any.TAG: String
     get() = this.javaClass.simpleName
+
+/**
+ * 글자 수 관계 없이 말 줄임표 붙이기
+ */
+fun TextView.setTextWithEllipsis(text: String) {
+    this.text = "$text···"
+}
 
 /**
  * 전화번호 하이픈 추가

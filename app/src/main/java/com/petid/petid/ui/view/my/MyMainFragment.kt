@@ -27,6 +27,8 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
+import com.petid.petid.common.Constants.COMMON_CATEGORY_TYPE
+import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.util.petidNullDialog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -104,12 +106,15 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            // 약관 및 개인정보 처리 동의
+            // 서비스 이용약관
             layoutTermsAgreeInfo
                 .clicks()
                 .throttleFirst()
                 .onEach {
-
+                    val target = Intent(activity, CommonInfoActivity::class.java).apply {
+                        putExtra(COMMON_CATEGORY_TYPE, ContentCategoryType.TERMS.name)
+                    }
+                    startActivity(target)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -118,7 +123,10 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 .clicks()
                 .throttleFirst()
                 .onEach {
-
+                    val target = Intent(activity, CommonInfoActivity::class.java).apply {
+                        putExtra(COMMON_CATEGORY_TYPE, ContentCategoryType.PRIVACY_POLICY.name)
+                    }
+                    startActivity(target)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -127,7 +135,10 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 .clicks()
                 .throttleFirst()
                 .onEach {
-
+                    val target = Intent(activity, CommonInfoActivity::class.java).apply {
+                        putExtra(COMMON_CATEGORY_TYPE, ContentCategoryType.NOTICE.name)
+                    }
+                    startActivity(target)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -136,7 +147,10 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 .clicks()
                 .throttleFirst()
                 .onEach {
-
+                    val target = Intent(activity, CommonInfoActivity::class.java).apply {
+                        putExtra(COMMON_CATEGORY_TYPE, ContentCategoryType.FAQ.name)
+                    }
+                    startActivity(target)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
