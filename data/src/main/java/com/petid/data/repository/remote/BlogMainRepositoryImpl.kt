@@ -2,6 +2,7 @@ package com.petid.data.repository.remote
 
 import com.petid.data.api.ContentAPI
 import com.petid.data.source.remote.BlogMainRemoteDataSource
+import com.petid.domain.entity.CommonInfo
 import com.petid.domain.entity.ContentEntity
 import com.petid.domain.entity.ContentLikeEntity
 import com.petid.domain.repository.BlogMainRepository
@@ -16,6 +17,9 @@ class BlogMainRepositoryImpl @Inject constructor(
 ): BlogMainRepository {
     override suspend fun getContentList(category: String): ApiResult<List<ContentEntity>> =
         remoteDataSource.getContentList(category)
+
+    override suspend fun getCommonInfoList(category: String): ApiResult<List<CommonInfo>>  =
+        remoteDataSource.getCommonInfoList(category)
 
     // TODO 변경 필
     override suspend fun getContentImage(filePath: String): String =
