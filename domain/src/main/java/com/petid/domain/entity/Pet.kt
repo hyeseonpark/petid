@@ -65,7 +65,7 @@ data class Pet(
         }
 
         /* ScannedInfoFragment */
-        fun setAppearance(breed: String, hairColor: String, weight: Int, hairLength: String) = apply {
+        fun setAppearance(breed: String, hairColor: String, weight: Double, hairLength: String) = apply {
             this.appearance = PetAppearance(breed, hairColor, weight, hairLength)
         }
 

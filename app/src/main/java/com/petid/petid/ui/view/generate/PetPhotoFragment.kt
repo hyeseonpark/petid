@@ -119,7 +119,6 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
                 viewModel.analyzeImage(getGlobalContext(), photoURI)
             } else {
                 showErrorMessage("사진 촬영 실패, resultCode: ${result.resultCode}")
-                Toast.makeText(context, "사진 촬영에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -127,50 +126,61 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
      * 사진 촬영을 시작하는 함수
      */
     private fun takePictureFullSize() {
-        photoURI = Uri.EMPTY
-        val fullSizePictureIntent = getPictureIntent_App_Specific(requireContext())
-        takePictureLauncher.launch(fullSizePictureIntent)
+        runCatching {
+            photoURI = Uri.EMPTY
+            getPictureintentAppSpecific(requireContext())
+        }.onSuccess { intent ->
+            intent?.let {
+                takePictureLauncher.launch(it)
+            } ?: run {
+                showErrorMessage("카메라 실행 준비 실패")
+                retryDialog()
+            }
+        }.onFailure {
+            showErrorMessage(it.message.toString())
+            retryDialog()
+        }
     }
 
     /**
      * 카메라 호출할 Intent 생성
      */
-    private fun getPictureIntent_App_Specific(context: Context): Intent {
+    private fun getPictureintentAppSpecific(context: Context): Intent? {
         val fullSizeCaptureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-        // 파일 생성 - 촬영 사진이 저장될 위치
-        val photoFile: File? = try {
+        return runCatching {
             createImageFile(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES))
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            null
-        }
-
-        photoFile?.also {
-            // 생성된 File로부터 Uri 생성 (by FileProvider)
-            photoURI = FileProvider.getUriForFile(
-                context,
-                BuildConfig.APPLICATION_ID + ".fileprovider",
-                it
-            )
-            // 생성된 Uri를 Intent에 추가
-            fullSizeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-        }
-        return fullSizeCaptureIntent
+        }.mapCatching { photoFile ->
+            if (photoFile != null) {
+                FileProvider.getUriForFile(
+                    context,
+                    BuildConfig.APPLICATION_ID + ".fileprovider",
+                    photoFile
+                ).also { uri ->
+                    photoURI = uri // 성공 시에만 photoURI 업데이트
+                    fullSizeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                }
+            }
+            fullSizeCaptureIntent
+        }.getOrNull() // 실패 시 null 반환
     }
 
     /**
      * 빈 파일 생성
      */
-    @Throws(IOException::class)
-    private fun createImageFile(storageDir: File?): File {
+    private fun createImageFile(storageDir: File?): File? {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            Log.i(TAG, "Created File AbsolutePath : $absolutePath")
+        return try {
+            File.createTempFile(
+                "JPEG_${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+            ).apply {
+                Log.i(TAG, "Created File AbsolutePath : $absolutePath, Name: $name")
+            }
+        } catch (e: IOException) {
+            showErrorMessage("Failed to create image file" + e.message.toString())
+            null
         }
     }
 
@@ -194,18 +204,15 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
 
                         val weight =
                             classifierResult.getOrNull(2)?.categories()?.firstOrNull()?.score()?.let {
-                                round(it*10)/10
-                            } ?: 0
+                                round(it*10).toInt()/10
+                            }?.toDouble() ?: 0.0
                         val hairColor = classifierResult.getCategoryName(3)
 
-                        // TODO weight 값 백엔드에서 수정완료 시 반영
-                        viewModel.petInfo.setAppearance(breed, hairColor, weight.toInt(), hairLength)
+                        viewModel.petInfo.setAppearance(breed, hairColor, weight, hairLength)
 
                         findNavController().navigate(R.id.action_petPhotoFragment_to_scannedInfoFragment)
                     }
-                    is AnalysisState.Error -> {
-                        retryDialog().show(childFragmentManager, null)
-                    }
+                    is AnalysisState.Error -> retryDialog().show(childFragmentManager, null)
                 }
             }
         }
