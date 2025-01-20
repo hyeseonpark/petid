@@ -68,7 +68,7 @@ class HomeMainViewModel @Inject constructor(
             _bannerApiState.emit(CommonApiState.Loading)
             val state = when (val result = homeMainRepository.getBannerList(type)) {
                 is ApiResult.Success -> {
-                    val bannerList = result.data
+                    val bannerList = result.data.filter { it.status == "active" }
 
                     val updatedBannerList = bannerList.map { item ->
                         val updatedImageUrl = getBannerImage(item.imageUrl)

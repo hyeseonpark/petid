@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.bumptech.glide.Glide
@@ -19,11 +20,14 @@ import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.BANNER_TYPE_MAIN
 import com.petid.petid.common.Constants.CHIP_TYPE
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.common.Constants.BANNER_TYPE_CONTENT
 import com.petid.petid.databinding.FragmentHomeMainBinding
 import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.view.blog.ContentDetailActivity
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.ui.view.generate.GeneratePetidMainActivity
 import com.petid.petid.ui.view.home.adapter.HomeBannerAdapter
+import com.petid.petid.ui.view.hospital.HospitalActivity
 import com.petid.petid.util.booleanCharToSign
 import com.petid.petid.util.calculateAge
 import com.petid.petid.util.genderCharToString
@@ -67,7 +71,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         observeGetPetImageUrlState()
         observeHasUncheckedNotificationState()
 
-        viewModel.getBannerList(BANNER_TYPE_MAIN)
+        // viewModel.getBannerList(BANNER_TYPE_MAIN)
+        viewModel.getBannerList(BANNER_TYPE_CONTENT)
     }
 
     override fun onResume() {
@@ -131,7 +136,12 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            bannerAdapter = HomeBannerAdapter(requireContext())
+            bannerAdapter = HomeBannerAdapter(requireContext()) { contentId ->
+                findNavController().navigate(R.id.action_homeMainFragment_to_blogMainFragment)
+                val target = Intent(requireContext(), ContentDetailActivity::class.java)
+                    .putExtra("contentId", contentId)
+                startActivity(target)
+            }
 
             snapHelper = PagerSnapHelper().also {
                 it.attachToRecyclerView(recyclerviewBannerList)
