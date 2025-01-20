@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -216,6 +218,11 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         startActivity(target)
         activity?.finish()
     }
+
+//    suspend fun googleLogout() {
+//        CredentialManager.create(getGlobalContext()).clearCredentialState(request = ClearCredentialStateRequest())
+//        firebaseAuth.signOut()
+//    }
 
     /**
      * viewModel.getMemberInfoResult 결과값 view 반영

@@ -4,30 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
-import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.lifecycleScope
-import com.petid.petid.BuildConfig
-import com.petid.petid.R
-import com.petid.petid.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.databinding.ActivitySocialAuthBinding
-import com.petid.petid.type.PlatformType
-import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.ui.state.LoginResult
-import com.petid.petid.ui.view.common.BaseActivity
-import com.petid.petid.ui.view.main.MainActivity
-import com.petid.petid.util.TAG
-import com.petid.petid.util.showErrorMessage
-import com.petid.petid.viewmodel.auth.SocialAuthViewModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -43,7 +24,20 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
+import com.petid.petid.BuildConfig
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.R
+import com.petid.petid.databinding.ActivitySocialAuthBinding
+import com.petid.petid.type.PlatformType
+import com.petid.petid.ui.component.CustomDialogCommon
+import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.LoginResult
+import com.petid.petid.ui.view.common.BaseActivity
+import com.petid.petid.ui.view.main.MainActivity
+import com.petid.petid.util.TAG
+import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
+import com.petid.petid.viewmodel.auth.SocialAuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -56,39 +50,17 @@ class SocialAuthActivity : BaseActivity() {
     private lateinit var binding: ActivitySocialAuthBinding
     private val viewModel: SocialAuthViewModel by viewModels()
 
-    private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
 
     private var socialAccessToken : String? = null
-
-    private val googleSignInLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                // Google 로그인이 성공하면, Firebase로 인증합니다.
-                val account = task.getResult(ApiException::class.java)!!
-                Log.d(TAG, "구글 로그인 성공")
-                socialAccessToken = account.idToken.toString()
-                loginWithSocialToken(account.id.toString())
-            } catch (e: ApiException) {
-                // Google 로그인 실패
-                showErrorMessage("KaKaoLoginError: ${e.message}")
-            }
-
-        }
 
     /* kakao Login callback*/
     val kakaoLoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
         if (error != null) {
             showErrorMessage("KaKaoLoginError: ${error.message}")
         } else if (token != null) {
-            requestKakaoUserInfo()
             socialAccessToken = token.accessToken
-            /*var idToken = token.idToken
-            if (idToken != null) {
-                Log.i(TAG, "카카오계정으로 로그인 성공 ${token}")
-                loginWithSocialToken(idToken)
-            }*/
+            requestKakaoUserInfo()
         }
     }
 
@@ -101,7 +73,6 @@ class SocialAuthActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
 
-        initGoogle()
         initFcm()
         observesLoginResultState()
         observesDoRestoreResultState()
@@ -136,35 +107,7 @@ class SocialAuthActivity : BaseActivity() {
                 .throttleFirst()
                 .onEach {
                     viewModel.platform = PlatformType.google
-
-                    val credentialManager = CredentialManager.create(getGlobalContext())
-
-                    val googleIdOption = GetGoogleIdOption.Builder()
-                        .setFilterByAuthorizedAccounts(false)
-                        .setServerClientId(resources.getString(R.string.default_web_client_id))
-                        .build()
-                    val credentialRequest = GetCredentialRequest.Builder()
-                        .addCredentialOption(googleIdOption)
-                        .build()
-                    try {
-                        val googleSignInRequest = credentialManager.getCredential(
-                            request = credentialRequest,
-                            context = this@SocialAuthActivity
-                        )
-                        val credential = googleSignInRequest.credential
-                        if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                            Log.d(TAG, "구글 로그인 성공")
-                            val googleIdTokenCredential =
-                                GoogleIdTokenCredential.createFrom(credential.data)
-                            socialAccessToken = googleIdTokenCredential.idToken
-                            firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
-                        }
-                    } catch (ex: GetCredentialCancellationException) {
-                        Log.e(TAG, "Error getting credentials", ex)
-
-                        showErrorMessage("GoogleLoginError: ${ex.message}")
-                    }
-                    //handleGoogleLogin()
+                    handleGoogleLogin()
                 }
                 .launchIn(lifecycleScope)
         }
@@ -194,6 +137,9 @@ class SocialAuthActivity : BaseActivity() {
         }
     }
 
+    /**
+     * 카카오 유저 정보 요청
+     */
     private fun requestKakaoUserInfo() {
         UserApiClient.instance.me { user, error ->
             if (error != null) {
@@ -218,7 +164,9 @@ class SocialAuthActivity : BaseActivity() {
         NaverIdLoginSDK.reagreeAuthenticate(this, oauthNaverLoginCallback)
     }
 
-
+    /**
+     * 네이버 로그인 콜백
+     */
     private val oauthNaverLoginCallback = object : OAuthLoginCallback {
         override fun onSuccess() {
             socialAccessToken = NaverIdLoginSDK.getAccessToken()
@@ -256,10 +204,40 @@ class SocialAuthActivity : BaseActivity() {
     /**
      * 구글 로그인
      */
-    private fun handleGoogleLogin() {
-        googleSignInClient.signOut()
-        val signInIntent = googleSignInClient.signInIntent
-        googleSignInLauncher.launch(signInIntent)
+    private suspend fun handleGoogleLogin() {
+        val credentialManager = CredentialManager.create(getGlobalContext())
+
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(resources.getString(R.string.default_web_client_id))
+            .build()
+        val credentialRequest = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+
+        runCatching {
+            credentialManager.getCredential(
+                request = credentialRequest,
+                context = this@SocialAuthActivity
+            )
+        }.onSuccess {
+            when(val credential = it.credential) {
+                is CustomCredential -> {
+                    if(credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                        runCatching {
+                            GoogleIdTokenCredential.createFrom(credential.data)
+                        }.onSuccess { googleIdTokenCredential ->
+                            socialAccessToken = googleIdTokenCredential.idToken
+                            firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
+                        }.onFailure { ex ->
+                            showErrorMessage("GoogleLoginError: ${ex.message}")
+                        }
+                    }
+                }
+            }
+        }.onFailure {
+            showErrorMessage("GoogleLoginError: ${it.message}")
+        }
     }
 
 
@@ -279,50 +257,18 @@ class SocialAuthActivity : BaseActivity() {
     }
 
     /**
-     * init Google
-     */
-    private fun initGoogle() {
-        // Firebase Authentication 인스턴스 초기화
-        firebaseAuth = FirebaseAuth.getInstance()
-
-        // 이미 로그인되어 있는지 확인
-        if (firebaseAuth.currentUser != null) {
-            // 이미 로그인된 경우 메인 화면으로 이동
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return
-        }
-
-        // GoogleSignInOptions를 구성합니다.
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestServerAuthCode(BuildConfig.GOOGLE_LOGIN_CLIENT_ID)
-            .requestIdToken(BuildConfig.GOOGLE_LOGIN_CLIENT_ID)
-            .requestEmail()
-            .build()
-
-        // GoogleSignInClient를 초기화합니다.
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-    }
-
-    /**
      * init Google Login
      */
     private fun firebaseAuthWithGoogle(idToken: String) {
         Log.d(TAG, idToken)
         val credential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth = FirebaseAuth.getInstance()
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // 로그인 성공
                     val user = firebaseAuth.currentUser
                     loginWithSocialToken(user?.uid.toString())
-//                    Toast.makeText(this, "환영합니다, ${user?.displayName}!", Toast.LENGTH_SHORT).show()
-                    // 여기서 로그인 후 화면 전환 등의 작업을 수행할 수 있습니다.
-                    //startActivity(Intent(this, MainActivity::class.java))
-                    //finish()
                 } else {
-                    // 로그인 실패
 //                    Toast.makeText(this, "Firebase 인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -416,10 +362,12 @@ class SocialAuthActivity : BaseActivity() {
         ).show(this.supportFragmentManager, null)
     }
 
+    /**
+     * 메인 이동
+     */
     private fun goMainActivity() {
         val target = Intent(getGlobalContext(), MainActivity::class.java)
         startActivity(target)
         finish()
     }
-
 }
