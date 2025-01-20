@@ -141,10 +141,9 @@ dependencies {
     implementation(libs.googleid)
 
     // Google Play services
-    implementation("com.google.gms:google-services:4.4.2")
     implementation(libs.play.services.location) // 위치
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
-    implementation("com.google.firebase:firebase-auth:23.1.0")
+    implementation(libs.google.services)
+    implementation(libs.firebase.auth)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics.ktx) // 비정상 종료 추적
     implementation(libs.firebase.analytics.ktx)
