@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
     // TODO 알람 정의 후 수정
     private fun handleNotificationIntent(data: NotificationEntity) {
         when (data.category) {
-            "reminder" -> showReminderDialog(data.title, data.body)
+            "reminder" -> showReminderDialog(data.category, data.desc)
                 .show(this.supportFragmentManager, null)
             "booking" -> {}
             "order" -> {}
