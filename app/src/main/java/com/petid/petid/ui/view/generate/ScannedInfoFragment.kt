@@ -111,7 +111,7 @@ class ScannedInfoFragment : BaseFragment<FragmentScannedInfoBinding>(FragmentSca
                     viewModel.petInfo.setAppearance(
                         autoCompleteTextViewBreed.text.toString(),
                         autoCompleteTextViewColor.text.toString(),
-                        editTextWeight.text.toString().toIntOrNull() ?: 0,
+                        editTextWeight.text.toString().toDoubleOrNull() ?: .0,
                         autoCompleteTextViewFeature.text.toString(),
                     )
                     findNavController().navigate(R.id.action_scannedInfoFragment_to_checkingInfoFragment)
