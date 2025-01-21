@@ -35,7 +35,6 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_layout_main) as NavHostFragment
         navController = navMainFragment.findNavController()
 
-
         val notificationData = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(NOTIFICATION_DATA, NotificationEntity::class.java)
         } else {

@@ -40,6 +40,7 @@ import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.auth.SocialAuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -68,10 +69,6 @@ class SocialAuthActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySocialAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    override fun onStart() {
-        super.onStart()
 
         initFcm()
         observesLoginResultState()
