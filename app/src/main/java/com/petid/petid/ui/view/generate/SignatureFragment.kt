@@ -50,11 +50,16 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
 
     fun initComponent() {
         with(binding) {
+            drawingViewSignature.onDrawDetected = { doDraw ->
+                binding.buttonNext.isEnabled = true
+            }
+
             buttonRefresh
                 .clicks()
                 .throttleFirst()
                 .onEach {
                     drawingViewSignature.clear()
+                    binding.buttonNext.isEnabled = false
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 

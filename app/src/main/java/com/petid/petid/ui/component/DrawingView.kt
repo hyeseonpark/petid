@@ -34,6 +34,8 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         canvas.drawPath(path, paint)
     }
 
+    var onDrawDetected: ((doDraw: Boolean) -> Unit)? = null
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
@@ -41,10 +43,12 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 path.moveTo(x, y)
+                onDrawDetected?.invoke(true)
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
                 path.lineTo(x, y)
+                onDrawDetected?.invoke(true)
             }
             MotionEvent.ACTION_UP -> {
                 // Do nothing
