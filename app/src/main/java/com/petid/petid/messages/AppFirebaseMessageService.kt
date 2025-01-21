@@ -143,7 +143,7 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
                 getGlobalContext(),
                 notificationId,
                 createNotificationIntent(messageData),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
         val notification = NotificationCompat.Builder(getGlobalContext(), channelId)
@@ -154,7 +154,7 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
             .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
             .setAutoCancel(true)
             .setFullScreenIntent(pendingIntent, true)
-            .setContentIntent(pendingIntent)
+            //.setContentIntent(pendingIntent)
             .build()
 
         try {
@@ -190,7 +190,7 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
      */
     private fun createNotificationIntent(messageData: NotificationEntity) =
         Intent(applicationContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
             // TODO 알람 정의 후 수정
             putExtra(NOTIFICATION_DATA, messageData)

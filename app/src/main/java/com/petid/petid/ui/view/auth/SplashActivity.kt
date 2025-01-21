@@ -47,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
             }
 
             val target = Intent(getGlobalContext(), nextActivity).apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
             startActivity(target)
             finish()
