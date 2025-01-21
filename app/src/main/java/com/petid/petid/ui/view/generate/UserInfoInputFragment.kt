@@ -58,10 +58,6 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
 
     fun initComponent() {
         with(binding) {
-            if (BuildConfig.DEBUG) {
-                buttonNext.isEnabled = true
-            }
-
             listOf(editTextName, editTextPhone, editTextAddress, editTextAddressDetail,
                 editTextRra, editTextRraDetail).forEach { editText ->
                 editText.addTextChangedListener {
@@ -91,11 +87,11 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
 
             checkboxTermsAgree
                 .checkedChanges()
-                .onEach {
+                .onEach { isChecked ->
                     buttonNext.isEnabled = isPossibleToNextStep()
 
                     listOf(editTextRra, editTextRraDetail).forEach { editText ->
-                        editText.visibility = if(it) View.GONE else View.VISIBLE
+                        editText.visibility = if(isChecked) View.GONE else View.VISIBLE
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -116,6 +112,10 @@ class UserInfoInputFragment: BaseFragment<FragmentUserInfoInputBinding>(Fragment
                     findNavController().navigate(R.id.action_userInfoInputFragment_to_petInfoInputFragment)
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            if (BuildConfig.DEBUG) {
+                buttonNext.isEnabled = true
+            }
         }
     }
 

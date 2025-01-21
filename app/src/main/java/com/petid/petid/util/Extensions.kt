@@ -7,17 +7,17 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.petid.petid.BuildConfig
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.petid.petid.BuildConfig
 import java.io.File
 import java.io.FileOutputStream
 
@@ -26,6 +26,13 @@ import java.io.FileOutputStream
  */
 val Any.TAG: String
     get() = this.javaClass.simpleName
+
+/**
+ * 글자 수 관계 없이 말 줄임표 붙이기
+ */
+fun TextView.setTextWithEllipsis(text: String) {
+    this.text = "$text···"
+}
 
 /**
  * 전화번호 하이픈 추가
@@ -86,8 +93,8 @@ fun Activity.hideKeyboardAndClearFocus() {
 /**
  * show dialog dialog
  */
-fun View.showLoadingDialog(context: Context) {
-    ProgressDialogUtil.show(context)
+fun View.showLoadingDialog(activity: Activity) {
+    ProgressDialogUtil.show(activity)
 }
 
 /**

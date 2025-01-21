@@ -1,14 +1,17 @@
 package com.petid.petid.common
 
 object Constants {
+    const val NOTIFICATION_DATA = "notification_data"
+
     const val SHARED_VALUE_IS_FIRST_RUN = "isFirst"
     const val REQUEST_STORAGE_PERMISSION = 1
-    const val SHARED_VALUE_ACCESS_TOKEN: String = "accessToken"
-    const val SHARED_VALUE_REFRESH_TOKEN: String = "refreshToken"
 
     const val SHARED_PET_ID_VALUE = "petIdValue"
     const val SHARED_MEMBER_ID_VALUE = "memberIdValue"
     const val SHARED_PET_CHIP_TYPE = "petChipTypeValue"
+
+    // extra name for commonInfoActivity
+    val COMMON_CATEGORY_TYPE = "categoryType"
 
     // location type
     const val LOCATION_SIDO_TYPE = 0

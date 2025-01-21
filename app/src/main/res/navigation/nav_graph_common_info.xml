@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_common_info"
+    app:startDestination="@id/commonInfoListFragment">
+
+    <fragment
+        android:id="@+id/commonInfoListFragment"
+        android:name="com.petid.petid.ui.view.my.CommonInfoListFragment"
+        android:label="fragment_common_info_list"
+        tools:layout="@layout/fragment_common_info_list" >
+        <action
+            android:id="@+id/action_commonInfoListFragment_to_commonInfoDetailFragment"
+            app:destination="@id/commonInfoDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/commonInfoDetailFragment"
+        android:name="com.petid.petid.ui.view.my.CommonInfoDetailFragment"
+        android:label="fragment_common_info_detail"
+        tools:layout="@layout/fragment_common_info_detail" >
+        <argument
+            android:name="contentId"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>

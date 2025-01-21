@@ -1,6 +1,6 @@
 package com.petid.data.dto.request
 
-import com.petid.domain.entity.PetAppearanceRequestEntity
+import com.petid.domain.entity.PetAppearance
 
 /**
  *
@@ -12,11 +12,11 @@ import com.petid.domain.entity.PetAppearanceRequestEntity
 data class PetAppearanceRequest (
     val breed: String,
     val hairColor: String,
-    val weight: Int,
+    val weight: Double,
     val hairLength: String,
 )
 
-fun PetAppearanceRequest.toDomain() = PetAppearanceRequestEntity(
+fun PetAppearance.toDto() = PetAppearanceRequest(
     breed = breed,
     hairColor = hairColor,
     weight = weight,

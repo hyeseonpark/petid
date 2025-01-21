@@ -14,6 +14,7 @@ import com.petid.petid.databinding.ItemBlogContentBinding
 import com.petid.petid.type.ContentCategoryType
 import com.bumptech.glide.Glide
 import com.bumptech.glide.signature.ObjectKey
+import com.petid.petid.util.setTextWithEllipsis
 
 class ContentListAdapter(
     private val mContext: Context,
@@ -24,11 +25,12 @@ class ContentListAdapter(
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<ContentEntity>() {
+            override fun areItemsTheSame(oldItem: ContentEntity, newItem: ContentEntity) =
+                oldItem.contentId == newItem.contentId
+
             override fun areContentsTheSame(oldItem: ContentEntity,newItem: ContentEntity) =
                 oldItem == newItem
 
-            override fun areItemsTheSame(oldItem: ContentEntity, newItem: ContentEntity) =
-                oldItem.contentId == newItem.contentId
         }
     }
 
@@ -93,13 +95,5 @@ class ContentListAdapter(
                 onItemClick(contentItem.contentId)
             }
         }
-    }
-
-
-    /**
-     * 글자 수 관계 없이 말 줄임표 붙이기
-     */
-    private fun TextView.setTextWithEllipsis(text: String) {
-        this.text = "$text···"
     }
 }

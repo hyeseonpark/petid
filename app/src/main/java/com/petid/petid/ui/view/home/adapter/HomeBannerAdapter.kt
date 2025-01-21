@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
+import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.petid.domain.entity.BannerEntity
 import com.petid.petid.R
-import com.bumptech.glide.Glide
 
 class HomeBannerAdapter(
-    private val mContext: Context
+    private val mContext: Context,
+    private val onItemClick: (Int) -> Unit
 ): ListAdapter<BannerEntity, HomeBannerAdapter.CustomViewHolder>(diffUtil) {
 
     companion object {
@@ -32,23 +34,28 @@ class HomeBannerAdapter(
         return CustomViewHolder(view).apply {
             itemView.setOnClickListener {
                 val curPosition = this.layoutPosition
-                // 클릭 시 관련 페이지로 이동하기
-                Toast.makeText(mContext, currentList[curPosition % currentList.size].text, Toast.LENGTH_SHORT).show()
-//                val intent = Intent(mContext, DetailActivity::class.java)
-//                mContext.startActivity(intent)
+                currentList[curPosition % currentList.size].contentId?.let { it1 -> onItemClick(it1) }
             }
         }
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         if (currentList.size != 0) {
-            val img = when (val imgUrl = currentList[position % currentList.size].imageUrl) {
-                "" -> mContext.getDrawable(R.drawable.layout_home_banner_background)
-                else -> imgUrl
-            }
-            Glide.with(mContext).load(img).into(holder.img)
-        }
+            val currentItem = currentList[position % currentList.size]
+            val defaultImg =
+                AppCompatResources.getDrawable(mContext, R.drawable.layout_home_banner_background)
 
+            with(holder) {
+                Glide
+                    .with(mContext)
+                    .load(currentItem.imageUrl)
+                    .placeholder(defaultImg)
+                    .error(defaultImg)
+                    .into(imageView)
+
+                title.text = currentItem.text
+            }
+        }
     }
 
     fun getListSize() : Int {
@@ -61,7 +68,8 @@ class HomeBannerAdapter(
 
 
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val img: ImageView = itemView.findViewById(R.id.imageView_banner_image)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView_banner_image)
+        val title: TextView = itemView.findViewById(R.id.textView_title)
     }
 
 }

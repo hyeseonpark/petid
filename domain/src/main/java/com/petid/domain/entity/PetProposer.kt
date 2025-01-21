@@ -1,6 +1,4 @@
-package com.petid.data.dto.request
-
-import com.petid.domain.entity.PetProposerRequestEntity
+package com.petid.domain.entity
 
 /**
  * @param name 신청자 이름
@@ -10,20 +8,11 @@ import com.petid.domain.entity.PetProposerRequestEntity
  * @param rraDetails 주민등록 상 주소 상세
  * @param phone 신청자 연락처
  */
-data class PetProposerRequest(
+data class PetProposer(
     val name: String,
     val address: String,
     val addressDetails: String,
     val rra: String,
     val rraDetails: String,
     val phone: String,
-)
-
-fun PetProposerRequest.toDomain() = PetProposerRequestEntity(
-    name = name,
-    address = address,
-    addressDetails = addressDetails,
-    rra = rra,
-    rraDetails = rraDetails,
-    phone = phone,
 )
