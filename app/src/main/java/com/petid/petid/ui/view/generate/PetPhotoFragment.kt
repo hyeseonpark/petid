@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.mediapipe.tasks.components.containers.Classifications
+import com.petid.data.util.sendCrashlytics
 import com.petid.petid.BuildConfig
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.R
@@ -138,6 +139,7 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
                 retryDialog()
             }
         }.onFailure {
+            it.sendCrashlytics()
             showErrorMessage(it.message.toString())
             retryDialog()
         }
@@ -164,6 +166,8 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
                 }
             }
             fullSizeCaptureIntent
+        }.onFailure {
+            it.sendCrashlytics()
         }.getOrNull() // 실패 시 null 반환
     }
 
@@ -172,7 +176,7 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
      */
     private fun createImageFile(storageDir: File?): File? {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return try {
+        return runCatching {
             File.createTempFile(
                 "JPEG_${timeStamp}_", /* prefix */
                 ".jpg", /* suffix */
@@ -180,10 +184,9 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
             ).apply {
                 Log.i(TAG, "Created File AbsolutePath : $absolutePath, Name: $name")
             }
-        } catch (e: IOException) {
-            showErrorMessage("Failed to create image file" + e.message.toString())
-            null
-        }
+        }.onFailure {
+            it.sendCrashlytics()
+        }.getOrNull()
     }
 
     /**
