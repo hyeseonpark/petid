@@ -84,34 +84,25 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
                 }
                 .launchIn(lifecycleScope)
 
-            // 선택된 성별
-            val checkedGender = when(radioButtonMale.isChecked) {
-                true -> getString(R.string.male_initial)
-                false -> getString(R.string.female_initial)
-            }.first()
-
-            // 중성화 여부
-            val checkedNeutering = when(checkboxIsNeutering.isChecked) {
-                true -> getString(R.string.N)
-                false -> getString(R.string.Y)
-            }.first()
-
-            // 중성화 날짜, 중성화가 N 일 경우 null 을 반환
-            val neuteringDate = when(editNeuteringDate.text.toString().isEmpty()) {
-                true -> null
-                false -> editNeuteringDate.text.toString()
-            }
-
             buttonNext
                 .clicks()
                 .throttleFirst()
                 .onEach {
+                    // 선택된 성별
+                    val checkedGender = getCheckedGender()
+
+                    // 중성화 여부
+                    val checkedNeutering = getCheckedNeutering()
+
+                    // 중성화 날짜, 중성화가 N 일 경우 null 을 반환
+                    val neuteringDate = getNeuteringDate()
+
                     viewModel.petInfo.setPetInfo(
-                        editTextName.text.toString(),
-                        editTextBirth.text.toString(),
-                        checkedGender,
-                        checkedNeutering,
-                        neuteringDate
+                        petName = editTextName.text.toString(),
+                        petBirthDate = editTextBirth.text.toString(),
+                        petSex = checkedGender,
+                        petNeuteredYn = checkedNeutering,
+                        petNeuteredDate = neuteringDate
                     )
                     findNavController().navigate(R.id.action_petInfoInputFragment_to_petPhotoFragment)
                 }
@@ -123,6 +114,24 @@ class PetInfoInputFragment : BaseFragment<FragmentPetInfoInputBinding>(FragmentP
 
         }
     }
+
+    private fun getCheckedGender(): Char =
+        when(binding.radioButtonMale.isChecked) {
+            true -> getString(R.string.male_initial)
+            false -> getString(R.string.female_initial)
+        }.first()
+
+    private fun getCheckedNeutering(): Char =
+        when(binding.checkboxIsNeutering.isChecked) {
+            true -> getString(R.string.N)
+            false -> getString(R.string.Y)
+        }.first()
+
+    private fun getNeuteringDate(): String? =
+        when(binding.editNeuteringDate.text.toString().isEmpty()) {
+            true -> null
+            false -> binding.editNeuteringDate.text.toString()
+        }
 
     /**
      * 모든 항목이 입력됐는지 확인

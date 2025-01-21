@@ -41,12 +41,12 @@ class NotificationListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = currentList[position]
         with(holder) {
-            type.text = item.title
-            title.text = item.body
+            type.text = item.category
+            title.text = item.desc
 
             binding.root.setOnClickListener {
                 if (!item.isChecked)
-                    onButtonClick(item.id, item.title)
+                    onButtonClick(item.id, item.category)
             }
 
             if(item.isChecked) {

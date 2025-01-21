@@ -71,7 +71,7 @@ class ImageClassifierHelper(
             }
         }
 
-        val modelName ="petid_crop_image_mobilenet_v1_2.tflite"
+        val modelName ="petid_crop_image_efficientnetb1_v1_4.tflite"
 
         baseOptionsBuilder.setModelAssetPath(modelName)
 

@@ -12,6 +12,8 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.Constants.MessageNotificationKeys
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import com.petid.data.dto.response.NotificationBody
 import com.petid.data.repository.local.NotificationRepository
 import com.petid.data.source.local.entity.NotificationEntity
 import com.petid.petid.R
@@ -95,16 +97,25 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
      */
     private fun extractMessageData(remoteMessage: RemoteMessage): NotificationEntity? {
         val extras = remoteMessage.toIntent().extras
-        val title = extras?.getString("gcm.notification.title").orEmpty()
+        val category = extras?.getString("gcm.notification.title").orEmpty()
         val body = extras?.getString("gcm.notification.body").orEmpty()
 
-        //TODO 데이터 형식 확인 후 변환
-        return if (title.isNotBlank() && body.isNotBlank()) {
+        val jsonBody = body
+            .replace("=", ":")
+            .replace("{", "{\"")
+            .replace("}", "\"}")
+            .replace(", ", "\", \"")
+            .replace("=", "\":\"")
+
+        val gson = Gson()
+        val notificationBody = gson.fromJson(jsonBody, NotificationBody::class.java)
+
+        return if (category.isNotBlank() && body.isNotBlank()) {
             NotificationEntity(
-                title = title,
-                body = body,
-                category = "reminder",
-                status = null,
+                desc = notificationBody.hospoitalName,
+                category = category,
+                status = notificationBody.status,
+                detailId = notificationBody.id,
             )
         } else {
             Log.w(TAG, "Received message with empty title or body")
@@ -132,18 +143,18 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
                 getGlobalContext(),
                 notificationId,
                 createNotificationIntent(messageData),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
         val notification = NotificationCompat.Builder(getGlobalContext(), channelId)
             .setSmallIcon(R.drawable.ic_app_logo_main)
             .setColor(getColor(R.color.petid_clear_blue))
-            .setContentTitle(messageData.title)
-            .setContentText(messageData.body)
+            .setContentTitle(messageData.category)
+            .setContentText(messageData.desc)
             .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
             .setAutoCancel(true)
             .setFullScreenIntent(pendingIntent, true)
-            .setContentIntent(pendingIntent)
+            //.setContentIntent(pendingIntent)
             .build()
 
         try {
@@ -179,7 +190,7 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
      */
     private fun createNotificationIntent(messageData: NotificationEntity) =
         Intent(applicationContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
             // TODO 알람 정의 후 수정
             putExtra(NOTIFICATION_DATA, messageData)

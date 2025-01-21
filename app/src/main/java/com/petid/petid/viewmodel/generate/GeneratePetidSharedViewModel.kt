@@ -6,17 +6,17 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.data.ml.ClassifierImageAnalyzer
 import com.petid.data.ml.ClassifierResult
+import com.petid.data.ml.ImageClassifierHelper
 import com.petid.data.util.S3UploadHelper
+import com.petid.domain.entity.Pet
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.GlobalApplication.Companion.getGlobalContext
-import com.petid.data.ml.ImageClassifierHelper
-import com.petid.domain.entity.Pet
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.common.Constants
 import com.petid.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -36,6 +36,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
     var petInfo = Pet.Builder()
     var petImage : File? = null
     var signImage : File? = null
+    val memberId = getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
 
     private val _registerPetResult = MutableStateFlow<CommonApiState<Unit>>(CommonApiState.Init)
     val registerPetResult = _registerPetResult.asStateFlow()
@@ -46,7 +47,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
     private fun generatePetid() {
         viewModelScope.launch {
             _registerPetResult.emit(CommonApiState.Loading)
-            val state = when (val result = petInfoRepository.registerPet(petInfo.build())) {
+            val state = when (val result = petInfoRepository.registerPet(petInfo.build(true))) {
                 is ApiResult.Success -> {
                     CommonApiState.Success(Unit)
                 }
@@ -66,42 +67,17 @@ class GeneratePetidSharedViewModel @Inject constructor(
      */
     fun uploadImageFiles() {
         viewModelScope.launch {
-            try {
-                _registerPetResult.emit(CommonApiState.Loading)
-                if (!handleUploadResult(getGlobalContext(), petImage!!, petInfo.getPetImageName()))
-                    return@launch
-                if (!handleUploadResult(getGlobalContext(), signImage!!, petInfo.getSignImageName()))
-                    return@launch
+            _registerPetResult.emit(CommonApiState.Loading)
 
-            } catch (e: Exception) {
-                _registerPetResult.emit(CommonApiState.Error(e.message))
-            } finally {
+            runCatching {
+                s3UploadHelper.uploadWithTransferUtility(file = petImage!!, keyName = petInfo.getPetImageName())
+                s3UploadHelper.uploadWithTransferUtility(file = signImage!!, keyName = petInfo.getSignImageName())
+            }.onSuccess {
                 generatePetid()
+            }.onFailure {
+                _registerPetResult.emit(CommonApiState.Error(it.message))
             }
         }
-    }
-
-    /**
-     * S3 bucket upload
-     */
-    private suspend fun handleUploadResult(
-        context: Context,
-        file: File,
-        keyName: String
-    ): Boolean {
-        return s3UploadHelper.uploadWithTransferUtility(
-            file = file,
-            keyName = keyName
-        ).fold(
-            onSuccess = {
-                Log.d("ViewModel", "$keyName upload succeeded")
-                true
-            },
-            onFailure = { e ->
-                _registerPetResult.emit(CommonApiState.Error(e.message))
-                false
-            }
-        )
     }
 
     /* 이미지 분석 결과 */
