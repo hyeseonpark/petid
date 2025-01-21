@@ -654,7 +654,7 @@
                     android:layout_height="wrap_content">
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerview_banner_list"
+                            android:id="@+id/recyclerview_main_banner_list"
                             android:layout_width="match_parent"
                             android:layout_height="121dp"
                             android:orientation="horizontal"
@@ -669,7 +669,7 @@
                             android:orientation="horizontal"
                             android:layout_marginBottom="13dp"
                             android:layout_marginEnd="12dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/recyclerview_banner_list"
+                            app:layout_constraintBottom_toBottomOf="@+id/recyclerview_main_banner_list"
                             app:layout_constraintEnd_toEndOf="parent"
                             android:gravity="center"
                             android:background="@drawable/layout_home_banner_background">
@@ -692,6 +692,81 @@
 
                             <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/textView_total_page"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="11sp"
+                                android:textFontWeight="500"
+                                android:textColor="@color/d9"/>
+
+                        </LinearLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <!-- banner - content -->
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scrollView_banner_content"
+                android:layout_width="match_parent"
+                android:layout_height="121dp"
+                android:layout_marginHorizontal="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="21dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:strokeWidth="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_banner_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerview_content_banner_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="121dp"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <LinearLayout
+                            android:layout_width="47dp"
+                            android:layout_height="22dp"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="13dp"
+                            android:layout_marginEnd="12dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/recyclerview_content_banner_list"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="center"
+                            android:background="@drawable/layout_home_banner_background">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/textView_current_page_content"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="11sp"
+                                android:textFontWeight="500"
+                                android:textColor="@color/white"/>
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / "
+                                android:textSize="11sp"
+                                android:textFontWeight="500"
+                                android:textColor="@color/d9"/>
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/textView_total_page_content"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="11sp"
