@@ -148,14 +148,9 @@ class ContentDetailActivity : BaseActivity() {
                             textViewDate.text =
                                 formatDateFormat(result.createdAt.split(".")[0].toLong())
 
-                            textViewContentCategory.text = when (result.category) {
-                                ContentCategoryType.RECOMMENDED.name -> getString(R.string.tab_recommendation_title)
-                                ContentCategoryType.TIPS.name -> getString(R.string.tab_tips_title)
-                                ContentCategoryType.ABOUTPET.name -> getString(R.string.tab_about_pet_title)
-                                ContentCategoryType.VENUE.name -> getString(R.string.tab_venue_title)
-                                ContentCategoryType.SUPPORT.name -> getString(R.string.tab_support_title)
-                                else -> ""
-                            }
+                            textViewContentCategory.text = result.category.let {
+                                ContentCategoryType.valueOf(it)
+                            }.title
 
                             textViewLike.text =
                                 String.format(

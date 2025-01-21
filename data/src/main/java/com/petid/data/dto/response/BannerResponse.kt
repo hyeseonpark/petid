@@ -9,7 +9,8 @@ data class BannerResponse(
     val imageUrl: String,
     val text: String,
     val type: String,
-    val status: String
+    val status: String,
+    val contentId: Int?,
 )
 
 fun BannerResponse.toDomain() = BannerEntity(
@@ -17,7 +18,8 @@ fun BannerResponse.toDomain() = BannerEntity(
     imageUrl = imageUrl,
     text = text,
     type = type,
-    status = status
+    status = status,
+    contentId = contentId,
 )
 
 fun List<BannerResponse>.toDomain(): List<BannerEntity> {

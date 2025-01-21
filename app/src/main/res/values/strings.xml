@@ -48,7 +48,7 @@
 
     <string name="to_owner">보호자 %s</string>
     <string name="neutering">중성화 %s</string>
-    <string name="to_kg">%dkg</string>
+    <string name="to_kg">%.1fkg</string>
     <string name="to_age">%d살</string>
     <string name="to_vet">%s 원장</string>
 
@@ -267,6 +267,8 @@
     <string name="re_reservation">다시 예약</string>
     <string name="cancel_reservation_dialog">예약을 취소 하시겠습니까?</string>
 
+    <!-- common info activity -->
+
     <!-- withdraw -->
     <string name="withdraw_dialog_title">정말 탈퇴하시겠습니까?</string>
     <string name="withdraw_dialog_desc">30일 이내 재가입 시 회원님의 계정이 복구됩니다</string>
@@ -292,4 +294,6 @@
     <string name="pet_info_dialog_chip_na_desc1_1">혹시 알고 계셨나요?</string>
     <string name="pet_info_dialog_chip_na_desc1_2">한국에는 매년 11만 마리 이상의\n반려동물이 길을 잃거나 버려지고 있어요.</string>
     <string name="pet_info_dialog_chip_na_desc2_1">내 반려동물을 안전하게 지키는 가장\n쉬운 방법은 바로 반려동물 등록이에요.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

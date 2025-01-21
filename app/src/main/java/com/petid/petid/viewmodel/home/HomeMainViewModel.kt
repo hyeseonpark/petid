@@ -1,6 +1,5 @@
 package com.petid.petid.viewmodel.home
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.data.repository.local.DBResult
@@ -12,6 +11,8 @@ import com.petid.domain.repository.HomeMainRepository
 import com.petid.domain.repository.MyInfoRepository
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
+import com.petid.petid.common.Constants.BANNER_TYPE_CONTENT
+import com.petid.petid.common.Constants.BANNER_TYPE_MAIN
 import com.petid.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -53,38 +54,61 @@ class HomeMainViewModel @Inject constructor(
     }
 
     /* banner 상태값 */
-    private val _bannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
+    private val _mainBannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
         CommonApiState.Init
     )
-    val bannerApiState = _bannerApiState.asStateFlow()
+    val mainBannerApiState = _mainBannerApiState.asStateFlow()
+
+    /* 상태값: Content Banner */
+    private val _contentBannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
+        CommonApiState.Init
+    )
+    val contentBannerApiState = _contentBannerApiState.asStateFlow()
+
+    /**
+     * Main 배너 데이터 호출
+     */
+    fun getMainBannerList() {
+        viewModelScope.launch {
+            fetchBannerList(BANNER_TYPE_MAIN, _mainBannerApiState)
+        }
+    }
+
+    /**
+     * Content 배너 데이터 호출
+     */
+    fun getContentBannerList() {
+        viewModelScope.launch {
+            fetchBannerList(BANNER_TYPE_CONTENT, _contentBannerApiState)
+        }
+    }
+
 
     /**
      * 배너 목록 호출 api
      */
-    fun getBannerList(type: String) {
+    private fun fetchBannerList(
+        type: String,
+        bannerApiState: MutableStateFlow<CommonApiState<List<BannerEntity>>>
+    ) {
         viewModelScope.launch {
-            if(_bannerApiState.value != CommonApiState.Init) return@launch
+            if(bannerApiState.value != CommonApiState.Init) return@launch
 
-            _bannerApiState.emit(CommonApiState.Loading)
+            bannerApiState.emit(CommonApiState.Loading)
             val state = when (val result = homeMainRepository.getBannerList(type)) {
                 is ApiResult.Success -> {
-                    val bannerList = result.data
-
-                    val updatedBannerList = bannerList.map { item ->
-                        val updatedImageUrl = getBannerImage(item.imageUrl)
-                        item.copy(imageUrl = updatedImageUrl)
-                    }
-
-                    CommonApiState.Success(updatedBannerList)
+                    result.data
+                        .filter { it.status == "active" }
+                        .map { item ->
+                            val updatedImageUrl = getBannerImage(item.imageUrl)
+                            item.copy(imageUrl = updatedImageUrl)
+                        }
+                        .let { CommonApiState.Success(it) }
                 }
-                is ApiResult.HttpError ->{
-                    CommonApiState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
-            _bannerApiState.emit(state)
+            bannerApiState.emit(state)
         }
     }
 
@@ -92,10 +116,10 @@ class HomeMainViewModel @Inject constructor(
      * banner 이미지 api
      */
     private suspend fun getBannerImage(imagePath: String): String {
-        return try {
-            homeMainRepository.getBannerImage(imagePath)
-        } catch (e: Exception) {
-            ""
+        return when (val result = homeMainRepository.getBannerImage(imagePath)) {
+            is ApiResult.Success -> result.data
+            is ApiResult.HttpError -> ""
+            is ApiResult.Error -> ""
         }
     }
 
@@ -182,33 +206,53 @@ class HomeMainViewModel @Inject constructor(
         }
     }
 
-    /* bannerScrollPosition 변수 */
-    private val _bannerScrollPosition = MutableStateFlow(0)
-    val bannerScrollPosition = _bannerScrollPosition.asStateFlow()
+    /* mainBannerScrollPosition 변수 */
+    private val _mainBannerScrollPosition = MutableStateFlow(0)
+    val mainBannerScrollPosition = _mainBannerScrollPosition.asStateFlow()
+    private var mainAutoScrollJob: Job? = null
 
-    private var autoScrollJob: Job? = null
+    fun startMainAutoScroll(intervalMillis: Long = 3000L) {
+        if (mainAutoScrollJob?.isActive == true) return // 이미 실행 중인 작업이 있으면 실행하지 않음
 
-    /**
-     * start banner auto scroll
-     */
-    fun startAutoScroll(intervalMillis: Long = 3000L) {
-        if (autoScrollJob?.isActive == true) return // 이미 실행 중인 작업이 있으면 실행하지 않음
-
-        autoScrollJob = viewModelScope.launch {
+        mainAutoScrollJob = viewModelScope.launch {
             while (true) {
                 delay(intervalMillis) // 스크롤 간격
-                _bannerScrollPosition.value += 1
+                _mainBannerScrollPosition.value += 1
             }
         }
-
     }
 
-    fun stopAutoScroll() {
-        autoScrollJob?.cancel() // 코루틴 작업 취소
-        autoScrollJob = null
+    fun stopMainAutoScroll() {
+        mainAutoScrollJob?.cancel() // 코루틴 작업 취소
+        mainAutoScrollJob = null
     }
 
-    fun updateCurrentPosition(position: Int) {
-        _bannerScrollPosition.value = position
+    fun updateMainCurrentPosition(position: Int) {
+        _mainBannerScrollPosition.value = position
+    }
+
+    /* contentBannerScrollPosition 변수 */
+    private val _contentBannerScrollPosition = MutableStateFlow(0)
+    val contentBannerScrollPosition = _contentBannerScrollPosition.asStateFlow()
+    private var contentAutoScrollJob: Job? = null
+
+    fun startContentAutoScroll(intervalMillis: Long = 3000L) {
+        if (contentAutoScrollJob?.isActive == true) return // 이미 실행 중인 작업이 있으면 실행하지 않음
+
+        contentAutoScrollJob = viewModelScope.launch {
+            while (true) {
+                delay(intervalMillis) // 스크롤 간격
+                _contentBannerScrollPosition.value += 1
+            }
+        }
+    }
+
+    fun stopContentAutoScroll() {
+        contentAutoScrollJob?.cancel() // 코루틴 작업 취소
+        contentAutoScrollJob = null
+    }
+
+    fun updateContentCurrentPosition(position: Int) {
+        _contentBannerScrollPosition.value = position
     }
 }

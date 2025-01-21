@@ -50,11 +50,16 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
 
     fun initComponent() {
         with(binding) {
+            drawingViewSignature.onDrawDetected = { doDraw ->
+                binding.buttonNext.isEnabled = true
+            }
+
             buttonRefresh
                 .clicks()
                 .throttleFirst()
                 .onEach {
                     drawingViewSignature.clear()
+                    binding.buttonNext.isEnabled = false
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -63,9 +68,6 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
                 .throttleFirst()
                 .onEach {
                     val bitmap = getBitmapFromView(binding.drawingViewSignature)
-
-                    val memberId =
-                        getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
 
                     with(viewModel) {
                         // S3 서버에 올릴 파일 세팅

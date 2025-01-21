@@ -9,18 +9,20 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.petid.domain.entity.BannerEntity
 import com.petid.petid.BuildConfig
 import com.petid.petid.R
 import com.petid.petid.common.Constants
-import com.petid.petid.common.Constants.BANNER_TYPE_MAIN
 import com.petid.petid.common.Constants.CHIP_TYPE
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentHomeMainBinding
 import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.view.blog.ContentDetailActivity
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.ui.view.generate.GeneratePetidMainActivity
 import com.petid.petid.ui.view.home.adapter.HomeBannerAdapter
@@ -37,18 +39,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
 
-
 @AndroidEntryPoint
 class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainBinding::inflate) {
 
     private val viewModel: HomeMainViewModel by activityViewModels()
 
     // banner adapter
-    private lateinit var bannerAdapter : HomeBannerAdapter
-
-    private lateinit var snapHelper : PagerSnapHelper
-    private lateinit var layoutManager : LinearLayoutManager
-    private lateinit var snapPagerScrollListener : SnapPagerScrollListener
+    private lateinit var mainBannerAdapter : HomeBannerAdapter
+    private lateinit var contentBannerAdapter : HomeBannerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,13 +59,15 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initComponent()
-        setupBannerObservers()
+        setupMainBannerObservers()
+        setupContentBannerObservers()
         observeGetMemberInfoState()
         observeGetPetInfoState()
         observeGetPetImageUrlState()
         observeHasUncheckedNotificationState()
 
-        viewModel.getBannerList(BANNER_TYPE_MAIN)
+        viewModel.getMainBannerList()
+        viewModel.getContentBannerList()
     }
 
     override fun onResume() {
@@ -81,7 +81,8 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     override fun onStop() {
         super.onStop()
 
-        viewModel.stopAutoScroll()
+        viewModel.stopMainAutoScroll()
+        viewModel.stopContentAutoScroll()
     }
 
     /**
@@ -113,8 +114,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     .clicks()
                     .throttleFirst()
                     .onEach {
-                        val target = Intent(activity, GeneratePetidMainActivity::class.java)
-                        startActivity(target)
+                        findNavController().navigate(R.id.action_homeMainFragment_to_hospitalMainFragment)
                     }
                     .launchIn(viewLifecycleOwner.lifecycleScope)
             }
@@ -131,30 +131,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            bannerAdapter = HomeBannerAdapter(requireContext())
-
-            snapHelper = PagerSnapHelper().also {
-                it.attachToRecyclerView(recyclerviewBannerList)
-            }
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            recyclerviewBannerList.apply {
-                layoutManager = layoutManager
-                adapter = bannerAdapter
-            }
-
-            snapPagerScrollListener = SnapPagerScrollListener(
-                snapHelper,
-                SnapPagerScrollListener.ON_SCROLL,
-                true,
-                object : SnapPagerScrollListener.OnChangeListener {
-                    override fun onSnapped(position: Int) {
-                        //position 받아서 이벤트 처리
-                        viewModel.updateCurrentPosition(position)
-                    }
-                }
-            )
-            recyclerviewBannerList.addOnScrollListener(snapPagerScrollListener)
-            observeBannerPosition()
+            initBannerUI()
 
             // Debug Mode: 로고 클릭시 카드 변경
             if(BuildConfig.DEBUG) {
@@ -201,28 +178,125 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     }
 
     /**
-     * 배너 초기화
+     * main Banner, content Banner UI 세팅
      */
-    private fun initBanner(bannerList: List<BannerEntity>) {
-        bannerAdapter.submitList(bannerList)
+    private fun initBannerUI() {
+        with(binding) {
+            mainBannerAdapter = HomeBannerAdapter(requireContext()) { contentId ->
+                findNavController().navigate(R.id.action_homeMainFragment_to_blogMainFragment)
+                val target = Intent(requireContext(), ContentDetailActivity::class.java)
+                    .putExtra("contentId", contentId)
+                startActivity(target)
+            }
+            contentBannerAdapter = HomeBannerAdapter(requireContext()) { contentId ->
+                findNavController().navigate(R.id.action_homeMainFragment_to_blogMainFragment)
+                val target = Intent(requireContext(), ContentDetailActivity::class.java)
+                    .putExtra("contentId", contentId)
+                startActivity(target)
+            }
+
+            val mainSnapHelper = PagerSnapHelper().also {
+                it.attachToRecyclerView(recyclerviewMainBannerList)
+            }
+
+            val contentSnapHelper = PagerSnapHelper().also {
+                it.attachToRecyclerView(recyclerviewContentBannerList)
+            }
+
+            SnapPagerScrollListener(
+                mainSnapHelper,
+                SnapPagerScrollListener.ON_SCROLL,
+                true,
+                object : SnapPagerScrollListener.OnChangeListener {
+                    override fun onSnapped(position: Int) {
+                        //position 받아서 이벤트 처리
+                        viewModel.updateMainCurrentPosition(position)
+                    }
+                }
+            ).also { listener ->
+                recyclerviewMainBannerList.addOnScrollListener(listener)
+            }
+
+            SnapPagerScrollListener(
+                contentSnapHelper,
+                SnapPagerScrollListener.ON_SCROLL,
+                true,
+                object : SnapPagerScrollListener.OnChangeListener {
+                    override fun onSnapped(position: Int) {
+                        //position 받아서 이벤트 처리
+                        viewModel.updateContentCurrentPosition(position)
+                    }
+                }
+            ).also { listener ->
+                recyclerviewContentBannerList.addOnScrollListener(listener)
+            }
+
+            setupRecyclerView(recyclerviewMainBannerList, mainBannerAdapter)
+            setupRecyclerView(recyclerviewContentBannerList, contentBannerAdapter)
+
+            observeMainBannerPosition()
+            observeContentBannerPosition()
+        }
+    }
+
+    private fun setupRecyclerView(recyclerView: RecyclerView, adapter: HomeBannerAdapter) {
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            this.adapter = adapter
+        }
+    }
+
+    /**
+     * main 배너 초기화
+     */
+    private fun handleMainBannerResult(bannerList: List<BannerEntity>) {
+        mainBannerAdapter.submitList(bannerList)
 
         // bannerList의 총 개수를 binding.textViewTotalPage.text에 설정
         val total = bannerList.size
         binding.textViewTotalPage.text = "$total"
 
         // 자동 스크롤 시작
-        viewModel.startAutoScroll()
+        viewModel.startMainAutoScroll()
+    }
+
+    /**
+     * main 배너 초기화
+     */
+    private fun handleContentBannerResult(bannerList: List<BannerEntity>) {
+        contentBannerAdapter.submitList(bannerList)
+
+        // bannerList의 총 개수를 binding.textViewTotalPage.text에 설정
+        val total = bannerList.size
+        binding.textViewTotalPageContent.text = "$total"
+
+        // 자동 스크롤 시작
+        viewModel.startContentAutoScroll()
     }
 
     /**
      * Banner Position observe
      */
-    private fun observeBannerPosition() {
+    private fun observeMainBannerPosition() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.bannerScrollPosition.collect { position ->
-                    binding.recyclerviewBannerList.smoothScrollToPosition(position)
-                    binding.textViewCurrentPage.text = "${position % bannerAdapter.getListSize() + 1}"
+                viewModel.mainBannerScrollPosition.collect { position ->
+                    binding.recyclerviewMainBannerList.smoothScrollToPosition(position)
+                    binding.textViewCurrentPage.text = "${position % mainBannerAdapter.getListSize() + 1}"
+                }
+            }
+        }
+    }
+
+    /**
+     * Banner Position observe
+     */
+    private fun observeContentBannerPosition() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.contentBannerScrollPosition.collect { position ->
+                    binding.recyclerviewContentBannerList.smoothScrollToPosition(position)
+                    binding.textViewCurrentPageContent.text = "${position % contentBannerAdapter.getListSize() + 1}"
                 }
             }
         }
@@ -231,17 +305,41 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     /**
      * banner api observer
      */
-    private fun setupBannerObservers() {
+    private fun setupMainBannerObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.bannerApiState.collect { result ->
+                viewModel.mainBannerApiState.collect { result ->
                     if (result !is CommonApiState.Loading)
                         hideLoading()
 
                     when (result) {
                         is CommonApiState.Success -> {
                             val bannerList = result.data
-                            initBanner(bannerList)
+                            handleMainBannerResult(bannerList)
+                        }
+                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                        is CommonApiState.Loading -> showLoading()
+                        is CommonApiState.Init -> {}
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * banner api observer
+     */
+    private fun setupContentBannerObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.contentBannerApiState.collect { result ->
+                    if (result !is CommonApiState.Loading)
+                        hideLoading()
+
+                    when (result) {
+                        is CommonApiState.Success -> {
+                            val bannerList = result.data
+                            handleContentBannerResult(bannerList)
                         }
                         is CommonApiState.Error -> showErrorMessage(result.message.toString())
                         is CommonApiState.Loading -> showLoading()

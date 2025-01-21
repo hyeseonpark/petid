@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    tools:context=".ui.view.my.CommonInfoDetailFragment"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/custom_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="75dp"
+            android:text="제목"
+            android:textSize="22sp"
+            android:textFontWeight="700"
+            android:textColor="@color/petid_title"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textView_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="17dp"
+            android:layout_marginEnd="24dp"
+            android:text="yyyy.MM.dd"
+            android:textFontWeight="400"
+            android:textSize="13sp"
+            android:textColor="@color/petid_subtitle" />
+
+        <TextView
+            android:id="@+id/textView_content_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="62dp"
+            android:text="내용"
+            android:textFontWeight="400"
+            android:textSize="15sp"
+            android:textColor="@color/petid_underbar" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

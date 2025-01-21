@@ -65,7 +65,7 @@ data class Pet(
         }
 
         /* ScannedInfoFragment */
-        fun setAppearance(breed: String, hairColor: String, weight: Int, hairLength: String) = apply {
+        fun setAppearance(breed: String, hairColor: String, weight: Double, hairLength: String) = apply {
             this.appearance = PetAppearance(breed, hairColor, weight, hairLength)
         }
 
@@ -80,16 +80,21 @@ data class Pet(
         fun getPetImageName() : String = this.petImages!!.first().imagePath
         fun getSignImageName() : String = this.sign!!
 
-        fun build(): Pet {
-            require(petName.isNullOrEmpty()) { "펫 이름은 필수입니다" }
-            require(petBirthDate.isNullOrEmpty()) { "생년월일은 필수입니다" }
+        /**
+         * build는 CheckingInfoFragment, SignatureFragment에서 이루어짐
+         * CheckingInfoFragment: 단순 정보 확인을 위함, forGenerting = false
+         * SignatureFragment: 실제 펫아이디 생성을 위함, forGenerating = true
+         */
+        fun build(forGenerating: Boolean): Pet {
+            require(!petName.isNullOrEmpty()) { "펫 이름은 필수입니다" }
+            require(!petBirthDate.isNullOrEmpty()) { "생년월일은 필수입니다" }
             require(petSex != null) { "성별은 필수입니다" }
             require(petNeuteredYn != null) { "중성화 여부는 필수입니다" }
-            require(chipType.isNullOrEmpty()) { "칩 타입은 필수입니다" }
+            require(!chipType.isNullOrEmpty()) { "칩 타입은 필수입니다" }
             require(appearance != null) { "외형 정보는 필수입니다" }
             require(petImages != null) { "펫 이미지는 필수입니다" }
             require(proposer != null) { "신청자 정보는 필수입니다" }
-            require(sign != null) { "서명은 필수입니다" }
+            if (forGenerating) require(sign != null) { "서명은 필수입니다" }
 
             return Pet(
                 petName = petName!!,
@@ -101,7 +106,7 @@ data class Pet(
                 appearance = appearance!!,
                 petImages = petImages!!,
                 proposer = proposer!!,
-                sign = sign!!
+                sign = if(forGenerating) sign!! else "",
             )
         }
     }

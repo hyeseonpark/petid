@@ -35,7 +35,6 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_layout_main) as NavHostFragment
         navController = navMainFragment.findNavController()
 
-
         val notificationData = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(NOTIFICATION_DATA, NotificationEntity::class.java)
         } else {
@@ -55,7 +54,7 @@ class MainActivity : BaseActivity() {
     // TODO 알람 정의 후 수정
     private fun handleNotificationIntent(data: NotificationEntity) {
         when (data.category) {
-            "reminder" -> showReminderDialog(data.title, data.body)
+            "reminder" -> showReminderDialog(data.category, data.desc)
                 .show(this.supportFragmentManager, null)
             "booking" -> {}
             "order" -> {}

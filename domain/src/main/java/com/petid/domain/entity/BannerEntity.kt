@@ -5,5 +5,6 @@ data class BannerEntity(
     var imageUrl: String,
     val text: String,
     val type: String,
-    val status: String
+    val status: String,
+    val contentId: Int?,
 )
