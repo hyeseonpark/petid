@@ -114,8 +114,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     .clicks()
                     .throttleFirst()
                     .onEach {
-                        val target = Intent(activity, GeneratePetidMainActivity::class.java)
-                        startActivity(target)
+                        findNavController().navigate(R.id.action_homeMainFragment_to_hospitalMainFragment)
                     }
                     .launchIn(viewLifecycleOwner.lifecycleScope)
             }
