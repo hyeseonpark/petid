@@ -8,6 +8,6 @@ class PetAppearanceEntity (
     val appearanceId: Int,
     val breed: String,
     val hairColor: String,
-    val weight: Int,
+    val weight: Double,
     val hairLength: String,
 ) : Parcelable

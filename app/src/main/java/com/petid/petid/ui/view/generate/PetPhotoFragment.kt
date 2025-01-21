@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -22,8 +21,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.mediapipe.tasks.components.containers.Classifications
 import com.petid.petid.BuildConfig
-import com.petid.petid.R
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.R
+import com.petid.petid.common.Constants.PHOTO_PATHS
 import com.petid.petid.databinding.FragmentPetPhotoBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseFragment
@@ -190,9 +190,6 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
     private fun observeAnalysisState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.analysisState.collect { result ->
-                if (result !is AnalysisState.Loading)
-                    hideLoading()
-
                 when(result) {
                     AnalysisState.Idle -> {}
                     AnalysisState.Loading -> showLoading()
@@ -208,12 +205,19 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
                             }?.toDouble() ?: 0.0
                         val hairColor = classifierResult.getCategoryName(3)
 
-                        viewModel.petInfo.setAppearance(breed, hairColor, weight, hairLength)
+                        with(viewModel) {
+                            petInfo
+                                .setAppearance(breed, hairColor, weight, hairLength)
+                                .setPetImage("${PHOTO_PATHS[2]}${memberId}.jpg")
+                        }
 
                         findNavController().navigate(R.id.action_petPhotoFragment_to_scannedInfoFragment)
                     }
                     is AnalysisState.Error -> retryDialog().show(childFragmentManager, null)
                 }
+
+                if (result !is AnalysisState.Loading)
+                    hideLoading()
             }
         }
     }

@@ -12,6 +12,7 @@ import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentCheckingInfoBinding
 import com.petid.petid.util.booleanCharToSign
 import com.petid.petid.util.genderCharToString
+import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,18 +50,22 @@ class CheckingInfoFragment : BaseFragment<FragmentCheckingInfoBinding>(FragmentC
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            viewModel.petInfo.build().also {
-                textViewName.text = it.petName
-                textViewBirth.text = it.petBirthDate
-                textViewGender.text =
-                    listOf(genderCharToString(it.petSex!!),
-                        String.format(getString(R.string.neutering), booleanCharToSign(it.petNeuteredYn!!)))
-                        .joinToString(", ")
-                textViewBreed.text = it.appearance!!.breed
-                textViewAppearance.text =
-                    listOf(it.appearance!!.hairColor, it.appearance!!.hairLength).joinToString(", ")
-                textViewWeight.text =
-                    String.format(getString(R.string.to_kg),it.appearance!!.weight)
+            runCatching {
+                viewModel.petInfo.build(false).also {
+                    textViewName.text = it.petName
+                    textViewBirth.text = it.petBirthDate
+                    textViewGender.text =
+                        listOf(genderCharToString(it.petSex),
+                            String.format(getString(R.string.neutering), booleanCharToSign(it.petNeuteredYn)))
+                            .joinToString(", ")
+                    textViewBreed.text = it.appearance.breed
+                    textViewAppearance.text =
+                        listOf(it.appearance.hairColor, it.appearance.hairLength).joinToString(", ")
+                    textViewWeight.text =
+                        String.format(getString(R.string.to_kg),it.appearance.weight)
+                }
+            }.onFailure {
+                showErrorMessage(it.message.toString())
             }
         }
     }

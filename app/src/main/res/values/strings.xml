@@ -48,7 +48,7 @@
 
     <string name="to_owner">보호자 %s</string>
     <string name="neutering">중성화 %s</string>
-    <string name="to_kg">%dkg</string>
+    <string name="to_kg">%.1fkg</string>
     <string name="to_age">%d살</string>
     <string name="to_vet">%s 원장</string>
 
