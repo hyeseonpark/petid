@@ -12,6 +12,7 @@ import com.petid.domain.repository.HomeMainRepository
 import com.petid.domain.repository.MyInfoRepository
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
+import com.petid.domain.util.getResult
 import com.petid.petid.ui.state.CommonApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -68,21 +69,16 @@ class HomeMainViewModel @Inject constructor(
             _bannerApiState.emit(CommonApiState.Loading)
             val state = when (val result = homeMainRepository.getBannerList(type)) {
                 is ApiResult.Success -> {
-                    val bannerList = result.data.filter { it.status == "active" }
-
-                    val updatedBannerList = bannerList.map { item ->
-                        val updatedImageUrl = getBannerImage(item.imageUrl)
-                        item.copy(imageUrl = updatedImageUrl)
-                    }
-
-                    CommonApiState.Success(updatedBannerList)
+                    result.data
+                        .filter { it.status == "active" }
+                        .map { item ->
+                            val updatedImageUrl = getBannerImage(item.imageUrl)
+                            item.copy(imageUrl = updatedImageUrl)
+                        }
+                        .let { CommonApiState.Success(it) }
                 }
-                is ApiResult.HttpError ->{
-                    CommonApiState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
             }
             _bannerApiState.emit(state)
         }
@@ -92,10 +88,10 @@ class HomeMainViewModel @Inject constructor(
      * banner 이미지 api
      */
     private suspend fun getBannerImage(imagePath: String): String {
-        return try {
-            homeMainRepository.getBannerImage(imagePath)
-        } catch (e: Exception) {
-            ""
+        return when (val result = homeMainRepository.getBannerImage(imagePath)) {
+            is ApiResult.Success -> result.data
+            is ApiResult.HttpError -> ""
+            is ApiResult.Error -> ""
         }
     }
 
