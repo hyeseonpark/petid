@@ -26,10 +26,10 @@ class PermissionActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        initComponent()
+        initUI()
     }
 
-    private fun initComponent() {
+    private fun initUI() {
         with(binding) {
             permissionTitle1.text =
                 setStyleSpan(getGlobalContext(),

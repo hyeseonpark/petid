@@ -11,6 +11,7 @@ import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.ActivitySplashBinding
 import com.petid.petid.ui.view.main.MainActivity
+import com.petid.data.util.Constants.SHARED_VALUE_REFRESH_TOKEN
 
 /**
  * 스플래시 화면
@@ -37,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
                 getPreferencesControl().getBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, true)
 
             val refreshToken =
-                getPreferencesControl().getStringValue(Constants.SHARED_VALUE_REFRESH_TOKEN)
+                getPreferencesControl().getStringValue(SHARED_VALUE_REFRESH_TOKEN)
 
             val nextActivity = when {
                 isFirstRun -> PermissionActivity::class.java
@@ -46,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
             }
 
             val target = Intent(getGlobalContext(), nextActivity).apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             }
             startActivity(target)
             finish()

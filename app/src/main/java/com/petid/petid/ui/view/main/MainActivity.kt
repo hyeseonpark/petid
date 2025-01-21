@@ -1,8 +1,10 @@
 package com.petid.petid.ui.view.main
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -11,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.petid.data.source.local.entity.NotificationEntity
 import com.petid.petid.R
+import com.petid.petid.common.Constants.NOTIFICATION_DATA
 import com.petid.petid.databinding.ActivityMainBinding
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.common.BaseActivity
@@ -32,11 +35,10 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_layout_main) as NavHostFragment
         navController = navMainFragment.findNavController()
 
-
         val notificationData = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("notification_type", NotificationEntity::class.java)
+            intent.getParcelableExtra(NOTIFICATION_DATA, NotificationEntity::class.java)
         } else {
-            intent.getParcelableExtra("notification_type") as? NotificationEntity
+            intent.getParcelableExtra(NOTIFICATION_DATA) as? NotificationEntity
         }
         if (notificationData != null) handleNotificationIntent(notificationData)
 
@@ -52,7 +54,7 @@ class MainActivity : BaseActivity() {
     // TODO 알람 정의 후 수정
     private fun handleNotificationIntent(data: NotificationEntity) {
         when (data.category) {
-            "reminder" -> showReminderDialog(data.title, data.body)
+            "reminder" -> showReminderDialog(data.category, data.desc)
                 .show(this.supportFragmentManager, null)
             "booking" -> {}
             "order" -> {}
@@ -74,9 +76,6 @@ class MainActivity : BaseActivity() {
     private fun showReminderDialog(title: String, body: String) = CustomDialogCommon(
         boldTitle = title,
         title = body,
-        yesButtonClick = {
-            navController.navigate(
-                R.id.action_homeMainFragment_to_hospitalMainFragment) },
         isSingleButton = true,
         singleButtonText = getString(R.string.hospital_make_reservation_dialog_info_button))
 
@@ -91,6 +90,8 @@ class MainActivity : BaseActivity() {
     /**
      * tooltip 제거
      */
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("RestrictedApi")
     private fun disableBottomNavigationViewTooltips(bottomNavigationView: BottomNavigationView) {
         val menuView = bottomNavigationView.getChildAt(0) as BottomNavigationMenuView
         for (i in 0 until menuView.childCount) {

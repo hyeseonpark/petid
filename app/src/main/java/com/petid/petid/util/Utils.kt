@@ -23,6 +23,10 @@ import androidx.core.content.ContextCompat
 import com.petid.petid.R
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.view.generate.GeneratePetidMainActivity
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -192,3 +196,13 @@ fun petidNullDialog(context: Context) = CustomDialogCommon(
         val target = Intent(context, GeneratePetidMainActivity::class.java)
         context.startActivity(target)
     })
+
+/**
+ * 날짜 포맷 정리
+ */
+fun formatDateFormat(timestamp: Long) : String{
+    val instant = Instant.ofEpochSecond(timestamp)
+    val dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+    val formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일(E) HH:mm", Locale.KOREAN)
+    return dateTime.format(formatter)
+}
