@@ -158,7 +158,7 @@ class SocialAuthActivity : BaseActivity() {
             BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.social_login_info_naver_client_name))
 
-        NaverIdLoginSDK.reagreeAuthenticate(this, oauthNaverLoginCallback)
+        NaverIdLoginSDK.authenticate(this, oauthNaverLoginCallback)
     }
 
     /**
@@ -264,7 +264,9 @@ class SocialAuthActivity : BaseActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = firebaseAuth.currentUser
-                    loginWithSocialToken(user?.uid.toString())
+                    user?.providerData?.get(1)?.uid?.apply {
+                        loginWithSocialToken(this)//user?.uid.toString())
+                    } ?: showErrorMessage("사용자 uid를 가져오는데 실패했습니다.")
                 } else {
 //                    Toast.makeText(this, "Firebase 인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
@@ -275,8 +277,10 @@ class SocialAuthActivity : BaseActivity() {
      * 각 social 로그인 성공 후 login 시도
      */
     private fun loginWithSocialToken(subValue: String) {
-        viewModel.subValue = subValue
-        viewModel.login()
+        with(viewModel) {
+            this.subValue = subValue
+            login()
+        }
     }
 
     /**

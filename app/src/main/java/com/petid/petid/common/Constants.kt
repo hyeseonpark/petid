@@ -6,6 +6,8 @@ object Constants {
     const val SHARED_VALUE_IS_FIRST_RUN = "isFirst"
     const val REQUEST_STORAGE_PERMISSION = 1
 
+    const val SHARED_AUTH_PROVIDER = "authProvider"
+
     const val SHARED_PET_ID_VALUE = "petIdValue"
     const val SHARED_MEMBER_ID_VALUE = "memberIdValue"
     const val SHARED_PET_CHIP_TYPE = "petChipTypeValue"
