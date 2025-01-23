@@ -25,6 +25,7 @@ import com.google.mediapipe.tasks.core.Delegate
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
+import com.petid.data.util.sendCrashlytics
 
 class ImageClassifierHelper(
     private var threshold: Float = THRESHOLD_DEFAULT,
@@ -60,51 +61,56 @@ class ImageClassifierHelper(
     // the GPU delegate needs to be used on the thread that initialized the
     // classifier
     private fun setupImageClassifier() {
-        val baseOptionsBuilder = BaseOptions.builder()
-        when (currentDelegate) {
-            DELEGATE_CPU -> {
-                baseOptionsBuilder.setDelegate(Delegate.CPU)
+        val modelName = "petid_crop_image_efficientnetb1_v1_4.tflite"
+
+        initializeClassifier(modelName)
+            .recoverCatching { throwable ->
+                if (currentDelegate == DELEGATE_CPU) {
+                    currentDelegate = DELEGATE_GPU
+                    initializeClassifier(modelName).getOrThrow()
+                } else {
+                    throw throwable
+                }
+            }.onSuccess {
+                imageClassifier = it
+            }.onFailure { throwable ->
+                throwable.sendCrashlytics()
+
+                val errorMessage = when (throwable) {
+                    is IllegalStateException, is RuntimeException -> "Classifier initialization failed: ${throwable.message}"
+                    else -> "Unexpected error: ${throwable.message}"
+                }
+
+                ClassifierResult.Error(errorMessage)
             }
-
-            DELEGATE_GPU -> {
-                baseOptionsBuilder.setDelegate(Delegate.GPU)
-            }
-        }
-
-        val modelName ="petid_crop_image_efficientnetb1_v1_4.tflite"
-
-        baseOptionsBuilder.setModelAssetPath(modelName)
-
-        try {
-            val baseOptions = baseOptionsBuilder.build()
-            val optionsBuilder =
-                ImageClassifier.ImageClassifierOptions.builder()
-                    .setScoreThreshold(threshold)
-                    .setMaxResults(maxResults)
-                    .setRunningMode(runningMode)
-                    .setBaseOptions(baseOptions)
-
-            val options = optionsBuilder.build()
-            imageClassifier =
-                ImageClassifier.createFromOptions(context, options)
-        } catch (e: IllegalStateException) {
-            ClassifierResult.Error("Image classifier failed to initialize. See error logs for details")
-            /*Log.e(
-                TAG,
-                "Image classifier failed to load model with error: " + e.message
-            )*/
-        } catch (e: RuntimeException) {
-            // This occurs if the model being used does not support GPU
-            ClassifierResult.Error(
-                "Image classifier failed to initialize. See error logs for " +
-                        "details", GPU_ERROR
-            )
-            /*Log.e(
-                TAG,
-                "Image classifier failed to load model with error: " + e.message
-            )*/
-        }
     }
+
+    private fun initializeClassifier(modelName: String): Result<ImageClassifier> =
+        runCatching {
+            val baseOptions = createBaseOptions(modelName, currentDelegate)
+            val options = createClassifierOptions(baseOptions)
+            ImageClassifier.createFromOptions(context, options)
+        }
+
+    private fun createBaseOptions(modelName: String, delegate: Int): BaseOptions =
+        BaseOptions.builder()
+            .setDelegate(
+                when (delegate) {
+                    DELEGATE_GPU -> Delegate.GPU
+                    DELEGATE_CPU -> Delegate.CPU
+                    else -> throw IllegalArgumentException("Invalid delegate type")
+                }
+            )
+            .setModelAssetPath(modelName)
+            .build()
+
+    private fun createClassifierOptions(baseOptions: BaseOptions): ImageClassifier.ImageClassifierOptions =
+        ImageClassifier.ImageClassifierOptions.builder()
+            .setScoreThreshold(threshold)
+            .setMaxResults(maxResults)
+            .setRunningMode(runningMode)
+            .setBaseOptions(baseOptions)
+            .build()
 
     // Accepted a Bitmap and runs image classification inference on it to
     // return results back to the caller
