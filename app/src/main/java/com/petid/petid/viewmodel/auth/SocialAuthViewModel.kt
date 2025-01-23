@@ -7,6 +7,7 @@ import com.petid.data.util.Constants.SHARED_VALUE_REFRESH_TOKEN
 import com.petid.domain.repository.SocialAuthRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.common.Constants.SHARED_AUTH_PROVIDER
 import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.state.CommonApiState.*
@@ -50,6 +51,7 @@ class SocialAuthViewModel @Inject constructor(
                     getPreferencesControl().apply {
                         saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
                         saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
+                        saveStringValue(SHARED_AUTH_PROVIDER, platform!!.name)
                     }
                     LoginResult.Success(result)  // 성공 시 데이터 전송
                 }

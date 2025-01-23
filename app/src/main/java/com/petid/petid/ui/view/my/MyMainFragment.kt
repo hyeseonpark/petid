@@ -29,9 +29,15 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
+import com.petid.data.util.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.petid.petid.common.Constants.COMMON_CATEGORY_TYPE
 import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.util.petidNullDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -62,6 +68,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewModel.getMemberInfo()
         observeGetMemberInfoState()
         observeGetMemberImageState()
+        observeDoLogoutState()
         observeDoWithdrawState()
     }
 
@@ -170,7 +177,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 .clicks()
                 .throttleFirst()
                 .onEach {
-                    doLogout()
+                    viewModel.doLogout()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -198,31 +205,11 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
             boldTitle = getString(R.string.withdraw_dialog_title),
             title = getString(R.string.withdraw_dialog_desc),
             yesButtonClick = {
-                viewModel.doWithdraw()
+                viewModel.doWithdrawSocialAuth()
             })
 
         withdrawDialog.show(this.childFragmentManager, "CustomDialogCommon")
     }
-
-    /**
-     * 로그아웃
-     */
-    private fun doLogout() {
-        getPreferencesControl().apply {
-            clear()
-            saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
-        }
-        val target = Intent(activity, SocialAuthActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        startActivity(target)
-        activity?.finish()
-    }
-
-//    suspend fun googleLogout() {
-//        CredentialManager.create(getGlobalContext()).clearCredentialState(request = ClearCredentialStateRequest())
-//        firebaseAuth.signOut()
-//    }
 
     /**
      * viewModel.getMemberInfoResult 결과값 view 반영
@@ -296,7 +283,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.success_withdraw), Toast.LENGTH_LONG).show()
-                            doLogout()
+                            goSocialAuthActivity()
                         }
                         is CommonApiState.Error -> showErrorMessage(result.message.toString())
                         is CommonApiState.Loading -> showLoading()
@@ -307,4 +294,35 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         }
     }
 
+    /**
+     *
+     */
+    private fun observeDoLogoutState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.doLogoutResult.collectLatest { result ->
+                    if (result !is CommonApiState.Loading)
+                        hideLoading()
+
+                    when (result) {
+                        is CommonApiState.Success -> goSocialAuthActivity()
+                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
+                        is CommonApiState.Loading -> showLoading()
+                        is CommonApiState.Init -> {}
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * go socialAuthActivity
+     */
+    private fun goSocialAuthActivity() {
+        val target = Intent(requireActivity(), SocialAuthActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        startActivity(target)
+        requireActivity().finish()
+    }
 }
