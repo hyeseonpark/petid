@@ -6,7 +6,7 @@
     app:startDestination="@id/petInfoDetailFragment">
     <fragment
         android:id="@+id/petInfoDetailFragment"
-        android:name=".ui.view.my.PetInfoDetailFragment"
+        android:name="com.petid.petid.ui.view.my.PetInfoDetailFragment"
         android:label="fragment_pet_info"
         tools:layout="@layout/fragment_pet_info_detail" >
         <action
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/petInfoUpdateFragment"
-        android:name=".ui.view.my.PetInfoUpdateFragment"
+        android:name="com.petid.petid.ui.view.my.PetInfoUpdateFragment"
         android:label="fragment_pet_info_update"
         tools:layout="@layout/fragment_pet_info_update" >
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/addressSearchFragment"
-        android:name=".ui.view.common.AddressSearchFragment"
+        android:name="com.petid.petid.ui.view.common.AddressSearchFragment"
         android:label="fragment_address_search"
         tools:layout="@layout/fragment_address_search" >
         <argument

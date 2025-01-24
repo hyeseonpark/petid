@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.petid.domain.entity.BannerEntity
 import com.petid.petid.BuildConfig
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.CHIP_TYPE
-import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentHomeMainBinding
 import com.petid.petid.ui.state.CommonApiState
 import com.petid.petid.ui.view.blog.ContentDetailActivity
@@ -43,6 +44,8 @@ import ru.ldralighieri.corbind.view.clicks
 class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainBinding::inflate) {
 
     private val viewModel: HomeMainViewModel by activityViewModels()
+
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     // banner adapter
     private lateinit var mainBannerAdapter : HomeBannerAdapter
@@ -89,6 +92,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
      * component 초기화
      */
     private fun initComponent() {
+        bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation)
         with(binding) {
             imageViewNoti
                 .clicks()
@@ -183,16 +187,18 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun initBannerUI() {
         with(binding) {
             mainBannerAdapter = HomeBannerAdapter(requireContext()) { contentId ->
-                findNavController().navigate(R.id.action_homeMainFragment_to_blogMainFragment)
-                val target = Intent(requireContext(), ContentDetailActivity::class.java)
-                    .putExtra("contentId", contentId)
-                startActivity(target)
+                bottomNavigationView.selectedItemId = R.id.blogMainFragment
+                with(Intent(requireContext(), ContentDetailActivity::class.java)){
+                    putExtra("contentId", contentId)
+                    startActivity(this)
+                }
             }
             contentBannerAdapter = HomeBannerAdapter(requireContext()) { contentId ->
-                findNavController().navigate(R.id.action_homeMainFragment_to_blogMainFragment)
-                val target = Intent(requireContext(), ContentDetailActivity::class.java)
-                    .putExtra("contentId", contentId)
-                startActivity(target)
+                bottomNavigationView.selectedItemId = R.id.blogMainFragment
+                with(Intent(requireContext(), ContentDetailActivity::class.java)){
+                    putExtra("contentId", contentId)
+                    startActivity(this)
+                }
             }
 
             val mainSnapHelper = PagerSnapHelper().also {

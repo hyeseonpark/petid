@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/petIdStartFragment"
-        android:name=".ui.view.generate.PetIdStartFragment"
+        android:name="com.petid.petid.ui.view.generate.PetIdStartFragment"
         android:label="PetIdStartFragment"
         tools:layout="@layout/fragment_pet_id_start">
 
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/userInfoInputFragment"
-        android:name=".ui.view.generate.UserInfoInputFragment"
+        android:name="com.petid.petid.ui.view.generate.UserInfoInputFragment"
         android:label="fragment_user_info_input"
         tools:layout="@layout/fragment_user_info_input" >
 
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/addressSearchFragment"
-        android:name=".ui.view.common.AddressSearchFragment"
+        android:name="com.petid.petid.ui.view.common.AddressSearchFragment"
         android:label="fragment_address_search"
         tools:layout="@layout/fragment_address_search" >
         <argument
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/petInfoInputFragment"
-        android:name=".ui.view.generate.PetInfoInputFragment"
+        android:name="com.petid.petid.ui.view.generate.PetInfoInputFragment"
         android:label="fragment_pet_info_input"
         tools:layout="@layout/fragment_pet_info_input" >
 
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/petPhotoFragment"
-        android:name=".ui.view.generate.PetPhotoFragment"
+        android:name="com.petid.petid.ui.view.generate.PetPhotoFragment"
         android:label="fragment_pet_photo"
         tools:layout="@layout/fragment_pet_photo" >
 
@@ -72,7 +72,7 @@
 
     <fragment
         android:id="@+id/scannedInfoFragment"
-        android:name=".ui.view.generate.ScannedInfoFragment"
+        android:name="com.petid.petid.ui.view.generate.ScannedInfoFragment"
         android:label="fragment_scanned_info"
         tools:layout="@layout/fragment_scanned_info" >
 
