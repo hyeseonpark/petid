@@ -140,7 +140,7 @@ class TermsActivity : BaseActivity() {
     private fun doJoin() {
         val platformString = intent.getStringExtra("platform")
         val platform = PlatformType.fromValue(platformString)
-        val sub = intent.getStringExtra("sub")
+        val sub = intent.getStringExtra("token")
         val fcmToken = intent.getStringExtra("fcmToken")
 
         if (platform != null && sub != null && fcmToken != null) {

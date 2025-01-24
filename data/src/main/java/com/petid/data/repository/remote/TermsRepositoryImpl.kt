@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class TermsRepositoryImpl @Inject constructor(
     private val remoteDataSource: TermsRemoteDataSource
 ) : TermsRepository{
-    override suspend fun doJoin(platform: String, sub: String, fcmToken: String, ad: Boolean
+    override suspend fun doJoin(platform: String, token: String, fcmToken: String, ad: Boolean
     ): ApiResult<AuthEntity> =
-        remoteDataSource.doJoin(platform, sub, fcmToken, ad)
+        remoteDataSource.doJoin(platform, token, fcmToken, ad)
 }
