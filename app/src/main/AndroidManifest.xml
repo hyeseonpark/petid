@@ -102,70 +102,70 @@
         <activity
             android:name=".ui.view.my.CommonInfoActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.hospital.HospitalActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.generate.GeneratePetidMainActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.home.NotificationActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.blog.ContentDetailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.my.NoticeActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.my.ReservationHistoryInfoActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.my.PetInfoActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.my.MyInfoActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.hospital.CompleteReservationActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.auth.PermissionActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.deleted.GenerateCompleteActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.auth.SignupCompleteActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.auth.TermsActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.auth.SocialAuthActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.main.MainActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.view.auth.IntroActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleInstance" />
     </application>
 
 </manifest>

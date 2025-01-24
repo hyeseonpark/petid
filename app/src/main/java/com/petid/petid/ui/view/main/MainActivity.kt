@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,7 +32,14 @@ class MainActivity : BaseActivity() {
 
         val navMainFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_layout_main) as NavHostFragment
-        navController = navMainFragment.findNavController()
+        navController = navMainFragment.navController
+
+        binding.bottomNavigation.let {
+            it.setupWithNavController(navController)
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                disableBottomNavigationViewTooltips(it)
+            }
+        }
 
         val notificationData = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(NOTIFICATION_DATA, NotificationEntity::class.java)
@@ -41,11 +47,6 @@ class MainActivity : BaseActivity() {
             intent.getParcelableExtra(NOTIFICATION_DATA) as? NotificationEntity
         }
         if (notificationData != null) handleNotificationIntent(notificationData)
-
-        binding.bottomNavigation.let {
-            it.setupWithNavController(navController)
-            disableBottomNavigationViewTooltips(it)
-        }
     }
 
     /**
