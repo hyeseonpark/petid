@@ -225,7 +225,7 @@ class SocialAuthActivity : BaseActivity() {
                             GoogleIdTokenCredential.createFrom(credential.data)
                         }.onSuccess { googleIdTokenCredential ->
                             socialAccessToken = googleIdTokenCredential.idToken
-                            firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
+                            firebaseAuthWithGoogle(socialAccessToken!!)
                         }.onFailure { ex ->
                             showErrorMessage("GoogleLoginError: ${ex.message}")
                         }
@@ -340,12 +340,12 @@ class SocialAuthActivity : BaseActivity() {
         if (platform.isNotEmpty() && sub != null && fcmToken != null) {
             val target = Intent(this, TermsActivity::class.java).apply {
                 putExtra("platform", platform)
-                putExtra("sub", socialAccessToken)
+                putExtra("token", socialAccessToken)
                 putExtra("fcmToken", fcmToken)
             }
             startActivity(target)
         } else {
-            showErrorMessage("platform, sub, fcmToken null error")
+            showErrorMessage("platform, token, fcmToken null error")
         }
     }
 
