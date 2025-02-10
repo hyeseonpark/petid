@@ -1,15 +1,32 @@
 package com.petid.petid.viewmodel.my
 
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.auth.FirebaseAuth
+import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.petid.data.util.PreferencesHelper
 import com.petid.data.util.S3UploadHelper
 import com.petid.data.util.sendCrashlytics
 import com.petid.domain.entity.MemberInfoEntity
 import com.petid.domain.repository.MyInfoRepository
 import com.petid.domain.util.ApiResult
+import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
+import com.petid.petid.common.Constants.SHARED_AUTH_PROVIDER
+import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.util.showErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -17,11 +34,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class MyInfoViewModel @Inject constructor(
     private val myInfoRepository: MyInfoRepository,
     private val s3UploadHelper: S3UploadHelper,
+    private val preferencesHelper: PreferencesHelper,
 ): ViewModel() {
 
     /* 서버에서 받은 파일명, nullable */
@@ -50,7 +70,11 @@ class MyInfoViewModel @Inject constructor(
     private val _updateMemberPhotoResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Init)
     val updateMemberPhotoResult = _updateMemberPhotoResult.asStateFlow()
 
-    /* 회원 탈퇴 */
+    /* 로그아웃 result */
+    private val _doLogoutResult = MutableSharedFlow<CommonApiState<Unit>>()
+    val doLogoutResult = _doLogoutResult.asSharedFlow()
+
+    /* 회원 탈퇴 result */
     private val _doWithdrawResult = MutableSharedFlow<CommonApiState<Unit>>()
     val doWithdrawResult = _doWithdrawResult.asSharedFlow()
 
@@ -93,7 +117,6 @@ class MyInfoViewModel @Inject constructor(
             _getMemberImageResult.emit(state)
         }
     }
-
 
     /**
      * S3 bucket upload
@@ -144,17 +167,109 @@ class MyInfoViewModel @Inject constructor(
     }
 
     /**
-     * 회원 탈퇴
+     * 로그아웃
      */
-    fun doWithdraw() {
+    fun doLogout() {
         viewModelScope.launch{
-            _doWithdrawResult.emit(CommonApiState.Loading)
-            val state = when(val result = myInfoRepository.doWithdraw()) {
-                is ApiResult.Success -> CommonApiState.Success(Unit)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+            _doLogoutResult.emit(CommonApiState.Loading)
+            val authProvider = getPreferencesControl().getStringValue(SHARED_AUTH_PROVIDER)
+
+            runCatching {
+                when(PlatformType.fromValue(authProvider)) {
+                    PlatformType.naver -> {
+                        if(NaverIdLoginSDK.isInitialized()) {
+                            NaverIdLoginSDK.logout()
+                        }
+                    }
+                    PlatformType.google -> {
+                        CredentialManager.create(getGlobalContext()).clearCredentialState(request = ClearCredentialStateRequest())
+                        FirebaseAuth.getInstance().signOut()
+                    }
+                    PlatformType.kakao -> {
+                        UserApiClient.instance.logout { error ->
+                            if (error != null) {
+                                throw Exception("카카오 로그아웃 실패: ${error.message}")
+                            }
+                        }
+                    }
+                    null -> {}
+                }
+            }.onSuccess {
+                preferencesHelper.run {
+                    clear()
+                    saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
+                }
+                _doLogoutResult.emit(CommonApiState.Success(Unit))
+            }.onFailure { exception ->
+                _doLogoutResult.emit(CommonApiState.Error(exception.message ?: "로그아웃 실패"))
             }
-            _doWithdrawResult.emit(state)
         }
     }
+
+    /**
+     * 회원탈퇴: 소셜로그인
+     */
+    fun doWithdrawSocialAuth() {
+        viewModelScope.launch{
+            _doLogoutResult.emit(CommonApiState.Loading)
+            val authProvider = getPreferencesControl().getStringValue(SHARED_AUTH_PROVIDER)
+
+            val result = runCatching {
+                when(PlatformType.fromValue(authProvider)) {
+                    PlatformType.naver -> deleteNaverToken()
+                    PlatformType.google -> {
+                        try {
+                            val currentUser = FirebaseAuth.getInstance().currentUser
+                            if (currentUser != null) {
+                                Tasks.await(currentUser.delete()) // 코루틴 내에서 await() 사용
+                            }
+                            CredentialManager.create(getGlobalContext()).clearCredentialState(ClearCredentialStateRequest())
+                        } catch (e: Exception) {
+                            throw Exception("[구글] 회원탈퇴 실패: ${e.message}")
+                        }
+                    }
+                    PlatformType.kakao -> {
+                        UserApiClient.instance.unlink { error ->
+                            if (error != null) {
+                                throw Exception("[카카오] 회원탈퇴 실패: ${error.message}")
+                            }
+                        }
+                    }
+                    null -> throw Exception("로그인된 플랫폼이 없음")
+                }
+            }.onFailure { exception ->
+                _doLogoutResult.emit(CommonApiState.Error(exception.message ?: "회원탈퇴 실패"))
+            }
+
+            if (result.isSuccess) {
+                preferencesHelper.run {
+                    clear()
+                    saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
+                }
+                _doLogoutResult.emit(CommonApiState.Success(Unit))
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private suspend fun deleteNaverToken(): Result<Unit> = suspendCoroutine { continuation ->
+        NidOAuthLogin().callDeleteTokenApi(object : OAuthLoginCallback {
+            override fun onSuccess() {
+                continuation.resume(Result.success(Unit))
+            }
+
+            override fun onFailure(httpStatus: Int, message: String) {
+                val errorMessage = "네이버 토큰 삭제 실패 (HTTP 상태 코드: $httpStatus, 메시지: $message)"
+                continuation.resume(Result.failure(Exception(errorMessage)))
+            }
+
+            override fun onError(errorCode: Int, message: String) {
+                val errorMessage = "네이버 토큰 삭제 실패 (에러 코드: $errorCode, 메시지: $message)"
+                continuation.resume(Result.failure(Exception(errorMessage)))
+            }
+        })
+    }
+
 }

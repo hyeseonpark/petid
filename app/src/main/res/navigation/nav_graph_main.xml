@@ -2,40 +2,40 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_graph_main"
     app:startDestination="@id/homeMainFragment">
 
     <fragment
         android:id="@+id/homeMainFragment"
-        android:name=".ui.view.home.HomeMainFragment"
+        android:name="com.petid.petid.ui.view.home.HomeMainFragment"
         android:label="fragment_home_main"
         tools:layout="@layout/fragment_home_main" >
         <action
             android:id="@+id/action_homeMainFragment_to_blogMainFragment"
             app:destination="@id/blogMainFragment" />
-        <action
-            android:id="@+id/action_homeMainFragment_to_hospitalMainFragment"
-            app:destination="@id/hospitalMainFragment" />
-        <action
-            android:id="@+id/action_homeMainFragment_to_myMainFragment"
-            app:destination="@id/myMainFragment" />
+    <action
+        android:id="@+id/action_homeMainFragment_to_hospitalMainFragment"
+        app:destination="@id/hospitalMainFragment" />
+    <action
+        android:id="@+id/action_homeMainFragment_to_myMainFragment"
+        app:destination="@id/myMainFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/hospitalMainFragment"
-        android:name=".ui.view.hospital.HospitalMainFragment"
+        android:name="com.petid.petid.ui.view.hospital.HospitalMainFragment"
         android:label="HospitalMainFragment"
         tools:layout="@layout/fragment_hospital_main" />
 
     <fragment
         android:id="@+id/blogMainFragment"
-        android:name=".ui.view.blog.BlogMainFragment"
+        android:name="com.petid.petid.ui.view.blog.BlogMainFragment"
         android:label="fragment_blog_main"
         tools:layout="@layout/fragment_blog_main" />
 
     <fragment
         android:id="@+id/myMainFragment"
-        android:name=".ui.view.my.MyMainFragment"
+        android:name="com.petid.petid.ui.view.my.MyMainFragment"
         android:label="MyMainFragment"
         tools:layout="@layout/fragment_my_main" />
 
