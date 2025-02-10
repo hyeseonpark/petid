@@ -10,7 +10,6 @@ fragmentKtx = "1.8.5"
 glide = "4.16.0"
 googleServices = "4.4.2"
 hiltAndroidGradlePlugin = "2.54"
-hiltNavigationCompose = "1.2.0"
 kotlin = "2.1.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -59,7 +58,6 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomDB" }
 corbind = { module = "ru.ldralighieri.corbind:corbind", version.ref = "corbind" }
 corbind-material = { module = "ru.ldralighieri.corbind:corbind-material", version.ref = "corbind" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
 androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navVersion" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navVersion" }
@@ -114,3 +112,5 @@ com-google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", vers
 com-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "comGoogleGmsGoogleServicesGradlePlugin" }
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "comGoogleDaggerHiltAndroidGradlePlugin" }
 androidx-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNavigationSafeargsKotlinGradlePlugin" }
+
+[bundles]

@@ -35,7 +35,6 @@ class GlobalApplication : MultiDexApplication() {
                 }
             }
         }
-
     }
 
     companion object {
