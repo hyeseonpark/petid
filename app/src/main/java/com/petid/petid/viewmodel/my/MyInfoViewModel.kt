@@ -177,7 +177,9 @@ class MyInfoViewModel @Inject constructor(
             runCatching {
                 when(PlatformType.fromValue(authProvider)) {
                     PlatformType.naver -> {
-                        NaverIdLoginSDK.logout()
+                        if(NaverIdLoginSDK.isInitialized()) {
+                            NaverIdLoginSDK.logout()
+                        }
                     }
                     PlatformType.google -> {
                         CredentialManager.create(getGlobalContext()).clearCredentialState(request = ClearCredentialStateRequest())
