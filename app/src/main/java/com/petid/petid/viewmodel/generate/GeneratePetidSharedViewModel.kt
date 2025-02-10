@@ -12,6 +12,7 @@ import com.petid.data.ml.ClassifierImageAnalyzer
 import com.petid.data.ml.ClassifierResult
 import com.petid.data.ml.ImageClassifierHelper
 import com.petid.data.util.S3UploadHelper
+import com.petid.data.util.sendCrashlytics
 import com.petid.domain.entity.Pet
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
@@ -91,27 +92,33 @@ class GeneratePetidSharedViewModel @Inject constructor(
         viewModelScope.launch {
             _analysisState.emit(AnalysisState.Loading)
 
-            // 이미지 변환
-            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(
-                    ImageDecoder.createSource(context.contentResolver, uri)
-                )
-            } else {
-                MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
-            }.copy(Bitmap.Config.ARGB_8888, true)
-
-            val state = when(val result = imageAnalyzer.analyzeImage(bitmap)) {
-                is ClassifierResult.Success -> {
-                    when(result.data.results.isNotEmpty()) {
-                        true -> AnalysisState.Success(result.data)
-                        false -> AnalysisState.Error("이미지 분석에 실패했습니다.")
+            runCatching {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    val source = ImageDecoder.createSource(context.contentResolver, uri)
+                    ImageDecoder.decodeBitmap(source).copy(Bitmap.Config.ARGB_8888, true)
+                } else {
+                    val originalBitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                    originalBitmap?.copy(Bitmap.Config.ARGB_8888, true)
+                        ?: throw IllegalStateException("Unable to copy bitmap")
+                }
+            }.onSuccess {
+                val state = when(val result = imageAnalyzer.analyzeImage(it)) {
+                    is ClassifierResult.Success -> {
+                        when(result.data.results.isNotEmpty()) {
+                            true -> AnalysisState.Success(result.data)
+                            false -> AnalysisState.Error("이미지 분석에 실패했습니다.")
+                        }
+                    }
+                    is ClassifierResult.Error -> {
+                        AnalysisState.Error(result.error.toString())
                     }
                 }
-                is ClassifierResult.Error -> {
-                    AnalysisState.Error(result.error.toString())
-                }
+                _analysisState.emit(state)
+
+            }.onFailure {
+                it.sendCrashlytics()
+                _analysisState.emit(AnalysisState.Error(it.message.toString()))
             }
-            _analysisState.emit(state)
         }
     }
 }

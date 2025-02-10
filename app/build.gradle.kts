@@ -26,8 +26,8 @@ android {
         applicationId = "com.petid.petid"
         minSdk = 24
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.0.4"
+        versionCode = 8
+        versionName = "1.0.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -38,6 +38,10 @@ android {
 
         // manifestPlaceholders에 값을 전달
         manifestPlaceholders["kakao_native_app_key"] = localProperties["KAKAO_NATIVE_APP_KEY"] as String
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+        }
     }
 
     buildTypes {

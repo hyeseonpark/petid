@@ -101,22 +101,26 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
         val body = extras?.getString("gcm.notification.body").orEmpty()
 
         val jsonBody = body
-            .replace("=", ":")
+            .replace("=", "\":\"")
             .replace("{", "{\"")
             .replace("}", "\"}")
             .replace(", ", "\", \"")
-            .replace("=", "\":\"")
+            .replace("hostpitalName", "hospitalName")
 
         val gson = Gson()
         val notificationBody = gson.fromJson(jsonBody, NotificationBody::class.java)
 
         return if (category.isNotBlank() && body.isNotBlank()) {
-            NotificationEntity(
-                desc = notificationBody.hospoitalName,
-                category = category,
-                status = notificationBody.status,
-                detailId = notificationBody.id,
-            )
+            with(notificationBody) {
+                NotificationEntity(
+                    notiTitle = getNotiTitle(category, status, id),
+                    notiBody = getNotiBody(category, status, id, hospitalName),
+                    category = category,
+                    status = status,
+                    hospitalName = hospitalName,
+                    detailId = id?.toInt(),
+                )
+            }
         } else {
             Log.w(TAG, "Received message with empty title or body")
             null
@@ -149,12 +153,12 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
         val notification = NotificationCompat.Builder(getGlobalContext(), channelId)
             .setSmallIcon(R.drawable.ic_app_logo_main)
             .setColor(getColor(R.color.petid_clear_blue))
-            .setContentTitle(messageData.category)
-            .setContentText(messageData.desc)
+            .setContentTitle(messageData.notiTitle)
+            .setContentText(messageData.notiBody)
             .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
             .setAutoCancel(true)
             .setFullScreenIntent(pendingIntent, true)
-            //.setContentIntent(pendingIntent)
+            .setContentIntent(pendingIntent)
             .build()
 
         try {
@@ -206,6 +210,64 @@ class AppFirebaseMessageService() : FirebaseMessagingService() {
                     PackageManager.PERMISSION_GRANTED
         } else {
             true
+        }
+    }
+
+    /**
+     * get notification title
+     */
+    private fun getNotiTitle(category: String, status: String, detailId: String?): String {
+        return when(category) {
+            "booking" -> {
+                when(status) {
+                    "CONFIRMED" -> "동물병원 예약 확정"
+                    "CANCELLED" -> "예약 취소 알림"
+                    else -> ""
+                }
+            }
+            "order" -> {
+                when(status) {
+                    "COMPLETED" -> "예약 방문 완료"
+                    "PENDING" -> "예약 방문 알림"
+                    else -> ""
+                }
+            }
+            "reminder" -> {
+                when(detailId == null) {
+                    true -> "동물등록 대상"
+                    false -> "펫 블로그 새로운 글"
+                }
+            }
+            else -> ""
+        }
+    }
+
+    /**
+     * get notification body
+     */
+    private fun getNotiBody(category: String, status: String, detailId: String?, hospitalName: String): String {
+        return when(category) {
+            "booking" -> {
+                when(status) {
+                    "CONFIRMED" -> "'${hospitalName}' 예약이 확정되었습니다. 예약 정보를 확인하시고 방문해주세요."
+                    "CANCELLED" -> "'${hospitalName}' 사정으로 예약이 취소되었습니다. 앱에서 다시 예약 도와드릴게요!"
+                    else -> ""
+                }
+            }
+            "order" -> {
+                when(status) {
+                    "COMPLETED" -> "동물 병원을 다녀오신 회원님의 상태를 변경해 주세요!"
+                    "PENDING" -> "1시간 후 '${hospitalName}' 예약 방문 일정이 있습니다. 방문 전 병원 정보를 다시 한 번 확인해 주세요."
+                    else -> ""
+                }
+            }
+            "reminder" -> {
+                when(detailId == null) {
+                    true -> "강아지 눈에 있는 길다린 실, 기생충 일 수 있다!?"
+                    false -> "간단한 반려동물등록으로 평생을 함께하는 방법 지금 알려드려요!"
+                }
+            }
+            else -> ""
         }
     }
 }

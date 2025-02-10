@@ -18,9 +18,11 @@ import androidx.room.PrimaryKey
 @Parcelize
 @Entity(tableName = "notifications")
 data class NotificationEntity(
+    val notiTitle: String,
+    val notiBody: String,
     val category: String,
-    val desc: String,
     val status: String?,
+    val hospitalName: String?,
     val detailId: Int?,
     val isChecked: Boolean = false,
 ) : Parcelable {

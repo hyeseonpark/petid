@@ -23,10 +23,10 @@ class TermsViewModel @Inject constructor(
     private val _apiState = MutableSharedFlow<CommonApiState<Unit>>()
     val apiState: SharedFlow<CommonApiState<Unit>> = _apiState
 
-        fun join(platform: PlatformType, sub: String, fcmToken: String, ad: Boolean) {
+        fun join(platform: PlatformType, token: String, fcmToken: String, ad: Boolean) {
             viewModelScope.launch {
                 _apiState.emit(CommonApiState.Loading)  // 로딩 상태 전송
-                val state = when (val result = termsRepository.doJoin(platform.toString(), sub, fcmToken, ad)) {
+                val state = when (val result = termsRepository.doJoin(platform.toString(), token, fcmToken, ad)) {
                     is ApiResult.Success -> {
                         val result = result.data
                         getPreferencesControl().apply {

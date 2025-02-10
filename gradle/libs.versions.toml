@@ -3,15 +3,14 @@ agp = "8.7.3"
 coreKtx = "1.15.0"
 corbind = "1.11.0"
 easyflipview = "3.0.3"
-firebaseAnalyticsKtx = "22.1.2"
-firebaseBom = "33.7.0"
-firebaseCrashlyticsKtx = "19.3.0"
+firebaseAnalyticsKtx = "22.2.0"
+firebaseBom = "33.8.0"
+firebaseCrashlyticsKtx = "19.4.0"
 fragmentKtx = "1.8.5"
 glide = "4.16.0"
 googleServices = "4.4.2"
 hiltAndroidGradlePlugin = "2.54"
-hiltNavigationCompose = "1.2.0"
-kotlin = "2.0.21"
+kotlin = "2.1.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -19,7 +18,7 @@ appcompat = "1.7.0"
 kotlinxCoroutinesAndroid = "1.10.1"
 logger = "2.2.0"
 material = "1.12.0"
-activity = "1.9.3"
+activity = "1.10.0"
 constraintlayout = "2.2.0"
 legacySupportV4 = "1.0.0"
 jetbrainsKotlinJvm = "2.0.21"
@@ -29,7 +28,7 @@ oauthJdk8 = "5.10.0"
 playServicesLocation = "21.3.0"
 preferenceKtx = "1.2.1"
 roomDB = "2.6.1"
-tasksVision = "latest.release"
+tasksVision = "0.10.20" # 0.20230731, 0.10.15+
 threetenabp = "1.2.0"
 toolsCore = "1.0.0-alpha10"
 cameraCore = "1.4.1"
@@ -44,7 +43,7 @@ comGoogleDaggerHiltAndroidGradlePlugin = "2.54"
 androidxNavigationSafeargsKotlinGradlePlugin = "2.9.0-alpha04"
 okhttp = "5.0.0-alpha.14"
 loggingInterceptor = "5.0.0-alpha.14"
-credentialsPlayServicesAuth = "1.5.0-beta01"
+credentialsPlayServicesAuth = "1.5.0-rc01"
 googleid = "1.1.1"
 multidex = "2.0.1"
 firebaseAuth = "23.1.0"
@@ -59,7 +58,6 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomDB" }
 corbind = { module = "ru.ldralighieri.corbind:corbind", version.ref = "corbind" }
 corbind-material = { module = "ru.ldralighieri.corbind:corbind-material", version.ref = "corbind" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navVersion" }
 androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "navVersion" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navVersion" }
@@ -114,3 +112,5 @@ com-google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", vers
 com-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "comGoogleGmsGoogleServicesGradlePlugin" }
 com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "comGoogleDaggerHiltAndroidGradlePlugin" }
 androidx-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidxNavigationSafeargsKotlinGradlePlugin" }
+
+[bundles]

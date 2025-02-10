@@ -1,6 +1,7 @@
 package com.petid.petid
 
 import androidx.multidex.MultiDexApplication
+import com.google.firebase.FirebaseApp
 import com.petid.petid.util.PreferencesControl
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.kakao.sdk.common.KakaoSdk
@@ -25,14 +26,15 @@ class GlobalApplication : MultiDexApplication() {
 
             Logger.addLogAdapter(AndroidLogAdapter())
 
-            // Crashlytics 기본 설정
-            if (BuildConfig.DEBUG) {
-                FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
-            } else {
-                FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
+            FirebaseApp.initializeApp(appInstance).apply {
+                // Crashlytics 기본 설정
+                if (BuildConfig.DEBUG) {
+                    FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
+                } else {
+                    FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
+                }
             }
         }
-
     }
 
     companion object {
