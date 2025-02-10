@@ -82,8 +82,8 @@ class MyInfoDetailFragment
                 .onEach {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                         with(Intent()) {
-                            action = Intent.ACTION_PICK
-                            type = MediaStore.Images.Media.CONTENT_TYPE
+                            action = Intent.ACTION_GET_CONTENT
+                            type = "image/*"
                             actionPick.launch(this)
                         }
                     } else {

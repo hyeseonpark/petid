@@ -118,7 +118,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                     .clicks()
                     .throttleFirst()
                     .onEach {
-                        findNavController().navigate(R.id.action_homeMainFragment_to_hospitalMainFragment)
+                        bottomNavigationView.selectedItemId = R.id.hospitalMainFragment
                     }
                     .launchIn(viewLifecycleOwner.lifecycleScope)
             }
