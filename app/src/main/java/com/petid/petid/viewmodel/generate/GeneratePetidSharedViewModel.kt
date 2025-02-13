@@ -11,32 +11,33 @@ import androidx.lifecycle.viewModelScope
 import com.petid.data.ml.ClassifierImageAnalyzer
 import com.petid.data.ml.ClassifierResult
 import com.petid.data.ml.ImageClassifierHelper
-import com.petid.data.util.S3UploadHelper
 import com.petid.data.util.sendCrashlytics
 import com.petid.domain.entity.Pet
 import com.petid.domain.repository.PetInfoRepository
+import com.petid.domain.usecase.UploadImageUseCase
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.common.Constants
 import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.util.toCompressedByteArray
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class GeneratePetidSharedViewModel @Inject constructor(
     private val petInfoRepository: PetInfoRepository,
     private val imageAnalyzer: ClassifierImageAnalyzer,
-    private val s3UploadHelper: S3UploadHelper,
+    private val uploadImageUseCase: UploadImageUseCase,
 ): ViewModel() {
     var petInfo = Pet.Builder()
-    var petImage : File? = null
-    var signImage : File? = null
+    var petImage : ByteArray? = null
+    var signImage : ByteArray? = null
     val memberId = getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
 
     private val _registerPetResult = MutableStateFlow<CommonApiState<Unit>>(CommonApiState.Init)
@@ -71,10 +72,16 @@ class GeneratePetidSharedViewModel @Inject constructor(
             _registerPetResult.emit(CommonApiState.Loading)
 
             runCatching {
-                s3UploadHelper.uploadWithTransferUtility(file = petImage!!, keyName = petInfo.getPetImageName())
-                s3UploadHelper.uploadWithTransferUtility(file = signImage!!, keyName = petInfo.getSignImageName())
-            }.onSuccess {
+                uploadImageUseCase(
+                    imagePath = petInfo.getPetImageName(),
+                    profileImage = petImage!!,
+                ).first()
+                uploadImageUseCase(
+                    imagePath = petInfo.getSignImageName(),
+                    profileImage = signImage!!,
+                ).first()
                 generatePetid()
+
             }.onFailure {
                 _registerPetResult.emit(CommonApiState.Error(it.message))
             }
@@ -105,7 +112,10 @@ class GeneratePetidSharedViewModel @Inject constructor(
                 val state = when(val result = imageAnalyzer.analyzeImage(it)) {
                     is ClassifierResult.Success -> {
                         when(result.data.results.isNotEmpty()) {
-                            true -> AnalysisState.Success(result.data)
+                            true -> {
+                                petImage = uri.toCompressedByteArray(context)
+                                AnalysisState.Success(result.data)
+                            }
                             false -> AnalysisState.Error("이미지 분석에 실패했습니다.")
                         }
                     }

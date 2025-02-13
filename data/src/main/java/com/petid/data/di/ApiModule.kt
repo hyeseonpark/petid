@@ -1,5 +1,8 @@
 package com.petid.data.di
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.petid.data.BuildConfig
 import com.petid.data.api.AuthAPI
 import com.petid.data.api.AuthAuthenticator
 import com.petid.data.api.AuthInterceptor
@@ -8,13 +11,11 @@ import com.petid.data.api.ContentAPI
 import com.petid.data.api.HosptialAPI
 import com.petid.data.api.LocationAPI
 import com.petid.data.api.LoggingInterceptor
+import com.petid.data.api.MemberAPI
 import com.petid.data.api.NullOnEmptyConverterFactory
 import com.petid.data.api.PetAPI
-import com.petid.data.api.MemberAPI
+import com.petid.data.api.S3UploadAPI
 import com.petid.data.util.PreferencesHelper
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.petid.data.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,7 +24,12 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class S3Retrofit
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -122,5 +128,38 @@ class ApiModule {
     @Singleton
     fun providePetAPI(retrofit: Retrofit): PetAPI {
         return retrofit.create(PetAPI::class.java)
+    }
+
+    /**
+     * OkHttpClient for S3
+     */
+    @Provides
+    @Singleton
+    @S3Retrofit
+    fun provideS3OkHttpClient(loggingInterceptor: LoggingInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
+
+    /**
+     * Retrofit for S3
+     */
+    @Provides
+    @Singleton
+    @S3Retrofit
+    fun provideS3Retrofit(@S3Retrofit okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://petid-bucket.s3.ap-northeast-2.amazonaws.com")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @S3Retrofit
+    fun provideS3UploadAPI(@S3Retrofit retrofit: Retrofit): S3UploadAPI {
+        return retrofit.create(S3UploadAPI::class.java)
     }
 }

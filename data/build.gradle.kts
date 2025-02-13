@@ -24,9 +24,6 @@ android {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "AWS_ACCESS_KEY", "\"${localProperties["AWS_ACCESS_KEY"]}\"")
-        buildConfigField("String", "AWS_SECRET_KEY", "\"${localProperties["AWS_SECRET_KEY"]}\"")
     }
 
     buildTypes {
@@ -85,9 +82,6 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-
-    // implementation("androidx.multidex:multidex:2.0.1")
-    implementation(libs.androidx.hilt.navigation.compose)
 
     // Logger
     implementation(libs.logger)
