@@ -3,6 +3,7 @@ package com.petid.petid.util
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -18,8 +19,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.petid.petid.BuildConfig
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * get tag
@@ -158,3 +161,75 @@ fun Bitmap.toFile(context: Context): File {
     fileOutputStream.close()
     return file
 }
+
+fun Uri.toCompressedByteArray(
+    context: Context,
+    targetWidth: Int = 800,
+    targetHeight: Int = 800,
+    compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+    quality: Int = 80,
+): ByteArray? =
+    try {
+        context.contentResolver.openInputStream(this)?.use { inputStream ->
+            val originalBitmap = BitmapFactory.decodeStream(inputStream)
+
+            val originalWidth = originalBitmap.width
+            val originalHeight = originalBitmap.height
+
+            val aspectRatio = originalWidth.toFloat() / originalHeight
+            val newWidth: Int
+            val newHeight: Int
+            if (aspectRatio > 1) {
+                newWidth = targetWidth
+                newHeight = (targetWidth / aspectRatio).toInt()
+            } else {
+                newHeight = targetHeight
+                newWidth = (targetHeight * aspectRatio).toInt()
+            }
+
+            val resizedBitmap =
+                Bitmap.createScaledBitmap(
+                    originalBitmap,
+                    newWidth,
+                    newHeight,
+                    true,
+                )
+
+            ByteArrayOutputStream().use { outputStream ->
+                resizedBitmap.compress(compressFormat, quality, outputStream)
+                outputStream.toByteArray()
+            }
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        null
+    }
+
+fun Bitmap.toCompressedByteArray(
+    targetWidth: Int = 800,
+    targetHeight: Int = 800,
+    compressFormat: Bitmap.CompressFormat = Bitmap.CompressFormat.JPEG,
+    quality: Int = 80,
+): ByteArray? =
+    try {
+        val aspectRatio = this.width.toFloat() / this.height
+        val newWidth: Int
+        val newHeight: Int
+        if (aspectRatio > 1) {
+            newWidth = targetWidth
+            newHeight = (targetWidth / aspectRatio).toInt()
+        } else {
+            newHeight = targetHeight
+            newWidth = (targetHeight * aspectRatio).toInt()
+        }
+
+        val resizedBitmap = Bitmap.createScaledBitmap(this, newWidth, newHeight, true)
+
+        ByteArrayOutputStream().use { outputStream ->
+            resizedBitmap.compress(compressFormat, quality, outputStream)
+            outputStream.toByteArray()
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        null
+    }

@@ -11,10 +11,10 @@ import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import com.petid.data.util.PreferencesHelper
-import com.petid.data.util.S3UploadHelper
 import com.petid.data.util.sendCrashlytics
 import com.petid.domain.entity.MemberInfoEntity
 import com.petid.domain.repository.MyInfoRepository
+import com.petid.domain.usecase.UploadImageUseCase
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
@@ -23,16 +23,13 @@ import com.petid.petid.common.Constants.PHOTO_PATHS
 import com.petid.petid.common.Constants.SHARED_AUTH_PROVIDER
 import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.util.showErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -40,7 +37,7 @@ import kotlin.coroutines.suspendCoroutine
 @HiltViewModel
 class MyInfoViewModel @Inject constructor(
     private val myInfoRepository: MyInfoRepository,
-    private val s3UploadHelper: S3UploadHelper,
+    private val uploadImageUseCase: UploadImageUseCase,
     private val preferencesHelper: PreferencesHelper,
 ): ViewModel() {
 
@@ -121,14 +118,16 @@ class MyInfoViewModel @Inject constructor(
     /**
      * S3 bucket upload
      */
-    fun uploadFile(file: File, fileName: String) {
+    fun uploadFile(file: ByteArray, fileName: String) {
         viewModelScope.launch {
             _uploadS3Result.emit(CommonApiState.Loading)
-
             runCatching {
-                s3UploadHelper.uploadWithTransferUtility(file = file, keyName = fileName)
-            }.onSuccess {
-                _uploadS3Result.emit(CommonApiState.Success(Unit))
+                uploadImageUseCase(
+                    imagePath = fileName,
+                    profileImage = file,
+                ).collectLatest {
+                    _uploadS3Result.emit(CommonApiState.Success(Unit))
+                }
             }.onFailure { e ->
                 e.sendCrashlytics()
                 _uploadS3Result.emit(CommonApiState.Error(e.message))

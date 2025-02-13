@@ -8,6 +8,7 @@ import com.petid.data.repository.remote.MyInfoRepositoryImpl
 import com.petid.data.repository.remote.PetInfoRepositoryImpl
 import com.petid.data.repository.remote.ReservationCalendarRepositoryImpl
 import com.petid.data.repository.remote.ReservationHistoryInfoRepositoryImpl
+import com.petid.data.repository.remote.S3UploadRepositoryImpl
 import com.petid.data.repository.remote.SocialAuthRepositoryImpl
 import com.petid.data.repository.remote.TermsRepositoryImpl
 import com.petid.domain.repository.BlogMainRepository
@@ -18,6 +19,7 @@ import com.petid.domain.repository.MyInfoRepository
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.repository.ReservationCalendarRepository
 import com.petid.domain.repository.ReservationHistoryInfoRepository
+import com.petid.domain.repository.S3UploadRepository
 import com.petid.domain.repository.SocialAuthRepository
 import com.petid.domain.repository.TermsRepository
 import dagger.Binds
@@ -92,10 +94,9 @@ abstract class RepositoryModule {
         petInfoRepositoryImpl: PetInfoRepositoryImpl
     ): PetInfoRepository
 
-
-    /*@Binds
+    @Binds
     @Singleton
-    abstract fun bindLoginRemoteDataSource(
-        loginRemoteDataSource: LoginRemoteDataSource
-    ): LoginDataSource.Remote*/
+    abstract fun bindS3UploadRepository(
+        s3UploadRepositoryImpl: S3UploadRepositoryImpl,
+    ): S3UploadRepository
 }
