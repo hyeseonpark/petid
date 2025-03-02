@@ -11,16 +11,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
-import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
-import com.petid.petid.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
-import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentSignatureBinding
 import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
-import com.petid.petid.util.toFile
+import com.petid.petid.util.toCompressedByteArray
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -71,7 +68,7 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
 
                     with(viewModel) {
                         // S3 서버에 올릴 파일 세팅
-                        signImage = bitmap.toFile(getGlobalContext())
+                        signImage = bitmap.toCompressedByteArray()
                         petInfo.setSign("${PHOTO_PATHS[1]}${memberId}.jpg")
                     }
 

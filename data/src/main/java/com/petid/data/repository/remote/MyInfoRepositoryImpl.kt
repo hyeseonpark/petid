@@ -17,14 +17,6 @@ class MyInfoRepositoryImpl @Inject constructor(
     override suspend fun getMemberInfo(): ApiResult<MemberInfoEntity> =
         myInfoRemoteDataSource.getMemberInfo()
 
-    override suspend fun uploadProfileImage(imagePath: String): String {
-        return try {
-            memberAPI.uploadProfileImage(imagePath)
-        } catch (e: Exception) {
-            ""
-        }
-    }
-
     override suspend fun getProfileImageUrl(imagePath: String): ApiResult<String> =
         myInfoRemoteDataSource.getProfileImageUrl(imagePath)
 

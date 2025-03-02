@@ -27,6 +27,7 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
 import com.petid.petid.util.throttleFirst
+import com.petid.petid.util.toCompressedByteArray
 import com.petid.petid.util.toFile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -122,7 +123,7 @@ class MyInfoDetailFragment
     private fun processForUploadFile(uri: Uri) {
         // s3 bucket 에 파일 업로드
         with(viewModel) {
-            uploadFile(uri.toFile(requireActivity())!!, memberImageFileName!!)
+            uploadFile(uri.toCompressedByteArray(requireActivity())!!, memberImageFileName!!)
         }
     }
 
