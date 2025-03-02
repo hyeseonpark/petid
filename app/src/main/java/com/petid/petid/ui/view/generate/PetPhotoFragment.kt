@@ -31,7 +31,6 @@ import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.TAG
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
-import com.petid.petid.util.toFile
 import com.petid.petid.viewmodel.generate.AnalysisState
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +39,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -161,7 +159,6 @@ class PetPhotoFragment : BaseFragment<FragmentPetPhotoBinding>(FragmentPetPhotoB
                     photoFile
                 ).also { uri ->
                     photoURI = uri // 성공 시에만 photoURI 업데이트
-                    viewModel.petImage = photoFile
                     fullSizeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
                 }
             }

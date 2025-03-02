@@ -14,6 +14,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * 현재 사용하지 않음
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 class S3Module {
@@ -23,8 +26,8 @@ class S3Module {
         @ApplicationContext context: Context,
     ): TransferUtility {
         val awsCredentials = BasicAWSCredentials(
-            BuildConfig.AWS_ACCESS_KEY,
-            BuildConfig.AWS_SECRET_KEY
+            "AWS_ACCESS_KEY",
+            "AWS_SECRET_KEY"
         )
         val s3Client = AmazonS3Client(
             awsCredentials,

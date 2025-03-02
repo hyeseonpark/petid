@@ -168,7 +168,7 @@ dependencies {
     // multidex
     implementation(libs.androidx.multidex)
 
-    // Jetpack Compose Integration
+    // Jetpack Compose Integration -> Chip component custom
     implementation(libs.androidx.navigation.compose)
 
     // Views/Fragments Integration
