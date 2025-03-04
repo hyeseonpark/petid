@@ -1,17 +1,16 @@
 package com.petid.data.source.remote
 
-import com.petid.domain.entity.MemberInfoEntity
-import com.petid.domain.entity.UpdateMemberInfoEntity
-import com.petid.domain.util.ApiResult
+import com.petid.data.dto.response.MemberInfoResponse
+import com.petid.data.dto.response.UpdateMemberInfoResponse
 
 interface MyInfoRemoteDataSource {
-    suspend fun getMemberInfo(): ApiResult<MemberInfoEntity>
-    suspend fun getProfileImageUrl(imagePath: String): ApiResult<String>
+    suspend fun getMemberInfo(): MemberInfoResponse
+    suspend fun getProfileImageUrl(imagePath: String): String
     suspend fun updateMemberInfo(
         address: String,
         addressDetail: String,
         phone: String
-    ): ApiResult<UpdateMemberInfoEntity>
-    suspend fun updateMemberPhoto(filePath: String): ApiResult<String>
-    suspend fun doWithdraw(): ApiResult<Unit>
+    ): UpdateMemberInfoResponse
+    suspend fun updateMemberPhoto(filePath: String): String
+    suspend fun doWithdraw(): Unit
 }

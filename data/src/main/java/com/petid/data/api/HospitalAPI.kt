@@ -13,7 +13,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface HosptialAPI {
+interface HospitalAPI {
 
     /**
      * 병원 리스트 조회

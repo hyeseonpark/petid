@@ -1,6 +1,8 @@
 package com.petid.data.repository.remote
 
+import com.petid.data.dto.response.toDomain
 import com.petid.data.source.remote.ReservationHistoryInfoRemoteDataSource
+import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.HospitalOrderDetailEntity
 import com.petid.domain.repository.ReservationHistoryInfoRepository
 import com.petid.domain.util.ApiResult
@@ -14,8 +16,12 @@ class ReservationHistoryInfoRepositoryImpl @Inject constructor(
     override suspend fun getHospitalReservationHistoryList(
         status: String,
     ): ApiResult<List<HospitalOrderDetailEntity>> =
-        remoteDataSource.getHospitalReservationHistoryList(status)
+        runCatching {
+            remoteDataSource.getHospitalReservationHistoryList(status).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int> =
-        remoteDataSource.cancelHospitalReservation(orderId)
+        runCatching {
+            remoteDataSource.cancelHospitalReservation(orderId)
+        }.mapApiResult { ApiResult.Success(it) }
 }
