@@ -140,12 +140,8 @@ class HomeMainViewModel @Inject constructor(
                     val memberInfo = result.data
                     CommonUIState.Success(memberInfo)
                 }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getMemberInfoResult.emit(state)
         }
@@ -168,12 +164,8 @@ class HomeMainViewModel @Inject constructor(
                     getPetImageUrl(petDetails.petImages.first().imagePath)
                     CommonUIState.Success(petDetails)
                 }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getPetDetailsResult.emit(state)
         }
@@ -192,15 +184,9 @@ class HomeMainViewModel @Inject constructor(
         viewModelScope.launch {
             _getPetImageUrlResult.emit(CommonUIState.Loading)
             val state = when (val result = petInfoRepository.getPetImageUrl(filePath)) {
-                is ApiResult.Success -> {
-                    CommonUIState.Success(result.data)
-                }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getPetImageUrlResult.emit(state)
         }

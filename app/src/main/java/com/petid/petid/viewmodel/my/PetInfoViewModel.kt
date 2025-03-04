@@ -112,11 +112,11 @@ class PetInfoViewModel @Inject constructor(
                     profileImage = file,
                     imagePath = fileName,
                 ).collectLatest {
-                    _updatePetPhotoResult.emit(CommonUIState.Success(Unit))
+                    _updatePetPhotoResult.emit(Success(Unit))
                 }
             }.onFailure { e ->
                 e.sendCrashlytics()
-                _updatePetPhotoResult.emit(CommonUIState.Error(e.message))
+                _updatePetPhotoResult.emit(Error(e.message))
             }
         }
     }

@@ -22,7 +22,6 @@ import kotlin.properties.Delegates
 class ContentDetailViewModel @Inject constructor(
     private val blogMainRepository: BlogMainRepository,
     private val contentDetailRepository: ContentDetailRepository,
-//    private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
     var contentId by Delegates.notNull<Int>()
 
@@ -56,12 +55,8 @@ class ContentDetailViewModel @Inject constructor(
                     )
                     CommonUIState.Success(updatedDetail)
                 }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _contentDetailApiState.emit(state)
         }
@@ -74,15 +69,9 @@ class ContentDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _doLikeApiResult.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.doContentLike(contentId)) {
-                is ApiResult.Success -> {
-                    CommonUIState.Success(result.data)
-                }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _doLikeApiResult.emit(state)
         }
@@ -95,20 +84,13 @@ class ContentDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _doLikeApiResult.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.cancelContentLike(contentId)) {
-                is ApiResult.Success -> {
-                    CommonUIState.Success(result.data)
-                }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _doLikeApiResult.emit(state)
         }
     }
-
 
     /**
      * 콘텐츠 목록 가져오기
@@ -144,11 +126,9 @@ class ContentDetailViewModel @Inject constructor(
     /**
      * 컨텐츠 이미지 가져오기
      */
-    private suspend fun getContentImage(filePath: String): String {
-        return try {
+    private suspend fun getContentImage(filePath: String): String =
+        runCatching{
             blogMainRepository.getContentImage(filePath)
-        } catch (e: Exception) {
-            ""
-        }
-    }
+        }.getOrDefault("")
+
 }
