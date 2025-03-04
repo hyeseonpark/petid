@@ -1,6 +1,5 @@
 package com.petid.data.api
 
-import com.petid.data.dto.request.DeleteHospitalOrderRequest
 import com.petid.data.dto.request.HospitalOrderRequest
 import com.petid.data.dto.response.HospitalOrderDetailResponse
 import com.petid.data.dto.response.HospitalOrderResponse
@@ -8,7 +7,6 @@ import com.petid.data.dto.response.HospitalResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST

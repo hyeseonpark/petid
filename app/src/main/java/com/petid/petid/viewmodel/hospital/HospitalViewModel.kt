@@ -76,12 +76,14 @@ class HospitalViewModel @Inject constructor(
             _createHospitalOrderApiState.emit(CommonApiState.Loading)
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
             val formatDateTime = sdf.format(selectedDateTime)
-            val state = when(val result = reservationCalendarRepository.createHospitalOrder(
-                hospitalId, formatDateTime)) {
-                is ApiResult.Success -> CommonApiState.Success(result.data)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
-            }
+
+            val data = HospitalOrderEntity(hospitalId, formatDateTime)
+            val state =
+                when(val result = reservationCalendarRepository.createHospitalOrder(data)) {
+                    is ApiResult.Success -> CommonApiState.Success(result.data)
+                    is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
+                    is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                }
             _createHospitalOrderApiState.emit(state)
         }
     }
