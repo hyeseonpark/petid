@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.petid.petid.R
 import com.petid.petid.databinding.FragmentPetInfoUpdateBinding
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.showDatePicker
 import com.petid.petid.util.showErrorMessage
@@ -104,11 +104,11 @@ class PetInfoUpdateFragment
     private fun observeGetMemberInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         with(result.data) {
                             binding.editTextName.setText(petName)
                             binding.editTextBirth.setText(petBirthDate)
@@ -129,9 +129,9 @@ class PetInfoUpdateFragment
 
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

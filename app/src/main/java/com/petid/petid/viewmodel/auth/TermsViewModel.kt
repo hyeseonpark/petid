@@ -8,7 +8,7 @@ import com.petid.domain.repository.TermsRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.type.PlatformType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,12 +20,12 @@ class TermsViewModel @Inject constructor(
     private val termsRepository: TermsRepository,
     ): ViewModel() {
 
-    private val _apiState = MutableSharedFlow<CommonApiState<Unit>>()
-    val apiState: SharedFlow<CommonApiState<Unit>> = _apiState
+    private val _apiState = MutableSharedFlow<CommonUIState<Unit>>()
+    val apiState: SharedFlow<CommonUIState<Unit>> = _apiState
 
         fun join(platform: PlatformType, token: String, fcmToken: String, ad: Boolean) {
             viewModelScope.launch {
-                _apiState.emit(CommonApiState.Loading)  // 로딩 상태 전송
+                _apiState.emit(CommonUIState.Loading)  // 로딩 상태 전송
                 val state = when (val result = termsRepository.doJoin(platform.toString(), token, fcmToken, ad)) {
                     is ApiResult.Success -> {
                         val result = result.data
@@ -33,13 +33,13 @@ class TermsViewModel @Inject constructor(
                             saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
                             saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
                         }
-                         CommonApiState.Success(Unit)
+                         CommonUIState.Success(Unit)
                     }
                     is ApiResult.HttpError -> {
-                        CommonApiState.Error(result.error.error)
+                        CommonUIState.Error(result.error.error)
                     }
                     is ApiResult.Error -> {
-                        CommonApiState.Error(result.errorMessage)
+                        CommonUIState.Error(result.errorMessage)
                     }
                 }
                 _apiState.emit(state)

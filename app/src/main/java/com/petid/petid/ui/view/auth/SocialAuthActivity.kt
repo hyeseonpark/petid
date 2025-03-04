@@ -30,7 +30,7 @@ import com.petid.petid.R
 import com.petid.petid.databinding.ActivitySocialAuthBinding
 import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.state.LoginResult
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.main.MainActivity
@@ -40,7 +40,6 @@ import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.auth.SocialAuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -312,18 +311,18 @@ class SocialAuthActivity : BaseActivity() {
     private fun observesDoRestoreResultState() {
         lifecycleScope.launch {
             viewModel.restoreResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         Toast.makeText(
                             getGlobalContext(),
                             getString(R.string.success_restore), Toast.LENGTH_LONG).show()
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

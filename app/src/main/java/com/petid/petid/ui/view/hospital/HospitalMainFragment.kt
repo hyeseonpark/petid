@@ -24,7 +24,7 @@ import com.petid.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.petid.petid.common.Constants.LOCATION_SIGUNGU_TYPE
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.databinding.FragmentHospitalMainBinding
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.ui.view.common.flowTextWatcher
 import com.petid.petid.ui.view.hospital.adapter.HospitalListAdapter
@@ -82,7 +82,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
         )
 
         // 기존에 불러온 데이터가 없는 경우만 초기 데이터 불러오기
-        if(viewModel.hospitalApiState.value == CommonApiState.Init) {
+        if(viewModel.hospitalApiState.value == CommonUIState.Init) {
             // 위치 권한 확인
             if (ContextCompat.checkSelfPermission(
                     getGlobalContext(),
@@ -271,7 +271,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
         lifecycleScope.launch {
             viewModel.hospitalApiState.collectLatest { result ->
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         currentHospitalList = result.data
                         hospitalListAdapter.submitList(currentHospitalList)
 
@@ -282,12 +282,12 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                             })
                         binding.editTextSeacrh.text?.clear()
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
 
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
             }
         }

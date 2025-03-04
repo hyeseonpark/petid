@@ -6,7 +6,7 @@ import com.petid.domain.repository.HomeMainRepository
 import com.petid.domain.repository.MyInfoRepository
 import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -52,6 +52,6 @@ class HomeMainViewModelTest {
 
         // then
         val result = homeMainViewModel.getMemberInfoResult.first()
-        assertEquals(CommonApiState.Success(emptyEntity), result)
+        assertEquals(CommonUIState.Success(emptyEntity), result)
     }
 }

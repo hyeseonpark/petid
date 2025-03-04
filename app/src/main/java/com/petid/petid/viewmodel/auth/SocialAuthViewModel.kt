@@ -9,8 +9,8 @@ import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.common.Constants.SHARED_AUTH_PROVIDER
 import com.petid.petid.type.PlatformType
-import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.ui.state.CommonApiState.*
+import com.petid.petid.ui.state.CommonUIState
+import com.petid.petid.ui.state.CommonUIState.*
 import com.petid.petid.ui.state.LoginResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -32,7 +32,7 @@ class SocialAuthViewModel @Inject constructor(
     val loginResult = _loginResult.asSharedFlow()
 
     /* restore result state*/
-    private val _restoreResult = MutableSharedFlow<CommonApiState<Unit>>()
+    private val _restoreResult = MutableSharedFlow<CommonUIState<Unit>>()
     val restoreResult = _restoreResult.asSharedFlow()
 
     /**
