@@ -21,7 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class BlogMainViewModel @Inject constructor(
     private val blogMainRepository: BlogMainRepository,
-    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     // content api 결과값
@@ -54,12 +53,8 @@ class BlogMainViewModel @Inject constructor(
 
                     CommonUIState.Success(contentList)
                 }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _contentListApiState.emit(state)
         }
@@ -68,13 +63,10 @@ class BlogMainViewModel @Inject constructor(
     /**
      * 컨텐츠 이미지 가져오기
      */
-    private suspend fun getContentImage(filePath: String): String {
-        return try {
+    private suspend fun getContentImage(filePath: String): String =
+        runCatching{
             blogMainRepository.getContentImage(filePath)
-        } catch (e: Exception) {
-            ""
-        }
-    }
+        }.getOrDefault("")
 
     /**
      * 콘텐츠 좋아요 하기
@@ -83,15 +75,9 @@ class BlogMainViewModel @Inject constructor(
         viewModelScope.launch {
             _doLikeApiResult.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.doContentLike(contentId)) {
-                is ApiResult.Success -> {
-                    CommonUIState.Success(result.data)
-                }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _doLikeApiResult.emit(state)
         }
@@ -104,15 +90,9 @@ class BlogMainViewModel @Inject constructor(
         viewModelScope.launch {
             _doLikeApiResult.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.cancelContentLike(contentId)) {
-                is ApiResult.Success -> {
-                    CommonUIState.Success(result.data)
-                }
-                is ApiResult.HttpError -> {
-                    CommonUIState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonUIState.Error(result.errorMessage)
-                }
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _doLikeApiResult.emit(state)
         }
