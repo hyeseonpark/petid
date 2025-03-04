@@ -18,7 +18,7 @@ import com.petid.domain.usecase.UploadImageUseCase
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.common.Constants
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.util.toCompressedByteArray
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -40,7 +40,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
     var signImage : ByteArray? = null
     val memberId = getPreferencesControl().getIntValue(Constants.SHARED_MEMBER_ID_VALUE)
 
-    private val _registerPetResult = MutableStateFlow<CommonApiState<Unit>>(CommonApiState.Init)
+    private val _registerPetResult = MutableStateFlow<CommonUIState<Unit>>(CommonUIState.Init)
     val registerPetResult = _registerPetResult.asStateFlow()
 
     /**
@@ -48,16 +48,16 @@ class GeneratePetidSharedViewModel @Inject constructor(
      */
     private fun generatePetid() {
         viewModelScope.launch {
-            _registerPetResult.emit(CommonApiState.Loading)
+            _registerPetResult.emit(CommonUIState.Loading)
             val state = when (val result = petInfoRepository.registerPet(petInfo.build(true))) {
                 is ApiResult.Success -> {
-                    CommonApiState.Success(Unit)
+                    CommonUIState.Success(Unit)
                 }
                 is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
+                    CommonUIState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
+                    CommonUIState.Error(result.errorMessage)
                 }
             }
             _registerPetResult.emit(state)
@@ -69,7 +69,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
      */
     fun uploadImageFiles() {
         viewModelScope.launch {
-            _registerPetResult.emit(CommonApiState.Loading)
+            _registerPetResult.emit(CommonUIState.Loading)
 
             runCatching {
                 uploadImageUseCase(
@@ -83,7 +83,7 @@ class GeneratePetidSharedViewModel @Inject constructor(
                 generatePetid()
 
             }.onFailure {
-                _registerPetResult.emit(CommonApiState.Error(it.message))
+                _registerPetResult.emit(CommonUIState.Error(it.message))
             }
         }
     }

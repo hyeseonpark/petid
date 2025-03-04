@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.petid.domain.entity.CommonInfo
 import com.petid.petid.R
 import com.petid.petid.databinding.FragmentCommonInfoListBinding
-import com.petid.petid.type.ContentCategoryType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.ui.view.my.adapter.CommonInfoListAdapter
 import com.petid.petid.util.showErrorMessage
@@ -80,17 +79,17 @@ class CommonInfoListFragment
         private fun observeCurrentCommonInfoListState() {
             lifecycleScope.launch {
                 viewModel.commonInfoListApiState.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             commonInfoList = result.data
                             commonInfoListAdapter.submitList(commonInfoList)
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }

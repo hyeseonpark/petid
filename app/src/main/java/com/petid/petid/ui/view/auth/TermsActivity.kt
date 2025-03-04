@@ -8,7 +8,7 @@ import com.petid.petid.R
 import com.petid.petid.databinding.ActivityTermsBinding
 import com.petid.petid.util.setStyleSpan
 import com.petid.petid.type.PlatformType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
@@ -117,18 +117,18 @@ class TermsActivity : BaseActivity() {
     private fun setupJoinObservers() {
         lifecycleScope.launch {
             viewModel.apiState.collect { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val target = Intent(this@TermsActivity, SignupCompleteActivity::class.java)
                         startActivity(target)
                         finish()
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

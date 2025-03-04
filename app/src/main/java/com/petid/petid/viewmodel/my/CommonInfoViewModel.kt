@@ -1,6 +1,5 @@
 package com.petid.petid.viewmodel.my
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.domain.entity.CommonInfo
@@ -9,7 +8,7 @@ import com.petid.domain.repository.BlogMainRepository
 import com.petid.domain.repository.ContentDetailRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.type.ContentCategoryType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,14 +25,14 @@ class CommonInfoViewModel @Inject constructor(
     lateinit var categoryType: ContentCategoryType
 
     // content api 결과값
-    private val _commonInfoListApiState = MutableStateFlow<CommonApiState<List<CommonInfo>>>(
-        CommonApiState.Init
+    private val _commonInfoListApiState = MutableStateFlow<CommonUIState<List<CommonInfo>>>(
+        CommonUIState.Init
     )
     val commonInfoListApiState = _commonInfoListApiState.asStateFlow()
 
     // content api 결과값
-    private val _contentDetailApiState = MutableStateFlow<CommonApiState<ContentEntity>>(
-        CommonApiState.Init
+    private val _contentDetailApiState = MutableStateFlow<CommonUIState<ContentEntity>>(
+        CommonUIState.Init
     )
     val contentDetailApiState = _contentDetailApiState.asStateFlow()
 
@@ -42,11 +41,11 @@ class CommonInfoViewModel @Inject constructor(
      */
     fun getCommonInfoList() {
         viewModelScope.launch {
-            _commonInfoListApiState.emit(CommonApiState.Loading)
+            _commonInfoListApiState.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.getCommonInfoList(categoryType.toString())) {
-                is ApiResult.Success -> CommonApiState.Success(result.data)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _commonInfoListApiState.emit(state)
         }
@@ -57,11 +56,11 @@ class CommonInfoViewModel @Inject constructor(
      */
     fun getContentDetail() {
         viewModelScope.launch {
-            _contentDetailApiState.emit(CommonApiState.Loading)
+            _contentDetailApiState.emit(CommonUIState.Loading)
             val state = when (val result = contentDetailRepository.getContentDetail(contentId)) {
-                is ApiResult.Success -> CommonApiState.Success(result.data)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _contentDetailApiState.emit(state)
         }

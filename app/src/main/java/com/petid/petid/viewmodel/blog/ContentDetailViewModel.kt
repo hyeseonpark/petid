@@ -8,7 +8,7 @@ import com.petid.domain.repository.BlogMainRepository
 import com.petid.domain.repository.ContentDetailRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.type.ContentCategoryType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,40 +27,40 @@ class ContentDetailViewModel @Inject constructor(
     var contentId by Delegates.notNull<Int>()
 
     // content api 결과값
-    private val _contentDetailApiState = MutableStateFlow<CommonApiState<ContentEntity>>(
-        CommonApiState.Init
+    private val _contentDetailApiState = MutableStateFlow<CommonUIState<ContentEntity>>(
+        CommonUIState.Init
     )
     val contentDetailApiState = _contentDetailApiState.asStateFlow()
 
     // get all content list api 결과값
-    private val _allContentListApiState = MutableStateFlow<CommonApiState<List<ContentEntity>>>(
-        CommonApiState.Init
+    private val _allContentListApiState = MutableStateFlow<CommonUIState<List<ContentEntity>>>(
+        CommonUIState.Init
     )
     val allContentListApiState = _allContentListApiState.asStateFlow()
 
     // 좋아요 결과
-    private val _doLikeApiResult = MutableSharedFlow<CommonApiState<ContentLikeEntity>>()
-    val doLikeApiResult: SharedFlow<CommonApiState<ContentLikeEntity>> = _doLikeApiResult
+    private val _doLikeApiResult = MutableSharedFlow<CommonUIState<ContentLikeEntity>>()
+    val doLikeApiResult: SharedFlow<CommonUIState<ContentLikeEntity>> = _doLikeApiResult
 
     /**
      * 콘텐츠 내용 가져오기
      */
     fun getContentDetail() {
         viewModelScope.launch {
-            _contentDetailApiState.emit(CommonApiState.Loading)
+            _contentDetailApiState.emit(CommonUIState.Loading)
             val state = when (val result = contentDetailRepository.getContentDetail(contentId)) {
                 is ApiResult.Success -> {
                     val contentDetail = result.data
                     val updatedDetail = contentDetail.copy(
                         imageUrl = contentDetail.imageUrl?.let { getContentImage(it) } ?: ""
                     )
-                    CommonApiState.Success(updatedDetail)
+                    CommonUIState.Success(updatedDetail)
                 }
                 is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
+                    CommonUIState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
+                    CommonUIState.Error(result.errorMessage)
                 }
             }
             _contentDetailApiState.emit(state)
@@ -72,16 +72,16 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun doContentLike() {
         viewModelScope.launch {
-            _doLikeApiResult.emit(CommonApiState.Loading)
+            _doLikeApiResult.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.doContentLike(contentId)) {
                 is ApiResult.Success -> {
-                    CommonApiState.Success(result.data)
+                    CommonUIState.Success(result.data)
                 }
                 is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
+                    CommonUIState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
+                    CommonUIState.Error(result.errorMessage)
                 }
             }
             _doLikeApiResult.emit(state)
@@ -93,16 +93,16 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun cancelContentLike() {
         viewModelScope.launch {
-            _doLikeApiResult.emit(CommonApiState.Loading)
+            _doLikeApiResult.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.cancelContentLike(contentId)) {
                 is ApiResult.Success -> {
-                    CommonApiState.Success(result.data)
+                    CommonUIState.Success(result.data)
                 }
                 is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
+                    CommonUIState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
+                    CommonUIState.Error(result.errorMessage)
                 }
             }
             _doLikeApiResult.emit(state)
@@ -115,7 +115,7 @@ class ContentDetailViewModel @Inject constructor(
      */
     fun getAllContentList() {
         viewModelScope.launch {
-            _allContentListApiState.emit(CommonApiState.Loading)
+            _allContentListApiState.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.getContentList(ContentCategoryType.ALL.name)) {
                 is ApiResult.Success -> {
                     var contentList = result.data
@@ -128,13 +128,13 @@ class ContentDetailViewModel @Inject constructor(
                         item.copy(imageUrl = updatedImageUrl)
                     }
 
-                    CommonApiState.Success(contentList)
+                    CommonUIState.Success(contentList)
                 }
                 is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
+                    CommonUIState.Error(result.error.error)
                 }
                 is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
+                    CommonUIState.Error(result.errorMessage)
                 }
             }
             _allContentListApiState.emit(state)

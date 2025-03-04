@@ -9,8 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.credentials.ClearCredentialStateRequest
-import androidx.credentials.CredentialManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,10 +16,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentMyMainBinding
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.auth.SocialAuthActivity
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.PreferencesControl
@@ -29,15 +26,9 @@ import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
-import com.kakao.sdk.user.UserApiClient
-import com.navercorp.nid.NaverIdLoginSDK
-import com.petid.data.util.Constants.SHARED_VALUE_ACCESS_TOKEN
 import com.petid.petid.common.Constants.COMMON_CATEGORY_TYPE
 import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.util.petidNullDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -218,20 +209,20 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberInfoResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             with(result.data) {
                                 binding.apply {
                                     textViewUserName.text = name
                                 }
                             }
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -245,11 +236,11 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberImageResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             R.drawable.ic_mypage_icon.let {
                                 Glide
                                     .with(requireContext())
@@ -259,9 +250,9 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                                     .into(binding.imageViewProfile)
                             }
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -275,19 +266,19 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.doWithdrawResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.success_withdraw), Toast.LENGTH_LONG).show()
                             goSocialAuthActivity()
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -301,14 +292,14 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.doLogoutResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> goSocialAuthActivity()
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Success -> goSocialAuthActivity()
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
