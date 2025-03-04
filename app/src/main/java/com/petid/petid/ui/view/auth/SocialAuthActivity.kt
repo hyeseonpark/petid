@@ -31,7 +31,7 @@ import com.petid.petid.databinding.ActivitySocialAuthBinding
 import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonUIState
-import com.petid.petid.ui.state.LoginResult
+import com.petid.petid.ui.state.LoginUIState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.main.MainActivity
 import com.petid.petid.util.TAG
@@ -288,18 +288,18 @@ class SocialAuthActivity : BaseActivity() {
     private fun observesLoginResultState() {
         lifecycleScope.launch {
             viewModel.loginResult.collectLatest { result ->
-                if (result !is LoginResult.Loading)
+                if (result !is LoginUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is LoginResult.Success -> {
+                    is LoginUIState.Success -> {
                         goMainActivity()
                         Log.d(TAG, "Login successful: ${result.data}")
                     }
-                    is LoginResult.NeedToSignUp -> goTermsActivity()
-                    is LoginResult.TryToRestore -> showRestoreDialog()
-                    is LoginResult.Error -> showErrorMessage(result.message.toString())
-                    is LoginResult.Loading -> showLoading()
+                    is LoginUIState.NeedToSignUp -> goTermsActivity()
+                    is LoginUIState.TryToRestore -> showRestoreDialog()
+                    is LoginUIState.Error -> showErrorMessage(result.message.toString())
+                    is LoginUIState.Loading -> showLoading()
                 }
             }
         }
