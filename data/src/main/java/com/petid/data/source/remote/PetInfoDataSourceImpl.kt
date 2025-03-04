@@ -3,8 +3,8 @@ package com.petid.data.source.remote
 import com.petid.data.api.PetAPI
 import com.petid.data.dto.request.FilePathRequest
 import com.petid.data.dto.request.PetRequest
+import com.petid.data.dto.request.PetUpdateRequest
 import com.petid.data.dto.response.PetDetailsResponse
-import com.petid.domain.entity.PetUpdateEntity
 import javax.inject.Inject
 
 class PetInfoDataSourceImpl @Inject constructor(
@@ -22,7 +22,7 @@ class PetInfoDataSourceImpl @Inject constructor(
 
     override suspend fun updatePetInfo(
         petId: Long,
-        updatePetInfo: PetUpdateEntity
+        updatePetInfo: PetUpdateRequest
     ): Unit =
         petAPI.updatePetInfo(petId, updatePetInfo)
 
