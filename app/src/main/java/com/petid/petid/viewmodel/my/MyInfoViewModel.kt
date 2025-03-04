@@ -22,7 +22,7 @@ import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
 import com.petid.petid.common.Constants.SHARED_AUTH_PROVIDER
 import com.petid.petid.type.PlatformType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,34 +45,34 @@ class MyInfoViewModel @Inject constructor(
     var memberImageFileName: String? = null
 
     /* Member info result */
-    private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
-        CommonApiState.Init
+    private val _getMemberInfoResult = MutableStateFlow<CommonUIState<MemberInfoEntity>>(
+        CommonUIState.Init
     )
     val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
 
     /* Member info update result */
-    private val _updateMemberInfoResult = MutableSharedFlow<CommonApiState<Unit>>()
+    private val _updateMemberInfoResult = MutableSharedFlow<CommonUIState<Unit>>()
     val updateMemberInfoResult = _updateMemberInfoResult.asSharedFlow()
 
 
     /* image result: S3 */
-    private val _getMemberImageResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Init)
+    private val _getMemberImageResult = MutableStateFlow<CommonUIState<String>>(CommonUIState.Init)
     val getMemberImageResult = _getMemberImageResult.asStateFlow()
 
     /* S3 사진 upload result */
-    private val _uploadS3Result = MutableSharedFlow<CommonApiState<Unit>>()
+    private val _uploadS3Result = MutableSharedFlow<CommonUIState<Unit>>()
     val uploadS3Result = _uploadS3Result.asSharedFlow()
 
     /* 서버 사진 update result */
-    private val _updateMemberPhotoResult = MutableStateFlow<CommonApiState<String>>(CommonApiState.Init)
+    private val _updateMemberPhotoResult = MutableStateFlow<CommonUIState<String>>(CommonUIState.Init)
     val updateMemberPhotoResult = _updateMemberPhotoResult.asStateFlow()
 
     /* 로그아웃 result */
-    private val _doLogoutResult = MutableSharedFlow<CommonApiState<Unit>>()
+    private val _doLogoutResult = MutableSharedFlow<CommonUIState<Unit>>()
     val doLogoutResult = _doLogoutResult.asSharedFlow()
 
     /* 회원 탈퇴 result */
-    private val _doWithdrawResult = MutableSharedFlow<CommonApiState<Unit>>()
+    private val _doWithdrawResult = MutableSharedFlow<CommonUIState<Unit>>()
     val doWithdrawResult = _doWithdrawResult.asSharedFlow()
 
     /**
@@ -81,7 +81,7 @@ class MyInfoViewModel @Inject constructor(
     fun getMemberInfo() {
         // TODO 1. moshi, 2.stateIn()
         viewModelScope.launch {
-            _getMemberInfoResult.emit(CommonApiState.Loading)
+            _getMemberInfoResult.emit(CommonUIState.Loading)
             val state = when (val result = myInfoRepository.getMemberInfo()) {
                 is ApiResult.Success -> {
                     val memberInfo = result.data
@@ -91,10 +91,10 @@ class MyInfoViewModel @Inject constructor(
                         getMemberImage(it)
                     }
 
-                    CommonApiState.Success(memberInfo)
+                    CommonUIState.Success(memberInfo)
                 }
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getMemberInfoResult.emit(state)
         }
@@ -105,11 +105,11 @@ class MyInfoViewModel @Inject constructor(
      */
     private fun getMemberImage(imageUrl: String) {
         viewModelScope.launch {
-            _getMemberImageResult.emit(CommonApiState.Loading)
+            _getMemberImageResult.emit(CommonUIState.Loading)
             val state = when (val result = myInfoRepository.getProfileImageUrl(imageUrl)) {
-                is ApiResult.Success -> CommonApiState.Success(result.data)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getMemberImageResult.emit(state)
         }
@@ -120,17 +120,17 @@ class MyInfoViewModel @Inject constructor(
      */
     fun uploadFile(file: ByteArray, fileName: String) {
         viewModelScope.launch {
-            _uploadS3Result.emit(CommonApiState.Loading)
+            _uploadS3Result.emit(CommonUIState.Loading)
             runCatching {
                 uploadImageUseCase(
                     imagePath = fileName,
                     profileImage = file,
                 ).collectLatest {
-                    _uploadS3Result.emit(CommonApiState.Success(Unit))
+                    _uploadS3Result.emit(CommonUIState.Success(Unit))
                 }
             }.onFailure { e ->
                 e.sendCrashlytics()
-                _uploadS3Result.emit(CommonApiState.Error(e.message))
+                _uploadS3Result.emit(CommonUIState.Error(e.message))
             }
         }
     }
@@ -140,11 +140,11 @@ class MyInfoViewModel @Inject constructor(
      */
     fun updateMemberPhoto(filePath: String) {
         viewModelScope.launch {
-            _updateMemberPhotoResult.emit(CommonApiState.Loading)
+            _updateMemberPhotoResult.emit(CommonUIState.Loading)
             val state = when (val result = myInfoRepository.updateMemberPhoto(filePath)) {
-                is ApiResult.Success -> CommonApiState.Success(result.data)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _updateMemberPhotoResult.emit(state)
         }
@@ -155,11 +155,11 @@ class MyInfoViewModel @Inject constructor(
      */
     fun updateMemberInfo(address: String, addressDetails: String, phone: String) {
         viewModelScope.launch {
-            _updateMemberInfoResult.emit(CommonApiState.Loading)
+            _updateMemberInfoResult.emit(CommonUIState.Loading)
             val state = when (val result = myInfoRepository.updateMemberInfo(address, addressDetails, phone)) {
-                is ApiResult.Success -> CommonApiState.Success(Unit)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.Success -> CommonUIState.Success(Unit)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _updateMemberInfoResult.emit(state)
         }
@@ -170,7 +170,7 @@ class MyInfoViewModel @Inject constructor(
      */
     fun doLogout() {
         viewModelScope.launch{
-            _doLogoutResult.emit(CommonApiState.Loading)
+            _doLogoutResult.emit(CommonUIState.Loading)
             val authProvider = getPreferencesControl().getStringValue(SHARED_AUTH_PROVIDER)
 
             runCatching {
@@ -198,9 +198,9 @@ class MyInfoViewModel @Inject constructor(
                     clear()
                     saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
                 }
-                _doLogoutResult.emit(CommonApiState.Success(Unit))
+                _doLogoutResult.emit(CommonUIState.Success(Unit))
             }.onFailure { exception ->
-                _doLogoutResult.emit(CommonApiState.Error(exception.message ?: "로그아웃 실패"))
+                _doLogoutResult.emit(CommonUIState.Error(exception.message ?: "로그아웃 실패"))
             }
         }
     }
@@ -210,7 +210,7 @@ class MyInfoViewModel @Inject constructor(
      */
     fun doWithdrawSocialAuth() {
         viewModelScope.launch{
-            _doLogoutResult.emit(CommonApiState.Loading)
+            _doLogoutResult.emit(CommonUIState.Loading)
             val authProvider = getPreferencesControl().getStringValue(SHARED_AUTH_PROVIDER)
 
             val result = runCatching {
@@ -237,7 +237,7 @@ class MyInfoViewModel @Inject constructor(
                     null -> throw Exception("로그인된 플랫폼이 없음")
                 }
             }.onFailure { exception ->
-                _doLogoutResult.emit(CommonApiState.Error(exception.message ?: "회원탈퇴 실패"))
+                _doLogoutResult.emit(CommonUIState.Error(exception.message ?: "회원탈퇴 실패"))
             }
 
             if (result.isSuccess) {
@@ -245,7 +245,7 @@ class MyInfoViewModel @Inject constructor(
                     clear()
                     saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
                 }
-                _doLogoutResult.emit(CommonApiState.Success(Unit))
+                _doLogoutResult.emit(CommonUIState.Success(Unit))
             }
         }
     }

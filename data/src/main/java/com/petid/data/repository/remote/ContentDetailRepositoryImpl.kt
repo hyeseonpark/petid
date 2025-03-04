@@ -1,6 +1,7 @@
 package com.petid.data.repository.remote
 
 import com.petid.data.source.remote.ContentDetailRemoteDataSource
+import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.ContentEntity
 import com.petid.domain.repository.ContentDetailRepository
 import com.petid.domain.util.ApiResult
@@ -12,5 +13,7 @@ class ContentDetailRepositoryImpl @Inject constructor(
     private val remoteDataSource: ContentDetailRemoteDataSource,
 ): ContentDetailRepository {
     override suspend fun getContentDetail(contentId: Int): ApiResult<ContentEntity> =
-        remoteDataSource.getContentDetail(contentId)
+        runCatching {
+            remoteDataSource.getContentDetail(contentId).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 }

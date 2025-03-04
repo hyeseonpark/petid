@@ -13,7 +13,7 @@ import com.petid.domain.repository.PetInfoRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.common.Constants.BANNER_TYPE_CONTENT
 import com.petid.petid.common.Constants.BANNER_TYPE_MAIN
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -31,8 +31,8 @@ class HomeMainViewModel @Inject constructor(
 ): ViewModel() {
 
     /* 읽지 않은 notification 여부 상태값*/
-    private val _unchekedNotifcationState = MutableStateFlow<CommonApiState<Boolean>>(
-        CommonApiState.Init
+    private val _unchekedNotifcationState = MutableStateFlow<CommonUIState<Boolean>>(
+        CommonUIState.Init
     )
     val unchekedNotifcationState = _unchekedNotifcationState.asStateFlow()
 
@@ -43,10 +43,10 @@ class HomeMainViewModel @Inject constructor(
         viewModelScope.launch {
             val state = when (val result = notificationRepository.hasUncheckedNotification()) {
                 is DBResult.Success -> {
-                    CommonApiState.Success(result.data)
+                    CommonUIState.Success(result.data)
                 }
                 is DBResult.Error -> {
-                    CommonApiState.Error(result.exception.message)
+                    CommonUIState.Error(result.exception.message)
                 }
             }
             _unchekedNotifcationState.emit(state)
@@ -54,14 +54,14 @@ class HomeMainViewModel @Inject constructor(
     }
 
     /* banner 상태값 */
-    private val _mainBannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
-        CommonApiState.Init
+    private val _mainBannerApiState = MutableStateFlow<CommonUIState<List<BannerEntity>>>(
+        CommonUIState.Init
     )
     val mainBannerApiState = _mainBannerApiState.asStateFlow()
 
     /* 상태값: Content Banner */
-    private val _contentBannerApiState = MutableStateFlow<CommonApiState<List<BannerEntity>>>(
-        CommonApiState.Init
+    private val _contentBannerApiState = MutableStateFlow<CommonUIState<List<BannerEntity>>>(
+        CommonUIState.Init
     )
     val contentBannerApiState = _contentBannerApiState.asStateFlow()
 
@@ -89,12 +89,12 @@ class HomeMainViewModel @Inject constructor(
      */
     private fun fetchBannerList(
         type: String,
-        bannerApiState: MutableStateFlow<CommonApiState<List<BannerEntity>>>
+        bannerApiState: MutableStateFlow<CommonUIState<List<BannerEntity>>>
     ) {
         viewModelScope.launch {
-            if(bannerApiState.value != CommonApiState.Init) return@launch
+            if(bannerApiState.value != CommonUIState.Init) return@launch
 
-            bannerApiState.emit(CommonApiState.Loading)
+            bannerApiState.emit(CommonUIState.Loading)
             val state = when (val result = homeMainRepository.getBannerList(type)) {
                 is ApiResult.Success -> {
                     result.data
@@ -103,10 +103,10 @@ class HomeMainViewModel @Inject constructor(
                             val updatedImageUrl = getBannerImage(item.imageUrl)
                             item.copy(imageUrl = updatedImageUrl)
                         }
-                        .let { CommonApiState.Success(it) }
+                        .let { CommonUIState.Success(it) }
                 }
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             bannerApiState.emit(state)
         }
@@ -124,8 +124,8 @@ class HomeMainViewModel @Inject constructor(
     }
 
     /* member 정보 가져오기 result*/
-    private val _getMemberInfoResult = MutableStateFlow<CommonApiState<MemberInfoEntity>>(
-        CommonApiState.Init
+    private val _getMemberInfoResult = MutableStateFlow<CommonUIState<MemberInfoEntity>>(
+        CommonUIState.Init
     )
     val getMemberInfoResult = _getMemberInfoResult.asStateFlow()
 
@@ -134,25 +134,21 @@ class HomeMainViewModel @Inject constructor(
      */
     fun getMemberInfo() {
         viewModelScope.launch {
-            _getMemberInfoResult.emit(CommonApiState.Loading)
+            _getMemberInfoResult.emit(CommonUIState.Loading)
             val state = when (val result = myInfoRepository.getMemberInfo()) {
                 is ApiResult.Success -> {
                     val memberInfo = result.data
-                    CommonApiState.Success(memberInfo)
+                    CommonUIState.Success(memberInfo)
                 }
-                is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getMemberInfoResult.emit(state)
         }
     }
 
-    private val _getPetDetailsResult = MutableStateFlow<CommonApiState<PetDetailsEntity>>(
-        CommonApiState.Init
+    private val _getPetDetailsResult = MutableStateFlow<CommonUIState<PetDetailsEntity>>(
+        CommonUIState.Init
     )
     val getPetDetailsResult = _getPetDetailsResult.asStateFlow()
 
@@ -161,27 +157,23 @@ class HomeMainViewModel @Inject constructor(
      */
     fun getPetDetails(petId: Long) {
         viewModelScope.launch {
-            _getPetDetailsResult.emit(CommonApiState.Loading)
+            _getPetDetailsResult.emit(CommonUIState.Loading)
             val state = when (val result = petInfoRepository.getPetDetails(petId)) {
                 is ApiResult.Success -> {
                     var petDetails = result.data
                     getPetImageUrl(petDetails.petImages.first().imagePath)
-                    CommonApiState.Success(petDetails)
+                    CommonUIState.Success(petDetails)
                 }
-                is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
-                }
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getPetDetailsResult.emit(state)
         }
     }
 
     /* 펫 이미지 가져오기 결과*/
-    private val _getPetImageUrlResult = MutableStateFlow<CommonApiState<String>>(
-        CommonApiState.Init
+    private val _getPetImageUrlResult = MutableStateFlow<CommonUIState<String>>(
+        CommonUIState.Init
     )
     val getPetImageUrlResult = _getPetImageUrlResult.asStateFlow()
 
@@ -190,17 +182,11 @@ class HomeMainViewModel @Inject constructor(
      */
     private fun getPetImageUrl(filePath: String) {
         viewModelScope.launch {
-            _getPetImageUrlResult.emit(CommonApiState.Loading)
+            _getPetImageUrlResult.emit(CommonUIState.Loading)
             val state = when (val result = petInfoRepository.getPetImageUrl(filePath)) {
-                is ApiResult.Success -> {
-                    CommonApiState.Success(result.data)
-                }
-                is ApiResult.HttpError -> {
-                    CommonApiState.Error(result.error.error)
-                }
-                is ApiResult.Error -> {
-                    CommonApiState.Error(result.errorMessage)
-                }
+                is ApiResult.Success -> CommonUIState.Success(result.data)
+                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _getPetImageUrlResult.emit(state)
         }

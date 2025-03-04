@@ -12,7 +12,7 @@ import com.petid.petid.R
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentMyInfoUpdateBinding
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BundleKeys
 import com.petid.petid.util.addPhoneNumberFormatting
 import com.petid.petid.util.showErrorMessage
@@ -89,11 +89,11 @@ class MyInfoUpdateFragment
     private fun observeGetMemberInfoState() {
         lifecycleScope.launch {
             viewModel.getMemberInfoResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         with(result.data) {
                             binding.editTextName.setText(name)
                             binding.editTextPhone.setText(phone)
@@ -101,9 +101,9 @@ class MyInfoUpdateFragment
                             binding.editTextAddressDetail.setText(addressDetails)
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -132,16 +132,16 @@ class MyInfoUpdateFragment
     private fun observeUpdateMemberInfoState() {
         lifecycleScope.launch {
             viewModel.updateMemberInfoResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

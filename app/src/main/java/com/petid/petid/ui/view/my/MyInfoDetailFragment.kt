@@ -2,12 +2,9 @@ package com.petid.petid.ui.view.my
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,14 +18,12 @@ import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentMyInfoDetailBinding
-import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.util.TAG
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.my.MyInfoViewModel
 import com.bumptech.glide.Glide
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.util.toCompressedByteArray
-import com.petid.petid.util.toFile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -134,11 +129,11 @@ class MyInfoDetailFragment
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberInfoResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             with(result.data) {
                                 binding.apply {
                                     textViewName.text = name
@@ -150,9 +145,9 @@ class MyInfoDetailFragment
                                 }
                             }
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -165,18 +160,18 @@ class MyInfoDetailFragment
     private fun observeGetMemberImage() {
         lifecycleScope.launch {
             viewModel.getMemberImageResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         result.data.let {
                             Glide.with(requireContext()).load(it).into(binding.imageViewProfile)
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -188,16 +183,16 @@ class MyInfoDetailFragment
     private fun observeUploadS3ResultState() {
         lifecycleScope.launch {
             viewModel.uploadS3Result.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         viewModel.updateMemberPhoto(viewModel.memberImageFileName!!)
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -209,16 +204,16 @@ class MyInfoDetailFragment
     private fun observeUpdateMemberPhotoResultState() {
         lifecycleScope.launch {
             viewModel.updateMemberPhotoResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         viewModel.getMemberInfo()
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

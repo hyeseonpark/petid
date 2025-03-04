@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,7 @@ import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.CHIP_TYPE
 import com.petid.petid.databinding.FragmentHomeMainBinding
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.blog.ContentDetailActivity
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.ui.view.generate.GeneratePetidMainActivity
@@ -315,17 +314,17 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.mainBannerApiState.collect { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             val bannerList = result.data
                             handleMainBannerResult(bannerList)
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -339,17 +338,17 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contentBannerApiState.collect { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             val bannerList = result.data
                             handleContentBannerResult(bannerList)
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -362,11 +361,11 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun observeGetMemberInfoState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getMemberInfoResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val memberResult = result.data
 
                         getPreferencesControl().saveIntValue(Constants.SHARED_MEMBER_ID_VALUE, memberResult.memberId)
@@ -393,9 +392,9 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                             }
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -407,11 +406,11 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun observeGetPetInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collect { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         with(result.data) {
                             setPetidCardType(chipType)
                             getPreferencesControl().saveStringValue(Constants.SHARED_PET_CHIP_TYPE, chipType)
@@ -435,9 +434,9 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
                             }
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -449,19 +448,19 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
     private fun observeGetPetImageUrlState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getPetImageUrlResult.collect { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         Glide.with(requireContext())
                             .load(result.data)
                             .error(R.color.d9)
                             .into(binding.imageViewCardPetPhoto)
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -474,7 +473,7 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.unchekedNotifcationState.collect { result ->
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val image = when(result.data) {
                             true -> R.drawable.ic_home_noti_alert
                             false -> R.drawable.ic_home_noti_default
@@ -482,9 +481,9 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
 
                         binding.imageViewNoti.setImageResource(image)
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> {}
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> {}
+                    is CommonUIState.Init -> {}
                 }
             }
         }

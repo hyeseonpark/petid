@@ -9,6 +9,7 @@ data class PetAppearanceResponse(
     val weight: Double,
     val hairLength: String,
 )
+
 fun PetAppearanceResponse.toDomain() = PetAppearanceEntity(
     appearanceId = appearanceId,
     breed = breed,

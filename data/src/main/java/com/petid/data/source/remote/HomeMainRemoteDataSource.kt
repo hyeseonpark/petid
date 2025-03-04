@@ -1,9 +1,8 @@
 package com.petid.data.source.remote
 
-import com.petid.domain.entity.BannerEntity
-import com.petid.domain.util.ApiResult
+import com.petid.data.dto.response.BannerResponse
 
 interface HomeMainRemoteDataSource {
-    suspend fun getBannerList(type: String): ApiResult<List<BannerEntity>>
-    suspend fun getBannerImage(imagePath: String): ApiResult<String>
+    suspend fun getBannerList(type: String): List<BannerResponse>
+    suspend fun getBannerImage(imagePath: String): String
 }

@@ -1,6 +1,8 @@
 package com.petid.data.repository.remote
 
+import com.petid.data.dto.response.toDomain
 import com.petid.data.source.remote.TermsRemoteDataSource
+import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.AuthEntity
 import com.petid.domain.repository.TermsRepository
 import com.petid.domain.util.ApiResult
@@ -13,5 +15,7 @@ class TermsRepositoryImpl @Inject constructor(
 ) : TermsRepository{
     override suspend fun doJoin(platform: String, token: String, fcmToken: String, ad: Boolean
     ): ApiResult<AuthEntity> =
-        remoteDataSource.doJoin(platform, token, fcmToken, ad)
+        runCatching {
+            remoteDataSource.doJoin(platform, token, fcmToken, ad).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 }

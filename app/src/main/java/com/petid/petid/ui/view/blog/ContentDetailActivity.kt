@@ -16,7 +16,7 @@ import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.R
 import com.petid.petid.databinding.ActivityContentDetailBinding
 import com.petid.petid.type.ContentCategoryType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.formatDateFormat
@@ -95,11 +95,11 @@ class ContentDetailActivity : BaseActivity() {
     private fun observeGetContentDetailState() {
         lifecycleScope.launch {
             viewModel.contentDetailApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val result = result.data
 
                         with(binding) {
@@ -173,9 +173,9 @@ class ContentDetailActivity : BaseActivity() {
                         }
                     }
 
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -187,11 +187,11 @@ class ContentDetailActivity : BaseActivity() {
     private fun observeDoLikeState() {
         lifecycleScope.launch {
             viewModel.doLikeApiResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val resultData = result.data
 
                         binding.buttonContentLike.isSelected = !binding.buttonContentLike.isSelected
@@ -203,9 +203,9 @@ class ContentDetailActivity : BaseActivity() {
 
                     }
 
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -216,11 +216,11 @@ class ContentDetailActivity : BaseActivity() {
     private fun observeCurrentContentListState() {
         lifecycleScope.launch {
             viewModel.allContentListApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val allContentList = result.data
 
                         if (allContentList.isNotEmpty()) {
@@ -233,9 +233,9 @@ class ContentDetailActivity : BaseActivity() {
                         }
                     }
 
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
