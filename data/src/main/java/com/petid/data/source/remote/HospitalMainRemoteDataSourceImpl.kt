@@ -4,11 +4,6 @@ import com.petid.data.api.HospitalAPI
 import com.petid.data.api.LocationAPI
 import com.petid.data.dto.response.HospitalResponse
 import com.petid.data.dto.response.LocationResponse
-import com.petid.data.dto.response.toDomain
-import com.petid.domain.entity.HospitalEntity
-import com.petid.domain.entity.LocationEntity
-import com.petid.domain.util.ApiResult
-import com.petid.data.util.mapApiResult
 import com.petid.data.util.nullToEmpty
 import javax.inject.Inject
 import javax.inject.Singleton

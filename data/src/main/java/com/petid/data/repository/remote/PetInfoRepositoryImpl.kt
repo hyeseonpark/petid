@@ -37,7 +37,7 @@ class PetInfoRepositoryImpl @Inject constructor(
         updatePetInfo: PetUpdateEntity
     ): ApiResult<Unit> =
         runCatching {
-            petInfoDataSource.updatePetInfo(petId, updatePetInfo)
+            petInfoDataSource.updatePetInfo(petId, updatePetInfo.toDto())
         }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun updatePetPhoto(
