@@ -1,6 +1,6 @@
 package com.petid.data.source.remote
 
-import com.petid.data.api.HosptialAPI
+import com.petid.data.api.HospitalAPI
 import com.petid.data.dto.request.HospitalOrderRequest
 import com.petid.data.dto.response.HospitalOrderResponse
 import javax.inject.Inject
@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ReservationCalendarRemoteDataSourceImpl @Inject constructor(
-    private val hospitalAPI: HosptialAPI
+    private val hospitalAPI: HospitalAPI
 ): ReservationCalendarRemoteDataSource {
     override suspend fun getHospitalOrderTimeList(
         hospitalId: Int,

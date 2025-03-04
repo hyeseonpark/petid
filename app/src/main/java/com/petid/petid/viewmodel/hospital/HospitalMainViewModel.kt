@@ -262,13 +262,10 @@ class HospitalMainViewModel @Inject constructor(
     /**
      * 병원 이미지 가져오기
      */
-    private suspend fun getHospitalImage(filePath: String): String {
-        return try {
+    private suspend fun getHospitalImage(filePath: String): String =
+        runCatching {
             hospitalMainRepository.getHospitalImageUrl(filePath)
-        } catch (e: Exception) {
-            ""
-        }
-    }
+        }.getOrDefault("")
 
     /**
      * 현재 위치 가져오기

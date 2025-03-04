@@ -1,9 +1,8 @@
 package com.petid.data.source.remote
 
-import com.petid.domain.entity.HospitalOrderDetailEntity
-import com.petid.domain.util.ApiResult
+import com.petid.data.dto.response.HospitalOrderDetailResponse
 
 interface ReservationHistoryInfoRemoteDataSource {
-    suspend fun getHospitalReservationHistoryList(status: String): ApiResult<List<HospitalOrderDetailEntity>>
-    suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int>
+    suspend fun getHospitalReservationHistoryList(status: String): List<HospitalOrderDetailResponse>
+    suspend fun cancelHospitalReservation(orderId: Int): Int
 }
