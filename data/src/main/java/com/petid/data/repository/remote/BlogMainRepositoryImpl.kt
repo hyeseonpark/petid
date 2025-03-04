@@ -1,6 +1,7 @@
 package com.petid.data.repository.remote
 
 import com.petid.data.api.ContentAPI
+import com.petid.data.dto.response.toDomain
 import com.petid.data.source.remote.BlogMainRemoteDataSource
 import com.petid.domain.entity.CommonInfo
 import com.petid.domain.entity.ContentEntity
