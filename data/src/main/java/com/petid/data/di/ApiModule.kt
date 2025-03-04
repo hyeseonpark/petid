@@ -8,7 +8,7 @@ import com.petid.data.api.AuthAuthenticator
 import com.petid.data.api.AuthInterceptor
 import com.petid.data.api.BannerAPI
 import com.petid.data.api.ContentAPI
-import com.petid.data.api.HosptialAPI
+import com.petid.data.api.HospitalAPI
 import com.petid.data.api.LocationAPI
 import com.petid.data.api.LoggingInterceptor
 import com.petid.data.api.MemberAPI
@@ -102,8 +102,8 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideHosptialAPI(retrofit: Retrofit): HosptialAPI {
-        return retrofit.create(HosptialAPI::class.java)
+    fun provideHosptialAPI(retrofit: Retrofit): HospitalAPI {
+        return retrofit.create(HospitalAPI::class.java)
     }
 
     @Provides

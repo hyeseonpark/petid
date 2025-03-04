@@ -20,7 +20,7 @@ import com.petid.petid.R
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.common.Constants.DAYS_OF_WEEK
 import com.petid.petid.databinding.FragmentReservationCalendarBinding
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.hospital.HospitalViewModel
 import com.google.android.material.chip.Chip
@@ -30,7 +30,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -179,11 +178,11 @@ class ReservationCalendarFragment:
     private fun observeHospitalOrderTimeList() {
         lifecycleScope.launch {
             viewModel.hospitalOrderTimeApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when(result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val orderTimeList = result.data
 
                         with(binding) {
@@ -202,9 +201,9 @@ class ReservationCalendarFragment:
                             }
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -216,17 +215,17 @@ class ReservationCalendarFragment:
     private fun observeCreateHospitalOrder() {
         lifecycleScope.launch {
             viewModel.createHospitalOrderApiState.collect { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when(result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         findNavController().navigate(
                             R.id.action_reservationCalendarFragment_to_reservationProcessFinishFragment)
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

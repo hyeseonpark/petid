@@ -1,16 +1,14 @@
 package com.petid.petid.viewmodel.hospital
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.HospitalOrderEntity
 import com.petid.domain.repository.ReservationCalendarRepository
 import com.petid.domain.util.ApiResult
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -37,16 +35,16 @@ class HospitalViewModel @Inject constructor(
     /**
      * 예약 가능 시간 목록 state
      */
-    private val _hospitalOrderTimeApiState = MutableStateFlow<CommonApiState<List<String>>>(
-        CommonApiState.Init
+    private val _hospitalOrderTimeApiState = MutableStateFlow<CommonUIState<List<String>>>(
+        CommonUIState.Init
     )
     val hospitalOrderTimeApiState = _hospitalOrderTimeApiState.asStateFlow()
 
     /**
      * 예약 생성 state
      */
-    private val _createHospitalOrderApiState = MutableStateFlow<CommonApiState<HospitalOrderEntity>>(
-        CommonApiState.Init
+    private val _createHospitalOrderApiState = MutableStateFlow<CommonUIState<HospitalOrderEntity>>(
+        CommonUIState.Init
     )
     val createHospitalOrderApiState = _createHospitalOrderApiState.asStateFlow()
 
@@ -57,12 +55,12 @@ class HospitalViewModel @Inject constructor(
      */
     fun getHospitalOrderTimeList() {
         viewModelScope.launch {
-            _hospitalOrderTimeApiState.emit(CommonApiState.Loading)
+            _hospitalOrderTimeApiState.emit(CommonUIState.Loading)
             val state = when(val result =
                 reservationCalendarRepository.getHospitalOrderTimeList(hospitalId, day, dateStr)) {
-                    is ApiResult.Success -> CommonApiState.Success(result.data)
-                    is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                    is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
+                    is ApiResult.Success -> CommonUIState.Success(result.data)
+                    is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                    is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
             }
             _hospitalOrderTimeApiState.emit(state)
         }
@@ -73,15 +71,17 @@ class HospitalViewModel @Inject constructor(
      */
     fun createHospitalOrder() {
         viewModelScope.launch {
-            _createHospitalOrderApiState.emit(CommonApiState.Loading)
+            _createHospitalOrderApiState.emit(CommonUIState.Loading)
             val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
             val formatDateTime = sdf.format(selectedDateTime)
-            val state = when(val result = reservationCalendarRepository.createHospitalOrder(
-                hospitalId, formatDateTime)) {
-                is ApiResult.Success -> CommonApiState.Success(result.data)
-                is ApiResult.HttpError -> CommonApiState.Error(result.error.error)
-                is ApiResult.Error -> CommonApiState.Error(result.errorMessage)
-            }
+
+            val data = HospitalOrderEntity(hospitalId, formatDateTime)
+            val state =
+                when(val result = reservationCalendarRepository.createHospitalOrder(data)) {
+                    is ApiResult.Success -> CommonUIState.Success(result.data)
+                    is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
+                    is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
+                }
             _createHospitalOrderApiState.emit(state)
         }
     }

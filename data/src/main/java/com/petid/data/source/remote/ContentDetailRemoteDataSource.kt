@@ -1,9 +1,7 @@
 package com.petid.data.source.remote
 
-import com.petid.domain.entity.ContentEntity
-import com.petid.domain.util.ApiResult
+import com.petid.data.dto.response.ContentResponse
 
 interface ContentDetailRemoteDataSource {
-    suspend fun getContentDetail(contentId: Int): ApiResult<ContentEntity>
-    // suspend fun getHospitalListByLocation()
+    suspend fun getContentDetail(contentId: Int): ContentResponse
 }

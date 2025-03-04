@@ -18,7 +18,7 @@ import com.petid.petid.R
 import com.petid.petid.common.Constants.CHIP_TYPE
 import com.petid.petid.databinding.FragmentPetInfoDetailBinding
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
@@ -138,11 +138,11 @@ class PetInfoDetailFragment
     private fun observeGetPetInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         with(result.data) {
                             binding.apply {
                                 textViewName.text = petName
@@ -167,9 +167,9 @@ class PetInfoDetailFragment
                             }
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -182,11 +182,11 @@ class PetInfoDetailFragment
     private fun observeGetPetImageState() {
         lifecycleScope.launch {
             viewModel.getPetImageUrlResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         R.color.d9.let {
                             Glide.with(requireContext())
                                 .load(result.data)
@@ -195,9 +195,9 @@ class PetInfoDetailFragment
                                 .into(binding.imageViewProfile)
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -209,14 +209,14 @@ class PetInfoDetailFragment
     private fun observeUpdatePetPhotoState() {
         lifecycleScope.launch {
             viewModel.updatePetPhotoResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> viewModel.getPetDetails()
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Success -> viewModel.getPetDetails()
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

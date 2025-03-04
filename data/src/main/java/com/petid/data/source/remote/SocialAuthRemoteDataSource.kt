@@ -1,9 +1,8 @@
 package com.petid.data.source.remote
 
-import com.petid.domain.entity.AuthEntity
-import com.petid.domain.util.ApiResult
+import com.petid.data.dto.response.AuthResponse
 
 interface SocialAuthRemoteDataSource {
-        suspend fun getLogin(sub: String, fcmToken: String): ApiResult<AuthEntity>
-        suspend fun doRestore(): ApiResult<Unit>
+        suspend fun getLogin(sub: String, fcmToken: String): AuthResponse
+        suspend fun doRestore(): Unit
 }

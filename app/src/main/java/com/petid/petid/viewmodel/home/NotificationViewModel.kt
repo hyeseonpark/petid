@@ -5,8 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.petid.data.repository.local.DBResult
 import com.petid.data.repository.local.NotificationRepository
 import com.petid.data.source.local.entity.NotificationEntity
-import com.petid.domain.entity.BannerEntity
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,8 +16,8 @@ import javax.inject.Inject
 class NotificationViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
 ): ViewModel() {
-    private val _notificationListState = MutableStateFlow<CommonApiState<List<NotificationEntity>>>(
-        CommonApiState.Init
+    private val _notificationListState = MutableStateFlow<CommonUIState<List<NotificationEntity>>>(
+        CommonUIState.Init
     )
     val notificationListState = _notificationListState.asStateFlow()
 
@@ -30,10 +29,10 @@ class NotificationViewModel @Inject constructor(
             val state = when(val result = notificationRepository.getNotifications()) {
                 is DBResult.Success -> {
                     val notiList = result.data
-                    CommonApiState.Success(notiList)
+                    CommonUIState.Success(notiList)
                 }
                 is DBResult.Error -> {
-                    CommonApiState.Error(result.exception.message)
+                    CommonUIState.Error(result.exception.message)
                 }
             }
             _notificationListState.emit(state)
@@ -45,10 +44,10 @@ class NotificationViewModel @Inject constructor(
             val state = when(val result = notificationRepository.markAsChecked(id)) {
                 is DBResult.Success -> {
                     val notiList = result.data
-                    CommonApiState.Success(notiList)
+                    CommonUIState.Success(notiList)
                 }
                 is DBResult.Error -> {
-                    CommonApiState.Error(result.exception.message)
+                    CommonUIState.Error(result.exception.message)
                 }
             }
             _notificationListState.emit(state)

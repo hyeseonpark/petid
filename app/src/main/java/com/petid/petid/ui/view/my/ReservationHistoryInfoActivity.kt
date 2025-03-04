@@ -12,7 +12,7 @@ import com.petid.petid.R
 import com.petid.petid.databinding.ActivityReservationHistoryInfoBinding
 import com.petid.petid.type.ReservationStatus
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.hospital.HospitalActivity
 import com.petid.petid.ui.view.my.adapter.HospitalReservationListAdapter
@@ -81,11 +81,11 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     private fun observeReservationHospitalListState() {
         lifecycleScope.launch {
             viewModel.hospitalReservationHistoryListApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val reservationList = result.data
 
                         when(reservationList.isNotEmpty()) {
@@ -96,15 +96,15 @@ class ReservationHistoryInfoActivity : BaseActivity() {
                             false -> isDataAvailable(false)
                         }
                     }
-                    is CommonApiState.Error -> {
+                    is CommonUIState.Error -> {
                         showErrorMessage(result.message.toString())
                         isDataAvailable(false)
                     }
-                    is CommonApiState.Loading -> {
+                    is CommonUIState.Loading -> {
                         showLoading()
                         isDataAvailable(false)
                     }
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -136,17 +136,17 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     private fun observeCancelHospitalReservation() {
         lifecycleScope.launch {
             viewModel.cancelHospitalReservationApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         viewModel.getHospitalReservationHistoryListApiState()
                         cancelDialog.dismiss()
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
