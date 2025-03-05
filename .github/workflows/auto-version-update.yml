@@ -28,7 +28,9 @@ jobs:
           elif [[ "$PR_TITLE" =~ version=minor ]]; then
             VERSION="minor"
           fi
-          echo "versioning=$VERSION" >> $GITHUB_OUTPUT
+          echo "versioning=$VERSION" >> $GITHUB_ENV
+          echo "versioning=$VERSION"
+          
       - name: 체크아웃 (develop 브랜치)
         uses: actions/checkout@v4
         with:
