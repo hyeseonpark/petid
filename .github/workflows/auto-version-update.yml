@@ -1,0 +1,63 @@
+name: Auto Version Update Before Merge
+
+on:
+  pull_request:
+    branches:
+      - release
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  version-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: PR 제목에서 versioning 값 추출
+        id: extract_version
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          VERSION="patch"  # 기본값: patch
+          
+          if [[ "$PR_TITLE" =~ version=major ]]; then
+            VERSION="major"
+          elif [[ "$PR_TITLE" =~ version=minor ]]; then
+            VERSION="minor"
+          fi
+          echo "versioning=$VERSION" >> $GITHUB_OUTPUT
+      - name: 체크아웃 (develop 브랜치)
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Gradle 실행 (버전 업데이트)
+        run: ./gradlew versionUp -Pversioning=${{ env.versioning }}
+
+      - name: 변경 사항 커밋
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/build.gradle.kts
+          git commit -m "자동 버전 업데이트 (${{ env.versioning }})"
+          git push origin develop
+      - name: PR 자동 머지 (develop → release)
+        run: |
+          gh pr create \
+            --base release \
+            --head develop \
+            --title "Release: Version update" \
+            --body "Automated version update" || true
+          gh pr merge --auto --squash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
