@@ -7,6 +7,9 @@ import org.gradle.work.InputChanges
 import java.net.URL
 import javax.inject.Inject
 
+/**
+ * google drive 에서 .tflite file 을 다운로드 하는 task
+ */
 abstract class TfliteModelDownloadTask @Inject constructor() : DefaultTask() {
 
     @Input
@@ -17,7 +20,6 @@ abstract class TfliteModelDownloadTask @Inject constructor() : DefaultTask() {
     var modelFileName: String = ""
         private set
 
-    // 세터 메서드를 통해 값 설정
     fun setModelUrl(url: String) {
         modelUrl = url
     }

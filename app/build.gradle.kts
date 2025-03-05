@@ -1,12 +1,15 @@
 import java.util.Properties
 
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use {
-        localProperties.load(it)
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use {
+            this.load(it)
+        }
     }
 }
+
+tasks.register<IncreaseVersionNameAndCode>("versionUp")
 
 plugins {
     alias(libs.plugins.android.application)
