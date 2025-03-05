@@ -29,8 +29,8 @@ android {
         applicationId = "com.petid.petid"
         minSdk = 24
         targetSdk = 35
-        versionCode = 12
-        versionName = "1.1.1"
+        versionCode = 13
+        versionName = "1.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
