@@ -56,13 +56,13 @@ jobs:
           git add app/build.gradle.kts
           git commit -m "자동 버전 업데이트 (${{ env.versioning }})"
           git push origin develop
-      - name: PR 자동 머지 (develop → release)
-        run: |
-          gh pr create \
-            --base release \
-            --head develop \
-            --title "Release: Version update" \
-            --body "Automated version update" || true
-          gh pr merge --auto --squash
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: PR 자동 머지 (develop → release)
+      #   run: |
+      #     gh pr create \
+      #       --base release \
+      #       --head develop \
+      #       --title "Release: Version update" \
+      #       --body "Automated version update" || true
+      #     gh pr merge --auto --squash
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
