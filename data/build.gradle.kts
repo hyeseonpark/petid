@@ -9,13 +9,16 @@ val localProperties = Properties().apply {
     }
 }
 
-val TFLITE_MODEL_NAME = "petid_crop_image_efficientnetb1_v1.tflite"
-val TFLITE_MODEL_PATH = "src/main/assets/$TFLITE_MODEL_NAME"
+val tfliteModelUrl = localProperties.getProperty("TFLITE_MODEL_URL")
+val tfliteModelName = "petid_crop_image_efficientnetb1_v1.tflite"
+val tfliteModelPath = "src/main/assets/$tfliteModelName"
 
 tasks.register<TfliteModelDownloadTask>("downloadTfliteModel") {
-    setModelUrl(localProperties.getProperty("TFLITE_MODEL_URL"))
-    setModelFileName(TFLITE_MODEL_NAME)
-    outputFile.set(layout.projectDirectory.file(TFLITE_MODEL_PATH))
+    apply {
+        setModelUrl(tfliteModelUrl)
+        setModelFileName(tfliteModelName)
+        outputFile.set(layout.projectDirectory.file(tfliteModelPath))
+    }
 }
 
 plugins {
