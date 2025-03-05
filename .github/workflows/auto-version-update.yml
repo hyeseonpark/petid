@@ -42,8 +42,8 @@ jobs:
           java-version: '17'
 
       - name: Gradle 실행 (버전 업데이트)
-        run: ./gradlew versionUp -Pversioning=${{ env.versioning }}
-
+        run: ./gradlew versionUp --versioning=${{ env.versioning }}
+        
       - name: 변경 사항 커밋
         run: |
           git config --global user.name "github-actions[bot]"
