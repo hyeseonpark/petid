@@ -37,6 +37,9 @@ jobs:
           ref: develop
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: 저장된 LOCAL_PROPERTIES 파일을 local.properties로 작성
+        run: echo "${{ secrets.LOCAL_PROPERTIES }}" > local.properties
+
       - name: Setup JDK
         uses: actions/setup-java@v3
         with:
