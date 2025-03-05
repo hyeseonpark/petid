@@ -52,10 +52,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
         debug {
             buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
     }
     compileOptions {
@@ -160,7 +161,6 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     // Glide
     implementation(libs.glide)

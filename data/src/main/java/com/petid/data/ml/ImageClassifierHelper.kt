@@ -25,6 +25,7 @@ import com.google.mediapipe.tasks.core.Delegate
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
+import com.petid.data.util.Constants
 import com.petid.data.util.sendCrashlytics
 
 class ImageClassifierHelper(
@@ -61,7 +62,7 @@ class ImageClassifierHelper(
     // the GPU delegate needs to be used on the thread that initialized the
     // classifier
     private fun setupImageClassifier() {
-        val modelName = "petid_crop_image_efficientnetb1_v1_4.tflite"
+        val modelName = Constants.TFLITE_MODEL_NAME
 
         initializeClassifier(modelName)
             .recoverCatching { throwable ->
