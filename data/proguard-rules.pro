@@ -28,6 +28,7 @@
 -keep class com.petid.data.repository.remote.** {*;}
 -keep class com.petid.domain.entity.** {*;}
 -keep class com.petid.data.dto.** {*;}
+-keep class com.petid.data.util.Constants {*;}
 
 -keep interface com.petid.data.util.PreferencesHelper { *; }
 -keep class com.petid.data.util.ExtensionsKt {*;}

@@ -1,12 +1,15 @@
 import java.util.Properties
 
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use {
-        localProperties.load(it)
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use {
+            this.load(it)
+        }
     }
 }
+
+tasks.register<IncreaseVersionNameAndCode>("versionUp")
 
 plugins {
     alias(libs.plugins.android.application)
@@ -52,10 +55,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
         debug {
             buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
     }
     compileOptions {
@@ -160,7 +164,6 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     // Glide
     implementation(libs.glide)

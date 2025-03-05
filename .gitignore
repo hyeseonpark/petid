@@ -17,3 +17,6 @@ local.properties
 /.idea/deploymentTargetSelector.xml
 /.idea/misc.xml
 /.idea/gradle.xml
+/buildSrc/build
+# Ignore TensorFlow Lite model files in assets folder
+data/src/main/assets/*.tflite

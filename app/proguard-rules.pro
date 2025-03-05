@@ -185,3 +185,11 @@
 -keep class com.petid.data.repository.remote.** {*;}
 -keep class com.petid.domain.entity.** {*;}
 -keep class com.petid.data.dto.** {*;}
+-keep class com.petid.data.util.Constants {*;}
+
+-keep class com.google.mediapipe.proto.** { *; }
+-keepclassmembers class * extends com.google.protobuf.GeneratedMessageLite { *; }
+-keep class com.google.common.flogger.** { *; }
+
+-dontwarn com.google.mediapipe.proto.CalculatorProfileProto$CalculatorProfile
+-dontwarn com.google.mediapipe.proto.GraphTemplateProto$CalculatorGraphTemplate

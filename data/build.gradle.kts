@@ -1,10 +1,23 @@
 import java.util.Properties
 
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use {
-        localProperties.load(it)
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use {
+            this.load(it)
+        }
+    }
+}
+
+val tfliteModelUrl = localProperties.getProperty("TFLITE_MODEL_URL")
+val tfliteModelName = "petid_crop_image_efficientnetb1_v1.tflite"
+val tfliteModelPath = "src/main/assets/$tfliteModelName"
+
+tasks.register<TfliteModelDownloadTask>("downloadTfliteModel") {
+    apply {
+        setModelUrl(tfliteModelUrl)
+        setModelFileName(tfliteModelName)
+        outputFile.set(layout.projectDirectory.file(tfliteModelPath))
     }
 }
 
@@ -33,10 +46,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
         debug {
             buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
     }
     compileOptions {
@@ -97,4 +111,8 @@ dependencies {
     // Room
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+}
+
+tasks.named("preBuild").configure {
+    dependsOn("downloadTfliteModel")
 }
