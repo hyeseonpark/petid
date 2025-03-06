@@ -29,8 +29,8 @@ android {
         applicationId = "com.petid.petid"
         minSdk = 24
         targetSdk = 35
-        versionCode = 13
-        versionName = "1.1.2"
+        versionCode = 15
+        versionName = "1.1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -58,7 +58,6 @@ android {
             buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
             buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
     }

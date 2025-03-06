@@ -32,7 +32,7 @@ abstract class TfliteModelDownloadTask @Inject constructor() : DefaultTask() {
     abstract val outputFile: RegularFileProperty
 
     @TaskAction
-    fun downloadModel(inputChanges: InputChanges) {
+    fun downloadModel() {
         val modelFile = outputFile.get().asFile
 
         if (!modelFile.exists()) {
