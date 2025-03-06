@@ -6,7 +6,12 @@ on:
 
 jobs:
   version-update:
-    if: ${{ github.event.issue.pull_request != null && github.event.comment.body == 'run version update' && github.event.comment.user.login == github.event.issue.user.login }}
+    if: ${{
+        github.event.issue.pull_request != null && 
+        github.event.pull_request.base.ref == 'release' && 
+        github.event.comment.body == 'run version update' && 
+        github.event.comment.user.login == github.event.issue.user.login
+        }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
