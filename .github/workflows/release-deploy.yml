@@ -64,6 +64,6 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
         packageName: com.petid.petid
-        releaseFiles: app/build/outputs/bundle/release/app-release.aab
+        releaseFiles: app/build/outputs/bundle/release/app-operation-release.aab
         track: alpha               # production, internal, alpha, beta
         status: completed
