@@ -2,26 +2,17 @@ name: Auto Version Update
 
 on:
   issue_comment:
-    types:
-      - created
+    types: [created]
 
 jobs:
   version-update:
-    if: ${{ github.event.comment.user.login == github.event.issue.user.login }}
+    if: ${{ github.event.issue.pull_request != null && github.event.comment.body == 'run version update' && github.event.comment.user.login == github.event.issue.user.login }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
 
     steps:
-      - name: Check if comment is 'run version update'
-        run: |
-          COMMENT_BODY="${{ github.event.comment.body }}"
-          if [[ "$COMMENT_BODY" != "run version update" ]]; then
-            echo "Skipping action, comment does not match trigger."
-            exit 0
-          fi
-          
       - name: PR 제목에서 versioning 값 추출
         id: extract_version
         run: |
