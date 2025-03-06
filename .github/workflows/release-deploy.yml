@@ -38,6 +38,11 @@ jobs:
     - name: Set up keystore environment variable
       run: echo "KEYSTORE_FILE=$GITHUB_WORKSPACE/app/keystore/petid-release.keystore" >> $GITHUB_ENV
 
+    - name: Set default AAB paths
+      run: |
+        echo "AAB_DIR=app/build/outputs/bundle/operationRelease" >> $GITHUB_ENV
+        echo "AAB_FILE=app-operation-release.aab" >> $GITHUB_ENV
+        
     - name: Build Release AAB
       run: ./gradlew bundleOperationRelease --stacktrace --info
       env:
@@ -46,15 +51,28 @@ jobs:
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
-    - name: Find AAB file
+    - name: Find AAB file and update paths if needed
       run: |
         echo "Looking for AAB files..."
-        find app/build -name "*.aab" -type f
+        AAB_PATH=$(find app/build -name "*.aab" -type f | head -n 1)
+        
+        if [ -n "$AAB_PATH" ]; then
+          # AAB 파일을 찾았을 경우 경로 업데이트
+          echo "Found AAB at: $AAB_PATH"
+          AAB_DIR=$(dirname "$AAB_PATH")
+          AAB_FILE=$(basename "$AAB_PATH")
+          echo "AAB_DIR=$AAB_DIR" >> $GITHUB_ENV
+          echo "AAB_FILE=$AAB_FILE" >> $GITHUB_ENV
+          echo "Updated AAB directory to: $AAB_DIR"
+          echo "Updated AAB filename to: $AAB_FILE"
+        else
+          echo "No AAB file found! Using default paths."
+        fi
         
     - name: Sign AAB
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: app/build/outputs/bundle/operationRelease/
+        releaseDirectory: ${{ env.AAB_DIR }}
         signingKeyBase64: ${{ secrets.APP_RELEASE_KEY_STORE_BASE_64 }}
         alias: ${{ secrets.KEY_ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -65,6 +83,6 @@ jobs:
       with:
         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
         packageName: com.petid.petid
-        releaseFiles: app/build/outputs/bundle/release/app-operation-release.aab
+        releaseFiles: ${{ env.AAB_DIR }}/${{ env.AAB_FILE }}
         track: alpha               # production, internal, alpha, beta
         status: completed
