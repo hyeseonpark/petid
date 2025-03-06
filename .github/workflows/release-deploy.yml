@@ -53,7 +53,7 @@ jobs:
     - name: Sign AAB
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: app/build/outputs/bundle/operation/release/
+        releaseDirectory: app/build/outputs/bundle/operationRelease/
         signingKeyBase64: ${{ secrets.APP_RELEASE_KEY_STORE_BASE_64 }}
         alias: ${{ secrets.KEY_ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
