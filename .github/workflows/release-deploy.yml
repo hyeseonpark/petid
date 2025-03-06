@@ -45,17 +45,22 @@ jobs:
         KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
 
+    - name: Find AAB file
+      run: |
+        echo "Looking for AAB files..."
+        find app/build -name "*.aab" -type f
+        
     - name: Sign AAB
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: app/build/outputs/bundle/release
+        releaseDirectory: app/build/outputs/bundle/operation/release/
         signingKeyBase64: ${{ secrets.APP_RELEASE_KEY_STORE_BASE_64 }}
         alias: ${{ secrets.KEY_ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
     - name: Deploy to Google Play Store
-      uses: r0adkll/upload-google-play@v1
+      uses: r0adkll/upload-google-play@v1.1.3
       with:
         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
         packageName: com.petid.petid
