@@ -1,22 +1,27 @@
-name: Auto Version Update Before Merge
+name: Auto Version Update
 
 on:
-  pull_request:
-    branches:
-      - release
+  issue_comment:
     types:
-      - opened
-      - synchronize
-      - reopened
+      - created
 
 jobs:
   version-update:
+    if: ${{ github.event.comment.user.login == github.event.issue.user.login }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
 
     steps:
+      - name: Check if comment is 'run version update'
+        run: |
+          COMMENT_BODY="${{ github.event.comment.body }}"
+          if [[ "$COMMENT_BODY" != "run version update" ]]; then
+            echo "Skipping action, comment does not match trigger."
+            exit 0
+          fi
+          
       - name: PR 제목에서 versioning 값 추출
         id: extract_version
         run: |
@@ -54,7 +59,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add app/build.gradle.kts
-          git commit -m "자동 버전 업데이트 (${{ env.versioning }})"
+          git commit -m "버전 업데이트 (${{ env.versioning }})"
           git push origin develop
       # - name: PR 자동 머지 (develop → release)
       #   run: |
