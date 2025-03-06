@@ -31,7 +31,7 @@ abstract class IncreaseVersionNameAndCode : DefaultTask() {
 
         content = versionNameRegex.replace(content) { match ->
             val currentVersion = match.groupValues[1]
-            val newVersion = getNewVersionName(currentVersion, versioning ?: "patch")
+            val newVersion = getNewVersionName(currentVersion, versioning)
             "versionName = \"$newVersion\""
         }
 
