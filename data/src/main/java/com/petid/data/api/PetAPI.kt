@@ -2,8 +2,8 @@ package com.petid.data.api
 
 import com.petid.data.dto.request.FilePathRequest
 import com.petid.data.dto.request.PetRequest
+import com.petid.data.dto.request.PetUpdateRequest
 import com.petid.data.dto.response.PetDetailsResponse
-import com.petid.domain.entity.PetUpdateEntity
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -37,7 +37,7 @@ interface PetAPI {
     @PUT("/v1/pet/{petId}")
     suspend fun updatePetInfo(
         @Path("petId") petId: Long,
-        @Body updatePetInfo: PetUpdateEntity
+        @Body updatePetInfo: PetUpdateRequest
     )
 
     /**

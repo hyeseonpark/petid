@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.petid.petid.R
 import com.petid.petid.databinding.ActivityNotificationBinding
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.home.adapter.NotificationListAdapter
 import com.petid.petid.util.TAG
@@ -69,20 +69,20 @@ class NotificationActivity : BaseActivity() {
     private fun observeNotificationListState() {
         lifecycleScope.launch {
             viewModel.notificationListState.collectLatest { result ->
-               if (result != CommonApiState.Loading)
+               if (result != CommonUIState.Loading)
                     hideLoading()
 
                 when(result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         notificationListAdapter.submitList(result.data)
                         isDataAvailable(true)
                     }
-                    is CommonApiState.Error -> {
+                    is CommonUIState.Error -> {
                         Log.e(TAG, result.message.toString())
                         isDataAvailable(false)
                     }
-                    CommonApiState.Loading -> showLoading()
-                    CommonApiState.Init -> {}
+                    CommonUIState.Loading -> showLoading()
+                    CommonUIState.Init -> {}
                 }
             }
         }

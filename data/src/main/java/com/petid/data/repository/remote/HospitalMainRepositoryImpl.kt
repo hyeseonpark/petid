@@ -1,7 +1,9 @@
 package com.petid.data.repository.remote
 
-import com.petid.data.api.HosptialAPI
+import com.petid.data.api.HospitalAPI
+import com.petid.data.dto.response.toDomain
 import com.petid.data.source.remote.HospitalMainRemoteDataSource
+import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.LocationEntity
 import com.petid.domain.repository.HospitalMainRepository
@@ -12,23 +14,31 @@ import javax.inject.Singleton
 @Singleton
 class HospitalMainRepositoryImpl @Inject constructor(
     private val remoteDataSource: HospitalMainRemoteDataSource,
-    private val hospitalAPI: HosptialAPI
+    private val hospitalAPI: HospitalAPI
 ) : HospitalMainRepository{
     override suspend fun getSido(): ApiResult<List<LocationEntity>> =
-        remoteDataSource.getSido()
+        runCatching {
+            remoteDataSource.getSido().toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun getSigunguList(id: Int): ApiResult<List<LocationEntity>> =
-        remoteDataSource.getSigunguList(id)
+        runCatching {
+            remoteDataSource.getSigunguList(id).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun getEupmundongList(id: Int): ApiResult<List<LocationEntity>> =
-        remoteDataSource.getEupmundongList(id)
+        runCatching {
+            remoteDataSource.getEupmundongList(id).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun getHospitalList(
         sidoId: Int,
         sigunguId: Int,
         eupmundongId: Int?
     ): ApiResult<List<HospitalEntity>> =
-        remoteDataSource.getHospitalList(sidoId, sigunguId, eupmundongId)
+        runCatching {
+            remoteDataSource.getHospitalList(sidoId, sigunguId, eupmundongId).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun getHospitalListLoc(
         sidoId: Int,
@@ -37,14 +47,13 @@ class HospitalMainRepositoryImpl @Inject constructor(
         lat: Double,
         lon: Double
     ): ApiResult<List<HospitalEntity>> =
-        remoteDataSource.getHospitalListLoc(sidoId, sigunguId, eupmundongId, lat, lon)
+        runCatching {
+            remoteDataSource.getHospitalListLoc(sidoId, sigunguId, eupmundongId, lat, lon).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun getHospitalImageUrl(filePath: String): String {
-        return try {
+    override suspend fun getHospitalImageUrl(filePath: String): String =
+        runCatching {
             hospitalAPI.getHospitalImageUrl(filePath)
-        } catch (e: Exception) {
-            ""
-        }
-    }
+        }.getOrDefault("")
 
 }

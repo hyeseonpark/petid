@@ -1,10 +1,23 @@
 import java.util.Properties
 
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use {
-        localProperties.load(it)
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use {
+            this.load(it)
+        }
+    }
+}
+
+val tfliteModelUrl = localProperties.getProperty("TFLITE_MODEL_URL")
+val tfliteModelName = "petid_crop_image_efficientnetb1_v1.tflite"
+val tfliteModelPath = "src/main/assets/$tfliteModelName"
+
+tasks.register<TfliteModelDownloadTask>("downloadTfliteModel") {
+    apply {
+        setModelUrl(tfliteModelUrl)
+        setModelFileName(tfliteModelName)
+        outputFile.set(layout.projectDirectory.file(tfliteModelPath))
     }
 }
 
@@ -24,22 +37,20 @@ android {
         minSdk = 24
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "AWS_ACCESS_KEY", "\"${localProperties["AWS_ACCESS_KEY"]}\"")
-        buildConfigField("String", "AWS_SECRET_KEY", "\"${localProperties["AWS_SECRET_KEY"]}\"")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
         debug {
             buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
+            buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
     }
     compileOptions {
@@ -86,9 +97,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    // implementation("androidx.multidex:multidex:2.0.1")
-    implementation(libs.androidx.hilt.navigation.compose)
-
     // Logger
     implementation(libs.logger)
 
@@ -103,4 +111,8 @@ dependencies {
     // Room
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+}
+
+tasks.named("preBuild").configure {
+    dependsOn("downloadTfliteModel")
 }

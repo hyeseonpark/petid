@@ -30,8 +30,8 @@ import com.petid.petid.R
 import com.petid.petid.databinding.ActivitySocialAuthBinding
 import com.petid.petid.type.PlatformType
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.ui.state.LoginResult
+import com.petid.petid.ui.state.CommonUIState
+import com.petid.petid.ui.state.LoginUIState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.main.MainActivity
 import com.petid.petid.util.TAG
@@ -40,7 +40,6 @@ import com.petid.petid.util.throttleFirst
 import com.petid.petid.viewmodel.auth.SocialAuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -158,7 +157,7 @@ class SocialAuthActivity : BaseActivity() {
             BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.social_login_info_naver_client_name))
 
-        NaverIdLoginSDK.reagreeAuthenticate(this, oauthNaverLoginCallback)
+        NaverIdLoginSDK.authenticate(this, oauthNaverLoginCallback)
     }
 
     /**
@@ -225,7 +224,7 @@ class SocialAuthActivity : BaseActivity() {
                             GoogleIdTokenCredential.createFrom(credential.data)
                         }.onSuccess { googleIdTokenCredential ->
                             socialAccessToken = googleIdTokenCredential.idToken
-                            firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
+                            firebaseAuthWithGoogle(socialAccessToken!!)
                         }.onFailure { ex ->
                             showErrorMessage("GoogleLoginError: ${ex.message}")
                         }
@@ -264,7 +263,9 @@ class SocialAuthActivity : BaseActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = firebaseAuth.currentUser
-                    loginWithSocialToken(user?.uid.toString())
+                    user?.providerData?.get(1)?.uid?.apply {
+                        loginWithSocialToken(this)//user?.uid.toString())
+                    } ?: showErrorMessage("사용자 uid를 가져오는데 실패했습니다.")
                 } else {
 //                    Toast.makeText(this, "Firebase 인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
@@ -275,8 +276,10 @@ class SocialAuthActivity : BaseActivity() {
      * 각 social 로그인 성공 후 login 시도
      */
     private fun loginWithSocialToken(subValue: String) {
-        viewModel.subValue = subValue
-        viewModel.login()
+        with(viewModel) {
+            this.subValue = subValue
+            login()
+        }
     }
 
     /**
@@ -285,18 +288,18 @@ class SocialAuthActivity : BaseActivity() {
     private fun observesLoginResultState() {
         lifecycleScope.launch {
             viewModel.loginResult.collectLatest { result ->
-                if (result !is LoginResult.Loading)
+                if (result !is LoginUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is LoginResult.Success -> {
+                    is LoginUIState.Success -> {
                         goMainActivity()
                         Log.d(TAG, "Login successful: ${result.data}")
                     }
-                    is LoginResult.NeedToSignUp -> goTermsActivity()
-                    is LoginResult.TryToRestore -> showRestoreDialog()
-                    is LoginResult.Error -> showErrorMessage(result.message.toString())
-                    is LoginResult.Loading -> showLoading()
+                    is LoginUIState.NeedToSignUp -> goTermsActivity()
+                    is LoginUIState.TryToRestore -> showRestoreDialog()
+                    is LoginUIState.Error -> showErrorMessage(result.message.toString())
+                    is LoginUIState.Loading -> showLoading()
                 }
             }
         }
@@ -308,18 +311,18 @@ class SocialAuthActivity : BaseActivity() {
     private fun observesDoRestoreResultState() {
         lifecycleScope.launch {
             viewModel.restoreResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         Toast.makeText(
                             getGlobalContext(),
                             getString(R.string.success_restore), Toast.LENGTH_LONG).show()
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -336,12 +339,12 @@ class SocialAuthActivity : BaseActivity() {
         if (platform.isNotEmpty() && sub != null && fcmToken != null) {
             val target = Intent(this, TermsActivity::class.java).apply {
                 putExtra("platform", platform)
-                putExtra("sub", socialAccessToken)
+                putExtra("token", socialAccessToken)
                 putExtra("fcmToken", fcmToken)
             }
             startActivity(target)
         } else {
-            showErrorMessage("platform, sub, fcmToken null error")
+            showErrorMessage("platform, token, fcmToken null error")
         }
     }
 

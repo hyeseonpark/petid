@@ -24,9 +24,3 @@ plugins {
     // Navigation Safe Args
     alias(libs.plugins.androidx.navigation.safeargs.kotlin) apply false
 }
-
-/*
-tasks.register<Delete>("clean") {
-    delete(rootProject.layout.buildDirectory)
-}
-*/

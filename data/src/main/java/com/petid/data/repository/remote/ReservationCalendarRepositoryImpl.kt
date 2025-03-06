@@ -1,6 +1,9 @@
 package com.petid.data.repository.remote
 
+import com.petid.data.dto.request.toDto
+import com.petid.data.dto.response.toDomain
 import com.petid.data.source.remote.ReservationCalendarRemoteDataSource
+import com.petid.data.util.mapApiResult
 import com.petid.domain.entity.HospitalOrderEntity
 import com.petid.domain.repository.ReservationCalendarRepository
 import com.petid.domain.util.ApiResult
@@ -16,11 +19,14 @@ class ReservationCalendarRepositoryImpl @Inject constructor(
         day: String,
         date: String
     ): ApiResult<List<String>> =
-        remoteDataSource.getHospitalOrderTimeList(hospitalId, day, date)
+        runCatching {
+            remoteDataSource.getHospitalOrderTimeList(hospitalId, day, date)
+        }.mapApiResult { ApiResult.Success(it) }
 
     override suspend fun createHospitalOrder(
-        hospitalId: Int,
-        date: String
+        hospitalOrderEntity: HospitalOrderEntity
     ): ApiResult<HospitalOrderEntity> =
-        remoteDataSource.createHospitalOrder(hospitalId, date)
+        runCatching {
+            remoteDataSource.createHospitalOrder(hospitalOrderEntity.toDto()).toDomain()
+        }.mapApiResult { ApiResult.Success(it) }
 }

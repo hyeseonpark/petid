@@ -11,16 +11,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.petid.petid.R
-import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
-import com.petid.petid.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
-import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentSignatureBinding
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
+import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
-import com.petid.petid.util.toFile
+import com.petid.petid.util.toCompressedByteArray
 import com.petid.petid.viewmodel.generate.GeneratePetidSharedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -71,7 +68,7 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
 
                     with(viewModel) {
                         // S3 서버에 올릴 파일 세팅
-                        signImage = bitmap.toFile(getGlobalContext())
+                        signImage = bitmap.toCompressedByteArray()
                         petInfo.setSign("${PHOTO_PATHS[1]}${memberId}.jpg")
                     }
 
@@ -87,17 +84,17 @@ class SignatureFragment : BaseFragment<FragmentSignatureBinding>(FragmentSignatu
     private fun observeUploadS3ResultState() {
         lifecycleScope.launch {
             viewModel.registerPetResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when(result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         Log.d("SignatureFragment", "success...")
                         findNavController().navigate(R.id.action_signatureFragment_to_completeCardFragment)
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    CommonApiState.Init -> {}
-                    CommonApiState.Loading -> showLoading()
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    CommonUIState.Init -> {}
+                    CommonUIState.Loading -> showLoading()
                 }
             }
         }

@@ -7,10 +7,11 @@ import com.petid.data.util.Constants.SHARED_VALUE_REFRESH_TOKEN
 import com.petid.domain.repository.SocialAuthRepository
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
+import com.petid.petid.common.Constants.SHARED_AUTH_PROVIDER
 import com.petid.petid.type.PlatformType
-import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.ui.state.CommonApiState.*
-import com.petid.petid.ui.state.LoginResult
+import com.petid.petid.ui.state.CommonUIState
+import com.petid.petid.ui.state.CommonUIState.*
+import com.petid.petid.ui.state.LoginUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -27,11 +28,11 @@ class SocialAuthViewModel @Inject constructor(
     var fcmToken: String? = null
 
     /* login result state*/
-    private val _loginResult = MutableSharedFlow<LoginResult>()
-    val loginResult = _loginResult.asSharedFlow()
+    private val _loginUIState = MutableSharedFlow<LoginUIState>()
+    val loginResult = _loginUIState.asSharedFlow()
 
     /* restore result state*/
-    private val _restoreResult = MutableSharedFlow<CommonApiState<Unit>>()
+    private val _restoreResult = MutableSharedFlow<CommonUIState<Unit>>()
     val restoreResult = _restoreResult.asSharedFlow()
 
     /**
@@ -42,7 +43,7 @@ class SocialAuthViewModel @Inject constructor(
         val fcmToken = fcmToken ?: return  // FCM 토큰이 없으면 로그인 시도 안함
 
         viewModelScope.launch {
-            _loginResult.emit(LoginResult.Loading)  // 로딩 상태 전송
+            _loginUIState.emit(LoginUIState.Loading)  // 로딩 상태 전송
 
             val state = when (val result = socialAuthRepository.doLogin(sub, fcmToken)) {
                 is ApiResult.Success -> {
@@ -50,21 +51,22 @@ class SocialAuthViewModel @Inject constructor(
                     getPreferencesControl().apply {
                         saveStringValue(SHARED_VALUE_ACCESS_TOKEN, result.accessToken.split(" ").last())
                         saveStringValue(SHARED_VALUE_REFRESH_TOKEN, result.refreshToken.split(" ").last())
+                        saveStringValue(SHARED_AUTH_PROVIDER, platform!!.name)
                     }
-                    LoginResult.Success(result)  // 성공 시 데이터 전송
+                    LoginUIState.Success(result)  // 성공 시 데이터 전송
                 }
                 is ApiResult.HttpError -> {
                     when(result.error.status) {
-                        400 -> LoginResult.NeedToSignUp // 회원가입 필요 시 전송
-                        401 -> LoginResult.TryToRestore // 재가입 시도
-                        else -> LoginResult.Error(result.error.error)
+                        400 -> LoginUIState.NeedToSignUp // 회원가입 필요 시 전송
+                        401 -> LoginUIState.TryToRestore // 재가입 시도
+                        else -> LoginUIState.Error(result.error.error)
                     }
                 }
                 is ApiResult.Error -> {
-                    LoginResult.Error(result.errorMessage)
+                    LoginUIState.Error(result.errorMessage)
                 }
             }
-            _loginResult.emit(state)
+            _loginUIState.emit(state)
         }
     }
 

@@ -1,36 +1,29 @@
 package com.petid.petid.ui.view.my
 
-import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.petid.petid.R
 import com.petid.petid.common.Constants.CHIP_TYPE
 import com.petid.petid.databinding.FragmentPetInfoDetailBinding
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseFragment
-import com.petid.petid.util.TAG
 import com.petid.petid.util.showErrorMessage
-import com.petid.petid.viewmodel.my.PetInfoViewModel
-import com.bumptech.glide.Glide
 import com.petid.petid.util.throttleFirst
-import com.petid.petid.util.toFile
+import com.petid.petid.util.toCompressedByteArray
+import com.petid.petid.viewmodel.my.PetInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
@@ -81,8 +74,8 @@ class PetInfoDetailFragment
                 .onEach {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                         with(Intent()) {
-                            action = Intent.ACTION_PICK
-                            type = MediaStore.Images.Media.CONTENT_TYPE
+                            action = Intent.ACTION_GET_CONTENT
+                            type = "image/*"
                             actionPick.launch(this)
                         }
                     } else {
@@ -135,7 +128,7 @@ class PetInfoDetailFragment
     private fun processForUploadFile(uri: Uri) {
         // s3 bucket 에 파일 업로드
         with(viewModel) {
-            uploadFile(uri.toFile(requireActivity())!!, petImageFileName!!)
+            uploadFile(uri.toCompressedByteArray(requireActivity())!!, petImageFileName!!)
         }
     }
 
@@ -145,11 +138,11 @@ class PetInfoDetailFragment
     private fun observeGetPetInfoState() {
         lifecycleScope.launch {
             viewModel.getPetDetailsResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         with(result.data) {
                             binding.apply {
                                 textViewName.text = petName
@@ -174,9 +167,9 @@ class PetInfoDetailFragment
                             }
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -189,11 +182,11 @@ class PetInfoDetailFragment
     private fun observeGetPetImageState() {
         lifecycleScope.launch {
             viewModel.getPetImageUrlResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         R.color.d9.let {
                             Glide.with(requireContext())
                                 .load(result.data)
@@ -202,9 +195,9 @@ class PetInfoDetailFragment
                                 .into(binding.imageViewProfile)
                         }
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }
@@ -216,14 +209,14 @@ class PetInfoDetailFragment
     private fun observeUpdatePetPhotoState() {
         lifecycleScope.launch {
             viewModel.updatePetPhotoResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> viewModel.getPetDetails()
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Success -> viewModel.getPetDetails()
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

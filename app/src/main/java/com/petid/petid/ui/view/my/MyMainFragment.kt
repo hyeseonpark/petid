@@ -9,8 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.credentials.ClearCredentialStateRequest
-import androidx.credentials.CredentialManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,10 +16,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
-import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.databinding.FragmentMyMainBinding
 import com.petid.petid.ui.component.CustomDialogCommon
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.auth.SocialAuthActivity
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.PreferencesControl
@@ -62,6 +59,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewModel.getMemberInfo()
         observeGetMemberInfoState()
         observeGetMemberImageState()
+        observeDoLogoutState()
         observeDoWithdrawState()
     }
 
@@ -170,7 +168,7 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                 .clicks()
                 .throttleFirst()
                 .onEach {
-                    doLogout()
+                    viewModel.doLogout()
                 }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -198,31 +196,11 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
             boldTitle = getString(R.string.withdraw_dialog_title),
             title = getString(R.string.withdraw_dialog_desc),
             yesButtonClick = {
-                viewModel.doWithdraw()
+                viewModel.doWithdrawSocialAuth()
             })
 
         withdrawDialog.show(this.childFragmentManager, "CustomDialogCommon")
     }
-
-    /**
-     * 로그아웃
-     */
-    private fun doLogout() {
-        getPreferencesControl().apply {
-            clear()
-            saveBooleanValue(Constants.SHARED_VALUE_IS_FIRST_RUN, false)
-        }
-        val target = Intent(activity, SocialAuthActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        startActivity(target)
-        activity?.finish()
-    }
-
-//    suspend fun googleLogout() {
-//        CredentialManager.create(getGlobalContext()).clearCredentialState(request = ClearCredentialStateRequest())
-//        firebaseAuth.signOut()
-//    }
 
     /**
      * viewModel.getMemberInfoResult 결과값 view 반영
@@ -231,20 +209,20 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberInfoResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             with(result.data) {
                                 binding.apply {
                                     textViewUserName.text = name
                                 }
                             }
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -258,11 +236,11 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMemberImageResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             R.drawable.ic_mypage_icon.let {
                                 Glide
                                     .with(requireContext())
@@ -272,9 +250,9 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
                                     .into(binding.imageViewProfile)
                             }
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
@@ -288,23 +266,54 @@ class MyMainFragment : BaseFragment<FragmentMyMainBinding>(FragmentMyMainBinding
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.doWithdrawResult.collectLatest { result ->
-                    if (result !is CommonApiState.Loading)
+                    if (result !is CommonUIState.Loading)
                         hideLoading()
 
                     when (result) {
-                        is CommonApiState.Success -> {
+                        is CommonUIState.Success -> {
                             Toast.makeText(
                                 requireContext(),
                                 getString(R.string.success_withdraw), Toast.LENGTH_LONG).show()
-                            doLogout()
+                            goSocialAuthActivity()
                         }
-                        is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                        is CommonApiState.Loading -> showLoading()
-                        is CommonApiState.Init -> {}
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
                     }
                 }
             }
         }
     }
 
+    /**
+     *
+     */
+    private fun observeDoLogoutState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.doLogoutResult.collectLatest { result ->
+                    if (result !is CommonUIState.Loading)
+                        hideLoading()
+
+                    when (result) {
+                        is CommonUIState.Success -> goSocialAuthActivity()
+                        is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                        is CommonUIState.Loading -> showLoading()
+                        is CommonUIState.Init -> {}
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * go socialAuthActivity
+     */
+    private fun goSocialAuthActivity() {
+        val target = Intent(requireActivity(), SocialAuthActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        startActivity(target)
+        requireActivity().finish()
+    }
 }

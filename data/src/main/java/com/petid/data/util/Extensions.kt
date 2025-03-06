@@ -47,3 +47,12 @@ inline fun <T> Result<T>.mapDBResult(transform : (T) -> DBResult<T>): DBResult<T
 fun Throwable.sendCrashlytics() {
     FirebaseCrashlytics.getInstance().recordException(this)
 }
+
+
+/**
+ * api 규격을 맞추기 위한 Int to String 변환
+ */
+fun Int?.nullToEmpty(): String {
+    if(this == -1) return ""
+    return this?.toString() ?: ""
+}

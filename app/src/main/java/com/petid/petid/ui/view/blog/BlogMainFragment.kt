@@ -15,7 +15,7 @@ import com.petid.petid.R
 import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.databinding.FragmentBlogMainBinding
 import com.petid.petid.type.ContentCategoryType
-import com.petid.petid.ui.state.CommonApiState
+import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.blog.adapter.ContentListAdapter
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.blog.BlogMainViewModel
@@ -101,11 +101,11 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
     private fun observeCurrentContentListState() {
         lifecycleScope.launch {
             viewModel.contentListApiState.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         contentList = result.data
 
                         when(contentList.isNotEmpty()) {
@@ -116,15 +116,15 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                             false -> visibleLayoutDataAvailable(false)
                         }
                     }
-                    is CommonApiState.Error -> {
+                    is CommonUIState.Error -> {
                         showErrorMessage(result.message.toString())
                         visibleLayoutDataAvailable(false)
                     }
-                    is CommonApiState.Loading -> {
+                    is CommonUIState.Loading -> {
                         showLoading()
                         visibleLayoutDataAvailable(false)
                     }
-                    is CommonApiState.Init -> visibleLayoutDataAvailable(false)
+                    is CommonUIState.Init -> visibleLayoutDataAvailable(false)
                 }
             }
         }
@@ -158,11 +158,11 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
     private fun observeDoLikeState() {
         lifecycleScope.launch {
             viewModel.doLikeApiResult.collectLatest { result ->
-                if (result !is CommonApiState.Loading)
+                if (result !is CommonUIState.Loading)
                     hideLoading()
 
                 when (result) {
-                    is CommonApiState.Success -> {
+                    is CommonUIState.Success -> {
                         val result = result.data
 
                         val index = contentList.indexOfFirst { it.contentId == result.contentId }
@@ -178,9 +178,9 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                         }
 
                     }
-                    is CommonApiState.Error -> showErrorMessage(result.message.toString())
-                    is CommonApiState.Loading -> showLoading()
-                    is CommonApiState.Init -> {}
+                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                    is CommonUIState.Loading -> showLoading()
+                    is CommonUIState.Init -> {}
                 }
             }
         }

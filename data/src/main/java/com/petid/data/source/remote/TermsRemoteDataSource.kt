@@ -1,8 +1,7 @@
 package com.petid.data.source.remote
 
-import com.petid.domain.entity.AuthEntity
-import com.petid.domain.util.ApiResult
+import com.petid.data.dto.response.AuthResponse
 
 interface TermsRemoteDataSource {
-    suspend fun doJoin(platform: String, sub: String, fcmToken: String, ad: Boolean): ApiResult<AuthEntity>
+    suspend fun doJoin(platform: String, token: String, fcmToken: String, ad: Boolean): AuthResponse
 }

@@ -1,10 +1,7 @@
 package com.petid.data.api
 
-import com.petid.data.dto.request.PresignedGetUrlRequest
 import com.petid.data.dto.response.BannerResponse
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface BannerAPI {

@@ -2,35 +2,35 @@ package com.petid.petid.viewmodel.my
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.petid.data.util.S3UploadHelper
 import com.petid.data.util.sendCrashlytics
 import com.petid.domain.entity.FilePath
 import com.petid.domain.entity.PetDetailsEntity
 import com.petid.domain.entity.PetUpdateEntity
 import com.petid.domain.entity.UpdateAppearanceEntity
 import com.petid.domain.repository.PetInfoRepository
+import com.petid.domain.usecase.UploadImageUseCase
 import com.petid.domain.util.ApiResult
 import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.PHOTO_PATHS
-import com.petid.petid.ui.state.CommonApiState
-import com.petid.petid.ui.state.CommonApiState.Error
-import com.petid.petid.ui.state.CommonApiState.Init
-import com.petid.petid.ui.state.CommonApiState.Loading
-import com.petid.petid.ui.state.CommonApiState.Success
+import com.petid.petid.ui.state.CommonUIState
+import com.petid.petid.ui.state.CommonUIState.Error
+import com.petid.petid.ui.state.CommonUIState.Init
+import com.petid.petid.ui.state.CommonUIState.Loading
+import com.petid.petid.ui.state.CommonUIState.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class PetInfoViewModel @Inject constructor(
     private val petInfoRepository: PetInfoRepository,
-    private val s3UploadHelper: S3UploadHelper,
+    private val uploadImageUseCase: UploadImageUseCase,
 ): ViewModel(){
 
     /* petId */
@@ -44,23 +44,23 @@ class PetInfoViewModel @Inject constructor(
     var petImageFileName: String? = null
 
     /* 펫 정보 가져오기 결과*/
-    private val _getPetDetailsResult = MutableStateFlow<CommonApiState<PetDetailsEntity>>(
+    private val _getPetDetailsResult = MutableStateFlow<CommonUIState<PetDetailsEntity>>(
         Init
     )
     val getPetDetailsResult = _getPetDetailsResult.asStateFlow()
 
     /* 펫 이미지 가져오기 결과*/
-    private val _getPetImageUrlResult = MutableStateFlow<CommonApiState<String>>(
+    private val _getPetImageUrlResult = MutableStateFlow<CommonUIState<String>>(
         Init
     )
     val getPetImageUrlResult = _getPetImageUrlResult.asStateFlow()
 
     /* 서버 사진 update result */
-    private val _updatePetPhotoResult = MutableStateFlow<CommonApiState<Unit>>(Init)
+    private val _updatePetPhotoResult = MutableStateFlow<CommonUIState<Unit>>(Init)
     val updatePetPhotoResult = _updatePetPhotoResult.asStateFlow()
 
     /* Pet info update result */
-    private val _updatePetInfoResult = MutableSharedFlow<CommonApiState<Unit>>()
+    private val _updatePetInfoResult = MutableSharedFlow<CommonUIState<Unit>>()
     val updatePetInfoResult = _updatePetInfoResult.asSharedFlow()
 
     /**
@@ -104,14 +104,16 @@ class PetInfoViewModel @Inject constructor(
     /**
      * S3 bucket upload
      */
-    fun uploadFile(file: File, fileName: String) {
+    fun uploadFile(file: ByteArray, fileName: String) {
         viewModelScope.launch {
             _updatePetPhotoResult.emit(Loading)
-
             runCatching {
-                s3UploadHelper.uploadWithTransferUtility(file = file, keyName = fileName)
-            }.onSuccess {
-                updatePetPhoto()
+                uploadImageUseCase(
+                    profileImage = file,
+                    imagePath = fileName,
+                ).collectLatest {
+                    _updatePetPhotoResult.emit(Success(Unit))
+                }
             }.onFailure { e ->
                 e.sendCrashlytics()
                 _updatePetPhotoResult.emit(Error(e.message))
