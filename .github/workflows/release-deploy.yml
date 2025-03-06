@@ -1,7 +1,6 @@
 name: Build and release aab
 
 on:
-  workflow_dispatch:
   pull_request:
     branches: [ release ]
     types: [ closed ]
