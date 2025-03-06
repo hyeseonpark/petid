@@ -49,7 +49,6 @@ android {
             buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://yourpet-id.com:8080/\"")
             buildConfigField("String", "BASE_URL", "\"${localProperties["BASE_URL"]}\"")
         }
     }
