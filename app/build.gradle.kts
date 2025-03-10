@@ -116,14 +116,15 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
 
+    // Test
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    testImplementation("io.mockk:mockk:1.13.14")
-    androidTestImplementation("io.mockk:mockk-android:1.13.14")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
