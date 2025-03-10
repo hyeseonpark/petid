@@ -40,7 +40,6 @@ class HomeMainViewModelTest {
             petInfoRepository, notificationRepository)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `멤버정보_가져오기_성공_시_CommonApiState를_Success로_업데이트한다`() = runTest {
         // given

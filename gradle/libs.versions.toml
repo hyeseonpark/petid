@@ -47,6 +47,9 @@ credentialsPlayServicesAuth = "1.5.0-rc01"
 googleid = "1.1.1"
 multidex = "2.0.1"
 firebaseAuth = "23.1.0"
+mockk = "1.13.17"
+kotlinxCoroutinesTest = "1.10.1"
+mockkAndroid = "1.13.17"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -101,6 +104,9 @@ androidx-credentials-play-services-auth = { group = "androidx.credentials", name
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockkAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
