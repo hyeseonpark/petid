@@ -1,4 +1,4 @@
-package com.android.domain
+package com.petid.domain
 
 import com.petid.domain.repository.S3UploadRepository
 import com.petid.domain.usecase.UploadImageUseCase
