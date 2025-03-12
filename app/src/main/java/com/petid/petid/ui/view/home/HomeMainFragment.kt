@@ -20,6 +20,7 @@ import com.petid.petid.GlobalApplication.Companion.getPreferencesControl
 import com.petid.petid.R
 import com.petid.petid.common.Constants
 import com.petid.petid.common.Constants.CHIP_TYPE
+import com.petid.petid.common.Constants.EXTRA_CONTENT_ID
 import com.petid.petid.databinding.FragmentHomeMainBinding
 import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.blog.ContentDetailActivity
@@ -188,14 +189,14 @@ class HomeMainFragment : BaseFragment<FragmentHomeMainBinding>(FragmentHomeMainB
             mainBannerAdapter = HomeBannerAdapter(requireContext()) { contentId ->
                 bottomNavigationView.selectedItemId = R.id.blogMainFragment
                 with(Intent(requireContext(), ContentDetailActivity::class.java)){
-                    putExtra("contentId", contentId)
+                    putExtra(EXTRA_CONTENT_ID, contentId)
                     startActivity(this)
                 }
             }
             contentBannerAdapter = HomeBannerAdapter(requireContext()) { contentId ->
                 bottomNavigationView.selectedItemId = R.id.blogMainFragment
                 with(Intent(requireContext(), ContentDetailActivity::class.java)){
-                    putExtra("contentId", contentId)
+                    putExtra(EXTRA_CONTENT_ID, contentId)
                     startActivity(this)
                 }
             }

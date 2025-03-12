@@ -20,9 +20,9 @@ import com.petid.petid.ui.view.blog.adapter.ContentListAdapter
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.blog.BlogMainViewModel
 import com.google.android.material.tabs.TabLayout
+import com.petid.petid.common.Constants.EXTRA_CONTENT_ID
+import com.petid.petid.util.collectLatestFlow
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainBinding::inflate) {
@@ -30,7 +30,7 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
 
     private lateinit var contentList : List<ContentEntity>
     private lateinit var contentListAdapter : ContentListAdapter
-    var currentCategory = ContentCategoryType.ALL
+    var currentCategory = ContentCategoryType.ABOUTPET
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +64,7 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
                     {viewModel.doContentLike(it)},
                     {viewModel.cancelContentLike(it)}) { contentId ->
                     val intent = Intent(activity, ContentDetailActivity::class.java)
-                        .putExtra("contentId", contentId)
+                        .putExtra(EXTRA_CONTENT_ID, contentId)
                     startActivity(intent)
                 }
             recyclerviewBlogContentList.apply {
@@ -76,12 +76,11 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
             tabLayoutBlogMain.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     currentCategory = when (tab?.position) {
-                        0 -> ContentCategoryType.ALL
-                        1 -> ContentCategoryType.ABOUTPET
-                        2 -> ContentCategoryType.TIPS
-                        3 -> ContentCategoryType.VENUE
-                        4 -> ContentCategoryType.SUPPORT
-                        else -> ContentCategoryType.ALL
+                        0 -> ContentCategoryType.ABOUTPET
+                        1 -> ContentCategoryType.TIPS
+                        2 -> ContentCategoryType.VENUE
+                        3 -> ContentCategoryType.SUPPORT
+                        else -> ContentCategoryType.ABOUTPET
                     }
                     viewModel.getContentList(currentCategory)
                 }
@@ -99,33 +98,31 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
      * 콘텐츠 리스트 조회
      */
     private fun observeCurrentContentListState() {
-        lifecycleScope.launch {
-            viewModel.contentListApiState.collectLatest { result ->
-                if (result !is CommonUIState.Loading)
-                    hideLoading()
+        viewModel.contentListApiState.collectLatestFlow(this) { result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
 
-                when (result) {
-                    is CommonUIState.Success -> {
-                        contentList = result.data
+            when (result) {
+                is CommonUIState.Success -> {
+                    contentList = result.data
 
-                        when(contentList.isNotEmpty()) {
-                            true -> {
-                                contentListAdapter.submitList(contentList)
-                                visibleLayoutDataAvailable(true)
-                            }
-                            false -> visibleLayoutDataAvailable(false)
+                    when(contentList.isNotEmpty()) {
+                        true -> {
+                            contentListAdapter.submitList(contentList)
+                            visibleLayoutDataAvailable(true)
                         }
+                        false -> visibleLayoutDataAvailable(false)
                     }
-                    is CommonUIState.Error -> {
-                        showErrorMessage(result.message.toString())
-                        visibleLayoutDataAvailable(false)
-                    }
-                    is CommonUIState.Loading -> {
-                        showLoading()
-                        visibleLayoutDataAvailable(false)
-                    }
-                    is CommonUIState.Init -> visibleLayoutDataAvailable(false)
                 }
+                is CommonUIState.Error -> {
+                    showErrorMessage(result.message.toString())
+                    visibleLayoutDataAvailable(false)
+                }
+                is CommonUIState.Loading -> {
+                    showLoading()
+                    visibleLayoutDataAvailable(false)
+                }
+                is CommonUIState.Init -> visibleLayoutDataAvailable(false)
             }
         }
     }
@@ -156,32 +153,30 @@ class BlogMainFragment : BaseFragment<FragmentBlogMainBinding>(FragmentBlogMainB
      * 콘텐츠 좋아요 하기
      */
     private fun observeDoLikeState() {
-        lifecycleScope.launch {
-            viewModel.doLikeApiResult.collectLatest { result ->
-                if (result !is CommonUIState.Loading)
-                    hideLoading()
+        viewModel.doLikeApiResult.collectLatestFlow(this) { result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
 
-                when (result) {
-                    is CommonUIState.Success -> {
-                        val result = result.data
+            when (result) {
+                is CommonUIState.Success -> {
+                    val result = result.data
 
-                        val index = contentList.indexOfFirst { it.contentId == result.contentId }
+                    val index = contentList.indexOfFirst { it.contentId == result.contentId }
 
-                        if (index != -1) {
-                            val newList = contentList.toMutableList()
-                            newList[index] = newList[index].copy(
-                                isLiked = !newList[index].isLiked,
-                                likesCount = result.likeCount
-                            )
-                            contentList = newList
-                            contentListAdapter.submitList(newList)
-                        }
-
+                    if (index != -1) {
+                        val newList = contentList.toMutableList()
+                        newList[index] = newList[index].copy(
+                            isLiked = !newList[index].isLiked,
+                            likesCount = result.likeCount
+                        )
+                        contentList = newList
+                        contentListAdapter.submitList(newList)
                     }
-                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
-                    is CommonUIState.Loading -> showLoading()
-                    is CommonUIState.Init -> {}
+
                 }
+                is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                is CommonUIState.Loading -> showLoading()
+                is CommonUIState.Init -> {}
             }
         }
     }

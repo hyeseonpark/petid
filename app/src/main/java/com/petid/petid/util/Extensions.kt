@@ -5,11 +5,16 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.text.Editable
+import android.text.Html
+import android.text.Spanned
 import android.text.TextWatcher
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -23,6 +28,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.net.URL
 
 /**
  * get tag
@@ -233,3 +239,30 @@ fun Bitmap.toCompressedByteArray(
         e.printStackTrace()
         null
     }
+
+/**
+ * String to SpannedHtml
+ */
+fun String.toSpannedHtml(context: Context): Spanned {
+    return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY, { source ->
+        try {
+            when {
+                source.startsWith("data:") -> {
+                    val base64Data = source.substringAfter("base64,")
+                    val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    BitmapDrawable(context.resources, bitmap).apply {
+                        setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+                    }
+                }
+                else -> {
+                    val drawable = Drawable.createFromStream(URL(source).openStream(), null)
+                    drawable?.apply { setBounds(0, 0, intrinsicWidth, intrinsicHeight) }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }, null)
+}
