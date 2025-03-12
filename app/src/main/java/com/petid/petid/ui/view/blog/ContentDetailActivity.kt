@@ -1,12 +1,7 @@
 package com.petid.petid.ui.view.blog
 
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Html
-import android.util.Base64
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,22 +9,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
 import com.petid.petid.R
+import com.petid.petid.common.Constants.EXTRA_CONTENT_ID
 import com.petid.petid.databinding.ActivityContentDetailBinding
 import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.blog.adapter.MoreContentListAdapter
 import com.petid.petid.ui.view.common.BaseActivity
+import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.formatDateFormat
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
+import com.petid.petid.util.toSpannedHtml
 import com.petid.petid.viewmodel.blog.ContentDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
-import java.net.URL
 
 @AndroidEntryPoint
 class ContentDetailActivity : BaseActivity() {
@@ -60,32 +55,29 @@ class ContentDetailActivity : BaseActivity() {
     }
 
     private fun initComponent() {
-        with(viewModel) {
-            contentId = intent.getIntExtra("contentId", -1)
-            getContentDetail()
-            getAllContentList()
-        }
-
-        // 콘텐츠 좋아요
-        binding.buttonContentLike
-            .clicks()
-            .throttleFirst()
-            .onEach {
-                when (binding.buttonContentLike.isSelected) {
-                    true -> viewModel.cancelContentLike()
-                    false -> viewModel.doContentLike()
+        with(binding) {
+            layoutDefault.visibility = View.GONE
+            // 콘텐츠 좋아요
+            buttonContentLike
+                .clicks()
+                .throttleFirst()
+                .onEach {
+                    when (binding.buttonContentLike.isSelected) {
+                        true -> viewModel.cancelContentLike()
+                        false -> viewModel.doContentLike()
+                    }
                 }
-            }
-            .launchIn(lifecycleScope)
+                .launchIn(lifecycleScope)
 
-        moreContentListAdapter = MoreContentListAdapter(applicationContext) { item ->
-            val target = Intent(this, ContentDetailActivity::class.java)
-                .putExtra("contentId", item.contentId)
-            startActivity(target)
-        }
-        binding.recyclerviewMoreContentList.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
-            adapter = moreContentListAdapter
+            moreContentListAdapter = MoreContentListAdapter(applicationContext) { item ->
+                val target = Intent(this@ContentDetailActivity, ContentDetailActivity::class.java)
+                    .putExtra(EXTRA_CONTENT_ID, item.contentId)
+                startActivity(target)
+            }
+            recyclerviewMoreContentList.apply {
+                layoutManager = LinearLayoutManager(applicationContext)
+                adapter = moreContentListAdapter
+            }
         }
     }
 
@@ -93,90 +85,51 @@ class ContentDetailActivity : BaseActivity() {
      * 컨텐츠 상세 정보
      */
     private fun observeGetContentDetailState() {
-        lifecycleScope.launch {
-            viewModel.contentDetailApiState.collectLatest { result ->
-                if (result !is CommonUIState.Loading)
-                    hideLoading()
+        viewModel.contentDetailApiState.collectLatestFlow(this) { result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
 
-                when (result) {
-                    is CommonUIState.Success -> {
-                        val result = result.data
+            when (result) {
+                is CommonUIState.Success -> {
+                    val result = result.data
 
-                        with(binding) {
-                            textViewContentTitle.text = result.title
-                            textViewContentBody.text =
-                                Html.fromHtml(result.body, Html.FROM_HTML_MODE_LEGACY, { source ->
-                                    try {
-                                        if (source.startsWith("data:")) {
-                                            // Base64 이미지 처리
-                                            val base64Data = source.substringAfter("base64,")
-                                            val decodedBytes =
-                                                Base64.decode(base64Data, Base64.DEFAULT)
-                                            val bitmap = BitmapFactory.decodeByteArray(
-                                                decodedBytes,
-                                                0,
-                                                decodedBytes.size
-                                            )
-                                            val drawable = BitmapDrawable(resources, bitmap)
-                                            drawable.setBounds(
-                                                0,
-                                                0,
-                                                drawable.intrinsicWidth,
-                                                drawable.intrinsicHeight
-                                            )
-                                            drawable
-                                        } else {
-                                            val drawable: Drawable
-                                            // 일반 URL 이미지 처리
-                                            URL(source).openStream().use {
-                                                drawable = Drawable.createFromStream(it, "")!!
-                                                drawable?.setBounds(
-                                                    0,
-                                                    0,
-                                                    drawable.intrinsicWidth,
-                                                    drawable.intrinsicHeight
-                                                )
-                                            }
-                                            drawable
-                                        }
-                                    } catch (e: Exception) {
-                                        e.printStackTrace()
-                                        null // 실패 시 null 반환
-                                    }
-                                }, null)
+                    with(binding) {
+                        textViewContentTitle.text = result.title
+                        textViewContentBody.text = result.body.toSpannedHtml(this@ContentDetailActivity)
 
-                            textViewDate.text =
-                                formatDateFormat(result.createdAt.split(".")[0].toLong())
+                        textViewDate.text =
+                            formatDateFormat(result.createdAt.split(".")[0].toLong())
 
-                            textViewContentCategory.text = result.category.let {
-                                ContentCategoryType.valueOf(it)
-                            }.title
+                        textViewContentCategory.text = result.category.let {
+                            ContentCategoryType.valueOf(it)
+                        }.title
 
-                            textViewLike.text =
-                                String.format(
-                                    getString(R.string.content_like_desc),
-                                    result.likesCount
-                                )
-                            buttonContentLike.isSelected = result.isLiked
+                        textViewLike.text =
+                            String.format(
+                                getString(R.string.content_like_desc),
+                                result.likesCount
+                            )
+                        buttonContentLike.isSelected = result.isLiked
 
-                            if (result.imageUrl.isNullOrEmpty()) {
-                                imageViewContentPreview.visibility = View.GONE
-                            } else {
-                                (R.color.d9).let {
-                                    Glide.with(getGlobalContext())
-                                        .load(result.imageUrl)
-                                        .placeholder(it)
-                                        .error(it)
-                                        .into(imageViewContentPreview)
-                                }
+                        if (result.imageUrl.isNullOrEmpty()) {
+                            imageViewContentPreview.visibility = View.GONE
+                        } else {
+                            (R.color.d9).let {
+                                Glide.with(getGlobalContext())
+                                    .load(result.imageUrl)
+                                    .placeholder(it)
+                                    .error(it)
+                                    .into(imageViewContentPreview)
                             }
                         }
-                    }
 
-                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
-                    is CommonUIState.Loading -> showLoading()
-                    is CommonUIState.Init -> {}
+                        layoutDefault.visibility = View.VISIBLE
+                    }
                 }
+
+                is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                is CommonUIState.Loading -> showLoading()
+                is CommonUIState.Init -> {}
             }
         }
     }
@@ -185,28 +138,26 @@ class ContentDetailActivity : BaseActivity() {
      * 콘텐츠 좋아요 하기
      */
     private fun observeDoLikeState() {
-        lifecycleScope.launch {
-            viewModel.doLikeApiResult.collectLatest { result ->
-                if (result !is CommonUIState.Loading)
-                    hideLoading()
+        viewModel.doLikeApiResult.collectLatestFlow(this) { result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
 
-                when (result) {
-                    is CommonUIState.Success -> {
-                        val resultData = result.data
+            when (result) {
+                is CommonUIState.Success -> {
+                    val resultData = result.data
 
-                        binding.buttonContentLike.isSelected = !binding.buttonContentLike.isSelected
-                        binding.textViewLike.text =
-                            String.format(
-                                getString(R.string.content_like_desc),
-                                resultData.likeCount
-                            )
+                    binding.buttonContentLike.isSelected = !binding.buttonContentLike.isSelected
+                    binding.textViewLike.text =
+                        String.format(
+                            getString(R.string.content_like_desc),
+                            resultData.likeCount
+                        )
 
-                    }
-
-                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
-                    is CommonUIState.Loading -> showLoading()
-                    is CommonUIState.Init -> {}
                 }
+
+                is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                is CommonUIState.Loading -> showLoading()
+                is CommonUIState.Init -> {}
             }
         }
     }
@@ -214,29 +165,27 @@ class ContentDetailActivity : BaseActivity() {
      * 모든 콘텐츠 리스트 조회
      */
     private fun observeCurrentContentListState() {
-        lifecycleScope.launch {
-            viewModel.allContentListApiState.collectLatest { result ->
-                if (result !is CommonUIState.Loading)
-                    hideLoading()
+        viewModel.allContentListApiState.collectLatestFlow(this) { result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
 
-                when (result) {
-                    is CommonUIState.Success -> {
-                        val allContentList = result.data
+            when (result) {
+                is CommonUIState.Success -> {
+                    val allContentList = result.data
 
-                        if (allContentList.isNotEmpty()) {
-                            val filteredContentList = allContentList
-                                .filter { item -> item.contentId != viewModel.contentId }
-                                .shuffled() // 순서 섞기
-                                .take(3) // 아이템 3개만 가져오기
+                    if (allContentList.isNotEmpty()) {
+                        val filteredContentList = allContentList
+                            .filter { item -> item.contentId != viewModel.contentId }
+                            .shuffled() // 순서 섞기
+                            .take(3) // 아이템 3개만 가져오기
 
-                            moreContentListAdapter.submitList(filteredContentList)
-                        }
+                        moreContentListAdapter.submitList(filteredContentList)
                     }
-
-                    is CommonUIState.Error -> showErrorMessage(result.message.toString())
-                    is CommonUIState.Loading -> showLoading()
-                    is CommonUIState.Init -> {}
                 }
+
+                is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                is CommonUIState.Loading -> showLoading()
+                is CommonUIState.Init -> {}
             }
         }
     }

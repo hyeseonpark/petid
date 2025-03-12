@@ -12,8 +12,9 @@ object Constants {
     const val SHARED_MEMBER_ID_VALUE = "memberIdValue"
     const val SHARED_PET_CHIP_TYPE = "petChipTypeValue"
 
-    // extra name for commonInfoActivity
-    val COMMON_CATEGORY_TYPE = "categoryType"
+    // extra name
+    const val COMMON_CATEGORY_TYPE = "categoryType"
+    const val EXTRA_CONTENT_ID = "contentId"
 
     // location type
     const val LOCATION_SIDO_TYPE = 0
