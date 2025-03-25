@@ -15,6 +15,7 @@ object Constants {
     // extra name
     const val COMMON_CATEGORY_TYPE = "categoryType"
     const val EXTRA_CONTENT_ID = "contentId"
+    const val EXTRA_HOSPITAL_ID = "hospitalId"
 
     // location type
     const val LOCATION_SIDO_TYPE = 0

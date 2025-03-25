@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.petid.petid.R
+import com.petid.petid.common.Constants.EXTRA_HOSPITAL_ID
 import com.petid.petid.databinding.ActivityReservationHistoryInfoBinding
 import com.petid.petid.type.ReservationStatus
 import com.petid.petid.ui.component.CustomDialogCommon
@@ -16,6 +17,7 @@ import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.ui.view.hospital.HospitalActivity
 import com.petid.petid.ui.view.my.adapter.HospitalReservationListAdapter
+import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.hospital.ReservationHistoryInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +51,6 @@ class ReservationHistoryInfoActivity : BaseActivity() {
 
         observeReservationHospitalListState()
         observeCancelHospitalReservation()
-        viewModel.getHospitalReservationHistoryListApiState()
     }
 
     private fun initComponent() {
@@ -79,33 +80,31 @@ class ReservationHistoryInfoActivity : BaseActivity() {
      * 예약 목록 api observer
      */
     private fun observeReservationHospitalListState() {
-        lifecycleScope.launch {
-            viewModel.hospitalReservationHistoryListApiState.collectLatest { result ->
-                if (result !is CommonUIState.Loading)
-                    hideLoading()
+        viewModel.hospitalReservationHistoryListApiState.collectLatestFlow(this) { result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
 
-                when (result) {
-                    is CommonUIState.Success -> {
-                        val reservationList = result.data
+            when (result) {
+                is CommonUIState.Success -> {
+                    val reservationList = result.data
 
-                        when(reservationList.isNotEmpty()) {
-                            true -> {
-                                hospitalReservationListAdapter.submitList(reservationList)
-                                isDataAvailable(true)
-                            }
-                            false -> isDataAvailable(false)
+                    when(reservationList.isNotEmpty()) {
+                        true -> {
+                            hospitalReservationListAdapter.submitList(reservationList)
+                            isDataAvailable(true)
                         }
+                        false -> isDataAvailable(false)
                     }
-                    is CommonUIState.Error -> {
-                        showErrorMessage(result.message.toString())
-                        isDataAvailable(false)
-                    }
-                    is CommonUIState.Loading -> {
-                        showLoading()
-                        isDataAvailable(false)
-                    }
-                    is CommonUIState.Init -> {}
                 }
+                is CommonUIState.Error -> {
+                    showErrorMessage(result.message.toString())
+                    isDataAvailable(false)
+                }
+                is CommonUIState.Loading -> {
+                    showLoading()
+                    isDataAvailable(false)
+                }
+                is CommonUIState.Init -> {}
             }
         }
     }
@@ -169,7 +168,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
      */
     private fun goHospitalDetailActivity(id: Int) {
         val intent = Intent(this, HospitalActivity::class.java)
-            .putExtra("hospitalDetail", id)
+            .putExtra(EXTRA_HOSPITAL_ID, id)
         startActivity(intent)
     }
 }
