@@ -5,13 +5,13 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.petid.petid.databinding.ActivityHospitalBinding
 import com.petid.petid.ui.view.common.BaseActivity
-import com.petid.petid.viewmodel.hospital.HospitalViewModel
+import com.petid.petid.viewmodel.hospital.HospitalReservationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HospitalActivity : BaseActivity() {
+class HospitalReservationActivity : BaseActivity() {
     private lateinit var binding : ActivityHospitalBinding
-    private val viewModel: HospitalViewModel by viewModels()
+    private val viewModel: HospitalReservationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

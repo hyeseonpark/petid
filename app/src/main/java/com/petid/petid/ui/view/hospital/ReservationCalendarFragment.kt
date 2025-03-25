@@ -26,7 +26,7 @@ import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
-import com.petid.petid.viewmodel.hospital.HospitalViewModel
+import com.petid.petid.viewmodel.hospital.HospitalReservationViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
@@ -50,7 +50,7 @@ import java.util.Locale
 class ReservationCalendarFragment:
     BaseFragment<FragmentReservationCalendarBinding>(FragmentReservationCalendarBinding::inflate) {
 
-    private val viewModel: HospitalViewModel by activityViewModels()
+    private val viewModel: HospitalReservationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

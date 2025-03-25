@@ -148,7 +148,7 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
             hospitalListAdapter = HospitalListAdapter(requireActivity()) { item ->
-                val intent = Intent(activity, HospitalActivity::class.java)
+                val intent = Intent(activity, HospitalReservationActivity::class.java)
                     .putExtra(EXTRA_HOSPITAL_ID, item.id)
                 startActivity(intent)
             }

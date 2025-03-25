@@ -20,7 +20,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class HospitalViewModel @Inject constructor(
+class HospitalReservationViewModel @Inject constructor(
     private val reservationCalendarRepository: ReservationCalendarRepository,
     private val hospitalMainRepository: HospitalMainRepository,
     savedStateHandle: SavedStateHandle

@@ -17,13 +17,13 @@ import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.util.throttleFirst
-import com.petid.petid.viewmodel.hospital.HospitalViewModel
+import com.petid.petid.viewmodel.hospital.HospitalReservationViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
 
 class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(FragmentHospitalDetailBinding::inflate) {
-    private val viewModel: HospitalViewModel by activityViewModels()
+    private val viewModel: HospitalReservationViewModel by activityViewModels()
 
     private lateinit var infoDialog : CustomDialogCommon
 

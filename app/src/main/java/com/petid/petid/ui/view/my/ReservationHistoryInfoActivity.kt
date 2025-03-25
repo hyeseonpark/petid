@@ -15,7 +15,7 @@ import com.petid.petid.type.ReservationStatus
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseActivity
-import com.petid.petid.ui.view.hospital.HospitalActivity
+import com.petid.petid.ui.view.hospital.HospitalReservationActivity
 import com.petid.petid.ui.view.my.adapter.HospitalReservationListAdapter
 import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.showErrorMessage
@@ -167,7 +167,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
      * HospitalDetailActivity 이동
      */
     private fun goHospitalDetailActivity(id: Int) {
-        val intent = Intent(this, HospitalActivity::class.java)
+        val intent = Intent(this, HospitalReservationActivity::class.java)
             .putExtra(EXTRA_HOSPITAL_ID, id)
         startActivity(intent)
     }

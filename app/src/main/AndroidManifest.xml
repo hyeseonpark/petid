@@ -100,7 +100,7 @@
             android:exported="false"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".ui.view.hospital.HospitalActivity"
+            android:name=".ui.view.hospital.HospitalReservationActivity"
             android:exported="false"
             android:launchMode="singleInstance" />
         <activity
