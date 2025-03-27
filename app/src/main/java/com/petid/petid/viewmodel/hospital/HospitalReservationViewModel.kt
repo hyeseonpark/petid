@@ -5,14 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.HospitalOrderEntity
-import com.petid.domain.repository.HospitalMainRepository
 import com.petid.domain.repository.ReservationCalendarRepository
+import com.petid.domain.usecase.GetHospitalDetailUseCase
 import com.petid.domain.util.ApiResult
 import com.petid.petid.common.Constants.EXTRA_HOSPITAL_ID
 import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -22,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HospitalReservationViewModel @Inject constructor(
     private val reservationCalendarRepository: ReservationCalendarRepository,
-    private val hospitalMainRepository: HospitalMainRepository,
+    private val getHospitalDetailUseCase: GetHospitalDetailUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val hospitalId: Int = savedStateHandle.get<Int>(EXTRA_HOSPITAL_ID) ?: -1
@@ -65,35 +68,12 @@ class HospitalReservationViewModel @Inject constructor(
      */
     private fun getHospitalDetail() {
         viewModelScope.launch {
-            _hospitalDetailApiState.emit(CommonUIState.Loading)
-            val state = when(val result =
-                reservationCalendarRepository.getHospitalDetailById(hospitalId)) {
-                is ApiResult.Success -> {
-                    var hospitalDetail = result.data
-
-                    hospitalDetail = hospitalDetail.copy(
-                        imageUrl = listOf(when (hospitalDetail.imageUrl.first().isNotEmpty()) {
-                            true -> getHospitalImage(hospitalDetail.imageUrl.first())
-                            false -> ""
-                        })
-                    )
-
-                    CommonUIState.Success(hospitalDetail)
-                }
-                is ApiResult.HttpError -> CommonUIState.Error(result.error.error)
-                is ApiResult.Error -> CommonUIState.Error(result.errorMessage)
-            }
-            _hospitalDetailApiState.emit(state)
+            getHospitalDetailUseCase(hospitalId)
+                .onStart { _hospitalDetailApiState.emit(CommonUIState.Loading) }
+                .catch { _hospitalDetailApiState.emit(CommonUIState.Error(it.message)) }
+                .collectLatest { _hospitalDetailApiState.emit(CommonUIState.Success(it)) }
         }
     }
-
-    /**
-     * 병원 이미지 가져오기
-     */
-    private suspend fun getHospitalImage(filePath: String): String =
-        runCatching {
-            hospitalMainRepository.getHospitalImageUrl(filePath)
-        }.getOrDefault("")
 
     /**
      * 예약 가능 시간 목록 조회
