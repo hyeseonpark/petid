@@ -23,7 +23,7 @@ import javax.inject.Inject
 class ContentDetailViewModel @Inject constructor(
     private val blogMainRepository: BlogMainRepository,
     private val contentDetailRepository: ContentDetailRepository,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
     val contentId: Int = savedStateHandle.get<Int>(EXTRA_CONTENT_ID) ?: -1
 
