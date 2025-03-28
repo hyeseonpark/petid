@@ -60,7 +60,9 @@ class HospitalReservationViewModel @Inject constructor(
     val createHospitalOrderApiState = _createHospitalOrderApiState.asStateFlow()
 
     init {
-        getHospitalDetail()
+        if (hospitalId != -1) {
+            getHospitalDetail()
+        }
     }
 
     /**
