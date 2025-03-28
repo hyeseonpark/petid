@@ -13,7 +13,17 @@ class GetHospitalDetailUseCase @Inject constructor(
     private val reservationCalendarRepository: ReservationCalendarRepository,
     private val hospitalMainRepository: HospitalMainRepository,
 ) {
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+             * Retrieves detailed hospital information for the specified hospital ID with an updated image URL.
+             *
+             * This function fetches hospital details from the reservation calendar repository and then uses the hospital main
+             * repository to retrieve a new image URL based on the original image. The updated image URL replaces the first entry
+             * in the image list of the retrieved hospital details. The resulting flow operates on the IO dispatcher.
+             *
+             * @param hospitalId the unique identifier of the hospital.
+             * @return a flow that emits hospital detail objects with the updated image URL.
+             */
+            @OptIn(ExperimentalCoroutinesApi::class)
     suspend operator fun invoke(hospitalId: Int) =
         reservationCalendarRepository
             .getHospitalDetailById(hospitalId)

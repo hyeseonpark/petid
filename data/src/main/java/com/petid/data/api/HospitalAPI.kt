@@ -81,7 +81,13 @@ interface HospitalAPI {
     ) : Int
 
     /**
-     * 동물병원 예약 목록 조회
+     * Retrieves a list of hospital orders filtered by order status.
+     *
+     * This suspend function makes a GET request to the `/v1/hospital/order` endpoint,
+     * using the provided status to filter the results.
+     *
+     * @param status the order status used for filtering, such as "pending", "completed", etc.
+     * @return a list of detailed hospital order responses.
      */
     @GET("/v1/hospital/order")
     suspend fun getHospitalOrderList(
@@ -89,7 +95,10 @@ interface HospitalAPI {
     ) : List<HospitalOrderDetailResponse>
 
     /**
-     * 4.6 특정 ID 병원 조회
+     * Retrieves detailed information for the hospital with the specified ID.
+     *
+     * @param hospitalId The unique identifier of the hospital.
+     * @return A [HospitalResponse] object containing detailed information about the hospital.
      */
     @GET("/v1/hospital/{hospitalId}")
     suspend fun getHospitalDetailById(

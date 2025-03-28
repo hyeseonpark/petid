@@ -261,8 +261,13 @@ class HospitalMainViewModel @Inject constructor(
     }
 
     /**
-     * 병원 이미지 가져오기
-     */
+         * Retrieves the URL for a hospital image using the given file path.
+         *
+         * This suspend function obtains the first URL emitted by the repository for the specified file path.
+         *
+         * @param filePath the path of the hospital image file.
+         * @return the URL of the hospital image.
+         */
     private suspend fun getHospitalImage(filePath: String): String =
         hospitalMainRepository.getHospitalImageUrl(filePath).first()
 

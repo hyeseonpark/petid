@@ -28,14 +28,31 @@ class ReservationCalendarRepositoryImpl @Inject constructor(
             remoteDataSource.getHospitalOrderTimeList(hospitalId, day, date)
         }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun createHospitalOrder(
+    /**
+         * Creates a new hospital order.
+         *
+         * Converts the provided hospital order entity into a DTO, sends it to the remote data source to create the hospital order,
+         * and converts the response back into a domain entity. The result is wrapped in an ApiResult.Success.
+         *
+         * @param hospitalOrderEntity the hospital order details to be processed.
+         * @return an ApiResult containing the created hospital order as a domain entity.
+         */
+        override suspend fun createHospitalOrder(
         hospitalOrderEntity: HospitalOrderEntity
     ): ApiResult<HospitalOrderEntity> =
         runCatching {
             remoteDataSource.createHospitalOrder(hospitalOrderEntity.toDto()).toDomain()
         }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun getHospitalDetailById(id: Int): Flow<HospitalEntity> =
+    /**
+         * Retrieves hospital details as a flow.
+         *
+         * This suspend function calls the remote data source to fetch hospital details for the given hospital identifier, converts the response to its domain entity, and emits it in a flow executed on the IO dispatcher.
+         *
+         * @param id the unique identifier of the hospital.
+         * @return a Flow emitting the corresponding hospital entity.
+         */
+        override suspend fun getHospitalDetailById(id: Int): Flow<HospitalEntity> =
         flow {
             val res = remoteDataSource.getHospitalDetailById(id).toDomain()
             emit(res)

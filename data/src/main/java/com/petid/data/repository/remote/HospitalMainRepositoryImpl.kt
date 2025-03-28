@@ -44,7 +44,21 @@ class HospitalMainRepositoryImpl @Inject constructor(
             remoteDataSource.getHospitalList(sidoId, sigunguId, eupmundongId).toDomain()
         }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun getHospitalListLoc(
+    /**
+         * Retrieves a list of hospitals based on region identifiers and geographic coordinates.
+         *
+         * This method fetches hospital data by filtering with the provided region IDs (sido, sigungu, and an optional eupmundong)
+         * along with latitude and longitude values. It encapsulates the result within an ApiResult, returning a successful result
+         * if the data is retrieved and converted correctly.
+         *
+         * @param sidoId the identifier for the primary region.
+         * @param sigunguId the identifier for the secondary region.
+         * @param eupmundongId an optional identifier for the tertiary region.
+         * @param lat the latitude coordinate used for proximity filtering.
+         * @param lon the longitude coordinate used for proximity filtering.
+         * @return an ApiResult containing a list of HospitalEntity instances on success.
+         */
+        override suspend fun getHospitalListLoc(
         sidoId: Int,
         sigunguId: Int,
         eupmundongId: Int?,
@@ -55,7 +69,15 @@ class HospitalMainRepositoryImpl @Inject constructor(
             remoteDataSource.getHospitalListLoc(sidoId, sigunguId, eupmundongId, lat, lon).toDomain()
         }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun getHospitalImageUrl(filePath: String): Flow<String> =
+    /**
+         * Retrieves the hospital image URL asynchronously.
+         *
+         * This method fetches the URL corresponding to the provided hospital image file path,
+         * returning the result as a [Flow] that emits the URL string on the IO dispatcher.
+         *
+         * @param filePath the path to the hospital image file.
+         */
+        override suspend fun getHospitalImageUrl(filePath: String): Flow<String> =
         flow {
             val res = hospitalAPI.getHospitalImageUrl(filePath)
             emit(res)

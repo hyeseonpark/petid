@@ -35,6 +35,15 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
         return binding.root
     }
 
+    /**
+     * Invoked immediately after the fragment's view is created.
+     *
+     * Initializes the toolbar with a back button that terminates the activity when clicked,
+     * sets up the fragment's UI components, and starts observing updated hospital details.
+     *
+     * @param view The root view of the fragment.
+     * @param savedInstanceState The previously saved state of the fragment, or null if it is a new instance.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -47,6 +56,12 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
         observeHospitalDetail()
     }
 
+    /**
+     * Initializes UI components for hospital reservations.
+     *
+     * Sets up the custom information dialog and attaches a throttled click listener to the reservation button.
+     * Both interactions trigger navigation to the reservation calendar.
+     */
     private fun initComponent() {
         with(binding) {
             infoDialog = CustomDialogCommon(
@@ -69,7 +84,13 @@ class HospitalDetailFragment: BaseFragment<FragmentHospitalDetailBinding>(Fragme
     }
 
     /**
-     *  hospital detail observe
+     * Observes changes in the hospital detail API state and updates the UI accordingly.
+     *
+     * This function collects the latest state from the hospital detail API and:
+     * - Hides the loading indicator when the state is no longer loading.
+     * - In the Success state, updates the toolbar title, loads the hospital image (using a default image if none is provided), and sets the textual details including name, vet, hours, address, and telephone.
+     * - In the Error state, displays an error message.
+     * - Leaves the UI unchanged in the Init state.
      */
     private fun observeHospitalDetail() {
         viewModel.hospitalDetailApiState.collectLatestFlow(this) {result ->

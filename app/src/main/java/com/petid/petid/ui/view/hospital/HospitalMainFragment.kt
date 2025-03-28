@@ -123,6 +123,14 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
         }
     }
 
+    /**
+     * Initializes UI components and binds event listeners for the hospital list and location filters.
+     *
+     * This function sets up the search input field with a debounced text watcher to update the hospital list based on the query,
+     * handles the keyboard's "done" action to hide the keyboard and clear focus, initializes the hospital list adapter to launch the
+     * HospitalReservationActivity with the selected hospital's ID, configures the RecyclerView with a layout manager and divider decoration,
+     * and assigns click listeners to the location buttons (Sido, Sigungu, Eupmundong) to display modal bottom sheets with the corresponding location data.
+     */
     private fun initComponent() {
         with(binding) {
             // 검색 기능

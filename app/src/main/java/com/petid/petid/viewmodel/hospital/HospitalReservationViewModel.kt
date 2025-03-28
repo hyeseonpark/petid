@@ -64,7 +64,10 @@ class HospitalReservationViewModel @Inject constructor(
     }
 
     /**
-     * 병원 정보 조회
+     * Fetches hospital details.
+     *
+     * Launches a coroutine that retrieves hospital details using the assigned use case with the current hospital ID.
+     * It emits a loading state initially, an error state if the retrieval fails, or a success state with the fetched details.
      */
     private fun getHospitalDetail() {
         viewModelScope.launch {

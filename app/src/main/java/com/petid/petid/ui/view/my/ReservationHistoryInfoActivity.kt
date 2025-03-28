@@ -39,6 +39,12 @@ class ReservationHistoryInfoActivity : BaseActivity() {
         setContentView(binding.root)
     }
 
+    /**
+     * Lifecycle callback invoked when the activity becomes visible.
+     *
+     * Configures the toolbar with a back button and localized title, initializes UI components,
+     * and starts observing state changes for both reservation history and reservation cancellation.
+     */
     override fun onStart() {
         super.onStart()
 
@@ -53,6 +59,15 @@ class ReservationHistoryInfoActivity : BaseActivity() {
         observeCancelHospitalReservation()
     }
 
+    /**
+     * Initializes the hospital reservation list component.
+     *
+     * Sets up the adapter for displaying hospital reservations with a click listener that triggers:
+     * - A cancellation dialog for reservations in CONFIRMED or PENDING status.
+     * - Navigation to the hospital detail view for reservations in CANCELLED or COMPLETED status.
+     *
+     * Also configures the RecyclerView with a linear layout manager and a vertical divider decoration.
+     */
     private fun initComponent() {
 
         // adapter 초기화
@@ -77,7 +92,16 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     }
 
     /**
-     * 예약 목록 api observer
+     * Observes changes in the hospital reservation history API state and updates the UI accordingly.
+     *
+     * This method collects the latest state from the hospital reservation history flow and performs the following actions:
+     * - When the state indicates success:
+     *   - If reservations are available, it updates the adapter with the reservation list and sets the UI to reflect that data is available.
+     *   - If the reservation list is empty, it marks the data as unavailable.
+     * - When an error occurs, it displays an error message and marks data as unavailable.
+     * - When loading, it shows a loading indicator and marks data as unavailable.
+     *
+     * Additionally, it hides any visible loading indicators when the state is not loading.
      */
     private fun observeReservationHospitalListState() {
         viewModel.hospitalReservationHistoryListApiState.collectLatestFlow(this) { result ->
@@ -164,7 +188,12 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     }
 
     /**
-     * HospitalDetailActivity 이동
+     * Launches the HospitalReservationActivity to display detailed reservation information.
+     *
+     * Creates an intent that passes the hospital's unique identifier using the EXTRA_HOSPITAL_ID constant
+     * and starts the activity.
+     *
+     * @param id The unique identifier for the selected hospital.
      */
     private fun goHospitalDetailActivity(id: Int) {
         val intent = Intent(this, HospitalReservationActivity::class.java)

@@ -13,6 +13,11 @@ class HospitalReservationActivity : BaseActivity() {
     private lateinit var binding : ActivityHospitalBinding
     private val viewModel: HospitalReservationViewModel by viewModels()
 
+    /**
+     * Initializes the activity by inflating the layout using View Binding and setting the content view.
+     *
+     * @param savedInstanceState Bundle containing the activity's previously saved state, or null if this is a new instance.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

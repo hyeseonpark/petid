@@ -36,6 +36,23 @@ abstract class BaseFragment<VB: ViewBinding>(
         _binding = null
     }
 
+    /**
+     * Configures the provided toolbar as the support action bar and sets up its UI elements.
+     *
+     * This method assigns the [toolbar] as the activity's support action bar (if the activity is an AppCompatActivity)
+     * and customizes its layout by managing the visibility and click actions of the back button, title, and update button.
+     * The back button (identified by R.id.btnBack) becomes visible if [showBackButton] is true and triggers either the
+     * provided [onBackClick] lambda or a default navigation-up action if none is provided. The title, shown in the view
+     * with R.id.tvTitle, is visible when [title] is non-null, and the update button (R.id.btnRight) is displayed when
+     * [showUpdateButton] is true and triggers [onUpdateClick] when clicked.
+     *
+     * @param toolbar The Toolbar to set as the support action bar.
+     * @param title Optional title text to display; if null, the title view is hidden.
+     * @param showBackButton If true, shows the back button.
+     * @param showUpdateButton If true, shows the update button.
+     * @param onBackClick Optional lambda executed when the back button is clicked. Defaults to navigating up if not provided.
+     * @param onUpdateClick Optional lambda executed when the update button is clicked.
+     */
     protected fun setupToolbar(
         toolbar: Toolbar,
         title: String? = null,
@@ -71,7 +88,13 @@ abstract class BaseFragment<VB: ViewBinding>(
     }
 
     /**
-     * title 만 수정
+     * Updates the toolbar title displayed in the fragment.
+     *
+     * This method retrieves the TextView with the ID `tvTitle` from the fragment's root view and updates its text
+     * to the provided [title]. The TextView is made visible when a non-null title is provided; otherwise, it is hidden.
+     * The update is applied only if the fragment's activity is an instance of AppCompatActivity.
+     *
+     * @param title The new title to display in the toolbar.
      */
     protected fun setupTitle(title: String) {
         (activity as? AppCompatActivity)?.apply {

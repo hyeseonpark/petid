@@ -52,6 +52,14 @@ class ReservationCalendarFragment:
 
     private val viewModel: HospitalReservationViewModel by activityViewModels()
 
+    /**
+     * Inflates the fragment's view using view binding.
+     *
+     * This method initializes the binding by inflating the layout for the reservation calendar and
+     * returns its root view, which serves as the fragment's user interface.
+     *
+     * @return The root view of the inflated layout.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,6 +69,12 @@ class ReservationCalendarFragment:
 
     }
 
+    /**
+     * Initializes UI components and subscribes to relevant observers once the fragment's view is created.
+     *
+     * This method configures the toolbar with a back button, initializes additional UI elements, and sets up
+     * observers for hospital details, available reservation time slots, and order creation events.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -76,7 +90,11 @@ class ReservationCalendarFragment:
     }
 
     /**
-     * init component
+     * Initializes UI components for creating a hospital reservation order.
+     *
+     * Sets up a throttled click listener on the confirm button to trigger order creation via the ViewModel,
+     * configures vertical spacing for morning and afternoon chip groups used for time selection, and
+     * initializes the calendar view.
      */
     private fun initComponent() {
         with(binding) {
@@ -151,7 +169,13 @@ class ReservationCalendarFragment:
     }
 
     /**
-     * 선택된 date에 따른 예약가능한 시간 목록 업데이트
+     * Updates the available reservation times based on the selected date.
+     *
+     * This function formats the provided date into a "yyyy-MM-dd" string, determines the corresponding day of the week,
+     * and updates the view model with the formatted date, day of the week, and selected date. It then triggers an API call
+     * to retrieve the available reservation times for that day.
+     *
+     * @param date the selected calendar day.
      */
     private fun triggerDateChangeListener(date: CalendarDay) {
         val dateFormat = "yyyy-MM-dd"
@@ -172,7 +196,13 @@ class ReservationCalendarFragment:
     }
 
     /**
-     * hospital detail observe
+     * Observes hospital detail updates and updates the UI based on the response state.
+     *
+     * Listens to the hospital detail API state from the view model and:
+     * - Hides the loading indicator when the state is not loading.
+     * - Updates the toolbar title with the hospital name on success.
+     * - Displays an error message on error.
+     * - Performs no action when in the initialization state.
      */
     private fun observeHospitalDetail() {
         viewModel.hospitalDetailApiState.collectLatestFlow(this) {result ->
