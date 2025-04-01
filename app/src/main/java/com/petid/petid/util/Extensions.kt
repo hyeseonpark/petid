@@ -115,7 +115,7 @@ fun View.hideLoadingDialog() {
 
 
 /**
- * Activity: show error message
+ * Activity: show error message for debug
  */
 fun Context.showErrorMessage(text: String) {
     FirebaseCrashlytics.getInstance().log("Error: $text") // Crashlytics 로그 기록
@@ -126,7 +126,7 @@ fun Context.showErrorMessage(text: String) {
 }
 
 /**
- * Fragment: show error message
+ * Fragment: show error message for debug
  */
 fun Fragment.showErrorMessage(text: String) {
     FirebaseCrashlytics.getInstance().log("Error: $text") // Crashlytics 로그 기록
@@ -134,6 +134,20 @@ fun Fragment.showErrorMessage(text: String) {
     Log.e(this.TAG, text)
     if (BuildConfig.IS_DEVELOP)
         Toast.makeText(requireContext(), "Error Message: $text", Toast.LENGTH_LONG).show()
+}
+
+/**
+ * Activity: show message
+ */
+fun Context.showMessage(text: String) {
+    Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+}
+
+/**
+ * Activity: show message
+ */
+fun Fragment.showMessage(text: String) {
+    Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
 }
 
 /**

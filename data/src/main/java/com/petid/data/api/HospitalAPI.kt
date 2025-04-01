@@ -87,4 +87,12 @@ interface HospitalAPI {
     suspend fun getHospitalOrderList(
         @Query("status") status: String,
     ) : List<HospitalOrderDetailResponse>
+
+    /**
+     * 4.6 특정 ID 병원 조회
+     */
+    @GET("/v1/hospital/{hospitalId}")
+    suspend fun getHospitalDetailById(
+        @Path("hospitalId") hospitalId: Int,
+    ) : HospitalResponse
 }

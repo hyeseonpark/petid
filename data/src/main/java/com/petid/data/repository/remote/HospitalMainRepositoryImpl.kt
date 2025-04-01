@@ -8,6 +8,10 @@ import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.LocationEntity
 import com.petid.domain.repository.HospitalMainRepository
 import com.petid.domain.util.ApiResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -51,9 +55,10 @@ class HospitalMainRepositoryImpl @Inject constructor(
             remoteDataSource.getHospitalListLoc(sidoId, sigunguId, eupmundongId, lat, lon).toDomain()
         }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun getHospitalImageUrl(filePath: String): String =
-        runCatching {
-            hospitalAPI.getHospitalImageUrl(filePath)
-        }.getOrDefault("")
+    override suspend fun getHospitalImageUrl(filePath: String): Flow<String> =
+        flow {
+            val res = hospitalAPI.getHospitalImageUrl(filePath)
+            emit(res)
+        }.flowOn(Dispatchers.IO)
 
 }

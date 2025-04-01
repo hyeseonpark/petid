@@ -1,15 +1,21 @@
 package com.petid.petid.viewmodel.hospital
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.HospitalOrderEntity
 import com.petid.domain.repository.ReservationCalendarRepository
+import com.petid.domain.usecase.GetHospitalDetailUseCase
 import com.petid.domain.util.ApiResult
+import com.petid.petid.common.Constants.EXTRA_HOSPITAL_ID
 import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -17,20 +23,25 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class HospitalViewModel @Inject constructor(
-    private val reservationCalendarRepository: ReservationCalendarRepository
+class HospitalReservationViewModel @Inject constructor(
+    private val reservationCalendarRepository: ReservationCalendarRepository,
+    private val getHospitalDetailUseCase: GetHospitalDetailUseCase,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
-
-    lateinit var hospitalDetail : HospitalEntity
-
-    // 예약 가능 시간 목록 조회 api request params
-    var hospitalId: Int = -1
-        get() = if (::hospitalDetail.isInitialized) hospitalDetail.id else -1
+    private val hospitalId: Int = savedStateHandle.get<Int>(EXTRA_HOSPITAL_ID) ?: -1
 
     var day: String = ""
     var dateStr: String = ""
 
     lateinit var selectedDateTime: Date
+
+    /**
+     * 병원 상세정보
+     */
+    private val _hospitalDetailApiState = MutableStateFlow<CommonUIState<HospitalEntity>>(
+        CommonUIState.Init
+    )
+    val hospitalDetailApiState = _hospitalDetailApiState.asStateFlow()
 
     /**
      * 예약 가능 시간 목록 state
@@ -48,7 +59,23 @@ class HospitalViewModel @Inject constructor(
     )
     val createHospitalOrderApiState = _createHospitalOrderApiState.asStateFlow()
 
+    init {
+        if (hospitalId != -1) {
+            getHospitalDetail()
+        }
+    }
 
+    /**
+     * 병원 정보 조회
+     */
+    private fun getHospitalDetail() {
+        viewModelScope.launch {
+            getHospitalDetailUseCase(hospitalId)
+                .onStart { _hospitalDetailApiState.emit(CommonUIState.Loading) }
+                .catch { _hospitalDetailApiState.emit(CommonUIState.Error(it.message)) }
+                .collectLatest { _hospitalDetailApiState.emit(CommonUIState.Success(it)) }
+        }
+    }
 
     /**
      * 예약 가능 시간 목록 조회

@@ -29,6 +29,9 @@ class ReservationHistoryInfoViewModel @Inject constructor(
     private val _cancelHospitalReservationApiState = MutableSharedFlow<CommonUIState<Unit>>()
     val cancelHospitalReservationApiState: SharedFlow<CommonUIState<Unit>> = _cancelHospitalReservationApiState
 
+    init {
+        getHospitalReservationHistoryListApiState()
+    }
     /**
      * 병원 예약 이력 목록 조회
      */

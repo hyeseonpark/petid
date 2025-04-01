@@ -56,6 +56,8 @@
     <!-- string name="residency_number">주민등록번호</string>
     <string name="residency_number_hint">생년월일 6자리</string-->
 
+    <string name="retry_message">잠시 후 다시 시도해 주세요</string>
+
     <!-- splash activity -->
     <string name="splash_desc">반려동물의 특별함을 담은\n단 하나의 아이디</string>
 
@@ -294,6 +296,4 @@
     <string name="pet_info_dialog_chip_na_desc1_1">혹시 알고 계셨나요?</string>
     <string name="pet_info_dialog_chip_na_desc1_2">한국에는 매년 11만 마리 이상의\n반려동물이 길을 잃거나 버려지고 있어요.</string>
     <string name="pet_info_dialog_chip_na_desc2_1">내 반려동물을 안전하게 지키는 가장\n쉬운 방법은 바로 반려동물 등록이에요.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
