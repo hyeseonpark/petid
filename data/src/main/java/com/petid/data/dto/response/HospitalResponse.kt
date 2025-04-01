@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HospitalResponse(
-    val id: Int,
+    val id: Long,
     val imageUrl: List<String>,
     val address: String,
     val name: String,

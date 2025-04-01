@@ -20,7 +20,7 @@ class ReservationCalendarRepositoryImpl @Inject constructor(
     private val remoteDataSource: ReservationCalendarRemoteDataSource
 ): ReservationCalendarRepository{
     override suspend fun getHospitalOrderTimeList(
-        hospitalId: Int,
+        hospitalId: Long,
         day: String,
         date: String
     ): ApiResult<List<String>> =
@@ -35,7 +35,7 @@ class ReservationCalendarRepositoryImpl @Inject constructor(
             remoteDataSource.createHospitalOrder(hospitalOrderEntity.toDto()).toDomain()
         }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun getHospitalDetailById(id: Int): Flow<HospitalEntity> =
+    override suspend fun getHospitalDetailById(id: Long): Flow<HospitalEntity> =
         flow {
             val res = remoteDataSource.getHospitalDetailById(id).toDomain()
             emit(res)

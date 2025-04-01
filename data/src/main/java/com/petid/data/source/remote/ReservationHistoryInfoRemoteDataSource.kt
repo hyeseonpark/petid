@@ -4,5 +4,5 @@ import com.petid.data.dto.response.HospitalOrderDetailResponse
 
 interface ReservationHistoryInfoRemoteDataSource {
     suspend fun getHospitalReservationHistoryList(status: String): List<HospitalOrderDetailResponse>
-    suspend fun cancelHospitalReservation(orderId: Int): Int
+    suspend fun cancelHospitalReservation(orderId: Long): Int
 }

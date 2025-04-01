@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class HospitalEntity(
-    val id: Int,
+    val id: Long,
     val imageUrl: List<String>,
     val address: String,
     val name: String,

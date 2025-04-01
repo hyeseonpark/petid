@@ -14,7 +14,7 @@ class GetHospitalDetailUseCase @Inject constructor(
     private val hospitalMainRepository: HospitalMainRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend operator fun invoke(hospitalId: Int) =
+    suspend operator fun invoke(hospitalId: Long) =
         reservationCalendarRepository
             .getHospitalDetailById(hospitalId)
             .flatMapLatest { result ->
