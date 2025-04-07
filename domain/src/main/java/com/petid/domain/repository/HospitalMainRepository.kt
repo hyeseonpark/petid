@@ -3,6 +3,7 @@ package com.petid.domain.repository
 import com.petid.domain.entity.HospitalEntity
 import com.petid.domain.entity.LocationEntity
 import com.petid.domain.util.ApiResult
+import kotlinx.coroutines.flow.Flow
 
 interface HospitalMainRepository {
     suspend fun getSido(): ApiResult<List<LocationEntity>>
@@ -13,5 +14,5 @@ interface HospitalMainRepository {
     suspend fun getHospitalListLoc(sidoId: Int, sigunguId: Int, eupmundongId: Int?,
                                    lat: Double, lon: Double): ApiResult<List<HospitalEntity>>
 
-    suspend fun getHospitalImageUrl(filePath: String): String
+    suspend fun getHospitalImageUrl(filePath: String): Flow<String>
 }

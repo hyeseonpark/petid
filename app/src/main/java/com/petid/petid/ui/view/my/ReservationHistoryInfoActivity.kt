@@ -9,13 +9,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.petid.petid.R
+import com.petid.petid.common.Constants.EXTRA_HOSPITAL_ID
 import com.petid.petid.databinding.ActivityReservationHistoryInfoBinding
 import com.petid.petid.type.ReservationStatus
 import com.petid.petid.ui.component.CustomDialogCommon
 import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseActivity
-import com.petid.petid.ui.view.hospital.HospitalActivity
+import com.petid.petid.ui.view.hospital.HospitalReservationActivity
 import com.petid.petid.ui.view.my.adapter.HospitalReservationListAdapter
+import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.showErrorMessage
 import com.petid.petid.viewmodel.hospital.ReservationHistoryInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,12 +58,12 @@ class ReservationHistoryInfoActivity : BaseActivity() {
 
         // adapter 초기화
         hospitalReservationListAdapter =
-            HospitalReservationListAdapter(applicationContext) { id, status ->
+            HospitalReservationListAdapter(applicationContext) { id, hospitalId, status ->
                 when(status) {
                     ReservationStatus.CONFIRMED.name -> cancelDialog(id)
                     ReservationStatus.PENDING.name -> cancelDialog(id)
-                    ReservationStatus.CANCELLED.name -> goHospitalDetailActivity(id)
-                    ReservationStatus.COMPLETED.name -> goHospitalDetailActivity(id)
+                    ReservationStatus.CANCELLED.name -> goHospitalDetailActivity(hospitalId)
+                    ReservationStatus.COMPLETED.name -> goHospitalDetailActivity(hospitalId)
                 }
             }
 
@@ -79,33 +81,31 @@ class ReservationHistoryInfoActivity : BaseActivity() {
      * 예약 목록 api observer
      */
     private fun observeReservationHospitalListState() {
-        lifecycleScope.launch {
-            viewModel.hospitalReservationHistoryListApiState.collectLatest { result ->
-                if (result !is CommonUIState.Loading)
-                    hideLoading()
+        viewModel.hospitalReservationHistoryListApiState.collectLatestFlow(this) { result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
 
-                when (result) {
-                    is CommonUIState.Success -> {
-                        val reservationList = result.data
+            when (result) {
+                is CommonUIState.Success -> {
+                    val reservationList = result.data
 
-                        when(reservationList.isNotEmpty()) {
-                            true -> {
-                                hospitalReservationListAdapter.submitList(reservationList)
-                                isDataAvailable(true)
-                            }
-                            false -> isDataAvailable(false)
+                    when(reservationList.isNotEmpty()) {
+                        true -> {
+                            hospitalReservationListAdapter.submitList(reservationList)
+                            isDataAvailable(true)
                         }
+                        false -> isDataAvailable(false)
                     }
-                    is CommonUIState.Error -> {
-                        showErrorMessage(result.message.toString())
-                        isDataAvailable(false)
-                    }
-                    is CommonUIState.Loading -> {
-                        showLoading()
-                        isDataAvailable(false)
-                    }
-                    is CommonUIState.Init -> {}
                 }
+                is CommonUIState.Error -> {
+                    showErrorMessage(result.message.toString())
+                    isDataAvailable(false)
+                }
+                is CommonUIState.Loading -> {
+                    showLoading()
+                    isDataAvailable(false)
+                }
+                is CommonUIState.Init -> {}
             }
         }
     }
@@ -155,7 +155,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     /**
      * 예약 취소 dialog
      */
-    private fun cancelDialog(id: Int) {
+    private fun cancelDialog(id: Long) {
         cancelDialog = CustomDialogCommon(
             getString(R.string.cancel_reservation_dialog), {
                 viewModel.cancelHospitalReservationApiState(id)
@@ -167,9 +167,9 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     /**
      * HospitalDetailActivity 이동
      */
-    private fun goHospitalDetailActivity(id: Int) {
-        val intent = Intent(this, HospitalActivity::class.java)
-            .putExtra("hospitalDetail", id)
+    private fun goHospitalDetailActivity(hospitalId: Long) {
+        val intent = Intent(this, HospitalReservationActivity::class.java)
+            .putExtra(EXTRA_HOSPITAL_ID, hospitalId)
         startActivity(intent)
     }
 }

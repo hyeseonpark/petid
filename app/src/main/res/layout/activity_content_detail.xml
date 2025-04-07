@@ -8,6 +8,7 @@
     android:layout_weight="1">
 
     <LinearLayout
+        android:id="@+id/layout_default"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -73,7 +74,7 @@
             android:layout_marginTop="22dp"
             android:layout_marginBottom="21dp"/>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textView_content_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +87,7 @@
             android:textSize="15dp"
             android:textColor="@color/petid_underbar" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"

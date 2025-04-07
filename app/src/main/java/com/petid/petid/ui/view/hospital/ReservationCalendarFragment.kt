@@ -16,16 +16,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.petid.petid.R
-import com.petid.petid.ui.view.common.BaseFragment
 import com.petid.petid.common.Constants.DAYS_OF_WEEK
 import com.petid.petid.databinding.FragmentReservationCalendarBinding
 import com.petid.petid.ui.state.CommonUIState
+import com.petid.petid.ui.view.common.BaseFragment
+import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.showErrorMessage
-import com.petid.petid.viewmodel.hospital.HospitalViewModel
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.petid.petid.util.throttleFirst
+import com.petid.petid.viewmodel.hospital.HospitalReservationViewModel
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
@@ -49,7 +50,7 @@ import java.util.Locale
 class ReservationCalendarFragment:
     BaseFragment<FragmentReservationCalendarBinding>(FragmentReservationCalendarBinding::inflate) {
 
-    private val viewModel: HospitalViewModel by activityViewModels()
+    private val viewModel: HospitalReservationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,10 +67,10 @@ class ReservationCalendarFragment:
         setupToolbar(
             toolbar = view.findViewById(R.id.toolbar),
             showBackButton = true,
-            title = viewModel.hospitalDetail.name
         )
         initComponent()
 
+        observeHospitalDetail()
         observeHospitalOrderTimeList()
         observeCreateHospitalOrder()
     }
@@ -79,8 +80,6 @@ class ReservationCalendarFragment:
      */
     private fun initComponent() {
         with(binding) {
-            viewModel.hospitalId = viewModel.hospitalId
-
             // 예약 완료 버튼
             buttonConfirm
                 .clicks()
@@ -170,6 +169,23 @@ class ReservationCalendarFragment:
 
         // 선택된 날짜 값 저장
         viewModel.selectedDateTime = calendar.time
+    }
+
+    /**
+     * hospital detail observe
+     */
+    private fun observeHospitalDetail() {
+        viewModel.hospitalDetailApiState.collectLatestFlow(this) {result ->
+            if (result !is CommonUIState.Loading)
+                hideLoading()
+
+            when (result) {
+                is CommonUIState.Success -> setupTitle(result.data.name)
+                is CommonUIState.Error -> showErrorMessage(result.message.toString())
+                is CommonUIState.Loading -> showLoading()
+                is CommonUIState.Init -> {}
+            }
+        }
     }
 
     /**

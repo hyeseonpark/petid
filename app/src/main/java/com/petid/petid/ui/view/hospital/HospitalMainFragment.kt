@@ -23,6 +23,7 @@ import com.petid.petid.common.Constants.LOCATION_EUPMUNDONG_TYPE
 import com.petid.petid.common.Constants.LOCATION_SIDO_TYPE
 import com.petid.petid.common.Constants.LOCATION_SIGUNGU_TYPE
 import com.petid.petid.GlobalApplication.Companion.getGlobalContext
+import com.petid.petid.common.Constants.EXTRA_HOSPITAL_ID
 import com.petid.petid.databinding.FragmentHospitalMainBinding
 import com.petid.petid.ui.state.CommonUIState
 import com.petid.petid.ui.view.common.BaseFragment
@@ -147,8 +148,8 @@ class HospitalMainFragment : BaseFragment<FragmentHospitalMainBinding>(FragmentH
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
             hospitalListAdapter = HospitalListAdapter(requireActivity()) { item ->
-                val intent = Intent(activity, HospitalActivity::class.java)
-                    .putExtra("hospitalDetail", item)
+                val intent = Intent(activity, HospitalReservationActivity::class.java)
+                    .putExtra(EXTRA_HOSPITAL_ID, item.id)
                 startActivity(intent)
             }
             recyclerviewHospitalList.apply {

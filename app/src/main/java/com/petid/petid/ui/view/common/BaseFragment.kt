@@ -71,6 +71,20 @@ abstract class BaseFragment<VB: ViewBinding>(
     }
 
     /**
+     * title 만 수정
+     */
+    protected fun setupTitle(title: String) {
+        (activity as? AppCompatActivity)?.apply {
+            with(binding.root) {
+                findViewById<TextView>(R.id.tvTitle)?.apply {
+                    visibility = View.VISIBLE
+                    text = title
+                }
+            }
+        }
+    }
+
+    /**
      * show loading dialog
      */
     fun showLoading() {

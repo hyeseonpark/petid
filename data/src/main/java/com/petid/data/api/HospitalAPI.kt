@@ -42,7 +42,7 @@ interface HospitalAPI {
      */
     @GET("/v1/hospital/order/time")
     suspend fun getHospitalOrderTimeList(
-        @Query("hospitalId") hospitalId: Int,
+        @Query("hospitalId") hospitalId: Long,
         @Query("day") day: String,
         @Query("date") date: String // yyyy-mm-dd
     ) : List<String>
@@ -77,7 +77,7 @@ interface HospitalAPI {
      */
     @DELETE("/v1/hospital/order/{orderId}")
     suspend fun deleteHospitalOrder(
-        @Path("orderId") orderId: Int,
+        @Path("orderId") orderId: Long,
     ) : Int
 
     /**
@@ -87,4 +87,12 @@ interface HospitalAPI {
     suspend fun getHospitalOrderList(
         @Query("status") status: String,
     ) : List<HospitalOrderDetailResponse>
+
+    /**
+     * 4.6 특정 ID 병원 조회
+     */
+    @GET("/v1/hospital/{hospitalId}")
+    suspend fun getHospitalDetailById(
+        @Path("hospitalId") hospitalId: Long,
+    ) : HospitalResponse
 }

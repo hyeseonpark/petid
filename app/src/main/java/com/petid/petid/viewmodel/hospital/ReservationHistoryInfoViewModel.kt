@@ -29,6 +29,9 @@ class ReservationHistoryInfoViewModel @Inject constructor(
     private val _cancelHospitalReservationApiState = MutableSharedFlow<CommonUIState<Unit>>()
     val cancelHospitalReservationApiState: SharedFlow<CommonUIState<Unit>> = _cancelHospitalReservationApiState
 
+    init {
+        getHospitalReservationHistoryListApiState()
+    }
     /**
      * 병원 예약 이력 목록 조회
      */
@@ -45,7 +48,7 @@ class ReservationHistoryInfoViewModel @Inject constructor(
         }
     }
 
-    fun cancelHospitalReservationApiState(orderId: Int) {
+    fun cancelHospitalReservationApiState(orderId: Long) {
         viewModelScope.launch {
             _cancelHospitalReservationApiState.emit(CommonUIState.Loading)
             val state = when (val result = reservationHistoryInfoRepository.cancelHospitalReservation(orderId)) {

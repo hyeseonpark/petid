@@ -22,6 +22,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -263,9 +264,7 @@ class HospitalMainViewModel @Inject constructor(
      * 병원 이미지 가져오기
      */
     private suspend fun getHospitalImage(filePath: String): String =
-        runCatching {
-            hospitalMainRepository.getHospitalImageUrl(filePath)
-        }.getOrDefault("")
+        hospitalMainRepository.getHospitalImageUrl(filePath).first()
 
     /**
      * 현재 위치 가져오기

@@ -20,7 +20,7 @@ class ReservationHistoryInfoRepositoryImpl @Inject constructor(
             remoteDataSource.getHospitalReservationHistoryList(status).toDomain()
         }.mapApiResult { ApiResult.Success(it) }
 
-    override suspend fun cancelHospitalReservation(orderId: Int): ApiResult<Int> =
+    override suspend fun cancelHospitalReservation(orderId: Long): ApiResult<Int> =
         runCatching {
             remoteDataSource.cancelHospitalReservation(orderId)
         }.mapApiResult { ApiResult.Success(it) }

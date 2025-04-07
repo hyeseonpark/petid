@@ -1,5 +1,6 @@
 package com.petid.petid.viewmodel.blog
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.petid.domain.entity.ContentEntity
@@ -7,6 +8,7 @@ import com.petid.domain.entity.ContentLikeEntity
 import com.petid.domain.repository.BlogMainRepository
 import com.petid.domain.repository.ContentDetailRepository
 import com.petid.domain.util.ApiResult
+import com.petid.petid.common.Constants.EXTRA_CONTENT_ID
 import com.petid.petid.type.ContentCategoryType
 import com.petid.petid.ui.state.CommonUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,14 +18,14 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @HiltViewModel
 class ContentDetailViewModel @Inject constructor(
     private val blogMainRepository: BlogMainRepository,
     private val contentDetailRepository: ContentDetailRepository,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    var contentId by Delegates.notNull<Int>()
+    val contentId: Int = savedStateHandle.get<Int>(EXTRA_CONTENT_ID) ?: -1
 
     // content api 결과값
     private val _contentDetailApiState = MutableStateFlow<CommonUIState<ContentEntity>>(
@@ -41,10 +43,15 @@ class ContentDetailViewModel @Inject constructor(
     private val _doLikeApiResult = MutableSharedFlow<CommonUIState<ContentLikeEntity>>()
     val doLikeApiResult: SharedFlow<CommonUIState<ContentLikeEntity>> = _doLikeApiResult
 
+    init {
+        getContentDetail()
+        getAllContentList()
+    }
+
     /**
      * 콘텐츠 내용 가져오기
      */
-    fun getContentDetail() {
+    private fun getContentDetail() {
         viewModelScope.launch {
             _contentDetailApiState.emit(CommonUIState.Loading)
             val state = when (val result = contentDetailRepository.getContentDetail(contentId)) {
@@ -95,7 +102,7 @@ class ContentDetailViewModel @Inject constructor(
     /**
      * 콘텐츠 목록 가져오기
      */
-    fun getAllContentList() {
+    private fun getAllContentList() {
         viewModelScope.launch {
             _allContentListApiState.emit(CommonUIState.Loading)
             val state = when (val result = blogMainRepository.getContentList(ContentCategoryType.ALL.name)) {
