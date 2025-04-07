@@ -13,10 +13,22 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: PR 제목 정보 가져오기
+        id: get_pr_title
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.issue.number,
+            });
+            core.setOutput("title", pr.data.title);
+
       - name: PR 제목에서 versioning 값 추출
         id: extract_version
         run: |
-          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_TITLE="${{ steps.get_pr_title.outputs.title }}"
           VERSION="patch"  # 기본값: patch
           
           if [[ "$PR_TITLE" =~ version=major ]]; then
@@ -25,7 +37,6 @@ jobs:
             VERSION="minor"
           fi
           echo "versioning=$VERSION" >> $GITHUB_ENV
-          echo "PR_TITLE=$PR_TITLE"
           echo "versioning=$VERSION"
           
       - name: 체크아웃 (develop 브랜치)
