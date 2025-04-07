@@ -77,7 +77,7 @@ abstract class BaseFragment<VB: ViewBinding>(
         (activity as? AppCompatActivity)?.apply {
             with(binding.root) {
                 findViewById<TextView>(R.id.tvTitle)?.apply {
-                    visibility = if (title != null) View.VISIBLE else View.GONE
+                    visibility = View.VISIBLE
                     text = title
                 }
             }

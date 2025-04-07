@@ -51,18 +51,19 @@ class ReservationHistoryInfoActivity : BaseActivity() {
 
         observeReservationHospitalListState()
         observeCancelHospitalReservation()
+        viewModel.getHospitalReservationHistoryListApiState()
     }
 
     private fun initComponent() {
 
         // adapter 초기화
         hospitalReservationListAdapter =
-            HospitalReservationListAdapter(applicationContext) { id, status ->
+            HospitalReservationListAdapter(applicationContext) { id, hospitalId, status ->
                 when(status) {
                     ReservationStatus.CONFIRMED.name -> cancelDialog(id)
                     ReservationStatus.PENDING.name -> cancelDialog(id)
-                    ReservationStatus.CANCELLED.name -> goHospitalDetailActivity(id)
-                    ReservationStatus.COMPLETED.name -> goHospitalDetailActivity(id)
+                    ReservationStatus.CANCELLED.name -> goHospitalDetailActivity(hospitalId)
+                    ReservationStatus.COMPLETED.name -> goHospitalDetailActivity(hospitalId)
                 }
             }
 
@@ -154,7 +155,7 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     /**
      * 예약 취소 dialog
      */
-    private fun cancelDialog(id: Int) {
+    private fun cancelDialog(id: Long) {
         cancelDialog = CustomDialogCommon(
             getString(R.string.cancel_reservation_dialog), {
                 viewModel.cancelHospitalReservationApiState(id)
@@ -166,9 +167,9 @@ class ReservationHistoryInfoActivity : BaseActivity() {
     /**
      * HospitalDetailActivity 이동
      */
-    private fun goHospitalDetailActivity(id: Int) {
+    private fun goHospitalDetailActivity(hospitalId: Long) {
         val intent = Intent(this, HospitalReservationActivity::class.java)
-            .putExtra(EXTRA_HOSPITAL_ID, id)
+            .putExtra(EXTRA_HOSPITAL_ID, hospitalId)
         startActivity(intent)
     }
 }

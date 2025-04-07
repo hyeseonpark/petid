@@ -23,8 +23,8 @@ class HospitalReservationActivity : BaseActivity() {
             setContentView(it.root)
         }
 
-        val hospitalId = intent.getIntExtra(EXTRA_HOSPITAL_ID, -1)
-        if (hospitalId == -1) {
+        val hospitalId = intent.getLongExtra(EXTRA_HOSPITAL_ID, -1L)
+        if (hospitalId == -1L) {
             showMessage(getString(R.string.retry_message))
             finish()
             return

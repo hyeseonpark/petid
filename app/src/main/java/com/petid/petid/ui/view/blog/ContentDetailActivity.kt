@@ -18,6 +18,7 @@ import com.petid.petid.ui.view.common.BaseActivity
 import com.petid.petid.util.collectLatestFlow
 import com.petid.petid.util.formatDateFormat
 import com.petid.petid.util.showErrorMessage
+import com.petid.petid.util.showMessage
 import com.petid.petid.util.throttleFirst
 import com.petid.petid.util.toSpannedHtml
 import com.petid.petid.viewmodel.blog.ContentDetailViewModel
@@ -37,6 +38,14 @@ class ContentDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityContentDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // EXTRA_CONTENT_ID 오류 시 activity 종료
+        val hospitalId = intent.getIntExtra(EXTRA_CONTENT_ID, -1)
+        if (hospitalId == -1) {
+            showMessage(getString(R.string.retry_message))
+            finish()
+            return
+        }
     }
 
     override fun onStart() {

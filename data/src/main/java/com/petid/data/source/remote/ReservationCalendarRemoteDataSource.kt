@@ -5,7 +5,7 @@ import com.petid.data.dto.response.HospitalOrderResponse
 import com.petid.data.dto.response.HospitalResponse
 
 interface ReservationCalendarRemoteDataSource {
-    suspend fun getHospitalOrderTimeList(hospitalId: Int, day: String, date: String): List<String>
+    suspend fun getHospitalOrderTimeList(hospitalId: Long, day: String, date: String): List<String>
     suspend fun createHospitalOrder(hospitalOrderRequest: HospitalOrderRequest): HospitalOrderResponse
-    suspend fun getHospitalDetailById(id: Int): HospitalResponse
+    suspend fun getHospitalDetailById(id: Long): HospitalResponse
 }

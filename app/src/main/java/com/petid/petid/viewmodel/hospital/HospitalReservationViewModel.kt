@@ -28,7 +28,7 @@ class HospitalReservationViewModel @Inject constructor(
     private val getHospitalDetailUseCase: GetHospitalDetailUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    private val hospitalId: Int = savedStateHandle.get<Int>(EXTRA_HOSPITAL_ID) ?: -1
+    private val hospitalId: Long = savedStateHandle.get<Long>(EXTRA_HOSPITAL_ID) ?: -1
 
     var day: String = ""
     var dateStr: String = ""
@@ -60,7 +60,7 @@ class HospitalReservationViewModel @Inject constructor(
     val createHospitalOrderApiState = _createHospitalOrderApiState.asStateFlow()
 
     init {
-        if (hospitalId != -1) {
+        if (hospitalId != -1L) {
             getHospitalDetail()
         }
     }

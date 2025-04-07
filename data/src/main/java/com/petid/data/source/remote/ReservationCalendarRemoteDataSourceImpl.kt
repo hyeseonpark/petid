@@ -12,7 +12,7 @@ class ReservationCalendarRemoteDataSourceImpl @Inject constructor(
     private val hospitalAPI: HospitalAPI
 ): ReservationCalendarRemoteDataSource {
     override suspend fun getHospitalOrderTimeList(
-        hospitalId: Int,
+        hospitalId: Long,
         day: String,
         date: String
     ): List<String> =
@@ -23,6 +23,6 @@ class ReservationCalendarRemoteDataSourceImpl @Inject constructor(
     ): HospitalOrderResponse =
         hospitalAPI.createHospitalOrder(hospitalOrderRequest)
 
-    override suspend fun getHospitalDetailById(id: Int): HospitalResponse =
+    override suspend fun getHospitalDetailById(id: Long): HospitalResponse =
         hospitalAPI.getHospitalDetailById(id)
 }

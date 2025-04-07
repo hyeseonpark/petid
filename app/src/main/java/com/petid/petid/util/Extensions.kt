@@ -24,6 +24,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.petid.petid.BuildConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -257,26 +261,28 @@ fun Bitmap.toCompressedByteArray(
 /**
  * String to SpannedHtml
  */
-fun String.toSpannedHtml(context: Context): Spanned {
-    return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY, { source ->
-        try {
-            when {
-                source.startsWith("data:") -> {
-                    val base64Data = source.substringAfter("base64,")
-                    val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
-                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-                    BitmapDrawable(context.resources, bitmap).apply {
-                        setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+suspend fun String.toSpannedHtml(context: Context): Spanned {
+    return withContext(Dispatchers.IO) {
+        Html.fromHtml(this@toSpannedHtml, Html.FROM_HTML_MODE_LEGACY, { source ->
+            try {
+                when {
+                    source.startsWith("data:") -> {
+                        val base64Data = source.substringAfter("base64,")
+                        val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                        BitmapDrawable(context.resources, bitmap).apply {
+                            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+                        }
+                    }
+                    else -> {
+                        val drawable = Drawable.createFromStream(URL(source).openStream(), null)
+                        drawable?.apply { setBounds(0, 0, intrinsicWidth, intrinsicHeight) }
                     }
                 }
-                else -> {
-                    val drawable = Drawable.createFromStream(URL(source).openStream(), null)
-                    drawable?.apply { setBounds(0, 0, intrinsicWidth, intrinsicHeight) }
-                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }, null)
+        }, null)
+    }
 }

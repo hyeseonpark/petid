@@ -12,6 +12,6 @@ class ReservationHistoryInfoRemoteDataSourceImpl @Inject constructor(
     ): List<HospitalOrderDetailResponse> =
         hospitalAPI.getHospitalOrderList(status)
 
-    override suspend fun cancelHospitalReservation(orderId: Int): Int =
+    override suspend fun cancelHospitalReservation(orderId: Long): Int =
         hospitalAPI.deleteHospitalOrder(orderId)
 }

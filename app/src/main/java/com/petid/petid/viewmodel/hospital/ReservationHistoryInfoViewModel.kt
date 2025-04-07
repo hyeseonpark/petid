@@ -48,7 +48,7 @@ class ReservationHistoryInfoViewModel @Inject constructor(
         }
     }
 
-    fun cancelHospitalReservationApiState(orderId: Int) {
+    fun cancelHospitalReservationApiState(orderId: Long) {
         viewModelScope.launch {
             _cancelHospitalReservationApiState.emit(CommonUIState.Loading)
             val state = when (val result = reservationHistoryInfoRepository.cancelHospitalReservation(orderId)) {

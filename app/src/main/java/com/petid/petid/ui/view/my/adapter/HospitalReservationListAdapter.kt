@@ -18,7 +18,7 @@ import java.util.Locale
 
 class HospitalReservationListAdapter(
     private val mContext: Context,
-    private val onButtonClick: (Int, String) -> Unit
+    private val onButtonClick: (Long, Long, String) -> Unit
 ) : ListAdapter<HospitalOrderDetailEntity, HospitalReservationListAdapter.ViewHolder>(diffUtil) {
 
     companion object {
@@ -61,7 +61,7 @@ class HospitalReservationListAdapter(
             dateTime.text = formatInstantToDateTime(item.date)
 
             button.setOnClickListener {
-                onButtonClick(item.id, item.status)
+                onButtonClick(item.id, item.hospitalId, item.status)
             }
 
             when(ReservationStatus.toValue(item.status)) {
